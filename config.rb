@@ -3,7 +3,7 @@
 ###
 
 set :site_title, "GitHub --- Alexander Shvets's Web Page"
-set :site_url, "http://shvets.github.com"
+set :site_url, "http://shvets.github.io"
 set :site_description, "Meta description."
 set :site_keywords, "keyword-one, keyword-two"
 
