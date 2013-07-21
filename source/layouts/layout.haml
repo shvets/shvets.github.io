@@ -1,0 +1,36 @@
+<!doctype html>
+
+%html{:lang => "en"}
+  %head
+    / Always force latest IE rendering engine or request Chrome Frame
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-type"}/
+    %meta{:content => "GitHub --- Alexander Shvets's Web Page", :name => "description"}/
+    %meta{:content => "github, ruby, java, rails", :name => "keywords"}/
+    %title= site_title
+
+    = stylesheet_link_tag "screen"
+    = javascript_include_tag  "application"
+
+    %link{:href => "http://fonts.googleapis.com/css?family=Reenie+Beanie", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "http://fonts.googleapis.com/css?family=Cantarell", :rel => "stylesheet", :type => "text/css"}/
+    -#%base{:href => "http://shvets.github.com"}
+  %body
+
+    -#- if content_for?(:header)
+    -#  .site-header__content
+    -#    = yield_content :header
+
+    #wrapper
+      #main-column
+        #logo
+          = partial "common/header"
+        #menu
+          = partial "common/menu"
+
+        #page
+          = yield
+          #footer
+            = partial "common/footer"
+      #sidebar
+        = partial "common/sidebar"
