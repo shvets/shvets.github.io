@@ -1,0 +1,32 @@
+
+-#= partial "sidebar", locals: { classes: "herp derp" }
+-#
+-#= link_to "About", '/about.html'
+-#
+-#-#= image_tag "middleman.png"
+-#
+-#= current_page.data.title
+-#
+-#- content_for :header do
+-#  %h2 Welcome
+-#
+-#.welcome
+-#  %h1 Middleman is Watching!!!
+-#  %p.doc
+-#    = link_to "Read Online Documentation", "http://middlemanapp.com/"
+  / .doc
+/ .welcome
+
+%h1="My Projects"
+
+- $: << "lib"
+
+- require 'projects_gen'
+
+- github_projects = ProjectsGen.new.read_data "data/github_projects.txt"
+
+%ul{:class => "projects"}
+  - github_projects.each do |project|
+    %li
+      %a{:href => "#{project[1]}"}="#{project[0]}"
+      ="#{project[2]}"
