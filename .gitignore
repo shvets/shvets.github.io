@@ -19,7 +19,8 @@
 .idea/*.*
 tmp
 
-source/bookmarks/*.*
+source/bookmarks/**
+data
 
 
 
