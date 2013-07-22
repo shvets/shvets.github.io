@@ -21,10 +21,10 @@ desc "generates web site"
 task "setup" do
   sh "rake gen"
   sh "middleman build"
-  sh "cp -r build/** ."
-  sh "cp -r build/assets/images images"
-  sh "cp -r build/assets/javascripts javascripts"
-  sh "cp -r build/assets/stylesheets stylesheets"
+  #sh "cp -r build/** ."
+  sh "cp -r build/assets/images ."
+  sh "cp -r build/assets/javascripts ."
+  sh "cp -r build/assets/stylesheets ."
   sh "rm -rf assets"
 end
 
