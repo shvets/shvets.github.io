@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+    <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+    <meta content='github, ruby, java, rails' name='keywords'>
+    <title>GitHub --- Alexander Shvets's Web Page</title>
+    <link href="../../assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+    <script src="../../assets/javascripts/application.js" type="text/javascript"></script>
+    <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='main-column'>
+        <div id='logo'>
+          <h1>
+            <a href='/'>Alexander Shvets GitHub Home Page</a>
+          </h1>
+        </div>
+        <div id='menu'>
+          <ul>
+            <li class='current_page_item'>
+              <a href='/index.html'>Projects</a>
+            </li>
+            <li class='current_page_item'>
+              <a href='/bookmarks/index.html'>Bookmarks</a>
+            </li>
+            <li class='current_page_item'>
+              <a href='/blog/index.html'>Blog</a>
+            </li>
+          </ul>
+        </div>
+        <div id='page'>
+          <h2 id="extending-rubymine-with-jruby-script---how-to-use-hamlsass-converter-from-inside-ide-jruby-script-plugin">Extending RubyMine with JRuby script - How to use HAML/SASS converter from inside IDE (JRuby script-plugin)</h2>
+          
+          <h1 id="how-it-works">How it works</h1>
+          
+          <p>RubyMine already has JRuby library as part of IDE (see <strong>${RUBYMINE_INSTALLATION/lib/jruby-complete.jar}</strong> file).
+          It also has few scripts that extend standard functionality of IDE, you can see them under <strong>'File|Settings|Extension'</strong> path or
+          here: <strong>${RUBYMINE_INSTALLATION/rb/*.rb}</strong>. It could be considered as convenient platform with easy extensions as
+          ruby-plugins.</p>
+          
+          <p>Unfortunately, if your script depends on other gems and list of dependencies is big, it becomes very difficult to
+          install new plugins. You have to detect and install all dependent gems into RubyMine installation.</p>
+          
+          <p>In this article I will introduce another way of how to extend RubyMine functionality. We'll have separate
+          installation of JRuby that will provide us with gems repository.</p>
+          
+          <p>First of all, you have to install <a href="http://rvm.beginrescueend.com" title="RVM Home">rvm</a>. This is a tool for installing different ruby versions under Mac/Unix 
+          platforms. Once you have <strong>rvm</strong> installed, install jruby and then use it:</p>
+          
+          <p><code>&gt; rvm install jruby-1.5.6</code><br />
+          <code>&gt; rvm use jruby</code></p>
+          
+          <p>Check, if you have correct ruby version:</p>
+          
+          <p><code>&gt; ruby -v</code></p>
+          
+          <p>It should be <strong>"jruby 1.5.6"</strong>.</p>
+          
+          <p>Once we have <strong>jruby</strong> installed, we can develop new RubyMine plugin. We'll discuss step-by-step what needs to be done.</p>
+          
+          <h3 id="step-1-defining-dependencies">Step 1: Defining dependencies</h3>
+          
+          <p>We need to document dependencies for our plugin in <strong>Gemfile</strong>:</p>
+          <div class="CodeRay">
+            <div class="code"><pre>source <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://rubygems.org</span><span style="color:#710">&quot;</span></span>&#x000A;&#x000A;gem <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">haml</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">3.0.24</span><span style="color:#710">&quot;</span></span>&#x000A;gem <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">hpricot</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">0.8.3</span><span style="color:#710">&quot;</span></span>&#x000A;gem <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">abstract</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">1.0.0</span><span style="color:#710">&quot;</span></span>&#x000A;gem <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">erubis</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">2.6.6</span><span style="color:#710">&quot;</span></span>&#x000A;gem <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sexp_processor</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">3.0.5</span><span style="color:#710">&quot;</span></span>&#x000A;gem <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ruby_parser</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">2.0.5</span><span style="color:#710">&quot;</span></span>&#x000A;</pre></div>
+          </div>
+          <p>Now you can install dependencies with one command:</p>
+          
+          <p><code>bundle install</code></p>
+          <h3 id="step-2-loading-dependencies">Step 2: Loading dependencies</h3>
+          
+          <p>The following method loads all required gems into memory:</p>
+          <div class="CodeRay">
+            <div class="code"><pre>include <span style="color:#036;font-weight:bold">Java</span>&#x000A;&#x000A;<span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">load_required_gems</span>&#x000A;  jruby_home = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span><span style="color:#069">ENV</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">HOME</span><span style="color:#710">'</span></span>]<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20">/.rvm/gems/jruby-1.5.6@haml-sass-converters</span><span style="color:#710">&quot;</span></span>&#x000A;&#x000A;  <span style="color:#d70">$:</span> &lt;&lt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span>jruby_home<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20">/gems</span><span style="color:#710">&quot;</span></span>&#x000A;&#x000A;  <span style="color:#d70">$:</span> &lt;&lt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span>jruby_home<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20">/gems/haml-3.0.24/lib</span><span style="color:#710">&quot;</span></span>&#x000A;  <span style="color:#d70">$:</span> &lt;&lt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span>jruby_home<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20">/gems/hpricot-0.8.3-java/lib</span><span style="color:#710">&quot;</span></span>&#x000A;  <span style="color:#d70">$:</span> &lt;&lt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span>jruby_home<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20">/gems/abstract-1.0.0/lib</span><span style="color:#710">&quot;</span></span>&#x000A;  <span style="color:#d70">$:</span> &lt;&lt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span>jruby_home<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20">/gems/erubis-2.6.6/lib</span><span style="color:#710">&quot;</span></span>&#x000A;  <span style="color:#d70">$:</span> &lt;&lt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span>jruby_home<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20">/gems/sexp_processor-3.0.5/lib</span><span style="color:#710">&quot;</span></span>&#x000A;  <span style="color:#d70">$:</span> &lt;&lt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span>jruby_home<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20">/gems/ruby_parser-2.0.5/lib</span><span style="color:#710">&quot;</span></span>&#x000A;<span style="color:#080;font-weight:bold">end</span>&#x000A;&#x000A;load_required_gems&#x000A;</pre></div>
+          </div>
+          <h3 id="step-3-requiring-libraries">Step 3: "Requiring" libraries</h3>
+          
+          <p>Now we need to <strong>require</strong> libraries for working with <strong>HAML/SASS</strong> and <strong>RubyMine</strong>:</p>
+          <div class="CodeRay">
+            <div class="code"><pre>require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">haml</span><span style="color:#710">&quot;</span></span>&#x000A;require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">haml/html</span><span style="color:#710">&quot;</span></span>&#x000A;require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sass/css</span><span style="color:#710">&quot;</span></span>&#x000A;&#x000A;require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">default_scripts_groups</span><span style="color:#710">'</span></span>&#x000A;require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">editor_action_helper</span><span style="color:#710">'</span></span>&#x000A;require <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">action_group_helper</span><span style="color:#710">'</span></span>&#x000A;</pre></div>
+          </div>
+          <h3 id="step-4-building-conversion-logic">Step 4: Building conversion logic</h3>
+          
+          <p>We encapsulate all conversion logic into <strong>Converter</strong> class. We need to integrate logic from HAML/SASS library
+          with RubyMine API. Because this class will be executed in RubyMine environment, we have access to <strong>editor</strong>
+          object:</p>
+          <div class="CodeRay">
+            <div class="code"><pre><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Converter</span>&#x000A;  <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">convert_selection</span> editor&#x000A;    <span style="color:#080;font-weight:bold">if</span> editor.has_selection?&#x000A;      text = editor.selection&#x000A;      s_start = editor.selection_start&#x000A;&#x000A;      changed_text = <span style="color:#080;font-weight:bold">yield</span>(text)&#x000A;      editor.replace_selection_text(changed_text)&#x000A;&#x000A;      <span style="color:#777"># restore selection</span>&#x000A;      editor.select(s_start, s_start + changed_text.length)&#x000A;    <span style="color:#080;font-weight:bold">end</span>&#x000A;  <span style="color:#080;font-weight:bold">end</span>&#x000A;&#x000A;  <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">convert_to_haml</span>(html)&#x000A;    <span style="color:#036;font-weight:bold">Haml</span>::<span style="color:#036;font-weight:bold">HTML</span>.new(html, <span style="color:#A60">:erb</span> =&gt; <span style="color:#069">true</span>, <span style="color:#A60">:xhtml</span> =&gt; <span style="color:#069">true</span>).render&#x000A;  <span style="color:#080;font-weight:bold">end</span>&#x000A;&#x000A;  <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">convert_to_sass</span>(css)&#x000A;    <span style="color:#036;font-weight:bold">Sass</span>::<span style="color:#036;font-weight:bold">CSS</span>.new(css).render(<span style="color:#A60">:sass</span>)&#x000A;  <span style="color:#080;font-weight:bold">end</span>&#x000A;&#x000A;  <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">convert_to_scss</span>(css)&#x000A;    <span style="color:#036;font-weight:bold">Sass</span>::<span style="color:#036;font-weight:bold">CSS</span>.new(css).render(<span style="color:#A60">:scss</span>)&#x000A;  <span style="color:#080;font-weight:bold">end</span>&#x000A;<span style="color:#080;font-weight:bold">end</span>&#x000A;</pre></div>
+          </div>
+          <h3 id="step-5-registering-editor-actions">Step 5: Registering editor actions</h3>
+          
+          <p>Now we need to register conversion methods of <strong>Converter</strong> class as editor actions for HTML/HAML conversions:</p>
+          <div class="CodeRay">
+            <div class="code"><pre>register_editor_action <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">html_to_haml</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:text</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Convert Html to Haml</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:description</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Converts Html content to Haml content.</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:group</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">EditorPopupMenu</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:enable_in_modal_context</span> =&gt; <span style="color:#069">true</span> <span style="color:#080;font-weight:bold">do</span> |editor, _|&#x000A;  <span style="color:#036;font-weight:bold">Converter</span>.convert_selection editor <span style="color:#080;font-weight:bold">do</span> |text|&#x000A;    <span style="color:#036;font-weight:bold">Converter</span>.convert_to_haml(text)&#x000A;  <span style="color:#080;font-weight:bold">end</span>&#x000A;<span style="color:#080;font-weight:bold">end</span>&#x000A;&#x000A;register_editor_action <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">html_to_haml_erb</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:text</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Convert Html to Haml</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:description</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Converts Html content to Haml content.</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#777">#:shortcut =&gt; &quot;control shift PERIOD&quot;,</span>&#x000A;                       <span style="color:#A60">:group</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ScriptsErb</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:file_type</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">RHTML</span><span style="color:#710">&quot;</span></span> <span style="color:#080;font-weight:bold">do</span> |editor, _|&#x000A;  <span style="color:#036;font-weight:bold">Converter</span>.convert_selection editor <span style="color:#080;font-weight:bold">do</span> |text|&#x000A;    <span style="color:#036;font-weight:bold">Converter</span>.convert_to_haml(text)&#x000A;  <span style="color:#080;font-weight:bold">end</span>&#x000A;<span style="color:#080;font-weight:bold">end</span>&#x000A;</pre></div>
+          </div>
+          <p>For executing CSS/SASS conversions we will create new "Css" group under 'Tools|Extensions' menu item.
+          We also need to register <strong>Converter</strong> class methods as editor actions for CSS/SASS conversions:</p>
+          <div class="CodeRay">
+            <div class="code"><pre>register_action_group <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ScriptsCss</span><span style="color:#710">&quot;</span></span>, <span style="color:#A60">:text</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Css</span><span style="color:#710">&quot;</span></span>&#x000A;&#x000A;register_editor_action <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">css_to_sass</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:text</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Convert CSS to SASS</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:description</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Converts CSS content to SASS content.</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:group</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">EditorPopupMenu</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:enable_in_modal_context</span> =&gt; <span style="color:#069">true</span> <span style="color:#080;font-weight:bold">do</span> |editor, _|&#x000A;  <span style="color:#036;font-weight:bold">Converter</span>.convert_selection editor <span style="color:#080;font-weight:bold">do</span> |text|&#x000A;    <span style="color:#036;font-weight:bold">Converter</span>.convert_to_sass(text)&#x000A;  <span style="color:#080;font-weight:bold">end</span>&#x000A;<span style="color:#080;font-weight:bold">end</span>&#x000A;&#x000A;register_editor_action <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">css_to_sass_css</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:text</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Convert CSS to SASS</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:description</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Converts CSS content to SASS content.</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#777">#:shortcut =&gt; &quot;control shift PERIOD&quot;,</span>&#x000A;                       <span style="color:#A60">:group</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">ScriptsCss</span><span style="color:#710">&quot;</span></span>,&#x000A;                       <span style="color:#A60">:file_type</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">CSS</span><span style="color:#710">&quot;</span></span> <span style="color:#080;font-weight:bold">do</span> |editor, _|&#x000A;  <span style="color:#036;font-weight:bold">Converter</span>.convert_selection editor <span style="color:#080;font-weight:bold">do</span> |text|&#x000A;    <span style="color:#036;font-weight:bold">Converter</span>.convert_to_sass(text)&#x000A;  <span style="color:#080;font-weight:bold">end</span>&#x000A;<span style="color:#080;font-weight:bold">end</span>&#x000A;</pre></div>
+          </div>
+          <h1 id="install-plugin">Install plugin</h1>
+          
+          <p>Above is th explanation of how plugin works. If you just want to use plugin, install
+          <a href="http://github.com/shvets/haml-sass-converters" title="Haml/SASS Converters">haml-sass-converters</a> gem into <strong>haml-sass-converters</strong> gemset:</p>
+          
+          <p><code>&gt; rvm use jruby@haml-sass-converters --create</code><br />
+          <code>&gt; gem i haml-sass-converters</code></p>
+          
+          <p>Run install script in your project's root (or some other location) in order to copy the script:</p>
+          
+          <p><code>&gt; cd &lt;your-project-root&gt;</code><br />
+          <code>&gt; haml-sass-converters-install</code></p>
+          
+          <p>New <strong>"scripts"</strong> folder will be created with <strong>"converters.rb"</strong> as a plugin.</p>
+          
+          <table>
+            <tbody>
+              <tr>
+                <td>Go to **"File</td>
+                <td>Setting</td>
+                <td>Extensions"** and add "scripts" folder as new <strong>"Script Folder"</strong>.</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <p>Restart <strong>RubyMine</strong>. After restarting IDE will have new <strong>"Css"</strong> group under <strong>"Tools|Extensions"</strong> and new actions:
+            * convert Html to Haml;
+            * convert CSS to SASS;</p>
+          
+          <table>
+            <tbody>
+              <tr>
+                <td>You can reach them from **"Tools</td>
+                <td>Extensions"** in main menu or from context popup menu inside the editor.</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <h1 id="how-to-use-plugin">How to use plugin</h1>
+          
+          <p>Select some content inside erb or css file. Right click inside the editor and select appropriate action.</p>
+          <div id='footer'>
+            <p id='legal'>
+              &copy; All Right Reserved (2013), Alexander Shvets.
+              Built with
+              <a href='http://middlemanapp.com'>middleman</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div id='sidebar'>
+        
+      </div>
+    </div>
+  </body>
+</html>

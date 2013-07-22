@@ -21,11 +21,11 @@ desc "generates web site"
 task "setup" do
   sh "rake gen"
   sh "middleman build"
-  #sh "cp -r build/** ."
-  sh "cp -r build/assets/images ."
-  sh "cp -r build/assets/javascripts ."
-  sh "cp -r build/assets/stylesheets ."
-  sh "rm -rf assets"
+  sh "cp -r build/** ."
+  #sh "cp -r build/assets/images ."
+  #sh "cp -r build/assets/javascripts ."
+  #sh "cp -r build/assets/stylesheets ."
+  #sh "rm -rf assets"
 end
 
 desc "generates bookmarks layout from bookmark.json"
