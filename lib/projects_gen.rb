@@ -12,7 +12,7 @@ class ProjectsGen
     projects = []
 
     items.each do |item|
-      projects << {:name => item['name'], :url => item['url'], :description => item['description']}
+      projects << {:name => item['name'], :url => item['url'].gsub('api.github.com/repos/', 'github.com/'), :description => item['description']}
     end
 
     File.open(file_name, "w") do |file|

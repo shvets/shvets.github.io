@@ -22,6 +22,7 @@ task "setup" do
   sh "rake gen"
   sh "middleman build"
   sh "cp -r build/** ."
+  sh "rm -rf assets"
 end
 
 desc "generates bookmarks layout from bookmark.json"
@@ -48,12 +49,14 @@ task :clean do
   `rm -rf build`
   `rm -rf data`
   `rm -rf source/bookmarks`
-  `rm -rf assets`
+  `rm -rf images`
+  `rm -rf javascripts`
+  `rm -rf stylesheets`
   `rm -rf blog`
   `rm -rf bookmarks`
   `rm -rf common`
-  `rm -index.html`
-  `rm -404.html`
+  `rm -f index.html`
+  `rm -f 404.html`
 end
 
 
