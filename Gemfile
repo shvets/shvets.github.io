@@ -3,7 +3,7 @@ source "https://rubygems.org"
 group "development" do
   gem "middleman"
   gem "middleman-livereload"
-  gem 'middleman-gh-pages'
+  #gem 'middleman-gh-pages'
   gem "haml"
   gem "haml-coderay"
   gem "nokogiri"

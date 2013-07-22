@@ -1,19 +1,28 @@
 # http://12devs.co.uk/articles/204/
 # http://blog.rlmflores.me/blog/2013/07/16/ruby-patterns-webservice-object/
 
-require 'middleman-gh-pages'
+#require 'middleman-gh-pages'
 
 $:.unshift(File::join(File::dirname(__FILE__), "lib"))
-
-namespace :assets do
-  task :precompile do
-    sh "middleman build"
-  end
-end
 
 #require "bookmarks_gen2"
 require "bookmarks_gen"
 require 'projects_gen'
+
+#desc "generates web site"
+#namespace :assets do
+#  task :precompile do
+#    sh "rake gen"
+#    sh "middleman build"
+#  end
+#end
+
+desc "generates web site"
+task "setup" do
+  sh "rake gen"
+  sh "middleman build"
+  sh "cp -r build/** ."
+end
 
 desc "generates bookmarks layout from bookmark.json"
 task "gen-bm" do
@@ -39,6 +48,12 @@ task :clean do
   `rm -rf build`
   `rm -rf data`
   `rm -rf source/bookmarks`
+  `rm -rf assets`
+  `rm -rf blog`
+  `rm -rf bookmarks`
+  `rm -rf common`
+  `rm -index.html`
+  `rm -404.html`
 end
 
 
