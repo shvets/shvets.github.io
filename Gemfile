@@ -1,8 +1,12 @@
 source "https://rubygems.org"
 
-group "development" do
+group "default" do
   gem "middleman"
   gem "middleman-livereload"
+  gem "redcarpet"
+  gem "rouge"
+  #gem "middleman-syntax"
+  gem 'middleman-rouge'
   #gem 'middleman-gh-pages'
   gem "haml"
   gem "haml-coderay"
@@ -14,15 +18,7 @@ group "test" do
   gem "rspec"
 end
 
-
-#gem 'compass'
-#gem "haml"
-#gem "haml-coderay"
-#gem "nokogiri"
-#gem "kramdown"
-#gem "mime-types"
-#gem "json"
-#gem "coderay"
-#gem "BlueCloth"
-#gem 'coffee-script'
-#gem 'coffee-filter'
+group :debug do
+  gem "ruby-debug-base19x", "0.11.30.pre12"
+  gem "ruby-debug-ide", "0.4.17"
+end

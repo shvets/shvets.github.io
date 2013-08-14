@@ -1,5 +1,6 @@
 # Modified version of TryStatic, from rack-contrib
 # https://github.com/rack/rack-contrib/blob/master/lib/rack/contrib/try_static.rb
+# http://www.alpine-lab.com/blog/utiliser-redcarpet-et-rouge-avec-middleman/
 
 # Serve static files under a `build` directory:
 # - `/` will try to serve your `build/index.html` file

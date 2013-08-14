@@ -26,6 +26,11 @@ set :css_dir, "assets/stylesheets"
 set :js_dir, "assets/javascripts"
 set :images_dir, "assets/images"
 
+set :markdown_engine, :redcarpet
+
+set :markdown, fenced_code_blocks: true, autolink: true, smartypants: true,
+    gh_blockcode: true, lax_spacing: true
+
 ###
 # Compass
 ###
@@ -45,7 +50,7 @@ require 'haml-coderay'
 
 # CoffeeScript filters in Haml
 # First: gem install coffee-filter
-# require 'coffee-filter'
+#require 'coffee-filter'
 
 ###
 # Page options, layouts, aliases and proxies
@@ -85,6 +90,16 @@ helpers do
     #{:class => @item[:menu] == value ? "current_page_item" : ""}
     {:class => "current_page_item" }
   end
+end
+
+configure :development do
+  activate :rouge_syntax
+
+  #activate :syntax
+  #activate :syntax,
+  #         :linenos => 'inline',
+  #         :anchorlinenos => true,
+  #         :linenostart => 2
 end
 
 # Build-specific configuration
