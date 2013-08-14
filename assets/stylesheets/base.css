@@ -134,7 +134,7 @@ a {
   /* line 118, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h1 {
     margin: 20px 0 30px;
-    font-size: 40px;
+    font-size: 30px;
     font-family: "Reenie Beanie", arial, serif;
     padding-bottom: 5px;
     border-bottom: 1px dotted #aaaaaa;
@@ -169,3 +169,12 @@ a {
 /* line 147, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #lang-selector {
   margin-bottom: 20px; }
+
+/* line 151, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+pre {
+  border: 1px solid black;
+  width: 800px; }
+
+/* line 155, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+span {
+  white-space: normal; }
