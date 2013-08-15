@@ -4,4 +4,4 @@ You are allowed to:
 1. Remove rake task
 2. Add existing rake tasks
 To add existing rake tasks automatically delete this file and reload the project.
---><RakeGroup description="" fullCmd="" taksId="rake" /></Settings>
+--><RakeGroup description="" fullCmd="" taksId="rake"><RakeTask description="generates bookmarks layout from bookmark.json" fullCmd="gen-bm" taksId="gen-bm" /><RakeTask description="generates projects" fullCmd="gen-projects" taksId="gen-projects" /><RakeTask description="generates web site" fullCmd="setup" taksId="setup" /><RakeTask description="" fullCmd="clean" taksId="clean" /><RakeTask description="" fullCmd="gen" taksId="gen" /></RakeGroup></Settings>

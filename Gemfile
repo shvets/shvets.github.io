@@ -4,12 +4,8 @@ group "default" do
   gem "middleman"
   gem "middleman-livereload"
   gem "redcarpet"
-  gem "rouge"
-  #gem "middleman-syntax"
-  gem 'middleman-rouge'
-  #gem 'middleman-gh-pages'
+  gem "middleman-syntax"
   gem "haml"
-  gem "haml-coderay"
   gem "nokogiri"
   gem "json"
 end

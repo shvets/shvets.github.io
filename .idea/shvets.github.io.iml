@@ -7,7 +7,6 @@
     <orderEntry type="library" scope="PROVIDED" name="activesupport (v3.2.12, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v1.3.5, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="chunky_png (v1.2.8, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="coderay (v1.0.9, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coffee-script (v2.2.0, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coffee-script-source (v1.6.3, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="compass (v0.12.2, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
@@ -19,7 +18,6 @@
     <orderEntry type="library" scope="PROVIDED" name="ffi (v1.9.0, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="fssm (v0.2.10, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="haml (v4.0.3, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="haml-coderay (v0.2.0, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="hike (v1.2.3, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="http_parser.rb (v0.5.3, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="i18n (v0.6.4, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
@@ -30,8 +28,8 @@
     <orderEntry type="library" scope="PROVIDED" name="middleman-core (v3.1.3, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="middleman-livereload (v3.1.0, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="middleman-more (v3.1.3, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="middleman-rouge (v0.0.1, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="middleman-sprockets (v3.1.2, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="middleman-syntax (v1.2.1, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mini_portile (v0.5.1, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.7.7, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.6.0, RVM: ruby-1.9.3-p448 [shvets.github.io]) [gem]" level="application" />

@@ -170,11 +170,31 @@ a {
 #lang-selector {
   margin-bottom: 20px; }
 
-/* line 151, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 164, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 pre {
-  border: 1px solid black;
-  width: 800px; }
+  border: solid 1px #dddddd;
+  background: white;
+  padding: 0;
+  line-height: 23px;
+  margin-bottom: 30px;
+  white-space: pre;
+  overflow-x: auto;
+  word-break: inherit;
+  word-wrap: inherit; }
 
-/* line 155, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
-span {
-  white-space: normal; }
+/* line 175, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+.highlight td {
+  padding: 8px 15px; }
+
+/* line 178, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+.gl {
+  background: #fafafa;
+  border-right: 1px solid #dddddd;
+  color: #999999;
+  /* Stop line numbers being visually selected */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }

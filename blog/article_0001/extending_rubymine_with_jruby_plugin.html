@@ -1,265 +1,258 @@
 <!doctype html>
 <html lang='en'>
-  <head>
-    <!-- Always force latest IE rendering engine or request Chrome Frame -->
-    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-type'>
-    <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
-    <meta content='github, ruby, java, rails' name='keywords'>
-    <title>GitHub --- Alexander Shvets's Web Page</title>
-    <link href="../../assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
-    <script src="../../assets/javascripts/application.js" type="text/javascript"></script>
-    <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
-    <div id='wrapper'>
-      <div id='main-column'>
-        <div id='logo'>
-          <h1>
-            <a href='/'>Alexander Shvets GitHub Home Page</a>
-          </h1>
-        </div>
-        <div id='menu'>
-          <ul>
-            <li class='current_page_item'>
-              <a href='/index.html'>Projects</a>
-            </li>
-            <li class='current_page_item'>
-              <a href='/bookmarks/index.html'>Bookmarks</a>
-            </li>
-            <li class='current_page_item'>
-              <a href='/blog/index.html'>Blog</a>
-            </li>
-          </ul>
-        </div>
-        <div id='page'>
-          <h2>Extending RubyMine with JRuby script - How to use HAML/SASS converter from inside IDE (JRuby script-plugin)</h2>
-          
-          <h1>How it works</h1>
-          
-          <p>RubyMine already has JRuby library as part of IDE (see <strong>${RUBYMINE_INSTALLATION/lib/jruby-complete.jar}</strong> file).</p>
-          
-          <p>It also has few scripts that extend standard functionality of IDE, you can see them under
-          <strong>&lsquo;File|Settings|Extension&rsquo;</strong> path or here: <strong>${RUBYMINE_INSTALLATION/rb/*.rb}</strong>. It could be considered as convenient
-          platform with easy extensions as ruby-plugins.</p>
-          
-          <p>Unfortunately, if your script depends on other gems and list of dependencies is big, it becomes very difficult to
-          install new plugins. You have to detect and install all dependent gems into RubyMine installation.</p>
-          
-          <p>In this article I will introduce another way of how to extend RubyMine functionality. We&rsquo;ll have separate
-          installation of JRuby that will provide us with gems repository.</p>
-          
-          <p>First of all, you have to install <a title="RVM Home" href="https://rvm.io">rvm</a>. This is a tool for installing different ruby versions under Mac/Unix
-          platforms. Once you have <strong>rvm</strong> installed, install jruby and then use it:</p>
-          
-          <pre><code class="bash">
-          &gt; rvm install jruby-1.5.6
-          &gt; rvm use jruby
-          </code></pre>
-          
-          <p>Check, if you have correct ruby version:</p>
-          
-          <pre><code class="bash">
-          &gt; ruby -v
-          </code></pre>
-          
-          <p>It should be <strong>jruby 1.5.6</strong>.</p>
-          
-          <p>Once we have <strong>jruby</strong> installed, we can develop new RubyMine plugin. We&rsquo;ll discuss step-by-step what needs to be done.</p>
-          
-          <h3>Step 1: Defining dependencies</h3>
-          
-          <p>We need to document dependencies for our plugin in <strong>Gemfile</strong>:</p>
-          
-          <pre><code class="ruby">
-          source &quot;http://rubygems.org&quot;
-          
-          gem &quot;haml&quot;, &quot;3.0.24&quot;
-          gem &quot;hpricot&quot;, &quot;0.8.3&quot;
-          gem &quot;abstract&quot;, &quot;1.0.0&quot;
-          gem &quot;erubis&quot;, &quot;2.6.6&quot;
-          gem &quot;sexp_processor&quot;, &quot;3.0.5&quot;
-          gem &quot;ruby_parser&quot;, &quot;2.0.5&quot;
-          </code></pre>
-          
-          <p>Now you can install dependencies with one command:</p>
-          
-          <pre><code class="ruby">
-          bundle install
-          </code></pre>
-          
-          <h3>Step 2: Loading dependencies</h3>
-          
-          <p>The following method loads all required gems into memory:</p>
-          
-          <pre><code class="ruby">
-          include Java
-          
-          def load_required_gems
-            jruby_home = &quot;#{ENV[&#39;HOME&#39;]}/.rvm/gems/jruby-1.5.6@haml-sass-converters&quot;
-          
-            $: &lt;&lt; &quot;#{jruby_home}/gems&quot;
-          
-            $: &lt;&lt; &quot;#{jruby_home}/gems/haml-3.0.24/lib&quot;
-            $: &lt;&lt; &quot;#{jruby_home}/gems/hpricot-0.8.3-java/lib&quot;
-            $: &lt;&lt; &quot;#{jruby_home}/gems/abstract-1.0.0/lib&quot;
-            $: &lt;&lt; &quot;#{jruby_home}/gems/erubis-2.6.6/lib&quot;
-            $: &lt;&lt; &quot;#{jruby_home}/gems/sexp_processor-3.0.5/lib&quot;
-            $: &lt;&lt; &quot;#{jruby_home}/gems/ruby_parser-2.0.5/lib&quot;
-          end
-          
-          load_required_gems
-          </code></pre>
-          
-          <h3>Step 3: &ldquo;Requiring&rdquo; libraries</h3>
-          
-          <p>Now we need to <strong>require</strong> libraries for working with <strong>HAML/SASS</strong> and <strong>RubyMine</strong>:</p>
-          
-          <pre><code class="ruby">
-          require &quot;haml&quot;
-          require &quot;haml/html&quot;
-          require &quot;sass/css&quot;
-          
-          require &#39;default_scripts_groups&#39;
-          require &#39;editor_action_helper&#39;
-          require &#39;action_group_helper&#39;
-          </code></pre>
-          
-          <h3>Step 4: Building conversion logic</h3>
-          
-          <p>We encapsulate all conversion logic into <strong>Converter</strong> class. We need to integrate logic from HAML/SASS library
-          with RubyMine API. Because this class will be executed in RubyMine environment, we have access to <strong>editor</strong> object:</p>
-          
-          <pre><code class="ruby">
-            class Converter
-              def self.convert_selection editor
-                if editor.has_selection?
-                  text = editor.selection
-                  s_start = editor.selection_start
-          
-                  changed_text = yield(text)
-                  editor.replace_selection_text(changed_text)
-          
-                  # restore selection
-                  editor.select(s_start, s_start + changed_text.length)
-                end
-              end
-          
-              def self.convert_to_haml(html)
-                Haml::HTML.new(html, :erb =&gt; true, :xhtml =&gt; true).render
-              end
-          
-              def self.convert_to_sass(css)
-                Sass::CSS.new(css).render(:sass)
-              end
-          
-              def self.convert_to_scss(css)
-                Sass::CSS.new(css).render(:scss)
-              end
-            end
-          </code></pre>
-          
-          <h3>Step 5: Registering editor actions</h3>
-          
-          <p>Now we need to register conversion methods of <strong>Converter</strong> class as editor actions for HTML/HAML conversions:</p>
-          
-          <pre><code class="ruby">
-            register_editor_action &quot;html_to_haml&quot;,
-                                   :text =&gt; &quot;Convert Html to Haml&quot;,
-                                   :description =&gt; &quot;Converts Html content to Haml content.&quot;,
-                                   :group =&gt; &quot;EditorPopupMenu&quot;,
-                                   :enable_in_modal_context =&gt; true do |editor, _|
-              Converter.convert_selection editor do |text|
-                Converter.convert_to_haml(text)
-              end
-            end
-          
-            register_editor_action &quot;html_to_haml_erb&quot;,
-                                   :text =&gt; &quot;Convert Html to Haml&quot;,
-                                   :description =&gt; &quot;Converts Html content to Haml content.&quot;,
-                                   #:shortcut =&gt; &quot;control shift PERIOD&quot;,
-                                   :group =&gt; &quot;ScriptsErb&quot;,
-                                   :file_type =&gt; &quot;RHTML&quot; do |editor, _|
-              Converter.convert_selection editor do |text|
-                Converter.convert_to_haml(text)
-              end
-            end
-          </code></pre>
-          
-          <p>For executing CSS/SASS conversions we will create new &ldquo;Css&rdquo; group under &lsquo;Tools|Extensions&rsquo; menu item.
-          We also need to register <strong>Converter</strong> class methods as editor actions for CSS/SASS conversions:</p>
-          
-          <pre><code class="ruby">
-            register_action_group &quot;ScriptsCss&quot;, :text =&gt; &quot;Css&quot;
-          
-            register_editor_action &quot;css_to_sass&quot;,
-                                   :text =&gt; &quot;Convert CSS to SASS&quot;,
-                                   :description =&gt; &quot;Converts CSS content to SASS content.&quot;,
-                                   :group =&gt; &quot;EditorPopupMenu&quot;,
-                                   :enable_in_modal_context =&gt; true do |editor, _|
-              Converter.convert_selection editor do |text|
-                Converter.convert_to_sass(text)
-              end
-            end
-          
-            register_editor_action &quot;css_to_sass_css&quot;,
-                                   :text =&gt; &quot;Convert CSS to SASS&quot;,
-                                   :description =&gt; &quot;Converts CSS content to SASS content.&quot;,
-                                   #:shortcut =&gt; &quot;control shift PERIOD&quot;,
-                                   :group =&gt; &quot;ScriptsCss&quot;,
-                                   :file_type =&gt; &quot;CSS&quot; do |editor, _|
-              Converter.convert_selection editor do |text|
-                Converter.convert_to_sass(text)
-              end
-            end
-          </code></pre>
-          
-          <h1>Install plugin</h1>
-          
-          <p>Above is th explanation of how plugin works. If you just want to use plugin, install
-          <a title="Haml/SASS Converters" href="http://github.com/shvets/haml-sass-converters">haml-sass-converters</a> gem into <strong>haml-sass-converters</strong> gemset:</p>
-          
-          <pre><code class="bash">
-          &gt; rvm use jruby@haml-sass-converters --create
-          &gt; gem i haml-sass-converters
-          </code></pre>
-          
-          <p>Run install script in your project&rsquo;s root (or some other location) in order to copy the script:</p>
-          
-          <pre><code class="bash">
-          &gt; cd &lt;your-project-root&gt;
-          &gt; haml-sass-converters-install
-          </code></pre>
-          
-          <p>New <strong>&ldquo;scripts&rdquo;</strong> folder will be created with <strong>&ldquo;converters.rb&rdquo;</strong> as a plugin.</p>
-          
-          <p>Go to <strong>&ldquo;File|Setting|Extensions&rdquo;</strong> and add &ldquo;scripts&rdquo; folder as new <strong>&ldquo;Script Folder&rdquo;</strong>.</p>
-          
-          <p>Restart <strong>RubyMine</strong>. After restarting IDE will have new <strong>&ldquo;Css&rdquo;</strong> group under <strong>&ldquo;Tools|Extensions&rdquo;</strong> and new actions:</p>
-          
-          <ul>
-          <li>convert Html to Haml;</li>
-          <li>convert CSS to SASS;</li>
-          </ul>
-          
-          <p>You can reach them from <strong>&ldquo;Tools|Extensions&rdquo;</strong> in main menu or from context popup menu inside the editor.</p>
-          
-          <h1>How to use plugin</h1>
-          
-          <p>Select some content inside erb or css file. Right click inside the editor and select appropriate action.</p>
-          <div id='footer'>
-            <p id='legal'>
-              &copy; All Right Reserved (2013), Alexander Shvets.
-              Built with
-              <a href='http://middlemanapp.com'>middleman</a>.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div id='sidebar'>
-        
-      </div>
-    </div>
-  </body>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="../../assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="../../assets/javascripts/application.js" type="text/javascript"></script>
+<link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h2>Extending RubyMine with JRuby script - How to use HAML/SASS converter from inside IDE (JRuby script-plugin)</h2>
+
+<h1>How it works</h1>
+
+<p>RubyMine already has JRuby library as part of IDE (see <strong>${RUBYMINE_INSTALLATION/lib/jruby-complete.jar}</strong> file).</p>
+
+<p>It also has few scripts that extend standard functionality of IDE, you can see them under
+<strong>&lsquo;File|Settings|Extension&rsquo;</strong> path or here: <strong>${RUBYMINE_INSTALLATION/rb/*.rb}</strong>. It could be considered as convenient
+platform with easy extensions as ruby-plugins.</p>
+
+<p>Unfortunately, if your script depends on other gems and list of dependencies is big, it becomes very difficult to
+install new plugins. You have to detect and install all dependent gems into RubyMine installation.</p>
+
+<p>In this article I will introduce another way of how to extend RubyMine functionality. We&rsquo;ll have separate
+installation of JRuby that will provide us with gems repository.</p>
+
+<p>First of all, you have to install <a title="RVM Home" href="https://rvm.io">rvm</a>. This is a tool for installing different ruby versions under Mac/Unix
+platforms. Once you have <strong>rvm</strong> installed, install jruby and then use it:</p>
+
+<pre><code class="bash">rvm install jruby-1.5.6
+rvm use jruby
+</code></pre>
+
+<p>Check, if you have correct ruby version:</p>
+
+<pre><code class="bash">ruby -v
+</code></pre>
+
+<p>It should be <strong>jruby 1.5.6</strong>.</p>
+
+<p>Once we have <strong>jruby</strong> installed, we can develop new RubyMine plugin. We&rsquo;ll discuss step-by-step what needs to be done.</p>
+
+<h3>Step 1: Defining dependencies</h3>
+
+<p>We need to document dependencies for our plugin in <strong>Gemfile</strong>:</p>
+
+<pre><code class="ruby">source &quot;http://rubygems.org&quot;
+
+gem &quot;haml&quot;, &quot;3.0.24&quot;
+gem &quot;hpricot&quot;, &quot;0.8.3&quot;
+gem &quot;abstract&quot;, &quot;1.0.0&quot;
+gem &quot;erubis&quot;, &quot;2.6.6&quot;
+gem &quot;sexp_processor&quot;, &quot;3.0.5&quot;
+gem &quot;ruby_parser&quot;, &quot;2.0.5&quot;
+</code></pre>
+
+<p>Now you can install dependencies with one command:</p>
+
+<pre><code class="ruby">bundle install
+</code></pre>
+
+<h3>Step 2: Loading dependencies</h3>
+
+<p>The following method loads all required gems into memory:</p>
+
+<pre><code class="ruby">include Java
+
+def load_required_gems
+  jruby_home = &quot;#{ENV[&#39;HOME&#39;]}/.rvm/gems/jruby-1.5.6@haml-sass-converters&quot;
+
+  $: &lt;&lt; &quot;#{jruby_home}/gems&quot;
+
+  $: &lt;&lt; &quot;#{jruby_home}/gems/haml-3.0.24/lib&quot;
+  $: &lt;&lt; &quot;#{jruby_home}/gems/hpricot-0.8.3-java/lib&quot;
+  $: &lt;&lt; &quot;#{jruby_home}/gems/abstract-1.0.0/lib&quot;
+  $: &lt;&lt; &quot;#{jruby_home}/gems/erubis-2.6.6/lib&quot;
+  $: &lt;&lt; &quot;#{jruby_home}/gems/sexp_processor-3.0.5/lib&quot;
+  $: &lt;&lt; &quot;#{jruby_home}/gems/ruby_parser-2.0.5/lib&quot;
+end
+
+load_required_gems
+</code></pre>
+
+<h3>Step 3: &ldquo;Requiring&rdquo; libraries</h3>
+
+<p>Now we need to <strong>require</strong> libraries for working with <strong>HAML/SASS</strong> and <strong>RubyMine</strong>:</p>
+
+<pre><code class="ruby">require &quot;haml&quot;
+require &quot;haml/html&quot;
+require &quot;sass/css&quot;
+
+require &#39;default_scripts_groups&#39;
+require &#39;editor_action_helper&#39;
+require &#39;action_group_helper&#39;
+</code></pre>
+
+<h3>Step 4: Building conversion logic</h3>
+
+<p>We encapsulate all conversion logic into <strong>Converter</strong> class. We need to integrate logic from HAML/SASS library
+with RubyMine API. Because this class will be executed in RubyMine environment, we have access to <strong>editor</strong> object:</p>
+
+<pre><code class="ruby">class Converter
+  def self.convert_selection editor
+    if editor.has_selection?
+      text = editor.selection
+      s_start = editor.selection_start
+
+      changed_text = yield(text)
+      editor.replace_selection_text(changed_text)
+
+      # restore selection
+      editor.select(s_start, s_start + changed_text.length)
+    end
+  end
+
+  def self.convert_to_haml(html)
+    Haml::HTML.new(html, :erb =&gt; true, :xhtml =&gt; true).render
+  end
+
+  def self.convert_to_sass(css)
+    Sass::CSS.new(css).render(:sass)
+  end
+
+  def self.convert_to_scss(css)
+    Sass::CSS.new(css).render(:scss)
+  end
+end
+</code></pre>
+
+<h3>Step 5: Registering editor actions</h3>
+
+<p>Now we need to register conversion methods of <strong>Converter</strong> class as editor actions for HTML/HAML conversions:</p>
+
+<pre><code class="ruby">register_editor_action &quot;html_to_haml&quot;,
+                       :text =&gt; &quot;Convert Html to Haml&quot;,
+                       :description =&gt; &quot;Converts Html content to Haml content.&quot;,
+                       :group =&gt; &quot;EditorPopupMenu&quot;,
+                       :enable_in_modal_context =&gt; true do |editor, _|
+  Converter.convert_selection editor do |text|
+    Converter.convert_to_haml(text)
+  end
+end
+
+register_editor_action &quot;html_to_haml_erb&quot;,
+                       :text =&gt; &quot;Convert Html to Haml&quot;,
+                       :description =&gt; &quot;Converts Html content to Haml content.&quot;,
+                       #:shortcut =&gt; &quot;control shift PERIOD&quot;,
+                       :group =&gt; &quot;ScriptsErb&quot;,
+                       :file_type =&gt; &quot;RHTML&quot; do |editor, _|
+  Converter.convert_selection editor do |text|
+    Converter.convert_to_haml(text)
+  end
+end
+</code></pre>
+
+<p>For executing CSS/SASS conversions we will create new &ldquo;Css&rdquo; group under &lsquo;Tools|Extensions&rsquo; menu item.
+We also need to register <strong>Converter</strong> class methods as editor actions for CSS/SASS conversions:</p>
+
+<pre><code class="ruby">register_action_group &quot;ScriptsCss&quot;, :text =&gt; &quot;Css&quot;
+
+register_editor_action &quot;css_to_sass&quot;,
+                       :text =&gt; &quot;Convert CSS to SASS&quot;,
+                       :description =&gt; &quot;Converts CSS content to SASS content.&quot;,
+                       :group =&gt; &quot;EditorPopupMenu&quot;,
+                       :enable_in_modal_context =&gt; true do |editor, _|
+  Converter.convert_selection editor do |text|
+    Converter.convert_to_sass(text)
+  end
+end
+
+register_editor_action &quot;css_to_sass_css&quot;,
+                       :text =&gt; &quot;Convert CSS to SASS&quot;,
+                       :description =&gt; &quot;Converts CSS content to SASS content.&quot;,
+                       #:shortcut =&gt; &quot;control shift PERIOD&quot;,
+                       :group =&gt; &quot;ScriptsCss&quot;,
+                       :file_type =&gt; &quot;CSS&quot; do |editor, _|
+  Converter.convert_selection editor do |text|
+    Converter.convert_to_sass(text)
+  end
+end
+</code></pre>
+
+<h1>Install plugin</h1>
+
+<p>Above is th explanation of how plugin works. If you just want to use plugin, install
+<a title="Haml/SASS Converters" href="http://github.com/shvets/haml-sass-converters">haml-sass-converters</a> gem into <strong>haml-sass-converters</strong> gemset:</p>
+
+<pre><code class="bash">rvm use jruby@haml-sass-converters --create
+gem i haml-sass-converters
+</code></pre>
+
+<p>Run install script in your project&rsquo;s root (or some other location) in order to copy the script:</p>
+
+<pre><code class="bash">cd &lt;your-project-root&gt;
+haml-sass-converters-install
+</code></pre>
+
+<p>New <strong>&ldquo;scripts&rdquo;</strong> folder will be created with <strong>&ldquo;converters.rb&rdquo;</strong> as a plugin.</p>
+
+<p>Go to <strong>&ldquo;File|Setting|Extensions&rdquo;</strong> and add &ldquo;scripts&rdquo; folder as new <strong>&ldquo;Script Folder&rdquo;</strong>.</p>
+
+<p>Restart <strong>RubyMine</strong>. After restarting IDE will have new <strong>&ldquo;Css&rdquo;</strong> group under <strong>&ldquo;Tools|Extensions&rdquo;</strong> and new actions:</p>
+
+<ul>
+<li>convert Html to Haml;</li>
+<li>convert CSS to SASS;</li>
+</ul>
+
+<p>You can reach them from <strong>&ldquo;Tools|Extensions&rdquo;</strong> in main menu or from context popup menu inside the editor.</p>
+
+<h1>How to use plugin</h1>
+
+<p>Select some content inside erb or css file. Right click inside the editor and select appropriate action.</p>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>.
+</p>
+
+</div>
+</div>
+</div>
+<div id='sidebar'>
+
+</div>
+</div>
+</body>
 </html>

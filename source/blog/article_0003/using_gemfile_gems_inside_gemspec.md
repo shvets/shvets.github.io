@@ -10,7 +10,6 @@ According to [bundler gem help](http://bundler.io/v1.3/rubygems.html), all you h
 with only one instruction (gemspec):
 
 ```ruby
-
 # Gemfile
 
 gemspec
@@ -23,7 +22,6 @@ and **add\_development\_dependency** calls.
 So, if you have the following **my_gem.gemspec** file:
 
 ```ruby
-
 # my_gem.gemspec
 
 spec.add_runtime_dependency "haml", [">= 0"]
@@ -35,7 +33,6 @@ spec.add_development_dependency "gemcutter", [">= 0"]
 it will dynamically build something like this:
 
 ```ruby
-
 # Gemfile
 
 group :default do
@@ -55,20 +52,18 @@ Gemfile as we would do for **any other ruby project**. We also keep gemspec file
 resulting gemspec when we need it or as part of gem release process.
 
 
-# Installation
+## Installation
 
 Add this line to to your Gemfile:
 
 ```ruby
-
 gem "gemspec_deps_gen"
 ```
 
 And then execute it:
 
 ```bash
-
-$ bundle
+bundle
 ```
 
 ## Usage
@@ -76,7 +71,6 @@ $ bundle
 Create **Gemfile** file:
 
 ```ruby
-
 # Gemfile
 
 group :default do
@@ -89,10 +83,9 @@ group :development do
 end
 ```
 
-Create **my_gem.gemspec.erb** file :
+Create **my_gem.gemspec.erb** file:
 
 ```ruby
-
 Gem::Specification.new do |spec|
   spec.name = "sample"
   spec.summary = %q{Summary.}
@@ -102,11 +95,11 @@ Gem::Specification.new do |spec|
   spec.homepage = "http://github.com/shvets/sample"
 
   spec.files = `git ls-files`.split($\)
-  spec.test_files = spec.files.grep(%r{^(test|spec|features)/})
+  spec.test_files =
+    spec.files.grep(%r{^(test|spec|features)/})
 
   spec.version = "1.0.0"
-
-  <%= project_dependencies %>
+  #<%= project_dependencies %>
 end
 ```
 
@@ -116,15 +109,12 @@ Now, run this command:
 
 
 ```bash
-
-$ gemspec_deps_gen my_gem
+gemspec_deps_gen my_gem
 ```
 
 It will generate **my_gem.gemspec** and replace ERB fragment with dependencies from Gemfile:
 
-
 ```ruby
-
 Gem::Specification.new do |spec|
   ...
 
@@ -138,7 +128,6 @@ end
 As alternative, you can call it as **rake command**:
 
 ```ruby
-
 require "gemspec_deps_gen"
 
 project_name = 'my_gem'
@@ -146,15 +135,16 @@ project_name = 'my_gem'
 task :gen do
   generator = GemspecDepsGen.new project_name
 
-  generator.generate_dependencies "spec", "#{project_name}.gemspec.erb", "#{project_name}.gemspec"
+  generator.generate_dependencies "spec",
+    "#{project_name}.gemspec.erb",
+    "#{project_name}.gemspec"
 end
 ```
 
 And run it:
 
 ```bash
-
-$ rake gen
+rake gen
 ```
 
 It will also generate **my_gem.gemspec** and replace ERB fragment with dependencies from Gemfile.

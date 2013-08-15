@@ -3,14 +3,12 @@
 **Step 1**: Add **coffee-script** to **Gemflie**:
 
 ```ruby
-
   gem 'coffee-script'
 ```
 
 **Step 2**: Add **coffee_filter.rb** file to **lib** folder:
 
 ```ruby
-
   require 'coffee-script'
 
   class CoffeeFilter < Nanoc3::Filter
@@ -25,7 +23,6 @@
 **Step 3**: Add new rules to **Rules** file for compiling **coffee-script** files into **javascript** files:
 
 ```ruby
-
   compile '/assets/coffee/*/' do
     filter :coffee
   end
@@ -39,7 +36,6 @@
 **Step 4**: Create your first coffescript file in **source/assets/coffee** directory:
 
 ```coffee
-
   # test.coffee
 
   notify -> alert "Hello, user!"
@@ -50,7 +46,6 @@
 **Step 5**: Compile your web site.
 
 ```ruby
-
   nanoc3 compile
 ```
 
@@ -59,14 +54,12 @@ Compiled javascript files should be located in **javascrips** folder.
 If you want to use coffee-script inside your haml partials, include this gem into 'Gemfile':
 
 ```ruby
-
   gem 'coffee-filter'
 ```
 
 And include this fragment into partial:
 
 ```coffee
-
 :coffeescript
   window.notify = () -> alert 'Hello, user!'
 ```

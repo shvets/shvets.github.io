@@ -18,16 +18,14 @@ First of all, you have to install [rvm][rvm]. This is a tool for installing diff
 platforms. Once you have **rvm** installed, install jruby and then use it:
 
 ```bash
-
-> rvm install jruby-1.5.6
-> rvm use jruby
+rvm install jruby-1.5.6
+rvm use jruby
 ```
 
 Check, if you have correct ruby version:
 
 ```bash
-
-> ruby -v
+ruby -v
 ```
 
 It should be **jruby 1.5.6**.
@@ -39,7 +37,6 @@ Once we have **jruby** installed, we can develop new RubyMine plugin. We'll disc
 We need to document dependencies for our plugin in **Gemfile**:
 
 ```ruby
-
 source "http://rubygems.org"
 
 gem "haml", "3.0.24"
@@ -53,7 +50,6 @@ gem "ruby_parser", "2.0.5"
 Now you can install dependencies with one command:
 
 ```ruby
-
 bundle install
 ```
 
@@ -62,7 +58,6 @@ bundle install
 The following method loads all required gems into memory:
 
 ```ruby
-
 include Java
 
 def load_required_gems
@@ -86,7 +81,6 @@ load_required_gems
 Now we need to **require** libraries for working with **HAML/SASS** and **RubyMine**:
 
 ```ruby
-
 require "haml"
 require "haml/html"
 require "sass/css"
@@ -102,33 +96,32 @@ We encapsulate all conversion logic into **Converter** class. We need to integra
 with RubyMine API. Because this class will be executed in RubyMine environment, we have access to **editor** object:
 
 ````ruby
+class Converter
+  def self.convert_selection editor
+    if editor.has_selection?
+      text = editor.selection
+      s_start = editor.selection_start
 
-  class Converter
-    def self.convert_selection editor
-      if editor.has_selection?
-        text = editor.selection
-        s_start = editor.selection_start
+      changed_text = yield(text)
+      editor.replace_selection_text(changed_text)
 
-        changed_text = yield(text)
-        editor.replace_selection_text(changed_text)
-
-        # restore selection
-        editor.select(s_start, s_start + changed_text.length)
-      end
-    end
-
-    def self.convert_to_haml(html)
-      Haml::HTML.new(html, :erb => true, :xhtml => true).render
-    end
-
-    def self.convert_to_sass(css)
-      Sass::CSS.new(css).render(:sass)
-    end
-
-    def self.convert_to_scss(css)
-      Sass::CSS.new(css).render(:scss)
+      # restore selection
+      editor.select(s_start, s_start + changed_text.length)
     end
   end
+
+  def self.convert_to_haml(html)
+    Haml::HTML.new(html, :erb => true, :xhtml => true).render
+  end
+
+  def self.convert_to_sass(css)
+    Sass::CSS.new(css).render(:sass)
+  end
+
+  def self.convert_to_scss(css)
+    Sass::CSS.new(css).render(:scss)
+  end
+end
 ```
 
 ### Step 5: Registering editor actions
@@ -136,56 +129,54 @@ with RubyMine API. Because this class will be executed in RubyMine environment, 
 Now we need to register conversion methods of **Converter** class as editor actions for HTML/HAML conversions:
 
 ```ruby
-
-  register_editor_action "html_to_haml",
-                         :text => "Convert Html to Haml",
-                         :description => "Converts Html content to Haml content.",
-                         :group => "EditorPopupMenu",
-                         :enable_in_modal_context => true do |editor, _|
-    Converter.convert_selection editor do |text|
-      Converter.convert_to_haml(text)
-    end
+register_editor_action "html_to_haml",
+                       :text => "Convert Html to Haml",
+                       :description => "Converts Html content to Haml content.",
+                       :group => "EditorPopupMenu",
+                       :enable_in_modal_context => true do |editor, _|
+  Converter.convert_selection editor do |text|
+    Converter.convert_to_haml(text)
   end
+end
 
-  register_editor_action "html_to_haml_erb",
-                         :text => "Convert Html to Haml",
-                         :description => "Converts Html content to Haml content.",
-                         #:shortcut => "control shift PERIOD",
-                         :group => "ScriptsErb",
-                         :file_type => "RHTML" do |editor, _|
-    Converter.convert_selection editor do |text|
-      Converter.convert_to_haml(text)
-    end
+register_editor_action "html_to_haml_erb",
+                       :text => "Convert Html to Haml",
+                       :description => "Converts Html content to Haml content.",
+                       #:shortcut => "control shift PERIOD",
+                       :group => "ScriptsErb",
+                       :file_type => "RHTML" do |editor, _|
+  Converter.convert_selection editor do |text|
+    Converter.convert_to_haml(text)
   end
+end
 ```
 
 For executing CSS/SASS conversions we will create new "Css" group under 'Tools|Extensions' menu item.
 We also need to register **Converter** class methods as editor actions for CSS/SASS conversions:
 
 ```ruby
+register_action_group "ScriptsCss", :text => "Css"
 
-  register_action_group "ScriptsCss", :text => "Css"
-
-  register_editor_action "css_to_sass",
-                         :text => "Convert CSS to SASS",
-                         :description => "Converts CSS content to SASS content.",
-                         :group => "EditorPopupMenu",
-                         :enable_in_modal_context => true do |editor, _|
-    Converter.convert_selection editor do |text|
-      Converter.convert_to_sass(text)
-    end
+register_editor_action "css_to_sass",
+                       :text => "Convert CSS to SASS",
+                       :description => "Converts CSS content to SASS content.",
+                       :group => "EditorPopupMenu",
+                       :enable_in_modal_context => true do |editor, _|
+  Converter.convert_selection editor do |text|
+    Converter.convert_to_sass(text)
   end
+end
 
-  register_editor_action "css_to_sass_css",
-                         :text => "Convert CSS to SASS",
-                         :description => "Converts CSS content to SASS content.",
-                         #:shortcut => "control shift PERIOD",
-                         :group => "ScriptsCss",
-                         :file_type => "CSS" do |editor, _|
-    Converter.convert_selection editor do |text|
-      Converter.convert_to_sass(text)
-    end
+register_editor_action "css_to_sass_css",
+                       :text => "Convert CSS to SASS",
+                       :description => "Converts CSS content to SASS content.",
+                       #:shortcut => "control shift PERIOD",
+                       :group => "ScriptsCss",
+                       :file_type => "CSS" do |editor, _|
+  Converter.convert_selection editor do |text|
+    Converter.convert_to_sass(text)
   end
+end
 ```
 
 # Install plugin
@@ -194,16 +185,14 @@ Above is th explanation of how plugin works. If you just want to use plugin, ins
 [haml-sass-converters][haml-sass-converters] gem into **haml-sass-converters** gemset:
 
 ```bash
-
-> rvm use jruby@haml-sass-converters --create
-> gem i haml-sass-converters
+rvm use jruby@haml-sass-converters --create
+gem i haml-sass-converters
 ```
 Run install script in your project's root (or some other location) in order to copy the script:
 
 ```bash
-
-> cd <your-project-root>
-> haml-sass-converters-install
+cd <your-project-root>
+haml-sass-converters-install
 ```
 
 New **"scripts"** folder will be created with **"converters.rb"** as a plugin.

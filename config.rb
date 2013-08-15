@@ -44,9 +44,10 @@ set :markdown, fenced_code_blocks: true, autolink: true, smartypants: true,
 # Haml
 ###
 
+set :haml, { ugly: true }
+
 # CodeRay syntax highlighting in Haml
 # First: gem install haml-coderay
-require 'haml-coderay'
 
 # CoffeeScript filters in Haml
 # First: gem install coffee-filter
@@ -93,13 +94,11 @@ helpers do
 end
 
 configure :development do
-  activate :rouge_syntax
-
-  #activate :syntax
-  #activate :syntax,
-  #         :linenos => 'inline',
-  #         :anchorlinenos => true,
-  #         :linenostart => 2
+  activate :syntax,
+           #:linenos => 'inline',
+           :line_numbers => true
+           #:anchorlinenos => true,
+           #:linenostart => 2
 end
 
 # Build-specific configuration
