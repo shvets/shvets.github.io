@@ -112,8 +112,10 @@ configure :build do
   # Enable cache buster
   # activate :asset_hash
 
+  activate :syntax, :line_numbers => true
+
   # Use relative URLs
-  activate :relative_assets
+  #activate :relative_assets
 
   # Or use a different image path
   # set :http_path, "/Content/images/"

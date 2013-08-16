@@ -7,8 +7,8 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="../../assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
-<script src="../../assets/javascripts/application.js" type="text/javascript"></script>
+<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
 <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
 </head>
@@ -54,16 +54,12 @@ installation of JRuby that will provide us with gems repository.</p>
 
 <p>First of all, you have to install <a title="RVM Home" href="https://rvm.io">rvm</a>. This is a tool for installing different ruby versions under Mac/Unix
 platforms. Once you have <strong>rvm</strong> installed, install jruby and then use it:</p>
-
-<pre><code class="bash">rvm install jruby-1.5.6
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code">rvm install jruby-1.5.6
 rvm use jruby
-</code></pre>
-
+</td></tr></tbody></table></pre>
 <p>Check, if you have correct ruby version:</p>
-
-<pre><code class="bash">ruby -v
-</code></pre>
-
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">ruby -v
+</td></tr></tbody></table></pre>
 <p>It should be <strong>jruby 1.5.6</strong>.</p>
 
 <p>Once we have <strong>jruby</strong> installed, we can develop new RubyMine plugin. We&rsquo;ll discuss step-by-step what needs to be done.</p>
@@ -71,158 +67,140 @@ rvm use jruby
 <h3>Step 1: Defining dependencies</h3>
 
 <p>We need to document dependencies for our plugin in <strong>Gemfile</strong>:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="n">source</span> <span class="s2">&quot;http://rubygems.org&quot;</span>
 
-<pre><code class="ruby">source &quot;http://rubygems.org&quot;
-
-gem &quot;haml&quot;, &quot;3.0.24&quot;
-gem &quot;hpricot&quot;, &quot;0.8.3&quot;
-gem &quot;abstract&quot;, &quot;1.0.0&quot;
-gem &quot;erubis&quot;, &quot;2.6.6&quot;
-gem &quot;sexp_processor&quot;, &quot;3.0.5&quot;
-gem &quot;ruby_parser&quot;, &quot;2.0.5&quot;
-</code></pre>
-
+<span class="n">gem</span> <span class="s2">&quot;haml&quot;</span><span class="p">,</span> <span class="s2">&quot;3.0.24&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;hpricot&quot;</span><span class="p">,</span> <span class="s2">&quot;0.8.3&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;abstract&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;erubis&quot;</span><span class="p">,</span> <span class="s2">&quot;2.6.6&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;sexp_processor&quot;</span><span class="p">,</span> <span class="s2">&quot;3.0.5&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;ruby_parser&quot;</span><span class="p">,</span> <span class="s2">&quot;2.0.5&quot;</span>
+</td></tr></tbody></table></pre>
 <p>Now you can install dependencies with one command:</p>
-
-<pre><code class="ruby">bundle install
-</code></pre>
-
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">bundle</span> <span class="n">install</span>
+</td></tr></tbody></table></pre>
 <h3>Step 2: Loading dependencies</h3>
 
 <p>The following method loads all required gems into memory:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div></td><td class="code"><span class="kp">include</span> <span class="no">Java</span>
 
-<pre><code class="ruby">include Java
+<span class="k">def </span><span class="nf">load_required_gems</span>
+  <span class="n">jruby_home</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">'HOME'</span><span class="o">]</span><span class="si">}</span><span class="s2">/.rvm/gems/jruby-1.5.6@haml-sass-converters&quot;</span>
 
-def load_required_gems
-  jruby_home = &quot;#{ENV[&#39;HOME&#39;]}/.rvm/gems/jruby-1.5.6@haml-sass-converters&quot;
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems&quot;</span>
 
-  $: &lt;&lt; &quot;#{jruby_home}/gems&quot;
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/haml-3.0.24/lib&quot;</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/hpricot-0.8.3-java/lib&quot;</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/abstract-1.0.0/lib&quot;</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/erubis-2.6.6/lib&quot;</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/sexp_processor-3.0.5/lib&quot;</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/ruby_parser-2.0.5/lib&quot;</span>
+<span class="k">end</span>
 
-  $: &lt;&lt; &quot;#{jruby_home}/gems/haml-3.0.24/lib&quot;
-  $: &lt;&lt; &quot;#{jruby_home}/gems/hpricot-0.8.3-java/lib&quot;
-  $: &lt;&lt; &quot;#{jruby_home}/gems/abstract-1.0.0/lib&quot;
-  $: &lt;&lt; &quot;#{jruby_home}/gems/erubis-2.6.6/lib&quot;
-  $: &lt;&lt; &quot;#{jruby_home}/gems/sexp_processor-3.0.5/lib&quot;
-  $: &lt;&lt; &quot;#{jruby_home}/gems/ruby_parser-2.0.5/lib&quot;
-end
-
-load_required_gems
-</code></pre>
-
+<span class="n">load_required_gems</span>
+</td></tr></tbody></table></pre>
 <h3>Step 3: &ldquo;Requiring&rdquo; libraries</h3>
 
 <p>Now we need to <strong>require</strong> libraries for working with <strong>HAML/SASS</strong> and <strong>RubyMine</strong>:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;haml&quot;</span>
+<span class="nb">require</span> <span class="s2">&quot;haml/html&quot;</span>
+<span class="nb">require</span> <span class="s2">&quot;sass/css&quot;</span>
 
-<pre><code class="ruby">require &quot;haml&quot;
-require &quot;haml/html&quot;
-require &quot;sass/css&quot;
-
-require &#39;default_scripts_groups&#39;
-require &#39;editor_action_helper&#39;
-require &#39;action_group_helper&#39;
-</code></pre>
-
+<span class="nb">require</span> <span class="s1">'default_scripts_groups'</span>
+<span class="nb">require</span> <span class="s1">'editor_action_helper'</span>
+<span class="nb">require</span> <span class="s1">'action_group_helper'</span>
+</td></tr></tbody></table></pre>
 <h3>Step 4: Building conversion logic</h3>
 
 <p>We encapsulate all conversion logic into <strong>Converter</strong> class. We need to integrate logic from HAML/SASS library
 with RubyMine API. Because this class will be executed in RubyMine environment, we have access to <strong>editor</strong> object:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div></td><td class="code"><span class="k">class </span><span class="nc">Converter</span>
+  <span class="k">def </span><span class="nc">self</span><span class="o">.</span><span class="nf">convert_selection</span> <span class="n">editor</span>
+    <span class="k">if</span> <span class="n">editor</span><span class="nf">.has_selection?</span>
+      <span class="n">text</span> <span class="o">=</span> <span class="n">editor</span><span class="nf">.selection</span>
+      <span class="n">s_start</span> <span class="o">=</span> <span class="n">editor</span><span class="nf">.selection_start</span>
 
-<pre><code class="ruby">class Converter
-  def self.convert_selection editor
-    if editor.has_selection?
-      text = editor.selection
-      s_start = editor.selection_start
+      <span class="n">changed_text</span> <span class="o">=</span> <span class="k">yield</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+      <span class="n">editor</span><span class="nf">.replace_selection_text</span><span class="p">(</span><span class="n">changed_text</span><span class="p">)</span>
 
-      changed_text = yield(text)
-      editor.replace_selection_text(changed_text)
+      <span class="c1"># restore selection</span>
+      <span class="n">editor</span><span class="nf">.select</span><span class="p">(</span><span class="n">s_start</span><span class="p">,</span> <span class="n">s_start</span> <span class="o">+</span> <span class="n">changed_text</span><span class="nf">.length</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
 
-      # restore selection
-      editor.select(s_start, s_start + changed_text.length)
-    end
-  end
+  <span class="k">def </span><span class="nc">self</span><span class="o">.</span><span class="nf">convert_to_haml</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="no">Haml</span><span class="o">::</span><span class="no">HTML</span><span class="nf">.new</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="ss">:erb</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">:xhtml</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span><span class="nf">.render</span>
+  <span class="k">end</span>
 
-  def self.convert_to_haml(html)
-    Haml::HTML.new(html, :erb =&gt; true, :xhtml =&gt; true).render
-  end
+  <span class="k">def </span><span class="nc">self</span><span class="o">.</span><span class="nf">convert_to_sass</span><span class="p">(</span><span class="n">css</span><span class="p">)</span>
+    <span class="no">Sass</span><span class="o">::</span><span class="no">CSS</span><span class="nf">.new</span><span class="p">(</span><span class="n">css</span><span class="p">)</span><span class="nf">.render</span><span class="p">(</span><span class="ss">:sass</span><span class="p">)</span>
+  <span class="k">end</span>
 
-  def self.convert_to_sass(css)
-    Sass::CSS.new(css).render(:sass)
-  end
-
-  def self.convert_to_scss(css)
-    Sass::CSS.new(css).render(:scss)
-  end
-end
-</code></pre>
-
+  <span class="k">def </span><span class="nc">self</span><span class="o">.</span><span class="nf">convert_to_scss</span><span class="p">(</span><span class="n">css</span><span class="p">)</span>
+    <span class="no">Sass</span><span class="o">::</span><span class="no">CSS</span><span class="nf">.new</span><span class="p">(</span><span class="n">css</span><span class="p">)</span><span class="nf">.render</span><span class="p">(</span><span class="ss">:scss</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
 <h3>Step 5: Registering editor actions</h3>
 
 <p>Now we need to register conversion methods of <strong>Converter</strong> class as editor actions for HTML/HAML conversions:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div></td><td class="code"><span class="n">register_editor_action</span> <span class="s2">&quot;html_to_haml&quot;</span><span class="p">,</span>
+                       <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">&quot;Convert Html to Haml&quot;</span><span class="p">,</span>
+                       <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">&quot;Converts Html content to Haml content.&quot;</span><span class="p">,</span>
+                       <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">&quot;EditorPopupMenu&quot;</span><span class="p">,</span>
+                       <span class="ss">:enable_in_modal_context</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">editor</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+  <span class="no">Converter</span><span class="nf">.convert_selection</span> <span class="n">editor</span> <span class="k">do</span> <span class="o">|</span><span class="n">text</span><span class="o">|</span>
+    <span class="no">Converter</span><span class="nf">.convert_to_haml</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 
-<pre><code class="ruby">register_editor_action &quot;html_to_haml&quot;,
-                       :text =&gt; &quot;Convert Html to Haml&quot;,
-                       :description =&gt; &quot;Converts Html content to Haml content.&quot;,
-                       :group =&gt; &quot;EditorPopupMenu&quot;,
-                       :enable_in_modal_context =&gt; true do |editor, _|
-  Converter.convert_selection editor do |text|
-    Converter.convert_to_haml(text)
-  end
-end
-
-register_editor_action &quot;html_to_haml_erb&quot;,
-                       :text =&gt; &quot;Convert Html to Haml&quot;,
-                       :description =&gt; &quot;Converts Html content to Haml content.&quot;,
-                       #:shortcut =&gt; &quot;control shift PERIOD&quot;,
-                       :group =&gt; &quot;ScriptsErb&quot;,
-                       :file_type =&gt; &quot;RHTML&quot; do |editor, _|
-  Converter.convert_selection editor do |text|
-    Converter.convert_to_haml(text)
-  end
-end
-</code></pre>
-
+<span class="n">register_editor_action</span> <span class="s2">&quot;html_to_haml_erb&quot;</span><span class="p">,</span>
+                       <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">&quot;Convert Html to Haml&quot;</span><span class="p">,</span>
+                       <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">&quot;Converts Html content to Haml content.&quot;</span><span class="p">,</span>
+                       <span class="c1">#:shortcut =&gt; &quot;control shift PERIOD&quot;,</span>
+                       <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">&quot;ScriptsErb&quot;</span><span class="p">,</span>
+                       <span class="ss">:file_type</span> <span class="o">=&gt;</span> <span class="s2">&quot;RHTML&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">editor</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+  <span class="no">Converter</span><span class="nf">.convert_selection</span> <span class="n">editor</span> <span class="k">do</span> <span class="o">|</span><span class="n">text</span><span class="o">|</span>
+    <span class="no">Converter</span><span class="nf">.convert_to_haml</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
 <p>For executing CSS/SASS conversions we will create new &ldquo;Css&rdquo; group under &lsquo;Tools|Extensions&rsquo; menu item.
 We also need to register <strong>Converter</strong> class methods as editor actions for CSS/SASS conversions:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div></td><td class="code"><span class="n">register_action_group</span> <span class="s2">&quot;ScriptsCss&quot;</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">&quot;Css&quot;</span>
 
-<pre><code class="ruby">register_action_group &quot;ScriptsCss&quot;, :text =&gt; &quot;Css&quot;
+<span class="n">register_editor_action</span> <span class="s2">&quot;css_to_sass&quot;</span><span class="p">,</span>
+                       <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">&quot;Convert CSS to SASS&quot;</span><span class="p">,</span>
+                       <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">&quot;Converts CSS content to SASS content.&quot;</span><span class="p">,</span>
+                       <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">&quot;EditorPopupMenu&quot;</span><span class="p">,</span>
+                       <span class="ss">:enable_in_modal_context</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">editor</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+  <span class="no">Converter</span><span class="nf">.convert_selection</span> <span class="n">editor</span> <span class="k">do</span> <span class="o">|</span><span class="n">text</span><span class="o">|</span>
+    <span class="no">Converter</span><span class="nf">.convert_to_sass</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 
-register_editor_action &quot;css_to_sass&quot;,
-                       :text =&gt; &quot;Convert CSS to SASS&quot;,
-                       :description =&gt; &quot;Converts CSS content to SASS content.&quot;,
-                       :group =&gt; &quot;EditorPopupMenu&quot;,
-                       :enable_in_modal_context =&gt; true do |editor, _|
-  Converter.convert_selection editor do |text|
-    Converter.convert_to_sass(text)
-  end
-end
-
-register_editor_action &quot;css_to_sass_css&quot;,
-                       :text =&gt; &quot;Convert CSS to SASS&quot;,
-                       :description =&gt; &quot;Converts CSS content to SASS content.&quot;,
-                       #:shortcut =&gt; &quot;control shift PERIOD&quot;,
-                       :group =&gt; &quot;ScriptsCss&quot;,
-                       :file_type =&gt; &quot;CSS&quot; do |editor, _|
-  Converter.convert_selection editor do |text|
-    Converter.convert_to_sass(text)
-  end
-end
-</code></pre>
-
+<span class="n">register_editor_action</span> <span class="s2">&quot;css_to_sass_css&quot;</span><span class="p">,</span>
+                       <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">&quot;Convert CSS to SASS&quot;</span><span class="p">,</span>
+                       <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">&quot;Converts CSS content to SASS content.&quot;</span><span class="p">,</span>
+                       <span class="c1">#:shortcut =&gt; &quot;control shift PERIOD&quot;,</span>
+                       <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">&quot;ScriptsCss&quot;</span><span class="p">,</span>
+                       <span class="ss">:file_type</span> <span class="o">=&gt;</span> <span class="s2">&quot;CSS&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">editor</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+  <span class="no">Converter</span><span class="nf">.convert_selection</span> <span class="n">editor</span> <span class="k">do</span> <span class="o">|</span><span class="n">text</span><span class="o">|</span>
+    <span class="no">Converter</span><span class="nf">.convert_to_sass</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
 <h1>Install plugin</h1>
 
 <p>Above is th explanation of how plugin works. If you just want to use plugin, install
 <a title="Haml/SASS Converters" href="http://github.com/shvets/haml-sass-converters">haml-sass-converters</a> gem into <strong>haml-sass-converters</strong> gemset:</p>
-
-<pre><code class="bash">rvm use jruby@haml-sass-converters --create
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code">rvm use jruby@haml-sass-converters --create
 gem i haml-sass-converters
-</code></pre>
-
+</td></tr></tbody></table></pre>
 <p>Run install script in your project&rsquo;s root (or some other location) in order to copy the script:</p>
-
-<pre><code class="bash">cd &lt;your-project-root&gt;
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code"><span class="nb">cd</span> &lt;your-project-root&gt;
 haml-sass-converters-install
-</code></pre>
-
+</td></tr></tbody></table></pre>
 <p>New <strong>&ldquo;scripts&rdquo;</strong> folder will be created with <strong>&ldquo;converters.rb&rdquo;</strong> as a plugin.</p>
 
 <p>Go to <strong>&ldquo;File|Setting|Extensions&rdquo;</strong> and add &ldquo;scripts&rdquo; folder as new <strong>&ldquo;Script Folder&rdquo;</strong>.</p>

@@ -19,6 +19,7 @@ require 'projects_gen'
 
 desc "generates web site"
 task "setup" do
+  sh "rake clean"
   sh "rake gen"
   sh "middleman build"
   sh "cp -r build/** ."
