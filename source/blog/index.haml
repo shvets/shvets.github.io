@@ -1,10 +1,54 @@
+---
+pageable: true
+per_page: 12
+paginate: true
+
+my_list:
+  - one
+  - two
+  - three
+---
+
 %h1="My Blog"
 
-%ul{:class => "blog"}
-  %li
-    %a{:href => "article_0001/extending_rubymine_with_jruby_plugin.html"}="Extending RubyMine with JRuby script - How to use HAML/SASS converter from inside IDE"
-  %li
-    %a{:href => "article_0002/how_to_use_coffeescript_with_nanoc.html"}="How to use CoffeeScript with nanoc"
-  %li
-    %a{:href => "article_0003/using_gemfile_gems_inside_gemspec.html"}="Using Gemfile gems inside .gemspec file"
+%aside
+  %h2 Recent Articles
+  %ol
+    - blog.articles[0...10].each do |article|
+      %li
+        = link_to article.title, article
+        %span= article.date.strftime('%b %e')
+  %h2 Tags
+  %ol
+    - blog.tags.each do |tag, articles|
+      %li
+        = link_to tag, tag_path(tag)
+        (#{articles.size})
+  %h2 By Year
+  %ol
+    - blog.articles.group_by {|a| a.date.year }.each do |year, articles|
+      %li
+        = link_to year, blog_year_path(year)
+        (#{articles.size})
 
+-#%h1
+-#  Articles tagged 'tagname'
+-#- if paginate
+-#  %p
+-#    Page #{page_number} of #{num_pages}
+-#  - if prev_page
+-#    %p= link_to 'Previous page', prev_page
+-#%ul
+-#  - page_articles.each_with_index do |article, i|
+-#    %li
+-#      = link_to article.title, article
+-#      %span= article.date.strftime('%b %e')
+-#- if paginate
+-#  - if next_page
+-#    %p= link_to 'Next page', next_page
+
+
+-#%h1 List
+-#%ol
+-#  - current_page.data.my_list.each do |f|
+-#    %li= f

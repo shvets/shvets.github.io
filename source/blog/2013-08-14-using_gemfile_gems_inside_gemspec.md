@@ -1,3 +1,10 @@
+---
+title: Using Gemfile gems inside .gemspec file
+date: 2013-08-14
+layout: "layout"
+tags: ruby
+---
+
 # Using Gemfile gems inside .gemspec file
 
 ## Introduction
@@ -6,7 +13,7 @@ If you have a (or plan to create new) gem, the chance is that you also have **Ge
 Here we have old and new approaches to describe dependencies of your gem. They don't coexist well
 with each other and you have to do additional steps in order to let them work together.
 
-According to [bundler gem help](http://bundler.io/v1.3/rubygems.html), all you have to do is to create simple **Gemfile**
+According to [bundler gem help][bundler gem help], all you have to do is to create simple **Gemfile**
 with only one instruction (gemspec):
 
 ```ruby
@@ -148,3 +155,5 @@ rake gen
 ```
 
 It will also generate **my_gem.gemspec** and replace ERB fragment with dependencies from Gemfile.
+
+[bundler gem help]: http://bundler.io/v1.3/rubygems.html

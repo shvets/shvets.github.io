@@ -1,3 +1,10 @@
+---
+title: Extending RubyMine with JRuby script
+date: 2011-01-01
+layout: "layout"
+tags: ruby, jruby, rubymine
+---
+
 ## Extending RubyMine with JRuby script - How to use HAML/SASS converter from inside IDE (JRuby script-plugin)
 
 # How it works

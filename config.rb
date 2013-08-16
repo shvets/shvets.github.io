@@ -9,14 +9,46 @@ set :site_keywords, "keyword-one, keyword-two"
 
 set :relative_links, true
 
-# Remove .html extension from pages
-#activate :directory_indexes
-
 # Set slim-lang output style
 #Slim::Engine.set_default_options :pretty => true
 
 # Set template languages
 #set :slim, :layout_engine => :slim
+
+###
+# Blog settings
+###
+
+# Time.zone = "UTC"
+
+activate :blog do |blog|
+  blog.prefix = "blog"
+  blog.permalink = ":year/:month/:day/:title.html"
+  #blog.permalink = ":year/:title.md"
+  #blog.sources = ":year-:month-:day-:title.html"
+  #blog.sources = ":year/title.html"
+  blog.taglink = "tags/:tag.html"
+
+  #blog.layout = "blog_layout"
+  # blog.summary_separator = /(READMORE)/
+  # blog.summary_length = 250
+  # blog.year_link = ":year.html"
+  # blog.month_link = ":year/:month.html"
+  # blog.day_link = ":year/:month/:day.html"
+  # blog.default_extension = ".markdown"
+
+  blog.tag_template = "tag.html"
+  blog.calendar_template = "calendar.html"
+
+  # blog.paginate = true
+  # blog.per_page = 10
+  # blog.page_link = "page/:num"
+end
+
+page "/feed.xml", :layout => false
+
+# Remove .html extension from pages
+#activate :directory_indexes
 
 ###
 # Assets
@@ -94,9 +126,8 @@ helpers do
 end
 
 configure :development do
-  activate :syntax,
+  activate :syntax, :line_numbers => true
            #:linenos => 'inline',
-           :line_numbers => true
            #:anchorlinenos => true,
            #:linenostart => 2
 end
@@ -109,8 +140,7 @@ configure :build do
   # Minify Javascript on build
   # activate :minify_javascript
 
-  activate :syntax,
-           :line_numbers => true
+  activate :syntax, :line_numbers => true
 
   # Enable cache buster
   # activate :asset_hash

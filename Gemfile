@@ -2,7 +2,9 @@ source "https://rubygems.org"
 
 group "default" do
   gem "middleman"
+  gem "middleman-blog"
   gem "middleman-livereload"
+  gem "builder" # for feed.xml.builder
   gem "redcarpet"
   gem "middleman-syntax"
   gem "haml"
