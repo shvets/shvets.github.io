@@ -39,62 +39,48 @@
 <h2>How to use CoffeeScript with nanoc</h2>
 
 <p><strong>Step 1</strong>: Add <strong>coffee-script</strong> to <strong>Gemflie</strong>:</p>
-
-<pre><code class="ruby">  gem &#39;coffee-script&#39;
-</code></pre>
-
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  <span class="n">gem</span> <span class="s1">'coffee-script'</span>
+</td></tr></tbody></table></pre>
 <p><strong>Step 2</strong>: Add <strong>coffee_filter.rb</strong> file to <strong>lib</strong> folder:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div></td><td class="code">  <span class="nb">require</span> <span class="s1">'coffee-script'</span>
 
-<pre><code class="ruby">  require &#39;coffee-script&#39;
+  <span class="k">class </span><span class="nc">CoffeeFilter</span> <span class="o">&lt;</span> <span class="no">Nanoc3</span><span class="o">::</span><span class="no">Filter</span>
+    <span class="n">identifier</span> <span class="ss">:coffee</span>
 
-  class CoffeeFilter &lt; Nanoc3::Filter
-    identifier :coffee
-
-    def run(content, params = {})
-      CoffeeScript.compile(content)
-    end
-  end
-</code></pre>
-
+    <span class="k">def </span><span class="nf">run</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="p">{})</span>
+      <span class="no">CoffeeScript</span><span class="nf">.compile</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</td></tr></tbody></table></pre>
 <p><strong>Step 3</strong>: Add new rules to <strong>Rules</strong> file for compiling <strong>coffee-script</strong> files into <strong>javascript</strong> files:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code">  <span class="n">compile</span> <span class="s1">'/assets/coffee/*/'</span> <span class="k">do</span>
+    <span class="n">filter</span> <span class="ss">:coffee</span>
+  <span class="k">end</span>
 
-<pre><code class="ruby">  compile &#39;/assets/coffee/*/&#39; do
-    filter :coffee
-  end
-
-  # so that the /assets/coffee/ item is copied to /javascripts/ item
-  route &#39;/assets/coffee/*/&#39; do
-    item.identifier.sub(%r{^/assets/coffee}, &#39;/javascripts&#39;).chop + &#39;.js&#39;
-  end
-</code></pre>
-
+  <span class="c1"># so that the /assets/coffee/ item is copied to /javascripts/ item</span>
+  <span class="n">route</span> <span class="s1">'/assets/coffee/*/'</span> <span class="k">do</span>
+    <span class="n">item</span><span class="nf">.identifier.sub</span><span class="p">(</span><span class="sr">%r{^/assets/coffee}</span><span class="p">,</span> <span class="s1">'/javascripts'</span><span class="p">)</span><span class="nf">.chop</span> <span class="o">+</span> <span class="s1">'.js'</span>
+  <span class="k">end</span>
+</td></tr></tbody></table></pre>
 <p><strong>Step 4</strong>: Create your first coffescript file in <strong>source/assets/coffee</strong> directory:</p>
+<pre class="highlight coffeescript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div></td><td class="code">  <span class="c1"># test.coffee
+</span>
+  <span class="nx">notify</span> <span class="o">-&gt;</span> <span class="nx">alert</span> <span class="s">&quot;Hello, user!&quot;</span>
 
-<pre><code class="coffee">  # test.coffee
-
-  notify -> alert &quot;Hello, user!&quot;
-
-  notify()
-</code></pre>
-
+  <span class="nx">notify</span><span class="p">()</span>
+</td></tr></tbody></table></pre>
 <p><strong>Step 5</strong>: Compile your web site.</p>
-
-<pre><code class="ruby">  nanoc3 compile
-</code></pre>
-
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  <span class="n">nanoc3</span> <span class="n">compile</span>
+</td></tr></tbody></table></pre>
 <p>Compiled javascript files should be located in <strong>javascrips</strong> folder.</p>
 
 <p>If you want to use coffee-script inside your haml partials, include this gem into &lsquo;Gemfile&rsquo;:</p>
-
-<pre><code class="ruby">  gem &#39;coffee-filter&#39;
-</code></pre>
-
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  <span class="n">gem</span> <span class="s1">'coffee-filter'</span>
+</td></tr></tbody></table></pre>
 <p>And include this fragment into partial:</p>
-
-<pre><code class="coffee">:coffeescript
-  window.notify = () -> alert &#39;Hello, user!&#39;
-</code></pre>
-
+<pre class="highlight coffeescript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code"><span class="o">:</span><span class="nx">coffeescript</span>
+  <span class="nb">window</span><span class="p">.</span><span class="na">notify</span> <span class="o">=</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="nx">alert</span> <span class="s">'Hello, user!'</span>
+</td></tr></tbody></table></pre>
 <div id='footer'>
 <p id='legal'>
 &copy; All Right Reserved (2013), Alexander Shvets.
