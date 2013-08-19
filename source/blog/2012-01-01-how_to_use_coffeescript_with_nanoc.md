@@ -1,7 +1,6 @@
 ---
 title: How to use CoffeeScript with nanoc
 date: 2012-01-01
-layout: "layout"
 tags: ruby
 ---
 

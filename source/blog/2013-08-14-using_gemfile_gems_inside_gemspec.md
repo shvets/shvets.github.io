@@ -1,7 +1,6 @@
 ---
 title: Using Gemfile gems inside .gemspec file
 date: 2013-08-14
-layout: "layout"
 tags: ruby
 ---
 
@@ -9,12 +8,12 @@ tags: ruby
 
 ## Introduction
 
-If you have a (or plan to create new) gem, the chance is that you also have **Gemfile** inside your project.
-Here we have old and new approaches to describe dependencies of your gem. They don't coexist well
-with each other and you have to do additional steps in order to let them work together.
+If you have a (or plan to create new) gem, the chance is that you also have **Gemfile** inside your project
+along with **.gemspec** file. Here we have two different ways to describe dependencies of your ruby code.
+They don't coexist well with each other and you have to do additional steps in order to let them work together.
 
 According to [bundler gem help][bundler gem help], all you have to do is to create simple **Gemfile**
-with only one instruction (gemspec):
+with only one instruction (**gemspec**):
 
 ```ruby
 # Gemfile
@@ -52,11 +51,11 @@ group :development do
 end
 ```
 
-This approach has on drawback though - you have to think in terms of .gemspec file, which is counter-intuitive.
+This approach has on drawback though - you have to think in terms of **.gemspec** file, which is counter-intuitive.
 
-I propose to do it [other way around](https://github.com/shvets/gemspec_deps_gen). We keep all the dependencies in
-Gemfile as we would do for **any other ruby project**. We also keep gemspec file as **ERB template**, so we can generate
-resulting gemspec when we need it or as part of gem release process.
+It would be nice if you can do it [other way around](https://github.com/shvets/gemspec_deps_gen). We keep all
+the dependencies in **Gemfile** as we would do it for **any other ruby project**. We also keep **.gemspec** file as
+**ERB template**, so we can generate resulting **.gemspec** when we need it or as part of gem release process.
 
 
 ## Installation
@@ -116,7 +115,7 @@ Now, run this command:
 
 
 ```bash
-gemspec_deps_gen my_gem
+$ gemspec_deps_gen my_gem.gemspec.erb my_gem.gemspec
 ```
 
 It will generate **my_gem.gemspec** and replace ERB fragment with dependencies from Gemfile:
@@ -132,6 +131,9 @@ Gem::Specification.new do |spec|
 end
 ```
 
+
+If second parameter is missing, result will be outputted to console.
+
 As alternative, you can call it as **rake command**:
 
 ```ruby
@@ -140,11 +142,9 @@ require "gemspec_deps_gen"
 project_name = 'my_gem'
 
 task :gen do
-  generator = GemspecDepsGen.new project_name
+  generator = GemspecDepsGen.new
 
-  generator.generate_dependencies "spec",
-    "#{project_name}.gemspec.erb",
-    "#{project_name}.gemspec"
+  generator.generate_dependencies "spec", "#{project_name}.gemspec.erb", "#{project_name}.gemspec"
 end
 ```
 

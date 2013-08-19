@@ -11,41 +11,27 @@ my_list:
 
 %h1="My Blog"
 
-%aside
-  %h2 Recent Articles
-  %ol
-    - blog.articles[0...10].each do |article|
-      %li
-        = link_to article.title, article
-        %span= article.date.strftime('%b %e')
-  %h2 Tags
-  %ol
-    - blog.tags.each do |tag, articles|
-      %li
-        = link_to tag, tag_path(tag)
-        (#{articles.size})
-  %h2 By Year
-  %ol
-    - blog.articles.group_by {|a| a.date.year }.each do |year, articles|
-      %li
-        = link_to year, blog_year_path(year)
-        (#{articles.size})
+%h2 Recent Articles
 
--#%h1
--#  Articles tagged 'tagname'
--#- if paginate
--#  %p
--#    Page #{page_number} of #{num_pages}
--#  - if prev_page
--#    %p= link_to 'Previous page', prev_page
--#%ul
--#  - page_articles.each_with_index do |article, i|
--#    %li
--#      = link_to article.title, article
--#      %span= article.date.strftime('%b %e')
--#- if paginate
--#  - if next_page
--#    %p= link_to 'Next page', next_page
+%ol
+  - blog.articles[0...10].each do |article|
+    %li
+      = link_to article.title, article
+      %span= article.date.strftime('%b %e')
+
+%h2 Tags
+%ol
+  - blog.tags.each do |tag, articles|
+    %li
+      = link_to tag, tag_path(tag)
+      (#{articles.size})
+
+%h2 By Year
+%ol
+  - blog.articles.group_by {|a| a.date.year }.each do |year, articles|
+    %li
+      = link_to year, blog_year_path(year)
+      (#{articles.size})
 
 
 -#%h1 List

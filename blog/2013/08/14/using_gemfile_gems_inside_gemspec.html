@@ -9,8 +9,6 @@
 <title>GitHub --- Alexander Shvets's Web Page</title>
 <link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
-<link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
 </head>
 <body>
 <div id='wrapper'>
@@ -40,12 +38,12 @@
 
 <h2>Introduction</h2>
 
-<p>If you have a (or plan to create new) gem, the chance is that you also have <strong>Gemfile</strong> inside your project.
-Here we have old and new approaches to describe dependencies of your gem. They don&rsquo;t coexist well
-with each other and you have to do additional steps in order to let them work together.</p>
+<p>If you have a (or plan to create new) gem, the chance is that you also have <strong>Gemfile</strong> inside your project
+along with <strong>.gemspec</strong> file. Here we have two different ways to describe dependencies of your ruby code.
+They don&rsquo;t coexist well with each other and you have to do additional steps in order to let them work together.</p>
 
 <p>According to <a href="http://bundler.io/v1.3/rubygems.html">bundler gem help</a>, all you have to do is to create simple <strong>Gemfile</strong>
-with only one instruction (gemspec):</p>
+with only one instruction (<strong>gemspec</strong>):</p>
 <pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="c1"># Gemfile</span>
 
 <span class="n">gemspec</span>
@@ -74,11 +72,11 @@ and <strong>add_development_dependency</strong> calls.</p>
   <span class="n">gem</span> <span class="s2">&quot;gemcutter&quot;</span>
 <span class="k">end</span>
 </td></tr></tbody></table></pre>
-<p>This approach has on drawback though - you have to think in terms of .gemspec file, which is counter-intuitive.</p>
+<p>This approach has on drawback though - you have to think in terms of <strong>.gemspec</strong> file, which is counter-intuitive.</p>
 
-<p>I propose to do it <a href="https://github.com/shvets/gemspec_deps_gen">other way around</a>. We keep all the dependencies in
-Gemfile as we would do for <strong>any other ruby project</strong>. We also keep gemspec file as <strong>ERB template</strong>, so we can generate
-resulting gemspec when we need it or as part of gem release process.</p>
+<p>It would be nice if you can do it <a href="https://github.com/shvets/gemspec_deps_gen">other way around</a>. We keep all
+the dependencies in <strong>Gemfile</strong> as we would do it for <strong>any other ruby project</strong>. We also keep <strong>.gemspec</strong> file as
+<strong>ERB template</strong>, so we can generate resulting <strong>.gemspec</strong> when we need it or as part of gem release process.</p>
 
 <h2>Installation</h2>
 
@@ -122,7 +120,7 @@ resulting gemspec when we need it or as part of gem release process.</p>
 <p>You can see ERB fragment (<strong>project_dependencies</strong>) included inside the body of the specification.</p>
 
 <p>Now, run this command:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gemspec_deps_gen my_gem
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="gp">$ </span>gemspec_deps_gen my_gem.gemspec.erb my_gem.gemspec
 </td></tr></tbody></table></pre>
 <p>It will generate <strong>my_gem.gemspec</strong> and replace ERB fragment with dependencies from Gemfile:</p>
 <pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="nf">.new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
@@ -134,17 +132,17 @@ resulting gemspec when we need it or as part of gem release process.</p>
 
 <span class="k">end</span>
 </td></tr></tbody></table></pre>
+<p>If second parameter is missing, result will be outputted to console.</p>
+
 <p>As alternative, you can call it as <strong>rake command</strong>:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;gemspec_deps_gen&quot;</span>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;gemspec_deps_gen&quot;</span>
 
 <span class="n">project_name</span> <span class="o">=</span> <span class="s1">'my_gem'</span>
 
 <span class="n">task</span> <span class="ss">:gen</span> <span class="k">do</span>
-  <span class="n">generator</span> <span class="o">=</span> <span class="no">GemspecDepsGen</span><span class="nf">.new</span> <span class="n">project_name</span>
+  <span class="n">generator</span> <span class="o">=</span> <span class="no">GemspecDepsGen</span><span class="nf">.new</span>
 
-  <span class="n">generator</span><span class="nf">.generate_dependencies</span> <span class="s2">&quot;spec&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec.erb&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec&quot;</span>
+  <span class="n">generator</span><span class="nf">.generate_dependencies</span> <span class="s2">&quot;spec&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec.erb&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec&quot;</span>
 <span class="k">end</span>
 </td></tr></tbody></table></pre>
 <p>And run it:</p>
@@ -156,15 +154,51 @@ resulting gemspec when we need it or as part of gem release process.</p>
 <p id='legal'>
 &copy; All Right Reserved (2013), Alexander Shvets.
 Built with
-<a href='http://middlemanapp.com'>middleman</a>.
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
 </p>
 
 </div>
 </div>
 </div>
-<div id='sidebar'>
-
 </div>
+<div id='sidebar'>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(3)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2013.html">2013</a>
+(2)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+
 </div>
 </body>
 </html>

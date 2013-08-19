@@ -1,7 +1,6 @@
 ---
 title: Extending RubyMine with JRuby script
 date: 2011-01-01
-layout: "layout"
 tags: ruby, jruby, rubymine
 ---
 

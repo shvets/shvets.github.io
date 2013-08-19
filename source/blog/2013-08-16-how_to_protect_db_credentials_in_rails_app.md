@@ -1,14 +1,13 @@
 ---
 title: How to protect DB credentials for Rails app
 date: 2013-08-16
-layout: "layout"
 tag: ruby
 ---
 
 
 # How to protect DB credentials for Rails app
 
-[shadow_db_credentials](shadow_db_credentials) gem helps to keep DB credentials for rails app in private place.
+[This gem](shadow_db_credentials) helps to keep DB credentials for rails app in private place.
 
 ## Installation
 
@@ -22,7 +21,7 @@ And then execute:
 
 ## Usage
 
-Create "shadowed" credentials file (**your_prod_credentials**) inside some directory (e.g. **~/.credentials**):
+Create "shadowed" credentials file (**your\_prod\_credentials**) inside some directory (e.g. **~/.credentials**):
 
 ```yml
 username: your_username
@@ -46,7 +45,7 @@ ENV['CREDENTIALS_DIR'] ||= "#{ENV['HOME']}/.credentials"
 
 Remove all the credentials (username/password) that you don't want to keep inside **config/database.yml**
 and replace them with single **credentials** attriubute. It points to the name of credentials file
-(**your_prod_credentials**):
+(**your\_prod\_credentials**):
 
 ```yml
 development:
@@ -60,7 +59,7 @@ production:
   credentials: your_prod_credentials
 ```
 
-If you want, you can also move other sensitive information, such as database name, url etc.
+If you want, you can also move other sensitive information, such as **database** name, **url** etc.
 
 Next, you have to create code hook inside rails **config/application.rb** in order to call gem's API:
 
@@ -91,7 +90,9 @@ You can check result of your work:
 
 ```bash
 $ rails console production
+```
 
+```ruby
 > ActiveRecord::Base.configurations["production"]
  => {"adapter"=>"postgresql", "username"=>"your_username", "password"=>"your_password"}
 
@@ -99,7 +100,7 @@ $ rails console production
  => {"adapter"=>"postgresql", "username"=>"your_username", "password"=>"your_password"}
 ```
 
-Or you can get it with API call:
+Or you can get connection information with API call:
 
 ```ruby
 require 'shadow_db_credentials'

@@ -12,15 +12,7 @@
     = stylesheet_link_tag "screen"
     = javascript_include_tag  "application"
 
-    %link{:href => "http://fonts.googleapis.com/css?family=Reenie+Beanie", :rel => "stylesheet", :type => "text/css"}/
-    %link{:href => "http://fonts.googleapis.com/css?family=Cantarell", :rel => "stylesheet", :type => "text/css"}/
-
-    -#%base{:href => "http://shvets.github.io"}
   %body
-
-    -#- if content_for?(:header)
-    -#  .site-header__content
-    -#    = yield_content :header
 
     #wrapper
       #main-column
@@ -33,5 +25,11 @@
           = yield
           #footer
             = partial "common/footer"
-      #sidebar
+
+    #sidebar
+      - if is_blog_article?
+        = partial "common/blog_sidebar"
+      - else
         = partial "common/sidebar"
+
+

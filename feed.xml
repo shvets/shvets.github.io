@@ -20,7 +20,7 @@
     </author>
     <content type="html">&lt;h1&gt;How to protect DB credentials for Rails app&lt;/h1&gt;
 
-&lt;p&gt;&lt;a href="shadow_db_credentials"&gt;shadow&lt;em&gt;db&lt;/em&gt;credentials&lt;/a&gt; gem helps to keep DB credentials for rails app in private place.&lt;/p&gt;
+&lt;p&gt;&lt;a href="shadow_db_credentials"&gt;This gem&lt;/a&gt; helps to keep DB credentials for rails app in private place.&lt;/p&gt;
 
 &lt;h2&gt;Installation&lt;/h2&gt;
 
@@ -32,7 +32,7 @@
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;h2&gt;Usage&lt;/h2&gt;
 
-&lt;p&gt;Create &amp;ldquo;shadowed&amp;rdquo; credentials file (&lt;strong&gt;your&lt;em&gt;prod&lt;/em&gt;credentials&lt;/strong&gt;) inside some directory (e.g. &lt;strong&gt;~/.credentials&lt;/strong&gt;):&lt;/p&gt;
+&lt;p&gt;Create &amp;ldquo;shadowed&amp;rdquo; credentials file (&lt;strong&gt;your_prod_credentials&lt;/strong&gt;) inside some directory (e.g. &lt;strong&gt;~/.credentials&lt;/strong&gt;):&lt;/p&gt;
 &lt;pre class="highlight yaml"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="s"&gt;username&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_username&lt;/span&gt;
 &lt;span class="s"&gt;password&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_password&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
@@ -47,7 +47,7 @@ variable. Register it in &lt;strong&gt;config/initializers/env_variables.rb&lt;/
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;Remove all the credentials (username/password) that you don&amp;rsquo;t want to keep inside &lt;strong&gt;config/database.yml&lt;/strong&gt;
 and replace them with single &lt;strong&gt;credentials&lt;/strong&gt; attriubute. It points to the name of credentials file
-(&lt;strong&gt;your&lt;em&gt;prod&lt;/em&gt;credentials&lt;/strong&gt;):&lt;/p&gt;
+(&lt;strong&gt;your_prod_credentials&lt;/strong&gt;):&lt;/p&gt;
 &lt;pre class="highlight yaml"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="s"&gt;development&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
   &lt;span class="s"&gt;adapter&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;postgresql&lt;/span&gt;
   &lt;span class="s"&gt;database&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_dev_db&lt;/span&gt;
@@ -58,7 +58,7 @@ and replace them with single &lt;strong&gt;credentials&lt;/strong&gt; attriubute
   &lt;span class="s"&gt;database&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_prod_db&lt;/span&gt;
   &lt;span class="s"&gt;credentials&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_prod_credentials&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;If you want, you can also move other sensitive information, such as database name, url etc.&lt;/p&gt;
+&lt;p&gt;If you want, you can also move other sensitive information, such as &lt;strong&gt;database&lt;/strong&gt; name, &lt;strong&gt;url&lt;/strong&gt; etc.&lt;/p&gt;
 
 &lt;p&gt;Next, you have to create code hook inside rails &lt;strong&gt;config/application.rb&lt;/strong&gt; in order to call gem&amp;rsquo;s API:&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'shadow_db_credentials'&lt;/span&gt;
@@ -83,15 +83,14 @@ and replace them with single &lt;strong&gt;credentials&lt;/strong&gt; attriubute
 with corresponding values dynamically, at run time.&lt;/p&gt;
 
 &lt;p&gt;You can check result of your work:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;rails console production
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;rails console production
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;&lt;span class="nf"&gt;.configurations&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;production&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+ &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;adapter&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&amp;gt;&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;postgresql&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;username&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&amp;gt;&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;your_username&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&amp;gt;&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;your_password&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 
-&lt;span class="gp"&gt;&amp;gt; &lt;/span&gt;ActiveRecord::Base.configurations[&lt;span class="s2"&gt;&amp;quot;production&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
- &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; &lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;adapter&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="s2"&gt;&amp;quot;postgresql&amp;quot;&lt;/span&gt;, &lt;span class="s2"&gt;&amp;quot;username&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="s2"&gt;&amp;quot;your_username&amp;quot;&lt;/span&gt;, &lt;span class="s2"&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="s2"&gt;&amp;quot;your_password&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;
-
-&lt;span class="gp"&gt;&amp;gt; &lt;/span&gt;Rails.application.config.database_configuration[&lt;span class="s1"&gt;'production'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
- &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; &lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;adapter&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="s2"&gt;&amp;quot;postgresql&amp;quot;&lt;/span&gt;, &lt;span class="s2"&gt;&amp;quot;username&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="s2"&gt;&amp;quot;your_username&amp;quot;&lt;/span&gt;, &lt;span class="s2"&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="s2"&gt;&amp;quot;your_password&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;Rails&lt;/span&gt;&lt;span class="nf"&gt;.application.config.database_configuration&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'production'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+ &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;adapter&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&amp;gt;&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;postgresql&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;username&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&amp;gt;&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;your_username&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;=&amp;gt;&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;your_password&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Or you can get it with API call:&lt;/p&gt;
+&lt;p&gt;Or you can get connection information with API call:&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'shadow_db_credentials'&lt;/span&gt;
 
 &lt;span class="n"&gt;credentials_dir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'CREDENTIALS_DIR'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
@@ -127,12 +126,12 @@ with corresponding values dynamically, at run time.&lt;/p&gt;
 
 &lt;h2&gt;Introduction&lt;/h2&gt;
 
-&lt;p&gt;If you have a (or plan to create new) gem, the chance is that you also have &lt;strong&gt;Gemfile&lt;/strong&gt; inside your project.
-Here we have old and new approaches to describe dependencies of your gem. They don&amp;rsquo;t coexist well
-with each other and you have to do additional steps in order to let them work together.&lt;/p&gt;
+&lt;p&gt;If you have a (or plan to create new) gem, the chance is that you also have &lt;strong&gt;Gemfile&lt;/strong&gt; inside your project
+along with &lt;strong&gt;.gemspec&lt;/strong&gt; file. Here we have two different ways to describe dependencies of your ruby code.
+They don&amp;rsquo;t coexist well with each other and you have to do additional steps in order to let them work together.&lt;/p&gt;
 
 &lt;p&gt;According to &lt;a href="http://bundler.io/v1.3/rubygems.html"&gt;bundler gem help&lt;/a&gt;, all you have to do is to create simple &lt;strong&gt;Gemfile&lt;/strong&gt;
-with only one instruction (gemspec):&lt;/p&gt;
+with only one instruction (&lt;strong&gt;gemspec&lt;/strong&gt;):&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
 
 &lt;span class="n"&gt;gemspec&lt;/span&gt;
@@ -161,11 +160,11 @@ and &lt;strong&gt;add_development_dependency&lt;/strong&gt; calls.&lt;/p&gt;
   &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemcutter&amp;quot;&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;This approach has on drawback though - you have to think in terms of .gemspec file, which is counter-intuitive.&lt;/p&gt;
+&lt;p&gt;This approach has on drawback though - you have to think in terms of &lt;strong&gt;.gemspec&lt;/strong&gt; file, which is counter-intuitive.&lt;/p&gt;
 
-&lt;p&gt;I propose to do it &lt;a href="https://github.com/shvets/gemspec_deps_gen"&gt;other way around&lt;/a&gt;. We keep all the dependencies in
-Gemfile as we would do for &lt;strong&gt;any other ruby project&lt;/strong&gt;. We also keep gemspec file as &lt;strong&gt;ERB template&lt;/strong&gt;, so we can generate
-resulting gemspec when we need it or as part of gem release process.&lt;/p&gt;
+&lt;p&gt;It would be nice if you can do it &lt;a href="https://github.com/shvets/gemspec_deps_gen"&gt;other way around&lt;/a&gt;. We keep all
+the dependencies in &lt;strong&gt;Gemfile&lt;/strong&gt; as we would do it for &lt;strong&gt;any other ruby project&lt;/strong&gt;. We also keep &lt;strong&gt;.gemspec&lt;/strong&gt; file as
+&lt;strong&gt;ERB template&lt;/strong&gt;, so we can generate resulting &lt;strong&gt;.gemspec&lt;/strong&gt; when we need it or as part of gem release process.&lt;/p&gt;
 
 &lt;h2&gt;Installation&lt;/h2&gt;
 
@@ -209,7 +208,7 @@ resulting gemspec when we need it or as part of gem release process.&lt;/p&gt;
 &lt;p&gt;You can see ERB fragment (&lt;strong&gt;project_dependencies&lt;/strong&gt;) included inside the body of the specification.&lt;/p&gt;
 
 &lt;p&gt;Now, run this command:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;gemspec_deps_gen my_gem
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;gemspec_deps_gen my_gem.gemspec.erb my_gem.gemspec
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;It will generate &lt;strong&gt;my_gem.gemspec&lt;/strong&gt; and replace ERB fragment with dependencies from Gemfile:&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Specification&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
@@ -221,17 +220,17 @@ resulting gemspec when we need it or as part of gem release process.&lt;/p&gt;
 
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;If second parameter is missing, result will be outputted to console.&lt;/p&gt;
+
 &lt;p&gt;As alternative, you can call it as &lt;strong&gt;rake command&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemspec_deps_gen&amp;quot;&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemspec_deps_gen&amp;quot;&lt;/span&gt;
 
 &lt;span class="n"&gt;project_name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'my_gem'&lt;/span&gt;
 
 &lt;span class="n"&gt;task&lt;/span&gt; &lt;span class="ss"&gt;:gen&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="n"&gt;generator&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;GemspecDepsGen&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt; &lt;span class="n"&gt;project_name&lt;/span&gt;
+  &lt;span class="n"&gt;generator&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;GemspecDepsGen&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt;
 
-  &lt;span class="n"&gt;generator&lt;/span&gt;&lt;span class="nf"&gt;.generate_dependencies&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;spec&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;project_name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;.gemspec.erb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;project_name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;.gemspec&amp;quot;&lt;/span&gt;
+  &lt;span class="n"&gt;generator&lt;/span&gt;&lt;span class="nf"&gt;.generate_dependencies&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;spec&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;project_name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;.gemspec.erb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;project_name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;.gemspec&amp;quot;&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;And run it:&lt;/p&gt;
