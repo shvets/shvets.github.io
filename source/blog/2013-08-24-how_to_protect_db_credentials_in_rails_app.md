@@ -1,6 +1,6 @@
 ---
 title: How to protect DB credentials for Rails app
-date: 2013-08-16
+date: 2013-08-24
 tag: ruby
 ---
 

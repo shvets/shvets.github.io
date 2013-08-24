@@ -5,16 +5,16 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-08-16T00:00:00Z</updated>
+  <updated>2013-08-24T00:00:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
   <entry>
     <title>How to protect DB credentials for Rails app</title>
-    <link rel="alternate" href="/blog/2013/08/16/how_to_protect_db_credentials_in_rails_app.html"/>
-    <id>/blog/2013/08/16/how_to_protect_db_credentials_in_rails_app.html</id>
-    <published>2013-08-16T00:00:00Z</published>
-    <updated>2013-08-16T00:00:00Z</updated>
+    <link rel="alternate" href="/blog/2013/08/24/how_to_protect_db_credentials_in_rails_app.html"/>
+    <id>/blog/2013/08/24/how_to_protect_db_credentials_in_rails_app.html</id>
+    <published>2013-08-24T00:00:00Z</published>
+    <updated>2013-08-24T00:00:00Z</updated>
     <author>
       <name>Article Author</name>
     </author>
