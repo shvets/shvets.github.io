@@ -20,14 +20,14 @@
     </author>
     <content type="html">&lt;h1&gt;How to protect DB credentials for Rails app&lt;/h1&gt;
 
-&lt;p&gt;&lt;a href="shadow_db_credentials"&gt;This gem&lt;/a&gt; helps to keep DB credentials for rails app in private place.&lt;/p&gt;
+&lt;p&gt;&lt;a href="shadow_db_credentials"&gt;This gem&lt;/a&gt; helps us to keep DB credentials for rails app in private place.&lt;/p&gt;
 
 &lt;h2&gt;Installation&lt;/h2&gt;
 
 &lt;p&gt;Add this line to to your Gemfile:&lt;/p&gt;
 &lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;gem &amp;quot;shadow_db_credentials&amp;quot;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;And then execute:&lt;/p&gt;
+&lt;p&gt;And then execute it:&lt;/p&gt;
 &lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;$ bundle
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;h2&gt;Usage&lt;/h2&gt;
@@ -40,14 +40,13 @@
 variable. Register it in &lt;strong&gt;config/initializers/env_variables.rb&lt;/strong&gt; file:&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'CREDENTIALS_DIR'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;||=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'HOME'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/.credentials&amp;quot;&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;If you want to have different &lt;strong&gt;credentials directory&lt;/strong&gt; per environment, define it in corresponding env file:&lt;/p&gt;
+&lt;p&gt;If you want to have different &lt;strong&gt;credentials directory&lt;/strong&gt; per environment, define it in corresponding &lt;strong&gt;env&lt;/strong&gt; file:&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# config/environments/development.rb&lt;/span&gt;
 &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
 &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'CREDENTIALS_DIR'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;||=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'HOME'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/.credentials&amp;quot;&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;Remove all the credentials (username/password) that you don&amp;rsquo;t want to keep inside &lt;strong&gt;config/database.yml&lt;/strong&gt;
-and replace them with single &lt;strong&gt;credentials&lt;/strong&gt; attriubute. It points to the name of credentials file
-(&lt;strong&gt;your_prod_credentials&lt;/strong&gt;):&lt;/p&gt;
+and replace them with single &lt;strong&gt;credentials&lt;/strong&gt; attribute. It points to the name of &lt;strong&gt;your_prod_credentials&lt;/strong&gt; file:&lt;/p&gt;
 &lt;pre class="highlight yaml"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="s"&gt;development&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
   &lt;span class="s"&gt;adapter&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;postgresql&lt;/span&gt;
   &lt;span class="s"&gt;database&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_dev_db&lt;/span&gt;
@@ -58,8 +57,12 @@ and replace them with single &lt;strong&gt;credentials&lt;/strong&gt; attriubute
   &lt;span class="s"&gt;database&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_prod_db&lt;/span&gt;
   &lt;span class="s"&gt;credentials&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_prod_credentials&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;If you want, you can also move other sensitive information, such as &lt;strong&gt;database&lt;/strong&gt; name, &lt;strong&gt;url&lt;/strong&gt; etc.&lt;/p&gt;
-
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: If you want, you can move other sensitive information as well, such as &lt;strong&gt;database&lt;/strong&gt; name, &lt;strong&gt;url&lt;/strong&gt; etc.&lt;/p&gt;
+&lt;pre class="highlight yaml"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="s"&gt;adapter&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;postgresql&lt;/span&gt;
+&lt;span class="s"&gt;database&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_prod_db&lt;/span&gt;
+&lt;span class="s"&gt;username&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_username&lt;/span&gt;
+&lt;span class="s"&gt;password&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;your_password&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;Next, you have to create code hook inside rails &lt;strong&gt;config/application.rb&lt;/strong&gt; in order to call gem&amp;rsquo;s API:&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'shadow_db_credentials'&lt;/span&gt;
 
@@ -82,6 +85,21 @@ and replace them with single &lt;strong&gt;credentials&lt;/strong&gt; attriubute
 &lt;p&gt;The hook will access original DB configuration and try to expand all &lt;strong&gt;credentials&lt;/strong&gt; attributes
 with corresponding values dynamically, at run time.&lt;/p&gt;
 
+&lt;p&gt;If you think that processing all environments is not necessary, you cant process only current environment:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;YourRailsApp&lt;/span&gt;
+  &lt;span class="k"&gt;class &lt;/span&gt;&lt;span class="nc"&gt;Application&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Rails&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Application&lt;/span&gt;
+    &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+
+    &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nc"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;database_configuration&lt;/span&gt;
+      &lt;span class="n"&gt;orig_db_configurations&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;super&lt;/span&gt;
+
+      &lt;span class="n"&gt;processor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ShadowDbCredentials&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'CREDENTIALS_DIR'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+      &lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="nf"&gt;.process_configuration&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;orig_db_configurations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;Rails&lt;/span&gt;&lt;span class="nf"&gt;.env&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;end&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;You can check result of your work:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;rails console production
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;&lt;span class="nf"&gt;.configurations&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;production&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
@@ -98,8 +116,8 @@ with corresponding values dynamically, at run time.&lt;/p&gt;
 
 &lt;span class="c1"&gt;# 1. get production hash, read configuration from default location&lt;/span&gt;
 
-&lt;span class="n"&gt;connection_hash1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="nf"&gt;.retrieve_configuration&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;production&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;connection_hash1&lt;/span&gt;&lt;span class="nf"&gt;.inspect&lt;/span&gt;
+&lt;span class="n"&gt;prod_conf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="nf"&gt;.retrieve_configuration&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;production&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;prod_conf&lt;/span&gt;&lt;span class="nf"&gt;.inspect&lt;/span&gt;
 
 &lt;span class="c1"&gt;# 2. get development hash, read configuration from dynamic source&lt;/span&gt;
 
@@ -109,8 +127,8 @@ with corresponding values dynamically, at run time.&lt;/p&gt;
     credentials: your_dev_db
 &lt;/span&gt;&lt;span class="no"&gt;TEXT&lt;/span&gt;
 
-&lt;span class="n"&gt;connection_hash2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="nf"&gt;.retrieve_configuration&lt;/span&gt; &lt;span class="s1"&gt;'development'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt;
-&lt;span class="n"&gt;connection_has2&lt;/span&gt;&lt;span class="nf"&gt;.inspect&lt;/span&gt;
+&lt;span class="n"&gt;dev_conf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="nf"&gt;.retrieve_configuration&lt;/span&gt; &lt;span class="s1"&gt;'development'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt;
+&lt;span class="n"&gt;dev_conf&lt;/span&gt;&lt;span class="nf"&gt;.inspect&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
   </entry>
   <entry>
