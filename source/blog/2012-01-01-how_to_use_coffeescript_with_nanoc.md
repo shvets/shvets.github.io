@@ -1,7 +1,7 @@
 ---
 title: How to use CoffeeScript with nanoc
 date: 2012-01-01
-tags: ruby
+tags: ruby, nanoc, coffeescript
 ---
 
 ## How to use CoffeeScript with nanoc

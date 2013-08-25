@@ -1,7 +1,7 @@
 ---
 title: Using Gemfile gems inside .gemspec file
 date: 2013-08-14
-tags: ruby
+tags: ruby, bundler
 ---
 
 # Using Gemfile gems inside .gemspec file
