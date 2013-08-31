@@ -1,6 +1,6 @@
 ---
 title: Easy access to http resources
-date: 2013-08-31
+date: 2013-09-07
 tag: ruby
 ---
 
@@ -100,6 +100,18 @@ response = accessor.get_response {:url => some_url},
   {'Content-Type" => "application/json;charset=UTF-8'}
 
 response2 = accessor.get_json_response :url => some_url
+```
+
+If you want to provide additional parameters in GET call, use **query** parameter:
+
+```ruby
+response = accessor.get_response :url => some_url, :query => {:param1 => 'p1', :param2 => 'p2'}
+```
+
+or
+
+```ruby
+response = accessor.get_response :url => "#{some_url?param1=p1&param2=p2}"
 ```
 
 You can setup timeout for your accessor object in milliseconds:

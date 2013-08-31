@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Replacing nanoc with middleman for static web site generation</h1>
+
+<p><a href="http://nanoc.ws/">Nanoc</a> and <a href="http://middlemanapp.com/">middleman</a> are comparable tools. Both provide static web site generation from ruby
+templates, such as erb, haml etc. I discover that middleman is easier to configure and has better/simpler
+extension support. So, I decided to convert my existing web site to work with middleman.</p>
+
+<p>Here are the steps that you need to do in order to use middleman or migrate your web site from other static site generator.</p>
+
+<p><strong>1.</strong> If you have old <strong>.rvmrc</strong> file, remove it and create 2 new files:</p>
+
+<ul>
+<li><strong>.ruby-version</strong>:</li>
+</ul>
+<pre class="highlight text"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">1.9.3
+</td></tr></tbody></table></pre>
+<ul>
+<li><strong>.ruby-gemset</strong>:</li>
+</ul>
+<pre class="highlight text"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">your_gemset_name
+</td></tr></tbody></table></pre>
+<p>This is the <a href="http://blog.railsapps.org/post/47051459677/project-gemsets-with-rvm">new way</a> of handling <strong>ruby version</strong> and <strong>gemset name</strong> introduced in latest
+versions of bundler.</p>
+
+<p><strong>2.</strong> Include into your <strong>Gemfile</strong> at least these gems:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code"><span class="n">gem</span> <span class="s2">&quot;middleman&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;middleman-livereload&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;haml&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;redcarpet&quot;</span>
+</td></tr></tbody></table></pre>
+<p>In this minimal configuration we have support for dynamic reloading of web pages when they get changed
+and support for haml and markdown engines.</p>
+
+<p><strong>3.</strong> Move all files from your <strong>content</strong> folder into new <strong>sources</strong> folder.:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">mv content <span class="nb">source</span>
+</td></tr></tbody></table></pre>
+<p><strong>4.</strong> Remove <strong>compass_config.rb</strong> and create new <strong>config.rb</strong> file. This is configuration file for
+middleman:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div></td><td class="code"><span class="n">set</span> <span class="ss">:build_dir</span><span class="p">,</span> <span class="s2">&quot;public&quot;</span>
+
+<span class="n">set</span> <span class="ss">:css_dir</span><span class="p">,</span> <span class="s2">&quot;assets/stylesheets&quot;</span>
+<span class="n">set</span> <span class="ss">:js_dir</span><span class="p">,</span> <span class="s2">&quot;assets/javascripts&quot;</span>
+<span class="n">set</span> <span class="ss">:images_dir</span><span class="p">,</span> <span class="s2">&quot;assets/images&quot;</span>
+
+<span class="n">set</span> <span class="ss">:markdown_engine</span><span class="p">,</span> <span class="ss">:redcarpet</span>
+
+<span class="n">set</span> <span class="ss">:markdown</span><span class="p">,</span> <span class="ss">fenced_code_blocks: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">autolink: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">smartypants: </span><span class="kp">true</span><span class="p">,</span>
+    <span class="ss">gh_blockcode: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">lax_spacing: </span><span class="kp">true</span>
+
+<span class="n">set</span> <span class="ss">:haml</span><span class="p">,</span> <span class="p">{</span> <span class="ss">ugly: </span><span class="kp">true</span> <span class="p">}</span>
+</td></tr></tbody></table></pre>
+<p>Make sure that your styles, javascripts and images are located in:</p>
+
+<ul>
+<li>source/assets/stylesheets</li>
+<li>source/assets/javascripts</li>
+<li>source/assets/images</li>
+</ul>
+
+<p><strong>5.</strong> Adding language highlight support</p>
+
+<p>If you want support for language highlight in markdown files, include this gem into <strong>Gemfile</strong>:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">gem</span> <span class="s2">&quot;middleman-syntax&quot;</span>
+</td></tr></tbody></table></pre>
+<p>and these lines to <strong>config.rb</strong> file:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="n">configure</span> <span class="ss">:development</span> <span class="k">do</span>
+  <span class="n">activate</span> <span class="ss">:syntax</span><span class="p">,</span> <span class="ss">:line_numbers</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="k">end</span>
+
+<span class="n">configure</span> <span class="ss">:build</span> <span class="k">do</span>
+  <span class="n">activate</span> <span class="ss">:syntax</span><span class="p">,</span> <span class="ss">:line_numbers</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
+<p>Make sure that you activated syntax highlight in development configuration too.</p>
+
+<p><strong>6.</strong> Adding partials support</p>
+
+<p>If you need partials in your project, use <strong>partial</strong> command:</p>
+<pre class="highlight haml"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">  <span class="nf">#main-column</span>
+    <span class="nf">#logo</span>
+      <span class="p">=</span> <span class="n">partial</span> <span class="s2">&quot;common/header&quot;</span>
+</td></tr></tbody></table></pre>
+<p><strong>7.</strong> Other miscellaneous changes</p>
+
+<ul>
+<li><p>Remove all related to <strong>nanoc</strong> files from <strong>lib</strong> folder.</p></li>
+<li><p>Move <strong>common</strong> folder (if you have) from <strong>layout/common</strong> into <strong>common</strong> folder.</p></li>
+<li><p>Rename <strong>layouts/default.haml</strong> into <strong>layouts/layout.haml</strong>.</p></li>
+</ul>
+
+<p><strong>8.</strong> Generate static web site:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code">rm -rf public
+middleman build
+</td></tr></tbody></table></pre>
+<p><strong>9.</strong> Start middleman and then access your web site from the browser:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">middleman &amp;
+
+open http://localhost:4567
+</td></tr></tbody></table></pre>
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(3)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2013.html">2013</a>
+(3)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>

@@ -5,10 +5,118 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-08-24T00:00:00Z</updated>
+  <updated>2013-08-31T00:00:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Replacing nanoc with middleman for static web site generation</title>
+    <link rel="alternate" href="/blog/2013/08/31/static_web_site_generation_with_middleman.html"/>
+    <id>/blog/2013/08/31/static_web_site_generation_with_middleman.html</id>
+    <published>2013-08-31T00:00:00Z</published>
+    <updated>2013-08-31T00:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Replacing nanoc with middleman for static web site generation&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href="http://nanoc.ws/"&gt;Nanoc&lt;/a&gt; and &lt;a href="http://middlemanapp.com/"&gt;middleman&lt;/a&gt; are comparable tools. Both provide static web site generation from ruby
+templates, such as erb, haml etc. I discover that middleman is easier to configure and has better/simpler
+extension support. So, I decided to convert my existing web site to work with middleman.&lt;/p&gt;
+
+&lt;p&gt;Here are the steps that you need to do in order to use middleman or migrate your web site from other static site generator.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; If you have old &lt;strong&gt;.rvmrc&lt;/strong&gt; file, remove it and create 2 new files:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;.ruby-version&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;1.9.3
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;.ruby-gemset&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;your_gemset_name
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;This is the &lt;a href="http://blog.railsapps.org/post/47051459677/project-gemsets-with-rvm"&gt;new way&lt;/a&gt; of handling &lt;strong&gt;ruby version&lt;/strong&gt; and &lt;strong&gt;gemset name&lt;/strong&gt; introduced in latest
+versions of bundler.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Include into your &lt;strong&gt;Gemfile&lt;/strong&gt; at least these gems:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;middleman&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;middleman-livereload&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;haml&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;redcarpet&amp;quot;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;In this minimal configuration we have support for dynamic reloading of web pages when they get changed
+and support for haml and markdown engines.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; Move all files from your &lt;strong&gt;content&lt;/strong&gt; folder into new &lt;strong&gt;sources&lt;/strong&gt; folder.:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;mv content &lt;span class="nb"&gt;source&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; Remove &lt;strong&gt;compass_config.rb&lt;/strong&gt; and create new &lt;strong&gt;config.rb&lt;/strong&gt; file. This is configuration file for
+middleman:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="ss"&gt;:build_dir&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;public&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="ss"&gt;:css_dir&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;assets/stylesheets&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="ss"&gt;:js_dir&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;assets/javascripts&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="ss"&gt;:images_dir&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;assets/images&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="ss"&gt;:markdown_engine&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:redcarpet&lt;/span&gt;
+
+&lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="ss"&gt;:markdown&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;fenced_code_blocks: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;autolink: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;smartypants: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="ss"&gt;gh_blockcode: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;lax_spacing: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;
+
+&lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="ss"&gt;:haml&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="ss"&gt;ugly: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Make sure that your styles, javascripts and images are located in:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;source/assets/stylesheets&lt;/li&gt;
+&lt;li&gt;source/assets/javascripts&lt;/li&gt;
+&lt;li&gt;source/assets/images&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;5.&lt;/strong&gt; Adding language highlight support&lt;/p&gt;
+
+&lt;p&gt;If you want support for language highlight in markdown files, include this gem into &lt;strong&gt;Gemfile&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;middleman-syntax&amp;quot;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;and these lines to &lt;strong&gt;config.rb&lt;/strong&gt; file:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;configure&lt;/span&gt; &lt;span class="ss"&gt;:development&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+  &lt;span class="n"&gt;activate&lt;/span&gt; &lt;span class="ss"&gt;:syntax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:line_numbers&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+
+&lt;span class="n"&gt;configure&lt;/span&gt; &lt;span class="ss"&gt;:build&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+  &lt;span class="n"&gt;activate&lt;/span&gt; &lt;span class="ss"&gt;:syntax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:line_numbers&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Make sure that you activated syntax highlight in development configuration too.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;6.&lt;/strong&gt; Adding partials support&lt;/p&gt;
+
+&lt;p&gt;If you need partials in your project, use &lt;strong&gt;partial&lt;/strong&gt; command:&lt;/p&gt;
+&lt;pre class="highlight haml"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="nf"&gt;#main-column&lt;/span&gt;
+    &lt;span class="nf"&gt;#logo&lt;/span&gt;
+      &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;partial&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;common/header&amp;quot;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;7.&lt;/strong&gt; Other miscellaneous changes&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Remove all related to &lt;strong&gt;nanoc&lt;/strong&gt; files from &lt;strong&gt;lib&lt;/strong&gt; folder.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Move &lt;strong&gt;common&lt;/strong&gt; folder (if you have) from &lt;strong&gt;layout/common&lt;/strong&gt; into &lt;strong&gt;common&lt;/strong&gt; folder.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Rename &lt;strong&gt;layouts/default.haml&lt;/strong&gt; into &lt;strong&gt;layouts/layout.haml&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;8.&lt;/strong&gt; Generate static web site:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rm -rf public
+middleman build
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;9.&lt;/strong&gt; Start middleman and then access your web site from the browser:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;middleman &amp;amp;
+
+open http://localhost:4567
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
+  </entry>
   <entry>
     <title>How to protect DB credentials for Rails app</title>
     <link rel="alternate" href="/blog/2013/08/24/how_to_protect_db_credentials_in_rails_app.html"/>
