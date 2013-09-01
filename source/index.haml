@@ -28,5 +28,5 @@
 %ul{:class => "projects"}
   - github_projects.each do |project|
     %li
-      %a{:href => "#{project[1]}"}="#{project[0]}"
-      ="#{project[2]}"
+      %a{:href => "#{project[0]}"}="#{project[1]}"
+      ="(#{project[2]}) #{project[3]}"
