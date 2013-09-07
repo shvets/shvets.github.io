@@ -38,7 +38,7 @@ require 'resource_accessor'
 accessor = ResourceAccessor.new
 ```
 
-If you want to access unprotected resource located at **some_url**, execute this line:
+If you want to access unprotected resource, located at **some_url**, execute this line:
 
 ```ruby
 response = accessor.get_response :url => some_url
