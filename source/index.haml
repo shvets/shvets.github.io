@@ -17,13 +17,13 @@
   / .doc
 / .welcome
 
-%h1="My Projects"
-
 - $: << "lib"
 
 - require 'projects_gen'
 
 - github_projects = ProjectsGen.new.read_data "data/github_projects.txt"
+
+%h1="My Projects (#{github_projects.size})"
 
 %ul{:class => "projects"}
   - github_projects.each do |project|

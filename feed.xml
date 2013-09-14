@@ -5,10 +5,390 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-09-07T00:00:00Z</updated>
+  <updated>2013-09-14T00:00:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Using Node.js and Karma Framework for Unit Tests and Code Coverage in Javascript</title>
+    <link rel="alternate" href="/blog/2013/09/14/nodejs_and_karma.html"/>
+    <id>/blog/2013/09/14/nodejs_and_karma.html</id>
+    <published>2013-09-14T00:00:00Z</published>
+    <updated>2013-09-14T00:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Using Node.js and Karma Framework for Unit Tests and Code Coverage in Javascript&lt;/h1&gt;
+
+&lt;p&gt;Your web project, whether it&amp;rsquo;s written in Java, Python or Ruby, has Javascript files that
+support front-end part of it. And unit tests and code coverage for them are two most
+&lt;strong&gt;uncovered&lt;/strong&gt; areas, &lt;strong&gt;terra incognito&lt;/strong&gt; of Javascript world.&lt;/p&gt;
+
+&lt;p&gt;New technologies, such as &lt;strong&gt;Node.js&lt;/strong&gt;, can help you to &lt;strong&gt;cover&lt;/strong&gt; it. Node.js is server-side technology, but
+we don&amp;rsquo;t plan to change the way we use Javascript in today&amp;rsquo;s projects, we just use Node.js as complimentary
+tool for packages delivery and execution of code, that is located outside of your project,
+such as unit-test runner or coverage runner.&lt;/p&gt;
+
+&lt;p&gt;Because this technology is orthogonal to your project, it can be used in virtually any project,
+whether it&amp;rsquo;s PHP, Java, Ruby or C#, as long as they have Javascript.&lt;/p&gt;
+
+&lt;p&gt;Writing unit tests and generating code coverage is superior to your project, because having unit tests
+&lt;strong&gt;increases quality&lt;/strong&gt; of code and code coverage report provides &lt;strong&gt;awareness&lt;/strong&gt; and &lt;strong&gt;better control&lt;/strong&gt;
+of what is going on with the project.&lt;/p&gt;
+
+&lt;h2&gt;Node.js: what it is?&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;It was created by &lt;strong&gt;Ryan Dahl&lt;/strong&gt; in 2009.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It is &lt;strong&gt;scripting language&lt;/strong&gt; - no compilation required, convenient for writing automation scripts. It uses
+Google Chrome v8 Javascript engine.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It is Javascript that&amp;rsquo;s &lt;strong&gt;freed from the browser&amp;rsquo;s chains&lt;/strong&gt; - it can be used from &lt;strong&gt;command line&lt;/strong&gt; and as
+part of &lt;strong&gt;server-side&lt;/strong&gt; collection of technologies.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It has a lot of &lt;strong&gt;packages&lt;/strong&gt; (libraries) for easy extending existing functionality. You use &lt;strong&gt;node package manager&lt;/strong&gt;
+to deliver node packages to your computer same way as Ruby developers use RubyGems for downloading gems
+(Ruby equivalent of library).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It is &lt;strong&gt;technology-in-demand&lt;/strong&gt;. Some companies that use it: &lt;strong&gt;github.com&lt;/strong&gt;,  &lt;strong&gt;linkedin.com&lt;/strong&gt;,
+&lt;strong&gt;vonage.com&lt;/strong&gt;, &lt;strong&gt;ebay.com&lt;/strong&gt;, &lt;strong&gt;microsoft.com&lt;/strong&gt;, &lt;strong&gt;trello.com&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It is &lt;strong&gt;new and promising technology&lt;/strong&gt;. See &lt;a href="http://www.dragoninnovation.com/projects/22-tessel‎"&gt;Tessel&lt;/a&gt; -
+internet-connected microcontroller progammable in Node.js.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A lot of hosting services already support Node.js: &lt;strong&gt;Heroku&lt;/strong&gt;, &lt;strong&gt;Joyent&lt;/strong&gt;, &lt;strong&gt;CloudFoundry&lt;/strong&gt;, &lt;strong&gt;OpenShift&lt;/strong&gt;, &lt;strong&gt;Cloudnode&lt;/strong&gt;,
+&lt;strong&gt;WindowsAzure&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;If you are on Apple computer, you can use &lt;strong&gt;homebrew&lt;/strong&gt; tool to install it:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install node
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;It will install &lt;strong&gt;node package manager&lt;/strong&gt; (npm) as well:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node -v
+npm -v
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;On Windows you can download node and npm as one installation from &lt;a href="http://nodejs.org/download"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Using Node.js: Webserver example&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s demonstrate &amp;ldquo;hello world&amp;rdquo; program for Node.js. This simple web server responds with &amp;ldquo;Hello World&amp;rdquo; string
+for every request.&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// hello_world.js
+&lt;/span&gt;
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;http&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'http'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;server&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;http&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;createServer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;req&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;writeHead&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;200&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;'Content-Type'&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'text/plain'&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;end&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Hello World\n'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+
+&lt;span class="nx"&gt;server&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;listen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1337&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'127.0.0.1'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Server running at http://127.0.0.1:1337/'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;To run this code, execute it from the command line:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="gp"&gt;% &lt;/span&gt;node example.js
+
+Server running at http://127.0.0.1:1337/
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Installing node packages&lt;/h2&gt;
+
+&lt;p&gt;You can install node packages in two ways:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;globally&lt;/strong&gt;, for all projects: usually in &lt;strong&gt;/usr/local//lib/node_modules&lt;/strong&gt;;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;locally&lt;/strong&gt;, for current project only: in &lt;strong&gt;your&lt;em&gt;project&lt;/em&gt;root/node_modules&lt;/strong&gt;;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is the example of global installation:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install -g grunt-cli
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;and local installation:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install grunt-cli
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;In examples above we are installing &lt;strong&gt;grunt&lt;/strong&gt; build tool.&lt;/p&gt;
+
+&lt;p&gt;Saving packages locally is &lt;a href="http://www.futurealoof.com/posts/nodemodules-in-git.html"&gt;good practice&lt;/a&gt; -
+this way you will have the ability to quickly reproduce your production environment -
+&lt;a href="http://www.12factor.net/dev-prod-parity"&gt;dev/prod parity&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can execute grunt command now:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;your_project_root
+
+node_modules/grunt-cli/bin/grunt -version
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Keep track of node packages used by project&lt;/h2&gt;
+
+&lt;p&gt;You can create &lt;strong&gt;package.json&lt;/strong&gt; file used by &lt;strong&gt;npm&lt;/strong&gt; to keep track of project dependencies. This is
+sample file:&lt;/p&gt;
+&lt;pre class="highlight json"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;your_project&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;1.0.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;description&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Npm package for your_project&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;author&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;John Smith &amp;lt;jsmith@site.com&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;engines&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;node&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;gt;= 0.10.16&amp;quot;&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{},&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;devDependencies&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;grunt&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;~0.4.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;grunt-cli&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;~0.1.9&amp;quot;&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;With this file in place you can install all required dependencies (grunt, grunt-cli) in one command:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;You can also install single package with automatic insert of package name/description into &lt;strong&gt;package.json&lt;/strong&gt;
+as development dependency:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install grunt-cli --save-dev
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Look: identical tools for different languages&lt;/h2&gt;
+
+&lt;p&gt;If we look at different languages as frameworks, we can see that most of them have similar tools for similar needs.&lt;/p&gt;
+
+&lt;p&gt;For example,&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;build tool:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java - Ant/Maven&lt;/li&gt;
+&lt;li&gt;Ruby - rake/thor&lt;/li&gt;
+&lt;li&gt;Node - grunt&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;package manager:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java - ??? (maybe Maven?)&lt;/li&gt;
+&lt;li&gt;Ruby - gem&lt;/li&gt;
+&lt;li&gt;Node - npm&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;dependencies resolver:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java - Maven&lt;/li&gt;
+&lt;li&gt;Ruby - bundler&lt;/li&gt;
+&lt;li&gt;Node - npm&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;version manager:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java - no&lt;/li&gt;
+&lt;li&gt;Ruby - rvm&lt;/li&gt;
+&lt;li&gt;Node - nvm&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Looks like it&amp;rsquo;s becoming &lt;strong&gt;de-facto standard&lt;/strong&gt; for contemporary popular languages to have
+at least some &lt;strong&gt;package delivery engine&lt;/strong&gt;, &lt;strong&gt;dependencies resolver&lt;/strong&gt; and &lt;strong&gt;framework version manager&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Karma Framework: what is it?&lt;/h2&gt;
+
+&lt;p&gt;We use Node.js primarily as &lt;strong&gt;delivery mechanism&lt;/strong&gt; for easy installation of packages that will help
+us to build &lt;strong&gt;unit tests&lt;/strong&gt; and generate &lt;strong&gt;code coverage&lt;/strong&gt;. This can be done by &lt;strong&gt;Karma&lt;/strong&gt; framework.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;It was created by &lt;strong&gt;AngularJS&lt;/strong&gt; team.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It&amp;rsquo;s &lt;strong&gt;not&lt;/strong&gt; unit test or coverage library - it&amp;rsquo;s universal &lt;strong&gt;layer built on top&lt;/strong&gt; of existing testing/coverage
+libraries &lt;strong&gt;with common configuration&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It&amp;rsquo;s &lt;strong&gt;agnostic to testing framework&lt;/strong&gt;: you describe your tests with Jasmine, Mocha, QUnit, or write a simple
+adapter for any framework you like.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You can plug in coverage library seamlessly.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You can test &lt;strong&gt;same code in different browsers&lt;/strong&gt; simultaneously.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You can &lt;strong&gt;debug&lt;/strong&gt; with the help of RubyMine/WebStorm IDEs, Chrome or Firefox browsers.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You can run your tests in &lt;strong&gt;headless mode&lt;/strong&gt; with the help of &lt;strong&gt;PhantomJS&lt;/strong&gt; library.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;You can install karma through &lt;strong&gt;npm&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma --save-dev
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;After &lt;strong&gt;karma&lt;/strong&gt; installation you need to create &lt;strong&gt;karma configuration file&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can keep it in javascript:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node_modules/karma/bin/karma init karma.conf.js
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;or coffeescript:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node_modules/karma/bin/karma init karma.conf.coffee
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Script will ask few questions and at the end &lt;strong&gt;karma.conf.js&lt;/strong&gt; or &lt;strong&gt;karma.conf.coffee&lt;/strong&gt; file will be created.&lt;/p&gt;
+
+&lt;p&gt;Now, you need to install additional packages. First, install browser launchers and preprocessors:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma-chrome-launcher --save-dev
+npm install karma-firefox-launcher --save-dev
+npm install karma-safari-launcher --save-dev
+npm install karma-phantomjs-launcher --save-dev
+
+npm install karma-coffee-preprocessor --save-dev
+npm install karma-html2js-preprocessor --save-dev
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Then, install support for jasmine (it&amp;rsquo;s one of supported testing libraries):&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma-jasmine --save-dev
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Revisiting Content of Karma Configuration File&lt;/h2&gt;
+
+&lt;p&gt;Below is the typical example of karma configuration file:&lt;/p&gt;
+&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;div class="lineno"&gt;24&lt;/div&gt;&lt;div class="lineno"&gt;25&lt;/div&gt;&lt;div class="lineno"&gt;26&lt;/div&gt;&lt;div class="lineno"&gt;27&lt;/div&gt;&lt;div class="lineno"&gt;28&lt;/div&gt;&lt;div class="lineno"&gt;29&lt;/div&gt;&lt;div class="lineno"&gt;30&lt;/div&gt;&lt;div class="lineno"&gt;31&lt;/div&gt;&lt;div class="lineno"&gt;32&lt;/div&gt;&lt;div class="lineno"&gt;33&lt;/div&gt;&lt;div class="lineno"&gt;34&lt;/div&gt;&lt;div class="lineno"&gt;35&lt;/div&gt;&lt;div class="lineno"&gt;36&lt;/div&gt;&lt;div class="lineno"&gt;37&lt;/div&gt;&lt;div class="lineno"&gt;38&lt;/div&gt;&lt;div class="lineno"&gt;39&lt;/div&gt;&lt;div class="lineno"&gt;40&lt;/div&gt;&lt;div class="lineno"&gt;41&lt;/div&gt;&lt;div class="lineno"&gt;42&lt;/div&gt;&lt;div class="lineno"&gt;43&lt;/div&gt;&lt;div class="lineno"&gt;44&lt;/div&gt;&lt;div class="lineno"&gt;45&lt;/div&gt;&lt;div class="lineno"&gt;46&lt;/div&gt;&lt;div class="lineno"&gt;47&lt;/div&gt;&lt;div class="lineno"&gt;48&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# karma.conf.coffee
+&lt;/span&gt;
+&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
+  &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;
+    &lt;span class="na"&gt;basePath&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'.'&lt;/span&gt;
+
+    &lt;span class="na"&gt;frameworks&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'jasmine'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="na"&gt;files&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+      &lt;span class="c1"&gt;# external libraries
+&lt;/span&gt;
+      &lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;GEM_HOME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;
+        &lt;span class="s"&gt;'/gems/jquery-rails-3.0.4/vendor/assets/javascripts/jquery.js'&lt;/span&gt;
+
+      &lt;span class="c1"&gt;# project libraries
+&lt;/span&gt;
+      &lt;span class="s"&gt;'app/assets/javascripts/*.js'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="s"&gt;'app/assets/javascripts/*.coffee'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+
+      &lt;span class="c1"&gt;# specs
+&lt;/span&gt;
+      &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'spec/javascripts/*_spec.js'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;included&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;true&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'spec/javascripts/*_spec.coffee'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;included&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;true&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# list of files to exclude
+&lt;/span&gt;    &lt;span class="na"&gt;exclude&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+
+    &lt;span class="na"&gt;preprocessors&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+      &lt;span class="s"&gt;'**/*.coffee'&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'coffee'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="na"&gt;reporters&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'dots'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="na"&gt;port&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;9876&lt;/span&gt;
+
+    &lt;span class="na"&gt;colors&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;true&lt;/span&gt;
+
+    &lt;span class="na"&gt;logLevel&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;LOG_INFO&lt;/span&gt;
+
+    &lt;span class="na"&gt;autoWatch&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;false&lt;/span&gt;
+
+    &lt;span class="na"&gt;browsers&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;PhantomJS&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="na"&gt;captureTimeout&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;60000&lt;/span&gt;
+
+    &lt;span class="na"&gt;singleRun&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;true&lt;/span&gt;
+
+    &lt;span class="na"&gt;reportSlowerThan&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;500&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;rsquo;s explain some of used properties.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;basePath&lt;/strong&gt; points to the root of your project&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;frameworks&lt;/strong&gt; describes used frameworks (we use jasmine only)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;files&lt;/strong&gt; should include&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;original javascript code to be tested&lt;/li&gt;
+&lt;li&gt;dependent external libraries&lt;/li&gt;
+&lt;li&gt;specs&lt;/li&gt;
+&lt;li&gt;fixtures (if yop plan to use them)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;preprocessors&lt;/strong&gt; describe different actions/filters. Some of them:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;how to process coffescript files (coffee);&lt;/li&gt;
+&lt;li&gt;how to build fixtures (html2js);&lt;/li&gt;
+&lt;li&gt;what files to include into code coverage (coverage);&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;reporters&lt;/strong&gt; define usage of &amp;ldquo;dots&amp;rdquo; reporter&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;browsers&lt;/strong&gt; describe in which browsers code should be tested. We use &lt;strong&gt;PhantomJS&lt;/strong&gt; for headless tests&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;singleRun&lt;/strong&gt;: true is useful for running in CI server&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Using Karma&lt;/h2&gt;
+
+&lt;p&gt;You can start karma with this command:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node_modules/karma/bin/karma start
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;This command will run all specs in &lt;strong&gt;spec/javascripts&lt;/strong&gt; folder and output results to console.&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;INFO &lt;span class="o"&gt;[&lt;/span&gt;karma]: Karma v0.10.2 server started at http://localhost:9876/
+INFO &lt;span class="o"&gt;[&lt;/span&gt;launcher]: Starting browser PhantomJS
+INFO &lt;span class="o"&gt;[&lt;/span&gt;PhantomJS 1.9.1 &lt;span class="o"&gt;(&lt;/span&gt;Mac OS X&lt;span class="o"&gt;)]&lt;/span&gt;: Connected on socket _juBSCUpZSBdU1wA-URx
+...............................................
+PhantomJS 1.9.1 &lt;span class="o"&gt;(&lt;/span&gt;Mac OS X&lt;span class="o"&gt;)&lt;/span&gt;: Executed 47 of 47 SUCCESS &lt;span class="o"&gt;(&lt;/span&gt;0.167 secs / 0.027 secs&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Code Coverage with Karma&lt;/h2&gt;
+
+&lt;p&gt;For generating code coverage report you have to install &lt;strong&gt;karma-coverage&lt;/strong&gt; package:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma-coverage --save-dev
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;You also have to register your javascript or coffeescript files with &lt;strong&gt;coverage&lt;/strong&gt; preprocessor,
+add &lt;strong&gt;coverage&lt;/strong&gt; reporter to the list of reporters and create &lt;strong&gt;coverageReporter&lt;/strong&gt; section:&lt;/p&gt;
+&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# karma.conf.coffee
+&lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
+  &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;
+    &lt;span class="p"&gt;...&lt;/span&gt;
+
+    &lt;span class="na"&gt;preprocessors&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+      &lt;span class="s"&gt;'app/assets/javascripts/**/*.js'&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'coverage'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+      &lt;span class="s"&gt;'app/assets/javascripts/**/*.coffee'&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'coverage'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="na"&gt;reporters&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'dots'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;'coverage'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="na"&gt;coverageReporter&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+      &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'html'&lt;/span&gt;
+      &lt;span class="na"&gt;dir&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'coverage'&lt;/span&gt;
+    &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;coverageReporter&lt;/strong&gt; section describes configuration of &amp;ldquo;coverage&amp;rdquo; reporter: type of report and location of it.&lt;/p&gt;
+
+&lt;p&gt;Now, when you run karma again&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node_modules/karma/bin/karma start
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;it will create coverage report inside &lt;strong&gt;coverage&lt;/strong&gt; directory. Open it:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;open coverage/PhantomJS&lt;span class="se"&gt;\ &lt;/span&gt;1.9.1&lt;span class="se"&gt;\ \(&lt;/span&gt;Mac&lt;span class="se"&gt;\ &lt;/span&gt;OS&lt;span class="se"&gt;\ &lt;/span&gt;X&lt;span class="se"&gt;\)&lt;/span&gt;/
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Using fixture for your specs&lt;/h2&gt;
+
+&lt;p&gt;If you plan to use fixtures inside your specs, you have to do these steps.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Create fixture file in &lt;strong&gt;fixtures&lt;/strong&gt; folder:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="highlight html"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c"&gt;&amp;lt;!-- spec/javascripts/fixtures/template.html --&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;div&amp;gt;&lt;/span&gt;something&lt;span class="nt"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Add fixtures location to &lt;strong&gt;files&lt;/strong&gt; sections and specify &lt;strong&gt;html2js&lt;/strong&gt; preprocessor for
+html files inside &lt;strong&gt;fixtures&lt;/strong&gt; directory:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# karma.conf.coffee
+&lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
+  &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;
+    &lt;span class="p"&gt;...&lt;/span&gt;
+
+    &lt;span class="na"&gt;files&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+      &lt;span class="p"&gt;...&lt;/span&gt;
+      &lt;span class="s"&gt;'spec/javascripts/fixtures/**/*.html'&lt;/span&gt;
+    &lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="na"&gt;preprocessors&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+      &lt;span class="s"&gt;'spec/javascripts/fixtures/**/*.html'&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'html2js'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Access &lt;strong&gt;fixture&lt;/strong&gt; from the spec through global &lt;strong&gt;window.__html__&lt;/strong&gt; variable:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# spec/javascripts/some_coffee_spec.coffee
+&lt;/span&gt;&lt;span class="nx"&gt;describe&lt;/span&gt; &lt;span class="s"&gt;'some_coffee_code'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
+  &lt;span class="nx"&gt;fixture&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;undefined&lt;/span&gt;
+
+  &lt;span class="nx"&gt;beforeEach&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
+    &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;__html__&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;__html__&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="p"&gt;{};&lt;/span&gt;
+    &lt;span class="nx"&gt;fixture&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;__html__&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'spec/javascripts/fixtures/template.html'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+  &lt;span class="nx"&gt;it&lt;/span&gt; &lt;span class="s"&gt;'access div element'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
+    &lt;span class="nx"&gt;el&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;fixture&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="na"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;'#div'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="nx"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;el&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="na"&gt;toBeDefined&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
+  </entry>
   <entry>
     <title>Easy access to http resources</title>
     <link rel="alternate" href="/blog/2013/09/07/easy_access_to_http_resources.html"/>
@@ -524,197 +904,5 @@ the dependencies in &lt;strong&gt;Gemfile&lt;/strong&gt; as we would do it for &
 &lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nx"&gt;coffeescript&lt;/span&gt;
   &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;notify&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;alert&lt;/span&gt; &lt;span class="s"&gt;'Hello, user!'&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
-  </entry>
-  <entry>
-    <title>Extending RubyMine with JRuby script</title>
-    <link rel="alternate" href="/blog/2011/01/01/extending_rubymine_with_jruby_plugin.html"/>
-    <id>/blog/2011/01/01/extending_rubymine_with_jruby_plugin.html</id>
-    <published>2011-01-01T00:00:00Z</published>
-    <updated>2011-01-01T00:00:00Z</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h2&gt;Extending RubyMine with JRuby script - How to use HAML/SASS converter from inside IDE (JRuby script-plugin)&lt;/h2&gt;
-
-&lt;h1&gt;How it works&lt;/h1&gt;
-
-&lt;p&gt;RubyMine already has JRuby library as part of IDE (see &lt;strong&gt;${RUBYMINE_INSTALLATION/lib/jruby-complete.jar}&lt;/strong&gt; file).&lt;/p&gt;
-
-&lt;p&gt;It also has few scripts that extend standard functionality of IDE, you can see them under
-&lt;strong&gt;&amp;lsquo;File|Settings|Extension&amp;rsquo;&lt;/strong&gt; path or here: &lt;strong&gt;${RUBYMINE_INSTALLATION/rb/*.rb}&lt;/strong&gt;. It could be considered as convenient
-platform with easy extensions as ruby-plugins.&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, if your script depends on other gems and list of dependencies is big, it becomes very difficult to
-install new plugins. You have to detect and install all dependent gems into RubyMine installation.&lt;/p&gt;
-
-&lt;p&gt;In this article I will introduce another way of how to extend RubyMine functionality. We&amp;rsquo;ll have separate
-installation of JRuby that will provide us with gems repository.&lt;/p&gt;
-
-&lt;p&gt;First of all, you have to install &lt;a title="RVM Home" href="https://rvm.io"&gt;rvm&lt;/a&gt;. This is a tool for installing different ruby versions under Mac/Unix
-platforms. Once you have &lt;strong&gt;rvm&lt;/strong&gt; installed, install jruby and then use it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm install jruby-1.5.6
-rvm use jruby
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Check, if you have correct ruby version:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;ruby -v
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;It should be &lt;strong&gt;jruby 1.5.6&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Once we have &lt;strong&gt;jruby&lt;/strong&gt; installed, we can develop new RubyMine plugin. We&amp;rsquo;ll discuss step-by-step what needs to be done.&lt;/p&gt;
-
-&lt;h3&gt;Step 1: Defining dependencies&lt;/h3&gt;
-
-&lt;p&gt;We need to document dependencies for our plugin in &lt;strong&gt;Gemfile&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;http://rubygems.org&amp;quot;&lt;/span&gt;
-
-&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;haml&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;3.0.24&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;hpricot&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;0.8.3&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;abstract&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;1.0.0&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;erubis&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2.6.6&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sexp_processor&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;3.0.5&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;ruby_parser&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2.0.5&amp;quot;&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Now you can install dependencies with one command:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;bundle&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h3&gt;Step 2: Loading dependencies&lt;/h3&gt;
-
-&lt;p&gt;The following method loads all required gems into memory:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="no"&gt;Java&lt;/span&gt;
-
-&lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;load_required_gems&lt;/span&gt;
-  &lt;span class="n"&gt;jruby_home&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'HOME'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/.rvm/gems/jruby-1.5.6@haml-sass-converters&amp;quot;&lt;/span&gt;
-
-  &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;jruby_home&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/gems&amp;quot;&lt;/span&gt;
-
-  &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;jruby_home&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/gems/haml-3.0.24/lib&amp;quot;&lt;/span&gt;
-  &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;jruby_home&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/gems/hpricot-0.8.3-java/lib&amp;quot;&lt;/span&gt;
-  &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;jruby_home&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/gems/abstract-1.0.0/lib&amp;quot;&lt;/span&gt;
-  &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;jruby_home&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/gems/erubis-2.6.6/lib&amp;quot;&lt;/span&gt;
-  &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;jruby_home&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/gems/sexp_processor-3.0.5/lib&amp;quot;&lt;/span&gt;
-  &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;jruby_home&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/gems/ruby_parser-2.0.5/lib&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;load_required_gems&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h3&gt;Step 3: &amp;ldquo;Requiring&amp;rdquo; libraries&lt;/h3&gt;
-
-&lt;p&gt;Now we need to &lt;strong&gt;require&lt;/strong&gt; libraries for working with &lt;strong&gt;HAML/SASS&lt;/strong&gt; and &lt;strong&gt;RubyMine&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;haml&amp;quot;&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;haml/html&amp;quot;&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sass/css&amp;quot;&lt;/span&gt;
-
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'default_scripts_groups'&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'editor_action_helper'&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'action_group_helper'&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h3&gt;Step 4: Building conversion logic&lt;/h3&gt;
-
-&lt;p&gt;We encapsulate all conversion logic into &lt;strong&gt;Converter&lt;/strong&gt; class. We need to integrate logic from HAML/SASS library
-with RubyMine API. Because this class will be executed in RubyMine environment, we have access to &lt;strong&gt;editor&lt;/strong&gt; object:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;div class="lineno"&gt;24&lt;/div&gt;&lt;div class="lineno"&gt;25&lt;/div&gt;&lt;div class="lineno"&gt;26&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="k"&gt;class &lt;/span&gt;&lt;span class="nc"&gt;Converter&lt;/span&gt;
-  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nc"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;convert_selection&lt;/span&gt; &lt;span class="n"&gt;editor&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="nf"&gt;.has_selection?&lt;/span&gt;
-      &lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="nf"&gt;.selection&lt;/span&gt;
-      &lt;span class="n"&gt;s_start&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="nf"&gt;.selection_start&lt;/span&gt;
-
-      &lt;span class="n"&gt;changed_text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;yield&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-      &lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="nf"&gt;.replace_selection_text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;changed_text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-      &lt;span class="c1"&gt;# restore selection&lt;/span&gt;
-      &lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="nf"&gt;.select&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;s_start&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;s_start&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;changed_text&lt;/span&gt;&lt;span class="nf"&gt;.length&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="k"&gt;end&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nc"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;convert_to_haml&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="no"&gt;Haml&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;HTML&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:erb&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:xhtml&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;.render&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nc"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;convert_to_sass&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;css&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="no"&gt;Sass&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;CSS&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;css&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;.render&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:sass&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nc"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;convert_to_scss&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;css&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="no"&gt;Sass&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;CSS&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;css&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;.render&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:scss&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h3&gt;Step 5: Registering editor actions&lt;/h3&gt;
-
-&lt;p&gt;Now we need to register conversion methods of &lt;strong&gt;Converter&lt;/strong&gt; class as editor actions for HTML/HAML conversions:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;register_editor_action&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;html_to_haml&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:text&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Convert Html to Haml&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:description&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Converts Html content to Haml content.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:group&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;EditorPopupMenu&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:enable_in_modal_context&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-  &lt;span class="no"&gt;Converter&lt;/span&gt;&lt;span class="nf"&gt;.convert_selection&lt;/span&gt; &lt;span class="n"&gt;editor&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-    &lt;span class="no"&gt;Converter&lt;/span&gt;&lt;span class="nf"&gt;.convert_to_haml&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;register_editor_action&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;html_to_haml_erb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:text&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Convert Html to Haml&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:description&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Converts Html content to Haml content.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="c1"&gt;#:shortcut =&amp;gt; &amp;quot;control shift PERIOD&amp;quot;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:group&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;ScriptsErb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:file_type&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;RHTML&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-  &lt;span class="no"&gt;Converter&lt;/span&gt;&lt;span class="nf"&gt;.convert_selection&lt;/span&gt; &lt;span class="n"&gt;editor&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-    &lt;span class="no"&gt;Converter&lt;/span&gt;&lt;span class="nf"&gt;.convert_to_haml&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;For executing CSS/SASS conversions we will create new &amp;ldquo;Css&amp;rdquo; group under &amp;lsquo;Tools|Extensions&amp;rsquo; menu item.
-We also need to register &lt;strong&gt;Converter&lt;/strong&gt; class methods as editor actions for CSS/SASS conversions:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;register_action_group&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;ScriptsCss&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:text&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Css&amp;quot;&lt;/span&gt;
-
-&lt;span class="n"&gt;register_editor_action&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;css_to_sass&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:text&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Convert CSS to SASS&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:description&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Converts CSS content to SASS content.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:group&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;EditorPopupMenu&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:enable_in_modal_context&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-  &lt;span class="no"&gt;Converter&lt;/span&gt;&lt;span class="nf"&gt;.convert_selection&lt;/span&gt; &lt;span class="n"&gt;editor&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-    &lt;span class="no"&gt;Converter&lt;/span&gt;&lt;span class="nf"&gt;.convert_to_sass&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;register_editor_action&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;css_to_sass_css&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:text&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Convert CSS to SASS&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:description&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Converts CSS content to SASS content.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="c1"&gt;#:shortcut =&amp;gt; &amp;quot;control shift PERIOD&amp;quot;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:group&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;ScriptsCss&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                       &lt;span class="ss"&gt;:file_type&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;CSS&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;editor&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-  &lt;span class="no"&gt;Converter&lt;/span&gt;&lt;span class="nf"&gt;.convert_selection&lt;/span&gt; &lt;span class="n"&gt;editor&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-    &lt;span class="no"&gt;Converter&lt;/span&gt;&lt;span class="nf"&gt;.convert_to_sass&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install plugin&lt;/h1&gt;
-
-&lt;p&gt;Above is th explanation of how plugin works. If you just want to use plugin, install
-&lt;a title="Haml/SASS Converters" href="http://github.com/shvets/haml-sass-converters"&gt;haml-sass-converters&lt;/a&gt; gem into &lt;strong&gt;haml-sass-converters&lt;/strong&gt; gemset:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm use jruby@haml-sass-converters --create
-gem i haml-sass-converters
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Run install script in your project&amp;rsquo;s root (or some other location) in order to copy the script:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; &amp;lt;your-project-root&amp;gt;
-haml-sass-converters-install
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;New &lt;strong&gt;&amp;ldquo;scripts&amp;rdquo;&lt;/strong&gt; folder will be created with &lt;strong&gt;&amp;ldquo;converters.rb&amp;rdquo;&lt;/strong&gt; as a plugin.&lt;/p&gt;
-
-&lt;p&gt;Go to &lt;strong&gt;&amp;ldquo;File|Setting|Extensions&amp;rdquo;&lt;/strong&gt; and add &amp;ldquo;scripts&amp;rdquo; folder as new &lt;strong&gt;&amp;ldquo;Script Folder&amp;rdquo;&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Restart &lt;strong&gt;RubyMine&lt;/strong&gt;. After restarting IDE will have new &lt;strong&gt;&amp;ldquo;Css&amp;rdquo;&lt;/strong&gt; group under &lt;strong&gt;&amp;ldquo;Tools|Extensions&amp;rdquo;&lt;/strong&gt; and new actions:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;convert Html to Haml;&lt;/li&gt;
-&lt;li&gt;convert CSS to SASS;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;You can reach them from &lt;strong&gt;&amp;ldquo;Tools|Extensions&amp;rdquo;&lt;/strong&gt; in main menu or from context popup menu inside the editor.&lt;/p&gt;
-
-&lt;h1&gt;How to use plugin&lt;/h1&gt;
-
-&lt;p&gt;Select some content inside erb or css file. Right click inside the editor and select appropriate action.&lt;/p&gt;
-</content>
   </entry>
 </feed>

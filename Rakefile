@@ -34,7 +34,7 @@ task "gen-bm" do
   #bookmarks = "#{ENV['HOME']}/Library/Application Support/Google/Chrome/Default/Bookmarks"
   #generator = BookmarksGen2.new
 
-  bookmarks = "#{ENV['HOME']}/Dropbox/Alex/bookmarks/bookmarks-2013-08-14.json"
+  bookmarks = "#{ENV['HOME']}/Dropbox/Alex/bookmarks/bookmarks-2013-09-14.json"
   generator = BookmarksGen.new
 
   generator.generate_haml(bookmarks, "source/bookmarks")
