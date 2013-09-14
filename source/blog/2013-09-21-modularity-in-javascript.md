@@ -147,6 +147,12 @@ describe('example', function() {
 });
 ```
 
+You need to install karma-commonjs plugin:
+
+```bash
+npm install karma-commonjs --save-dev
+```
+
 You need to modify **karma.conf.coffee** file in order to **recognize** commonjs:
 
 ```coffee
@@ -170,7 +176,7 @@ You need to modify **karma.conf.coffee** file in order to **recognize** commonjs
      ...
 ```
 
-You have toadd **commonjs** as framework and mark files that use CommonJS with **commonjs** preprocessor.
+You have to add **commonjs** as framework and mark files that use CommonJS with **commonjs** preprocessor.
 
 ## CommonJS implementations
 
