@@ -9,6 +9,7 @@ tags: nodejs, javascript, commonjs, requirejs
 Modularity in code **increases maintainability** of the project, letting us to to break code into
 **manageable parts**, **easy to read** and **easy to fix** forthcoming issues.
 
+What options do we have for creating **modules** un Javascript?
 
 ## Options
 
@@ -18,14 +19,15 @@ Modularity in code **increases maintainability** of the project, letting us to t
 
 * Use **RequireJS** framework as implementation of  CommonJS specification
 
-* Wait for upcoming **ECMA script 6** implementation for javascript
+* Wait for upcoming **ECMAScript 6** implementation of Javascript
 
 * Use **other language** that support modules, e.g. **Dart**
 
 
 ## Using Anonymous Closure
 
-You can simulate modularity in Javascript with the help of anonymous closure:
+You can simulate modularity in Javascript with the help of anonymous closure. It creates an anonymous
+function and execute it immediately. All of the code inside the function lives in a closure:
 
 ```js
 (function () {
@@ -33,24 +35,23 @@ You can simulate modularity in Javascript with the help of anonymous closure:
   // - still maintains access to all globals
 }());
 ```
-It creates an anonymous function and execute it immediately. All of the code inside the function lives in a closure.
 
-Notice the **()** around the anonymous function. Including () creates a function expression instead of
-function declaration. For example:
+Notice the **()** brackets around the anonymous function. Including **()** creates **function expression** instead of
+**function declaration**. For example:
 
 ```js
 var MyModule = (function() {
   var exports = {};
 
-  //Export foo to the outside world
+  // Export foo to the outside world
   exports.foo = function() {
      return "foo";
   }
 
-  //Keep bar private
+  // Keep bar private
   var bar = "bar";
 
-  //Expose interface to outside world
+  // Expose interface to outside world
   return exports;
 })();
 
@@ -65,7 +66,8 @@ You can use jquery's **extend** API in order to implement module:
 ```js
 function ModularityLibrary() {}
 
-ModularityLibrary.prototype.createClass = function(definitions, extra_definitions) {
+ModularityLibrary.prototype.createClass = function(definitions,
+  extra_definitions) {
   var klass = function() {
     this.initialize.apply(this, arguments);
   };
@@ -79,7 +81,8 @@ ModularityLibrary.prototype.createClass = function(definitions, extra_definition
   return klass;
 };
 
-ModularityLibrary.prototype.extendClass = function(baseClass, methods) {
+ModularityLibrary.prototype.extendClass = function(baseClass,
+  methods) {
   var klass = function() {
     this.initialize.apply(this, arguments);
   };
@@ -93,7 +96,7 @@ ModularityLibrary.prototype.extendClass = function(baseClass, methods) {
 var Modularity = new ModularityLibrary();
 ```
 
-Now, you can use it in your code:
+Now you can use it in your code:
 
 ```js
 // Create new class
@@ -110,7 +113,7 @@ var DisplayModule = Modularity.createClass({
 var displayObject = new DisplayModule();
 
 // Call instance function
-custoModule.display();
+displayObject.display();
 ```
 
 ## Working with CommonJS
@@ -122,23 +125,22 @@ in their own **unique module context**.
 
 CommonJS adds two new variables which you can use to import and export other modules:
 
-* **module.exports** **exposes** variables to other libraries;
+* **module.exports** object **exposes** variables to other libraries;
 
 * **require** function helps to **import** your module into another module.
 
-For example, javascript class and jasmine spec for it could look like this:
+For example, Javascript class and jasmine spec for it could look like this:
 
 ```js
 // app/assets/javascripts/commonjs/example.js
 
 module.exports.hello = function() {
-  return 'Hello World'
+  return 'Hello World';
 };
-```
 
-```js
 // spec/javascripts/commonjs/example_spec.js
-var example = require('../../../app/assets/javascripts/commonjs/example');
+var example =
+ require('../../../app/assets/javascripts/commonjs/example');
 
 describe('example', function() {
   it("tests CommonJS", function() {
@@ -147,13 +149,15 @@ describe('example', function() {
 });
 ```
 
-You need to install karma-commonjs plugin:
+If you use [karma framework] (karma framework) for your [unit testing and code coverage]
+(unit testing and code coverage), you need to install **karma-commonjs** plugin:
+
 
 ```bash
 npm install karma-commonjs --save-dev
 ```
 
-You need to modify **karma.conf.coffee** file in order to **recognize** commonjs:
+and modify **karma.conf.coffee** file in order to **recognize** commonjs:
 
 ```coffee
 # karma.conf.coffee
@@ -165,8 +169,10 @@ You need to modify **karma.conf.coffee** file in order to **recognize** commonjs
 
      files: [
        'app/assets/javascripts/commonjs/*.js',
-       {pattern: 'spec/javascripts/commonjs/*_spec.js', included: true}
-       {pattern: 'spec/javascripts/commonjs/*_spec.coffee', included: true}
+       {pattern: 'spec/javascripts/commonjs/*_spec.js',
+         included: true}
+       {pattern: 'spec/javascripts/commonjs/*_spec.coffee',
+         included: true}
      ]
 
      preprocessors:
@@ -181,7 +187,7 @@ You have to add **commonjs** as framework and mark files that use CommonJS with 
 ## CommonJS implementations
 
 Because CommonJS is just specification, you cannot use it directly in the browser. Node.js has it's
-own implementation and we use it withing spec, but we cannot use it on client side inside the browser.
+own implementation and we use it within spec, but we cannot use it on client side inside the browser.
 
 Developers have different options to have it in browser. Some of them:
 
@@ -293,7 +299,7 @@ requirejs.config({
 For using RequireJS in browser you have to [download] (http://requirejs.org/docs/download.html)
 it and include into your html file.
 
-Your sample  **html template file**:
+Your sample  **haml template file**:
 
 ```haml
 -#index.haml
@@ -321,13 +327,46 @@ require.config({
 
 // Start the main app logic.
 require(['jquery-1.10.2.min', 'helper'], function($, helper) {
-
   helper.do_something();
 });
 ```
 
-Now you can open it in browser:
+Now you can open it in the browser:
 
 ```bash
 open index.html
 ```
+
+## Calling CommonJS module from RequireJS
+
+If you have CommonJS module that you would like to use with RequireJS, you have to:
+
+* define a module
+* provide a factory function which takes three arguments: **require**, **exports** and **module**.
+
+See example below:
+
+```javascript
+// app/assets/javascripts/commonjs/example.js
+module.exports.hello = function() {
+  return 'Hello World';
+};
+
+// app/assets/javascripts/requirejs/example.js
+define('rjsExampleModule', function(require, exports, module) {
+  var cjsExampleModule = require('example');
+
+  return {
+    rjsHello: function() {
+      return cjsExampleModule.hello();
+    }
+  };
+});
+```
+
+With the **require** argument, you load module using CommonJS style syntax.
+Other two parameters are optional and can be omitted.
+
+
+[karma framework]: https://github.com/karma-runner/karma
+[unit testing and code coverage]: http://shvets.github.io/blog/2013/09/14/nodejs_and_karma.html

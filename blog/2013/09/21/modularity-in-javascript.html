@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Modularity in Javascript</h1>
+
+<p>Modularity in code <strong>increases maintainability</strong> of the project, letting us to to break code into
+<strong>manageable parts</strong>, <strong>easy to read</strong> and <strong>easy to fix</strong> forthcoming issues.</p>
+
+<p>What options do we have for creating <strong>modules</strong> un Javascript?</p>
+
+<h2>Options</h2>
+
+<ul>
+<li><p>Use <strong>home-grown library</strong> for implementing modularity</p></li>
+<li><p>Use <strong>CommonJS</strong> specification</p></li>
+<li><p>Use <strong>RequireJS</strong> framework as implementation of  CommonJS specification</p></li>
+<li><p>Wait for upcoming <strong>ECMAScript 6</strong> implementation of Javascript</p></li>
+<li><p>Use <strong>other language</strong> that support modules, e.g. <strong>Dart</strong></p></li>
+</ul>
+
+<h2>Using Anonymous Closure</h2>
+
+<p>You can simulate modularity in Javascript with the help of anonymous closure. It creates an anonymous
+function and execute it immediately. All of the code inside the function lives in a closure:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code"><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// - all vars and functions are in this scope only
+</span>  <span class="c1">// - still maintains access to all globals
+</span><span class="p">}());</span>
+</td></tr></tbody></table></pre>
+<p>Notice the <strong>()</strong> brackets around the anonymous function. Including <strong>()</strong> creates <strong>function expression</strong> instead of
+<strong>function declaration</strong>. For example:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div></td><td class="code"><span class="kd">var</span> <span class="nx">MyModule</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">exports</span> <span class="o">=</span> <span class="p">{};</span>
+
+  <span class="c1">// Export foo to the outside world
+</span>  <span class="nx">exports</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+     <span class="k">return</span> <span class="s2">&quot;foo&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Keep bar private
+</span>  <span class="kd">var</span> <span class="nx">bar</span> <span class="o">=</span> <span class="s2">&quot;bar&quot;</span><span class="p">;</span>
+
+  <span class="c1">// Expose interface to outside world
+</span>  <span class="k">return</span> <span class="nx">exports</span><span class="p">;</span>
+<span class="p">})();</span>
+
+<span class="nx">MyModule</span><span class="p">.</span><span class="nx">foo</span><span class="p">();</span> <span class="c1">// OK
+</span><span class="nx">MyModule</span><span class="p">.</span><span class="nx">bar</span><span class="p">();</span> <span class="c1">// error
+</span></td></tr></tbody></table></pre>
+<h2>Using JQuery.extend</h2>
+
+<p>You can use jquery&rsquo;s <strong>extend</strong> API in order to implement module:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div></td><td class="code"><span class="kd">function</span> <span class="nx">ModularityLibrary</span><span class="p">()</span> <span class="p">{}</span>
+
+<span class="nx">ModularityLibrary</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">definitions</span><span class="p">,</span>
+  <span class="nx">extra_definitions</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">klass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">klass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">definitions</span><span class="p">);</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="nx">extra_definitions</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">klass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">extra_definitions</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">klass</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">ModularityLibrary</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">extendClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">baseClass</span><span class="p">,</span>
+  <span class="nx">methods</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">klass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">klass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">baseClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+  <span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">klass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">methods</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="nx">klass</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">Modularity</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ModularityLibrary</span><span class="p">();</span>
+</td></tr></tbody></table></pre>
+<p>Now you can use it in your code:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code"><span class="c1">// Create new class
+</span>
+<span class="kd">var</span> <span class="nx">DisplayModule</span> <span class="o">=</span> <span class="nx">Modularity</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+  <span class="na">initialize</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{},</span>
+
+  <span class="na">display</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">connector</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// Create instance of class
+</span><span class="kd">var</span> <span class="nx">displayObject</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DisplayModule</span><span class="p">();</span>
+
+<span class="c1">// Call instance function
+</span><span class="nx">displayObject</span><span class="p">.</span><span class="nx">display</span><span class="p">();</span>
+</td></tr></tbody></table></pre>
+<h2>Working with CommonJS</h2>
+
+<p>CommonJS is the <strong>set of specifications</strong> that define how to do modules in Javascript.</p>
+
+<p>Instead of running your Javascript code from a global scope, CommonJS starts out each of your Javascript files
+in their own <strong>unique module context</strong>.</p>
+
+<p>CommonJS adds two new variables which you can use to import and export other modules:</p>
+
+<ul>
+<li><p><strong>module.exports</strong> object <strong>exposes</strong> variables to other libraries;</p></li>
+<li><p><strong>require</strong> function helps to <strong>import</strong> your module into another module.</p></li>
+</ul>
+
+<p>For example, Javascript class and jasmine spec for it could look like this:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code"><span class="c1">// app/assets/javascripts/commonjs/example.js
+</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="s1">'Hello World'</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// spec/javascripts/commonjs/example_spec.js
+</span><span class="kd">var</span> <span class="nx">example</span> <span class="o">=</span>
+ <span class="nx">require</span><span class="p">(</span><span class="s1">'../../../app/assets/javascripts/commonjs/example'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'example'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;tests CommonJS&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">example</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</td></tr></tbody></table></pre>
+<p>If you use <a href="karma framework">karma framework</a> for your <a href="unit testing and code coverage">unit testing and code coverage</a>, you need to install <strong>karma-commonjs</strong> plugin:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">npm install karma-commonjs --save-dev
+</td></tr></tbody></table></pre>
+<p>and modify <strong>karma.conf.coffee</strong> file in order to <strong>recognize</strong> commonjs:</p>
+<pre class="highlight coffeescript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div></td><td class="code"><span class="c1"># karma.conf.coffee
+</span> <span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
+   <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
+     <span class="p">...</span>
+
+     <span class="na">frameworks</span><span class="o">:</span> <span class="p">[</span><span class="s">'jasmine'</span><span class="p">,</span> <span class="s">'commonjs]
+
+     files: [
+       '</span><span class="nx">app</span><span class="o">/</span><span class="nx">assets</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/commonjs/</span><span class="o">*</span><span class="p">.</span><span class="na">js</span><span class="s">',
+       {pattern: '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/commonjs/</span><span class="o">*</span><span class="nx">_spec</span><span class="p">.</span><span class="na">js</span><span class="s">',
+         included: true}
+       {pattern: '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/commonjs/</span><span class="o">*</span><span class="nx">_spec</span><span class="p">.</span><span class="na">coffee</span><span class="s">',
+         included: true}
+     ]
+
+     preprocessors:
+       '</span><span class="nx">app</span><span class="o">/</span><span class="nx">assets</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/commonjs/</span><span class="o">*</span><span class="p">.</span><span class="na">js</span><span class="s">': ['</span><span class="nx">commonjs</span><span class="s">'],
+       '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/commonjs/</span><span class="o">*</span><span class="nx">_spec</span><span class="p">.</span><span class="na">js</span><span class="s">': ['</span><span class="nx">commonjs</span><span class="s">']
+       '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/commonjs/</span><span class="o">*</span><span class="nx">_spec</span><span class="p">.</span><span class="na">coffee</span><span class="s">': ['</span><span class="nx">commonjs</span><span class="s">']
+     ...
+</span></td></tr></tbody></table></pre>
+<p>You have to add <strong>commonjs</strong> as framework and mark files that use CommonJS with <strong>commonjs</strong> preprocessor.</p>
+
+<h2>CommonJS implementations</h2>
+
+<p>Because CommonJS is just specification, you cannot use it directly in the browser. Node.js has it&rsquo;s
+own implementation and we use it within spec, but we cannot use it on client side inside the browser.</p>
+
+<p>Developers have different options to have it in browser. Some of them:</p>
+
+<ul>
+<li><p>browserify, webmake - command line tools that wraps up your CommonJS-compatible code with simple implementation
+of <strong>require</strong> and <strong>module.exports</strong>.</p></li>
+<li><p>NodeJS - asynchronous implementation of CommonJS specification.</p></li>
+<li><p><a href="http://wiki.commonjs.org/wiki/Implementations">List of other solutions</a></p></li>
+</ul>
+
+<h2>Working with RequireJS</h2>
+
+<p>RequireJS uses another module format: Asynchronous Module Definition (AMD), originally created as part of
+the Dojo web framework.</p>
+
+<p>Compared to CommonJS, the main differences of AMD are:</p>
+
+<ul>
+<li><p>Special syntax for specifying module imports - <strong>define</strong> - must be done at the top of each script.</p></li>
+<li><p>No tooling required to use, works within browsers out of the box.</p></li>
+</ul>
+
+<p>First, create RequireJS-compatible js code:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div></td><td class="code"><span class="c1">// app/assets/javascripts/requirejs/example.js
+</span>
+<span class="nx">define</span><span class="p">(</span><span class="s1">'example'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Hello!&quot;</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">message</span><span class="p">:</span> <span class="nx">message</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</td></tr></tbody></table></pre>
+<p>Then, create jasmine spec for it:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div></td><td class="code"><span class="c1">// spec/javascripts/requirejs/example.js
+</span>
+<span class="nx">require</span><span class="p">([</span><span class="s1">'example'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">example</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Example&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have a message equal to 'Hello!'&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">example</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+      <span class="nx">expect</span><span class="p">(</span><span class="nx">example</span><span class="p">.</span><span class="nx">message</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">'Hello!'</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</td></tr></tbody></table></pre>
+<p>Configure <strong>karma.conf.coffee</strong> to recognize RequireJS framework:</p>
+<pre class="highlight coffeescript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div></td><td class="code"><span class="c1"># karma.conf.coffee
+</span> <span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
+   <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
+     <span class="p">...</span>
+     <span class="na">frameworks</span><span class="o">:</span> <span class="p">[</span><span class="s">'jasmine'</span><span class="p">,</span> <span class="s">'requirejs]
+
+     files: [
+       '</span><span class="nx">app</span><span class="o">/</span><span class="nx">assets</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/requirejs/</span><span class="o">*</span><span class="p">.</span><span class="na">js</span><span class="s">',
+       {pattern: '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/requirejs/</span><span class="o">*</span><span class="nx">_spec</span><span class="p">.</span><span class="na">js</span><span class="s">', included: true}
+       {pattern: '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/requirejs/</span><span class="o">*</span><span class="nx">_spec</span><span class="p">.</span><span class="na">coffee</span><span class="s">', included: true}
+       '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="o">/</span><span class="nx">requirejs</span><span class="o">/</span><span class="nx">spec</span><span class="o">-</span><span class="nx">main</span><span class="p">.</span><span class="na">js</span><span class="s">'
+     ]
+     ...
+</span></td></tr></tbody></table></pre>
+<p>You don&rsquo;t have to preprocess requirejs files - it&rsquo;s already part of karma framework.</p>
+
+<p>Create <strong>main</strong> RequireJS file for tests only:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div></td><td class="code"><span class="c1">// spec/javascripts/requirejs/spec-main.js
+</span>
+<span class="c1">// Grabs specs
+</span><span class="kd">var</span> <span class="nx">specs</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">file</span> <span class="k">in</span> <span class="nb">window</span><span class="p">.</span><span class="nx">__karma__</span><span class="p">.</span><span class="nx">files</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">__karma__</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">file</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="sr">/spec\.js$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">file</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">specs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">specs</span><span class="p">);</span>
+
+<span class="c1">// Configures RequireJS for tests
+</span><span class="nx">requirejs</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+  <span class="c1">// Karma serves files from '/base'
+</span>  <span class="nl">baseUrl</span><span class="p">:</span> <span class="s1">'/base/app/assets/javascripts/requirejs'</span><span class="p">,</span>
+
+  <span class="nl">paths</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">'jquery'</span><span class="err">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">GEM_HOME</span> <span class="o">+</span> <span class="s1">'//gems/jquery-rails-3.0.4/vendor/assets/javascripts/jquery'</span>
+  <span class="p">},</span>
+
+  <span class="c1">// ask Require.js to load these files (all our tests)
+</span>  <span class="nl">deps</span><span class="p">:</span> <span class="nx">specs</span><span class="p">,</span>
+
+  <span class="c1">// start test run, once Require.js is done
+</span>  <span class="nl">callback</span><span class="p">:</span> <span class="nb">window</span><span class="p">.</span><span class="nx">__karma__</span><span class="p">.</span><span class="nx">start</span>
+<span class="p">});</span>
+</td></tr></tbody></table></pre>
+<h2>Using RequireJS in browser</h2>
+
+<p>For using RequireJS in browser you have to <a href="http://requirejs.org/docs/download.html">download</a>
+it and include into your html file.</p>
+
+<p>Your sample  <strong>haml template file</strong>:</p>
+<pre class="highlight haml"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div></td><td class="code"><span class="c">-#index.haml
+</span><span class="nt">%html</span><span class="p">{</span><span class="ss">:lang</span> <span class="o">=&gt;</span> <span class="s2">&quot;en&quot;</span><span class="p">}</span>
+  <span class="nt">%head</span>
+    <span class="p">=</span> <span class="n">javascript_include_tag</span> <span class="s2">&quot;requirejs-2.1.8.min&quot;</span>
+    <span class="p">=</span> <span class="n">javascript_include_tag</span>  <span class="s2">&quot;helper&quot;</span>
+    <span class="p">=</span> <span class="n">javascript_include_tag</span>  <span class="s2">&quot;application&quot;</span>
+
+  <span class="nt">%body</span>
+    <span class="p">=</span> <span class="s2">&quot;Hello, Web!&quot;</span>
+</td></tr></tbody></table></pre>
+<p>and <strong>main</strong> RequireJS file:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div></td><td class="code"><span class="c1">// application.js
+</span><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+  <span class="na">baseUrl</span><span class="p">:</span> <span class="s1">'assets/javascripts'</span><span class="p">,</span>
+
+  <span class="na">paths</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">app</span><span class="p">:</span> <span class="s1">'.'</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// Start the main app logic.
+</span><span class="nx">require</span><span class="p">([</span><span class="s1">'jquery-1.10.2.min'</span><span class="p">,</span> <span class="s1">'helper'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">helper</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">helper</span><span class="p">.</span><span class="nx">do_something</span><span class="p">();</span>
+<span class="p">});</span>
+</td></tr></tbody></table></pre>
+<p>Now you can open it in the browser:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">open index.html
+</td></tr></tbody></table></pre>
+<h2>Calling CommonJS module from RequireJS</h2>
+
+<p>If you have CommonJS module that you would like to use with RequireJS, you have to:</p>
+
+<ul>
+<li>define a module</li>
+<li>provide a factory function which takes three arguments: <strong>require</strong>, <strong>exports</strong> and <strong>module</strong>.</li>
+</ul>
+
+<p>See example below:</p>
+<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code"><span class="c1">// app/assets/javascripts/commonjs/example.js
+</span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="s1">'Hello World'</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// app/assets/javascripts/requirejs/example.js
+</span><span class="nx">define</span><span class="p">(</span><span class="s1">'rjsExampleModule'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">cjsExampleModule</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'example'</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">rjsHello</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cjsExampleModule</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</td></tr></tbody></table></pre>
+<p>With the <strong>require</strong> argument, you load module using CommonJS style syntax.
+Other two parameters are optional and can be omitted.</p>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(3)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2013.html">2013</a>
+(6)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>

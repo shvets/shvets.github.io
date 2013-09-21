@@ -5,10 +5,336 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-09-14T00:00:00Z</updated>
+  <updated>2013-09-21T00:00:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Modularity in Javascript</title>
+    <link rel="alternate" href="/blog/2013/09/21/modularity-in-javascript.html"/>
+    <id>/blog/2013/09/21/modularity-in-javascript.html</id>
+    <published>2013-09-21T00:00:00Z</published>
+    <updated>2013-09-21T00:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Modularity in Javascript&lt;/h1&gt;
+
+&lt;p&gt;Modularity in code &lt;strong&gt;increases maintainability&lt;/strong&gt; of the project, letting us to to break code into
+&lt;strong&gt;manageable parts&lt;/strong&gt;, &lt;strong&gt;easy to read&lt;/strong&gt; and &lt;strong&gt;easy to fix&lt;/strong&gt; forthcoming issues.&lt;/p&gt;
+
+&lt;p&gt;What options do we have for creating &lt;strong&gt;modules&lt;/strong&gt; un Javascript?&lt;/p&gt;
+
+&lt;h2&gt;Options&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Use &lt;strong&gt;home-grown library&lt;/strong&gt; for implementing modularity&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use &lt;strong&gt;CommonJS&lt;/strong&gt; specification&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use &lt;strong&gt;RequireJS&lt;/strong&gt; framework as implementation of  CommonJS specification&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Wait for upcoming &lt;strong&gt;ECMAScript 6&lt;/strong&gt; implementation of Javascript&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use &lt;strong&gt;other language&lt;/strong&gt; that support modules, e.g. &lt;strong&gt;Dart&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Using Anonymous Closure&lt;/h2&gt;
+
+&lt;p&gt;You can simulate modularity in Javascript with the help of anonymous closure. It creates an anonymous
+function and execute it immediately. All of the code inside the function lives in a closure:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="c1"&gt;// - all vars and functions are in this scope only
+&lt;/span&gt;  &lt;span class="c1"&gt;// - still maintains access to all globals
+&lt;/span&gt;&lt;span class="p"&gt;}());&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Notice the &lt;strong&gt;()&lt;/strong&gt; brackets around the anonymous function. Including &lt;strong&gt;()&lt;/strong&gt; creates &lt;strong&gt;function expression&lt;/strong&gt; instead of
+&lt;strong&gt;function declaration&lt;/strong&gt;. For example:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;MyModule&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{};&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// Export foo to the outside world
+&lt;/span&gt;  &lt;span class="nx"&gt;exports&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;foo&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;foo&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// Keep bar private
+&lt;/span&gt;  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;bar&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;bar&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// Expose interface to outside world
+&lt;/span&gt;  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;exports&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;})();&lt;/span&gt;
+
+&lt;span class="nx"&gt;MyModule&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;foo&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// OK
+&lt;/span&gt;&lt;span class="nx"&gt;MyModule&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// error
+&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Using JQuery.extend&lt;/h2&gt;
+
+&lt;p&gt;You can use jquery&amp;rsquo;s &lt;strong&gt;extend&lt;/strong&gt; API in order to implement module:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;div class="lineno"&gt;24&lt;/div&gt;&lt;div class="lineno"&gt;25&lt;/div&gt;&lt;div class="lineno"&gt;26&lt;/div&gt;&lt;div class="lineno"&gt;27&lt;/div&gt;&lt;div class="lineno"&gt;28&lt;/div&gt;&lt;div class="lineno"&gt;29&lt;/div&gt;&lt;div class="lineno"&gt;30&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;ModularityLibrary&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{}&lt;/span&gt;
+
+&lt;span class="nx"&gt;ModularityLibrary&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;createClass&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;definitions&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nx"&gt;extra_definitions&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;klass&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;initialize&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;arguments&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;};&lt;/span&gt;
+
+  &lt;span class="nx"&gt;jQuery&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;klass&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;definitions&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+  &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;extra_definitions&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;jQuery&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;klass&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;extra_definitions&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;klass&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;};&lt;/span&gt;
+
+&lt;span class="nx"&gt;ModularityLibrary&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;extendClass&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;baseClass&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nx"&gt;methods&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;klass&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;initialize&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;arguments&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;};&lt;/span&gt;
+
+  &lt;span class="nx"&gt;jQuery&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;klass&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;baseClass&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="nx"&gt;jQuery&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;klass&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;methods&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;klass&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;};&lt;/span&gt;
+
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;Modularity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;ModularityLibrary&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Now you can use it in your code:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// Create new class
+&lt;/span&gt;
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;DisplayModule&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;Modularity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;createClass&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+  &lt;span class="na"&gt;initialize&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{},&lt;/span&gt;
+
+  &lt;span class="na"&gt;display&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;connector&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;display&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+
+&lt;span class="c1"&gt;// Create instance of class
+&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;displayObject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;DisplayModule&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+&lt;span class="c1"&gt;// Call instance function
+&lt;/span&gt;&lt;span class="nx"&gt;displayObject&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;display&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Working with CommonJS&lt;/h2&gt;
+
+&lt;p&gt;CommonJS is the &lt;strong&gt;set of specifications&lt;/strong&gt; that define how to do modules in Javascript.&lt;/p&gt;
+
+&lt;p&gt;Instead of running your Javascript code from a global scope, CommonJS starts out each of your Javascript files
+in their own &lt;strong&gt;unique module context&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;CommonJS adds two new variables which you can use to import and export other modules:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;module.exports&lt;/strong&gt; object &lt;strong&gt;exposes&lt;/strong&gt; variables to other libraries;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;require&lt;/strong&gt; function helps to &lt;strong&gt;import&lt;/strong&gt; your module into another module.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For example, Javascript class and jasmine spec for it could look like this:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// app/assets/javascripts/commonjs/example.js
+&lt;/span&gt;
+&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;exports&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;hello&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s1"&gt;'Hello World'&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;};&lt;/span&gt;
+
+&lt;span class="c1"&gt;// spec/javascripts/commonjs/example_spec.js
+&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;example&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;
+ &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'../../../app/assets/javascripts/commonjs/example'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+&lt;span class="nx"&gt;describe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'example'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;it&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;tests CommonJS&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;example&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;hello&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;If you use &lt;a href="karma framework"&gt;karma framework&lt;/a&gt; for your &lt;a href="unit testing and code coverage"&gt;unit testing and code coverage&lt;/a&gt;, you need to install &lt;strong&gt;karma-commonjs&lt;/strong&gt; plugin:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma-commonjs --save-dev
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;and modify &lt;strong&gt;karma.conf.coffee&lt;/strong&gt; file in order to &lt;strong&gt;recognize&lt;/strong&gt; commonjs:&lt;/p&gt;
+&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# karma.conf.coffee
+&lt;/span&gt; &lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
+   &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;
+     &lt;span class="p"&gt;...&lt;/span&gt;
+
+     &lt;span class="na"&gt;frameworks&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'jasmine'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;'commonjs]
+
+     files: [
+       '&lt;/span&gt;&lt;span class="nx"&gt;app&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;assets&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/commonjs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;js&lt;/span&gt;&lt;span class="s"&gt;',
+       {pattern: '&lt;/span&gt;&lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/commonjs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="nx"&gt;_spec&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;js&lt;/span&gt;&lt;span class="s"&gt;',
+         included: true}
+       {pattern: '&lt;/span&gt;&lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/commonjs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="nx"&gt;_spec&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;coffee&lt;/span&gt;&lt;span class="s"&gt;',
+         included: true}
+     ]
+
+     preprocessors:
+       '&lt;/span&gt;&lt;span class="nx"&gt;app&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;assets&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/commonjs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;js&lt;/span&gt;&lt;span class="s"&gt;': ['&lt;/span&gt;&lt;span class="nx"&gt;commonjs&lt;/span&gt;&lt;span class="s"&gt;'],
+       '&lt;/span&gt;&lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/commonjs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="nx"&gt;_spec&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;js&lt;/span&gt;&lt;span class="s"&gt;': ['&lt;/span&gt;&lt;span class="nx"&gt;commonjs&lt;/span&gt;&lt;span class="s"&gt;']
+       '&lt;/span&gt;&lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/commonjs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="nx"&gt;_spec&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;coffee&lt;/span&gt;&lt;span class="s"&gt;': ['&lt;/span&gt;&lt;span class="nx"&gt;commonjs&lt;/span&gt;&lt;span class="s"&gt;']
+     ...
+&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;You have to add &lt;strong&gt;commonjs&lt;/strong&gt; as framework and mark files that use CommonJS with &lt;strong&gt;commonjs&lt;/strong&gt; preprocessor.&lt;/p&gt;
+
+&lt;h2&gt;CommonJS implementations&lt;/h2&gt;
+
+&lt;p&gt;Because CommonJS is just specification, you cannot use it directly in the browser. Node.js has it&amp;rsquo;s
+own implementation and we use it within spec, but we cannot use it on client side inside the browser.&lt;/p&gt;
+
+&lt;p&gt;Developers have different options to have it in browser. Some of them:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;browserify, webmake - command line tools that wraps up your CommonJS-compatible code with simple implementation
+of &lt;strong&gt;require&lt;/strong&gt; and &lt;strong&gt;module.exports&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;NodeJS - asynchronous implementation of CommonJS specification.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://wiki.commonjs.org/wiki/Implementations"&gt;List of other solutions&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Working with RequireJS&lt;/h2&gt;
+
+&lt;p&gt;RequireJS uses another module format: Asynchronous Module Definition (AMD), originally created as part of
+the Dojo web framework.&lt;/p&gt;
+
+&lt;p&gt;Compared to CommonJS, the main differences of AMD are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Special syntax for specifying module imports - &lt;strong&gt;define&lt;/strong&gt; - must be done at the top of each script.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;No tooling required to use, works within browsers out of the box.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;First, create RequireJS-compatible js code:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// app/assets/javascripts/requirejs/example.js
+&lt;/span&gt;
+&lt;span class="nx"&gt;define&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'example'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;message&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Hello!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="na"&gt;message&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;message&lt;/span&gt;
+  &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Then, create jasmine spec for it:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// spec/javascripts/requirejs/example.js
+&lt;/span&gt;
+&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;'example'&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;example&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;describe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Example&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;it&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;should have a message equal to 'Hello!'&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;example&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;message&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="nx"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;example&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;message&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;toBe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Hello!'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Configure &lt;strong&gt;karma.conf.coffee&lt;/strong&gt; to recognize RequireJS framework:&lt;/p&gt;
+&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# karma.conf.coffee
+&lt;/span&gt; &lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
+   &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;
+     &lt;span class="p"&gt;...&lt;/span&gt;
+     &lt;span class="na"&gt;frameworks&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'jasmine'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;'requirejs]
+
+     files: [
+       '&lt;/span&gt;&lt;span class="nx"&gt;app&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;assets&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/requirejs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;js&lt;/span&gt;&lt;span class="s"&gt;',
+       {pattern: '&lt;/span&gt;&lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/requirejs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="nx"&gt;_spec&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;js&lt;/span&gt;&lt;span class="s"&gt;', included: true}
+       {pattern: '&lt;/span&gt;&lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="sr"&gt;/requirejs/&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="nx"&gt;_spec&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;coffee&lt;/span&gt;&lt;span class="s"&gt;', included: true}
+       '&lt;/span&gt;&lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;javascripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;requirejs&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;js&lt;/span&gt;&lt;span class="s"&gt;'
+     ]
+     ...
+&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;You don&amp;rsquo;t have to preprocess requirejs files - it&amp;rsquo;s already part of karma framework.&lt;/p&gt;
+
+&lt;p&gt;Create &lt;strong&gt;main&lt;/strong&gt; RequireJS file for tests only:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;div class="lineno"&gt;24&lt;/div&gt;&lt;div class="lineno"&gt;25&lt;/div&gt;&lt;div class="lineno"&gt;26&lt;/div&gt;&lt;div class="lineno"&gt;27&lt;/div&gt;&lt;div class="lineno"&gt;28&lt;/div&gt;&lt;div class="lineno"&gt;29&lt;/div&gt;&lt;div class="lineno"&gt;30&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// spec/javascripts/requirejs/spec-main.js
+&lt;/span&gt;
+&lt;span class="c1"&gt;// Grabs specs
+&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;specs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[];&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;file&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;__karma__&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;files&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;__karma__&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;files&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;hasOwnProperty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;file&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;/spec\.js$/&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;file&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;specs&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;push&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;file&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;specs&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+&lt;span class="c1"&gt;// Configures RequireJS for tests
+&lt;/span&gt;&lt;span class="nx"&gt;requirejs&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+  &lt;span class="c1"&gt;// Karma serves files from '/base'
+&lt;/span&gt;  &lt;span class="nl"&gt;baseUrl&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'/base/app/assets/javascripts/requirejs'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+
+  &lt;span class="nl"&gt;paths&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="s1"&gt;'jquery'&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;GEM_HOME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;'//gems/jquery-rails-3.0.4/vendor/assets/javascripts/jquery'&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// ask Require.js to load these files (all our tests)
+&lt;/span&gt;  &lt;span class="nl"&gt;deps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;specs&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// start test run, once Require.js is done
+&lt;/span&gt;  &lt;span class="nl"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;__karma__&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;start&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Using RequireJS in browser&lt;/h2&gt;
+
+&lt;p&gt;For using RequireJS in browser you have to &lt;a href="http://requirejs.org/docs/download.html"&gt;download&lt;/a&gt;
+it and include into your html file.&lt;/p&gt;
+
+&lt;p&gt;Your sample  &lt;strong&gt;haml template file&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre class="highlight haml"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c"&gt;-#index.haml
+&lt;/span&gt;&lt;span class="nt"&gt;%html&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;:lang&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;en&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="nt"&gt;%head&lt;/span&gt;
+    &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;javascript_include_tag&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;requirejs-2.1.8.min&amp;quot;&lt;/span&gt;
+    &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;javascript_include_tag&lt;/span&gt;  &lt;span class="s2"&gt;&amp;quot;helper&amp;quot;&lt;/span&gt;
+    &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;javascript_include_tag&lt;/span&gt;  &lt;span class="s2"&gt;&amp;quot;application&amp;quot;&lt;/span&gt;
+
+  &lt;span class="nt"&gt;%body&lt;/span&gt;
+    &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Hello, Web!&amp;quot;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;and &lt;strong&gt;main&lt;/strong&gt; RequireJS file:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// application.js
+&lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+  &lt;span class="na"&gt;baseUrl&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'assets/javascripts'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+
+  &lt;span class="na"&gt;paths&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="na"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'.'&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+
+&lt;span class="c1"&gt;// Start the main app logic.
+&lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;'jquery-1.10.2.min'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'helper'&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;helper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;helper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;do_something&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Now you can open it in the browser:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;open index.html
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Calling CommonJS module from RequireJS&lt;/h2&gt;
+
+&lt;p&gt;If you have CommonJS module that you would like to use with RequireJS, you have to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;define a module&lt;/li&gt;
+&lt;li&gt;provide a factory function which takes three arguments: &lt;strong&gt;require&lt;/strong&gt;, &lt;strong&gt;exports&lt;/strong&gt; and &lt;strong&gt;module&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;See example below:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// app/assets/javascripts/commonjs/example.js
+&lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;exports&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;hello&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s1"&gt;'Hello World'&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;};&lt;/span&gt;
+
+&lt;span class="c1"&gt;// app/assets/javascripts/requirejs/example.js
+&lt;/span&gt;&lt;span class="nx"&gt;define&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'rjsExampleModule'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;exports&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;cjsExampleModule&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'example'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="na"&gt;rjsHello&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;cjsExampleModule&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;hello&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;With the &lt;strong&gt;require&lt;/strong&gt; argument, you load module using CommonJS style syntax.
+Other two parameters are optional and can be omitted.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Using Node.js and Karma Framework for Unit Tests and Code Coverage in Javascript</title>
     <link rel="alternate" href="/blog/2013/09/14/nodejs_and_karma.html"/>
@@ -849,60 +1175,5 @@ the dependencies in &lt;strong&gt;Gemfile&lt;/strong&gt; as we would do it for &
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;It will also generate &lt;strong&gt;my_gem.gemspec&lt;/strong&gt; and replace ERB fragment with dependencies from Gemfile.&lt;/p&gt;
 </content>
-  </entry>
-  <entry>
-    <title>How to use CoffeeScript with nanoc</title>
-    <link rel="alternate" href="/blog/2012/01/01/how_to_use_coffeescript_with_nanoc.html"/>
-    <id>/blog/2012/01/01/how_to_use_coffeescript_with_nanoc.html</id>
-    <published>2012-01-01T00:00:00Z</published>
-    <updated>2012-01-01T00:00:00Z</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h2&gt;How to use CoffeeScript with nanoc&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Step 1&lt;/strong&gt;: Add &lt;strong&gt;coffee-script&lt;/strong&gt; to &lt;strong&gt;Gemflie&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'coffee-script'&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;Step 2&lt;/strong&gt;: Add &lt;strong&gt;coffee_filter.rb&lt;/strong&gt; file to &lt;strong&gt;lib&lt;/strong&gt; folder:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'coffee-script'&lt;/span&gt;
-
-  &lt;span class="k"&gt;class &lt;/span&gt;&lt;span class="nc"&gt;CoffeeFilter&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Nanoc3&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Filter&lt;/span&gt;
-    &lt;span class="n"&gt;identifier&lt;/span&gt; &lt;span class="ss"&gt;:coffee&lt;/span&gt;
-
-    &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;params&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{})&lt;/span&gt;
-      &lt;span class="no"&gt;CoffeeScript&lt;/span&gt;&lt;span class="nf"&gt;.compile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="k"&gt;end&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;Step 3&lt;/strong&gt;: Add new rules to &lt;strong&gt;Rules&lt;/strong&gt; file for compiling &lt;strong&gt;coffee-script&lt;/strong&gt; files into &lt;strong&gt;javascript&lt;/strong&gt; files:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="n"&gt;compile&lt;/span&gt; &lt;span class="s1"&gt;'/assets/coffee/*/'&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-    &lt;span class="n"&gt;filter&lt;/span&gt; &lt;span class="ss"&gt;:coffee&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="c1"&gt;# so that the /assets/coffee/ item is copied to /javascripts/ item&lt;/span&gt;
-  &lt;span class="n"&gt;route&lt;/span&gt; &lt;span class="s1"&gt;'/assets/coffee/*/'&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-    &lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="nf"&gt;.identifier.sub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;%r{^/assets/coffee}&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'/javascripts'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;.chop&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;'.js'&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;Step 4&lt;/strong&gt;: Create your first coffescript file in &lt;strong&gt;source/assets/coffee&lt;/strong&gt; directory:&lt;/p&gt;
-&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="c1"&gt;# test.coffee
-&lt;/span&gt;
-  &lt;span class="nx"&gt;notify&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;alert&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Hello, user!&amp;quot;&lt;/span&gt;
-
-  &lt;span class="nx"&gt;notify&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;Step 5&lt;/strong&gt;: Compile your web site.&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="n"&gt;nanoc3&lt;/span&gt; &lt;span class="n"&gt;compile&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Compiled javascript files should be located in &lt;strong&gt;javascrips&lt;/strong&gt; folder.&lt;/p&gt;
-
-&lt;p&gt;If you want to use coffee-script inside your haml partials, include this gem into &amp;lsquo;Gemfile&amp;rsquo;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'coffee-filter'&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;And include this fragment into partial:&lt;/p&gt;
-&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nx"&gt;coffeescript&lt;/span&gt;
-  &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;notify&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;alert&lt;/span&gt; &lt;span class="s"&gt;'Hello, user!'&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
   </entry>
 </feed>

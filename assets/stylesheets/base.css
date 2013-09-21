@@ -1,73 +1,73 @@
 /* general */
-/* line 4, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 4, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 body {
   padding: 0; }
 
-/* line 7, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 7, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 a {
   color: black;
   /*  text-decoration: none;  */ }
-  /* line 10, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 10, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   a:hover {
     color: black;
     text-decoration: underline; }
-  /* line 13, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 13, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   a img {
     border: 0 none; }
 
 /* whole page */
-/* line 18, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 18, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #wrapper {
   margin: 0 auto;
   width: 900px; }
 
 /* main column, as opposed to sidebar  */
-/* line 24, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 24, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #main-column {
   width: 700px;
   float: left; }
 
 /* sidebar */
-/* line 30, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 30, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #sidebar {
   width: 170px;
   margin: 135px 0 0 30px;
   float: left;
   font: 13px Helvetica;
   color: #5f5d5f; }
-  /* line 36, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 36, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #sidebar p {
     margin: 0 0 5px; }
-  /* line 38, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 38, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #sidebar h2 {
     margin-top: 17px; }
-  /* line 41, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 41, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #sidebar ul {
     margin: 0;
     padding: 0;
     list-style: none;
     line-height: 1.2em; }
-  /* line 46, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 46, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #sidebar h1, #sidebar h2 {
     font: bold 14px Helvetica;
     color: black; }
-  /* line 49, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 49, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #sidebar .section {
     margin: 0 0 20px;
     padding: 20px; }
 
 /* logo */
-/* line 56, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 56, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #logo {
   height: 70px;
   margin: 0 auto; }
-  /* line 59, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 59, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #logo h1 {
     float: left;
     margin: 0;
     padding: 10px 0 0 0px;
     line-height: normal; }
-  /* line 64, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 64, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #logo h2 {
     float: left;
     margin: 0;
@@ -77,26 +77,26 @@ a {
     padding: 68px 0 0 18px;
     font: 18px Helvetica;
     color: #5f5d5f; }
-    /* line 73, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+    /* line 73, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
     #logo h2 span {
       color: #b32d15; }
 
 /* menu */
-/* line 78, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 78, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #menu {
   margin: 0 0 0 110px;
   height: 50px; }
-  /* line 81, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 81, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #menu ul {
     margin: 0;
     padding: 0;
     list-style: none;
     line-height: normal; }
-  /* line 86, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 86, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #menu li {
     display: block;
     float: left; }
-  /* line 89, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 89, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #menu a {
     display: block;
     float: left;
@@ -106,16 +106,16 @@ a {
     font-family: "Graublau Web", Helvetica, Arial, sans-serif;
     font-size: 25px;
     color: #bebcbd; }
-    /* line 98, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+    /* line 98, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
     #menu a:hover {
       color: #b32d15;
       text-decoration: underline; }
-  /* line 101, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 101, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #menu .current_page_item a {
     color: #b32d15; }
 
 /* page */
-/* line 106, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 106, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #page {
   width: 590px;
   margin: 0 0 0 110px;
@@ -125,11 +125,11 @@ a {
   line-height: 1.4em;
   text-align: justify;
   letter-spacing: 0.03em; }
-  /* line 115, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 115, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h1, #page h2 {
     font: bold Helvetica;
     color: black; }
-  /* line 118, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 118, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h1 {
     margin: 20px 0 30px;
     font-size: 30px;
@@ -137,37 +137,37 @@ a {
     padding-bottom: 5px;
     font-variant: small-caps;
     text-transform: lowercase; }
-  /* line 126, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 126, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h2 {
     font-size: 14px; }
-  /* line 128, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 128, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page p {
     font-family: "Cantarell", arial, serif; }
 
-/* line 131, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 131, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #footer {
   margin-top: 30px; }
-  /* line 133, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 133, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #footer p {
     font: 11px Helvetica;
     color: #aaaaaa; }
 
-/* line 137, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 137, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #legal {
   clear: both;
   padding-top: 17px;
   text-align: left; }
-  /* line 141, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 141, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #legal a {
     font-weight: normal;
     color: #5f5d5f; }
 
 /* misc */
-/* line 147, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 147, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #lang-selector {
   margin-bottom: 20px; }
 
-/* line 164, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 164, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 pre {
   border: solid 1px #dddddd;
   background: white;
@@ -179,11 +179,11 @@ pre {
   word-break: inherit;
   word-wrap: inherit; }
 
-/* line 175, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 175, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 .highlight td {
   padding: 8px 15px; }
 
-/* line 178, /Users/oshvets/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 178, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 .gl {
   background: #fafafa;
   border-right: 1px solid #dddddd;
