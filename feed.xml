@@ -24,7 +24,7 @@
 
 &lt;p&gt;Sometimes you have functionality that you want to &lt;strong&gt;expose as the service&lt;/strong&gt; and &lt;strong&gt;access it from the browser&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;One of such examples is &lt;a href="GemBox"&gt;GemBox&lt;/a&gt; - you run simple web server that&amp;rsquo;s aware of your &lt;strong&gt;gems repository&lt;/strong&gt;
+&lt;p&gt;One of such examples is &lt;a href="https://github.com/quirkey/gembox"&gt;GemBox&lt;/a&gt; - you run simple web server that&amp;rsquo;s aware of your &lt;strong&gt;gems repository&lt;/strong&gt;
 and you can see all installed gems inside the browser.&lt;/p&gt;
 
 &lt;p&gt;Another example is &lt;strong&gt;rubygems&lt;/strong&gt; running in server mode:&lt;/p&gt;
@@ -36,13 +36,13 @@ and you can see all installed gems inside the browser.&lt;/p&gt;
 &lt;p&gt;For creating executable web applications you can use at least these 2 gems:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="Vegas gem"&gt;Vegas gem&lt;/a&gt; - let&amp;rsquo;s you &lt;strong&gt;daemonize&lt;/strong&gt; your code;&lt;/li&gt;
-&lt;li&gt;&lt;a href="Launchy gem"&gt;Launchy gem&lt;/a&gt; - helps you to &lt;strong&gt;open your application in the browser&lt;/strong&gt; when you start it.&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://code.quirkey.com/vegas"&gt;Vegas gem&lt;/a&gt; - let&amp;rsquo;s you &lt;strong&gt;daemonize&lt;/strong&gt; your code;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/copiousfreetime/launchy"&gt;Launchy gem&lt;/a&gt; - helps you to &lt;strong&gt;open your application in the browser&lt;/strong&gt; when you start it.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2&gt;Using Vegas gem&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href="Vegas gem"&gt;Vegas&lt;/a&gt; helps to create executable version of Sinatra/Rack application.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://code.quirkey.com/vegas"&gt;Vegas&lt;/a&gt; helps to create executable version of Sinatra/Rack application.&lt;/p&gt;
 
 &lt;p&gt;You use &lt;strong&gt;Vegas::Runner&lt;/strong&gt; class for wrapping such application. For example, this
 is shell script for starting your favorite &lt;strong&gt;sinatra&lt;/strong&gt; code:&lt;/p&gt;
@@ -100,7 +100,7 @@ Usage: bin/myapp &lt;span class="o"&gt;[&lt;/span&gt;options]
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;h2&gt;Using Launchy gem&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href="Launchy gem"&gt;Launchy&lt;/a&gt; is helper class for launching cross-platform applications in a &amp;ldquo;&lt;strong&gt;fire and forget manner&lt;/strong&gt;&amp;rdquo;.
+&lt;p&gt;&lt;a href="https://github.com/copiousfreetime/launchy"&gt;Launchy&lt;/a&gt; is helper class for launching cross-platform applications in a &amp;ldquo;&lt;strong&gt;fire and forget manner&lt;/strong&gt;&amp;rdquo;.
 This process is slightly different on different platforms and launchy is trying to hide this
 difference.&lt;/p&gt;
 
@@ -130,7 +130,7 @@ difference.&lt;/p&gt;
 &lt;h2&gt;Bonus: lunchy gem&lt;/h2&gt;
 
 &lt;p&gt;If your development platform is OSX and you need to frequently start/stop &lt;strong&gt;launchctl agents&lt;/strong&gt;, there is
-a &lt;a href="lunchy gem"&gt;lunchy&lt;/a&gt; gem that let you to make this task extremely easy.&lt;/p&gt;
+a &lt;a href="https://github.com/mperham/lunchy"&gt;lunchy&lt;/a&gt; gem that let you to make this task extremely easy.&lt;/p&gt;
 
 &lt;p&gt;The burden here is that in order to start/stop/etc launchctl agents, you have to specify exact file name for that agent
 as it&amp;rsquo;s identifier.&lt;/p&gt;
@@ -164,7 +164,7 @@ lunchy edit &lt;span class="o"&gt;[&lt;/span&gt;agent]
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;h2&gt;Example: mvn-plugin-config gem&lt;/h2&gt;
 
-&lt;p&gt;This &lt;a href="mvn-plugin-config gem"&gt;gem&lt;/a&gt; was created while I was working back on Java project. Generally speaking,
+&lt;p&gt;This &lt;a href="https://github.com/shvets/mvn-plugin-config"&gt;gem&lt;/a&gt; was created while I was working back on Java project. Generally speaking,
 Ruby can be used as facilitator for any programming language. At that time I had to create maven project
 and some of maven plugin options were undocumented.&lt;/p&gt;
 
@@ -192,7 +192,7 @@ on next page:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/mvn_plugin_config2.png" style="width:600px; height:400px"/&gt;&lt;/p&gt;
 
-&lt;p&gt;Look for implementation details &lt;a href="mvn-plugin-config gem"&gt;here&lt;/a&gt; if you are interested.&lt;/p&gt;
+&lt;p&gt;Look for implementation details &lt;a href="https://github.com/shvets/mvn-plugin-config"&gt;here&lt;/a&gt; if you are interested.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -332,7 +332,7 @@ in their own &lt;strong&gt;unique module context&lt;/strong&gt;.&lt;/p&gt;
   &lt;span class="p"&gt;});&lt;/span&gt;
 &lt;span class="p"&gt;});&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;If you use &lt;a href="karma framework"&gt;karma framework&lt;/a&gt; for your &lt;a href="unit testing and code coverage"&gt;unit testing and code coverage&lt;/a&gt;, you need to install &lt;strong&gt;karma-commonjs&lt;/strong&gt; plugin:&lt;/p&gt;
+&lt;p&gt;If you use &lt;a href="https://github.com/karma-runner/karma"&gt;karma framework&lt;/a&gt; for your &lt;a href="http://shvets.github.io/blog/2013/09/14/nodejs_and_karma.html"&gt;unit testing and code coverage&lt;/a&gt;, you need to install &lt;strong&gt;karma-commonjs&lt;/strong&gt; plugin:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma-commonjs --save-dev
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;and modify &lt;strong&gt;karma.conf.coffee&lt;/strong&gt; file in order to &lt;strong&gt;recognize&lt;/strong&gt; commonjs:&lt;/p&gt;
@@ -370,7 +370,7 @@ own implementation and we use it within spec, but we cannot use it on client sid
 &lt;li&gt;&lt;p&gt;browserify, webmake - command line tools that wraps up your CommonJS-compatible code with simple implementation
 of &lt;strong&gt;require&lt;/strong&gt; and &lt;strong&gt;module.exports&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;NodeJS - asynchronous implementation of CommonJS specification.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="http://wiki.commonjs.org/wiki/Implementations"&gt;List of other solutions&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;[List of other solutions] [&lt;a href="http://wiki.commonjs.org/wiki/Implementations"&gt;http://wiki.commonjs.org/wiki/Implementations&lt;/a&gt;]&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2&gt;Working with RequireJS&lt;/h2&gt;

@@ -149,8 +149,8 @@ describe('example', function() {
 });
 ```
 
-If you use [karma framework] (karma framework) for your [unit testing and code coverage]
-(unit testing and code coverage), you need to install **karma-commonjs** plugin:
+If you use [karma framework] [karma framework] for your [unit testing and code coverage]
+[unit testing and code coverage], you need to install **karma-commonjs** plugin:
 
 
 ```bash
@@ -196,7 +196,7 @@ of **require** and **module.exports**.
 
 * NodeJS - asynchronous implementation of CommonJS specification.
 
-* [List of other solutions] (http://wiki.commonjs.org/wiki/Implementations)
+* [List of other solutions] [http://wiki.commonjs.org/wiki/Implementations]
 
 
 ## Working with RequireJS

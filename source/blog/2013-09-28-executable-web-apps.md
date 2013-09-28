@@ -1,7 +1,7 @@
 ---
 title: Creating executable web applications with Ruby
 date: 2013-09-28
-tags: ruby, sinatra, vegas, launchy
+tags: ruby, sinatra, vegas, launchy, lunchy
 ---
 
 # Creating executable web applications with Ruby
@@ -11,7 +11,7 @@ tags: ruby, sinatra, vegas, launchy
 
 Sometimes you have functionality that you want to **expose as the service** and **access it from the browser**.
 
-One of such examples is [GemBox] (GemBox) - you run simple web server that's aware of your **gems repository**
+One of such examples is [GemBox] [GemBox] - you run simple web server that's aware of your **gems repository**
 and you can see all installed gems inside the browser.
 
 Another example is **rubygems** running in server mode:
@@ -28,12 +28,12 @@ open http://localhost:8808
 
 For creating executable web applications you can use at least these 2 gems:
 
-* [Vegas gem] (Vegas gem) - let's you **daemonize** your code;
-* [Launchy gem] (Launchy gem) - helps you to **open your application in the browser** when you start it.
+* [Vegas gem] [Vegas gem] - let's you **daemonize** your code;
+* [Launchy gem] [Launchy gem] - helps you to **open your application in the browser** when you start it.
 
 ## Using Vegas gem
 
-[Vegas] (Vegas gem) helps to create executable version of Sinatra/Rack application.
+[Vegas] [Vegas gem] helps to create executable version of Sinatra/Rack application.
 
 You use **Vegas::Runner** class for wrapping such application. For example, this
 is shell script for starting your favorite **sinatra** code:
@@ -110,7 +110,7 @@ bin/myapp -S
 
 ## Using Launchy gem
 
-[Launchy] (Launchy gem) is helper class for launching cross-platform applications in a "**fire and forget manner**".
+[Launchy] [Launchy gem] is helper class for launching cross-platform applications in a "**fire and forget manner**".
 This process is slightly different on different platforms and launchy is trying to hide this
 difference.
 
@@ -149,7 +149,7 @@ Launchy.open("http://localhost:9292", :application => MyApp)
 ## Bonus: lunchy gem
 
 If your development platform is OSX and you need to frequently start/stop **launchctl agents**, there is
-a [lunchy] (lunchy gem) gem that let you to make this task extremely easy.
+a [lunchy] [lunchy gem] gem that let you to make this task extremely easy.
 
 The burden here is that in order to start/stop/etc launchctl agents, you have to specify exact file name for that agent
 as it's identifier.
@@ -198,7 +198,7 @@ lunchy install [file]
 
 ## Example: mvn-plugin-config gem
 
-This [gem] (mvn-plugin-config gem) was created while I was working back on Java project. Generally speaking,
+This [gem] [mvn-plugin-config gem] was created while I was working back on Java project. Generally speaking,
 Ruby can be used as facilitator for any programming language. At that time I had to create maven project
 and some of maven plugin options were undocumented.
 
@@ -232,7 +232,7 @@ on next page:
 
 <img src="/assets/images/mvn_plugin_config2.png" style="width:600px; height:400px"/>
 
-Look for implementation details [here] (mvn-plugin-config gem) if you are interested.
+Look for implementation details [here] [mvn-plugin-config gem] if you are interested.
 
 [GemBox]: https://github.com/quirkey/gembox
 [Vegas gem]: http://code.quirkey.com/vegas
