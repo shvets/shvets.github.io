@@ -327,7 +327,7 @@ Let's explain some of used properties.
  * fixtures (if yop plan to use them)
 
 * **preprocessors** describe different actions/filters. Some of them:
-  - how to process coffescript files (coffee);
+  - how to process coffeescript files (coffee);
   - how to build fixtures (html2js);
   - what files to include into code coverage (coverage);
 

@@ -7,7 +7,7 @@ tag: ruby
 
 # How to protect DB credentials for Rails app
 
-[This gem](shadow_db_credentials) helps us to keep DB credentials for rails app in private place.
+[This gem] [shadow_db_credentials] helps us to keep DB credentials for rails app in private place.
 
 ## Installation
 

@@ -804,7 +804,7 @@ npm install karma-html2js-preprocessor --save-dev
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;preprocessors&lt;/strong&gt; describe different actions/filters. Some of them:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;how to process coffescript files (coffee);&lt;/li&gt;
+&lt;li&gt;how to process coffeescript files (coffee);&lt;/li&gt;
 &lt;li&gt;how to build fixtures (html2js);&lt;/li&gt;
 &lt;li&gt;what files to include into code coverage (coverage);&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
@@ -915,16 +915,16 @@ html files inside &lt;strong&gt;fixtures&lt;/strong&gt; directory:&lt;/li&gt;
 &lt;p&gt;When you want to access some http resource, you have plenty of solutions, such as:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="OpenURI"&gt;OpenURI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="HTTP Client"&gt;HTTP Client&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="rest client"&gt;rest client&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="HTTParty"&gt;HTTParty&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="Typhoeus"&gt;Typhoeus&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/open-uri/rdoc/OpenURI.html"&gt;OpenURI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/nahi/httpclient"&gt;HTTP Client&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/adamwiggins/rest-client"&gt;rest client&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/jnunemaker/httparty"&gt;HTTParty&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/typhoeus/typhoeus"&gt;Typhoeus&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;But they tend to be too big to use for simple cases. All you need is probably simple wrapper
 around &lt;strong&gt;http/https&lt;/strong&gt; ruby standard classes. You can get such implementation as
-&lt;a href="resource_accessor"&gt;resource_accessor&lt;/a&gt; gem.&lt;/p&gt;
+&lt;a href="https://github.com/shvets/resource_accessor"&gt;resource_accessor&lt;/a&gt; gem.&lt;/p&gt;
 
 &lt;h2&gt;Installation&lt;/h2&gt;
 
@@ -1125,7 +1125,7 @@ open http://localhost:4567
     </author>
     <content type="html">&lt;h1&gt;How to protect DB credentials for Rails app&lt;/h1&gt;
 
-&lt;p&gt;&lt;a href="shadow_db_credentials"&gt;This gem&lt;/a&gt; helps us to keep DB credentials for rails app in private place.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/shvets/shadow_db_credentials"&gt;This gem&lt;/a&gt; helps us to keep DB credentials for rails app in private place.&lt;/p&gt;
 
 &lt;h2&gt;Installation&lt;/h2&gt;
 

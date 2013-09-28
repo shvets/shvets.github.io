@@ -8,15 +8,15 @@ tag: ruby
 
 When you want to access some http resource, you have plenty of solutions, such as:
 
-* [OpenURI] (OpenURI)
-* [HTTP Client] (HTTP Client)
-* [rest client] (rest client)
-* [HTTParty] (HTTParty)
-* [Typhoeus] (Typhoeus)
+* [OpenURI] [OpenURI]
+* [HTTP Client] [HTTP Client]
+* [rest client] [rest client]
+* [HTTParty] [HTTParty]
+* [Typhoeus] [Typhoeus]
 
 But they tend to be too big to use for simple cases. All you need is probably simple wrapper
 around **http/https** ruby standard classes. You can get such implementation as
-[resource_accessor] (resource_accessor) gem.
+[resource_accessor] [resource_accessor] gem.
 
 ## Installation
 
