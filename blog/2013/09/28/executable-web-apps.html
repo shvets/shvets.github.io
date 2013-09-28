@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Creating executable web applications with Ruby</h1>
+
+<h2>What is it?</h2>
+
+<p>Sometimes you have functionality that you want to <strong>expose as the service</strong> and <strong>access it from the browser</strong>.</p>
+
+<p>One of such examples is <a href="GemBox">GemBox</a> - you run simple web server that&rsquo;s aware of your <strong>gems repository</strong>
+and you can see all installed gems inside the browser.</p>
+
+<p>Another example is <strong>rubygems</strong> running in server mode:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem server
+</td></tr></tbody></table></pre>
+<p>It starts server on port 8808 and lets you explore installed gems from inside the browser.</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">open http://localhost:8808
+</td></tr></tbody></table></pre>
+<p>For creating executable web applications you can use at least these 2 gems:</p>
+
+<ul>
+<li><a href="Vegas gem">Vegas gem</a> - let&rsquo;s you <strong>daemonize</strong> your code;</li>
+<li><a href="Launchy gem">Launchy gem</a> - helps you to <strong>open your application in the browser</strong> when you start it.</li>
+</ul>
+
+<h2>Using Vegas gem</h2>
+
+<p><a href="Vegas gem">Vegas</a> helps to create executable version of Sinatra/Rack application.</p>
+
+<p>You use <strong>Vegas::Runner</strong> class for wrapping such application. For example, this
+is shell script for starting your favorite <strong>sinatra</strong> code:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div></td><td class="code"><span class="c1">#!/usr/bin/env ruby</span>
+<span class="c1"># bin/myapp</span>
+
+<span class="vg">$:</span><span class="nf">.unshift</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span>
+             <span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)),</span> <span class="s2">&quot;lib&quot;</span><span class="p">))</span>
+
+<span class="nb">require</span> <span class="s1">'vegas'</span>
+<span class="nb">require</span> <span class="s1">'myapp.rb'</span>
+
+<span class="no">Vegas</span><span class="o">::</span><span class="no">Runner</span><span class="nf">.new</span><span class="p">(</span><span class="no">MyApp</span><span class="p">,</span> <span class="s1">'my_app'</span><span class="p">)</span>
+</td></tr></tbody></table></pre>
+<p>and this is your sinatra application:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div></td><td class="code"><span class="c1"># my_app.rb</span>
+
+<span class="nb">require</span> <span class="s1">'sinatra/base'</span>
+
+<span class="k">class </span><span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">get</span> <span class="s1">'/'</span> <span class="k">do</span>
+    <span class="s2">&quot;Hello, world!&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
+<p>Now you can run it:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">chmod +x bin/myapp
+</td></tr></tbody></table></pre><pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bin/myapp
+</td></tr></tbody></table></pre>
+<p>When you wrap sinatra application with Vegas, it does the following steps:</p>
+
+<ul>
+<li>Starts rack application under appropriate rack handler (thin, mongrel, puma) in one of the following forms:
+
+<ul>
+<li>as daemon (default);</li>
+<li>as standalone.</li>
+</ul></li>
+<li>Opens start page of your service in the  browser.</li>
+</ul>
+
+<p>You can print a list of available command line options when running with -h or &ndash;help option:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="gp">&gt; </span>bin/myapp -h
+Usage: bin/myapp <span class="o">[</span>options]
+...
+</td></tr></tbody></table></pre>
+<p>If you don&rsquo;t want to create a daemon and don&rsquo;t want to open it in the browser, use:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bin/myapp -F -L
+</td></tr></tbody></table></pre>
+<p>If you still use daemon and now want to stop it, use <strong>-K</strong> flag</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bin/myapp -K
+</td></tr></tbody></table></pre>
+<p>If you want to check status of your daemon, run this:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bin/myapp -S
+</td></tr></tbody></table></pre>
+<h2>Using Launchy gem</h2>
+
+<p><a href="Launchy gem">Launchy</a> is helper class for launching cross-platform applications in a &ldquo;<strong>fire and forget manner</strong>&rdquo;.
+This process is slightly different on different platforms and launchy is trying to hide this
+difference.</p>
+
+<p>You can use launchy on the command line, or via its API.</p>
+
+<p>From command line:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">launchy http://www.ruby-lang.org/
+</td></tr></tbody></table></pre>
+<p>via API:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="nb">require</span> <span class="s1">'launchy'</span>
+
+<span class="no">Launchy</span><span class="nf">.open</span><span class="p">(</span><span class="s2">&quot;http://localhost:9292&quot;</span><span class="p">)</span>
+</td></tr></tbody></table></pre>
+<p>If you want to use launchy with your rack application, do it inside <strong>config.ru</strong>:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div></td><td class="code"><span class="c1"># config.ru</span>
+
+<span class="vg">$:</span><span class="nf">.unshift</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span>
+             <span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)),</span> <span class="s2">&quot;lib&quot;</span><span class="p">))</span>
+
+<span class="nb">require</span> <span class="s1">'my_app'</span>
+<span class="nb">require</span> <span class="s1">'launchy'</span>
+
+<span class="n">run</span> <span class="no">MyApp</span>
+<span class="no">Launchy</span><span class="nf">.open</span><span class="p">(</span><span class="s2">&quot;http://localhost:9292&quot;</span><span class="p">,</span> <span class="ss">:application</span> <span class="o">=&gt;</span> <span class="no">MyApp</span><span class="p">)</span>
+
+</td></tr></tbody></table></pre>
+<h2>Bonus: lunchy gem</h2>
+
+<p>If your development platform is OSX and you need to frequently start/stop <strong>launchctl agents</strong>, there is
+a <a href="lunchy gem">lunchy</a> gem that let you to make this task extremely easy.</p>
+
+<p>The burden here is that in order to start/stop/etc launchctl agents, you have to specify exact file name for that agent
+as it&rsquo;s identifier.</p>
+
+<p>When you use lunchy, you can use Ruby <strong>regular expressions</strong> for specifying agent&rsquo;s identifier and lunchy will
+find correct entry.</p>
+
+<p>For example, to restart postgres server you have to run this command:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+</td></tr></tbody></table></pre>
+<p>With lunchy the tool you can shorten it:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">gem install lunchy
+
+lunchy start postgres
+</td></tr></tbody></table></pre>
+<p>You can see the list of available agents:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">lunchy ls
+</td></tr></tbody></table></pre>
+<p>or manage particular agent:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code">lunchy start <span class="o">[</span>agent]
+lunchy stop <span class="o">[</span>agent]
+lunchy restart <span class="o">[</span>agent]
+
+lunchy status <span class="o">[</span>agent]
+
+lunchy show <span class="o">[</span>agent]
+lunchy edit <span class="o">[</span>agent]
+</td></tr></tbody></table></pre>
+<p>or install it:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">lunchy install <span class="o">[</span>file]
+</td></tr></tbody></table></pre>
+<h2>Example: mvn-plugin-config gem</h2>
+
+<p>This <a href="mvn-plugin-config gem">gem</a> was created while I was working back on Java project. Generally speaking,
+Ruby can be used as facilitator for any programming language. At that time I had to create maven project
+and some of maven plugin options were undocumented.</p>
+
+<p>All you have to do in this situation is to go inside jar file for given plugin and locate
+<strong>META-INF/maven/plugin.xml</strong> file - inside you have all required information.</p>
+
+<p>If you do it one time - it&rsquo;s OK, but if you need to do it frequently, it&rsquo;s good case for automation. So,
+ruby gem was created to access this information in convenient way as local web server.</p>
+
+<p>In order to use it first install it (keep in mind - it uses Vegas gem):</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem install mvn_plugin_config
+</td></tr></tbody></table></pre>
+<p>and then run it as daemon:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">mvn-plugin-config
+</td></tr></tbody></table></pre>
+<p>All commands described in Vegas section are accessible here.</p>
+
+<p>When you run the script, it starts server as daemon and opens start page in the browser.
+On this page you can see <strong>all discovered maven plugins</strong>, something like this:</p>
+
+<p><img src="/assets/images/mvn_plugin_config1.png" style="width:600px; height:400px"/></p>
+
+<p>You can click on corresponding link for interested plugin and see all discovered information
+on next page:</p>
+
+<p><img src="/assets/images/mvn_plugin_config2.png" style="width:600px; height:400px"/></p>
+
+<p>Look for implementation details <a href="mvn-plugin-config gem">here</a> if you are interested.</p>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(4)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2013.html">2013</a>
+(7)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>

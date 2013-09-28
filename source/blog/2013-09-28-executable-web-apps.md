@@ -6,176 +6,236 @@ tags: ruby, sinatra, vegas, launchy
 
 # Creating executable web applications with Ruby
 
-[Vegas gem] (http://code.quirkey.com/vegas)
-[Launchy gem] (https://github.com/copiousfreetime/launchy)
-[mvn-plugin-config gem] (https://github.com/shvets/mvn-plugin-config)
 
+## What is it?
 
-https://github.com/oguzbilgic/garaj/tree/master/lib/garaj
+Sometimes you have functionality that you want to **expose as the service** and **access it from the browser**.
 
+One of such examples is [GemBox] (GemBox) - you run simple web server that's aware of your **gems repository**
+and you can see all installed gems inside the browser.
 
-What
+Another example is **rubygems** running in server mode:
 
-Vegas aims to solve the simple problem of creating executable versions of Sinatra/Rack apps.
-Why
+```bash
+gem server
+```
 
-I have a vision of a future where all us developers release gems with simple local web interfaces powered by Sinatra.
-I see Vegas as a little shove and an easy first step in making this vision come true.
+It starts server on port 8808 and lets you explore installed gems from inside the browser.
 
-I presented about “Sinatra: The Framework Within” at GoGaRuCo 2009: Check out the full video.
+```bash
+open http://localhost:8808
+```
 
-Usage
+For creating executable web applications you can use at least these 2 gems:
 
-Currently, vegas contains a single class Vegas::Runner that provides a wrapper for a Sinatra app to easily make it into an executable bin.
+* [Vegas gem] (Vegas gem) - let's you **daemonize** your code;
+* [Launchy gem] (Launchy gem) - helps you to **open your application in the browser** when you start it.
 
-Lets say you have a Sinatra app that looks like:
+## Using Vegas gem
 
-# /my_app.rb
-require 'rubygems'
+[Vegas] (Vegas gem) helps to create executable version of Sinatra/Rack application.
+
+You use **Vegas::Runner** class for wrapping such application. For example, this
+is shell script for starting your favorite **sinatra** code:
+
+```ruby
+#!/usr/bin/env ruby
+# bin/myapp
+
+$:.unshift(File::join(File::dirname(
+             File::dirname(__FILE__)), "lib"))
+
+require 'vegas'
+require 'myapp.rb'
+
+Vegas::Runner.new(MyApp, 'my_app')
+```
+
+and this is your sinatra application:
+
+```ruby
+# my_app.rb
+
 require 'sinatra/base'
 
 class MyApp < Sinatra::Base
-
   get '/' do
-    "This is my app"
+    "Hello, world!"
   end
-
 end
+```
 
-You can turn this into a simple binary:
+Now you can run it:
 
-  #!/usr/bin/env ruby
-  # /myapp
+```bash
+chmod +x bin/myapp
+```
 
-  require File.expand_path(File.dirname(__FILE__) + 'myapp.rb')
-  require 'vegas'
+```bash
+bin/myapp
+```
 
-  Vegas::Runner.new(MyApp, 'my_app')
+When you wrap sinatra application with Vegas, it does the following steps:
 
-Now if you run ./my_app it should:
+* Starts rack application under appropriate rack handler (thin, mongrel, puma) in one of the following forms:
+ - as daemon (default);
+ - as standalone.
+* Opens start page of your service in the  browser.
 
-    find an appropriate rack handler (thin. mongrel)
-    find an available port
-    launch the app in a browser
-    put itself in the background
-    write a .pid and a .url file
+You can print a list of available command line options when running with -h or --help option:
 
-Running it with -h or --help will print a list of available command line options. You can even add options specific to your app by using a block.
+```bash
+> bin/myapp -h
+Usage: bin/myapp [options]
+...
+```
 
-Vegas::Runner.new(AppClass, 'app_name') do |runner, opts, app|
-  # runner is the instance of Vegas::Runner
-  # opts is an option parser object
-  # app is your app class
-end
+If you don't want to create a daemon and don't want to open it in the browser, use:
 
-As of version 0.0.3, Vegas::Runner and its daemon-ization is fully compatible with Windows.
-Rack Apps
+```bash
+bin/myapp -F -L
+```
 
-Vegas (> v0.1.0) is not dependent on Sinatra. Vegas works almost exactly the same for general Rack Applications. For example, this will work as expected:
+If you still use daemon and now want to stop it, use **-K** flag
 
-#!/usr/bin/env ruby
+```bash
+bin/myapp -K
+```
 
-require 'vegas'
+If you want to check status of your daemon, run this:
 
-app = Proc.new {|env|
-  [200, {'Content-Type' => 'text/plain'}, ["This is an app. #{env.inspect}"]]
-}
+```bash
+bin/myapp -S
+```
 
-Vegas::Runner.new(app, 'rack_app')
+## Using Launchy gem
 
+[Launchy] (Launchy gem) is helper class for launching cross-platform applications in a "**fire and forget manner**".
+This process is slightly different on different platforms and launchy is trying to hide this
+difference.
 
-> bin/mvn-plugin-config -h
-Usage: bin/mvn-plugin-config [options]
+You can use launchy on the command line, or via its API.
 
-Vegas options:
-  -K, --kill               kill the running process and exit
-  -S, --status             display the current running PID and URL then quit
-  -s, --server SERVER      serve using SERVER (thin/mongrel/webrick)
-  -o, --host HOST          listen on HOST (default: 0.0.0.0)
-  -p, --port PORT          use PORT (default: 5678)
-  -x, --no-proxy           ignore env proxy settings (e.g. http_proxy)
-  -e, --env ENVIRONMENT    use ENVIRONMENT for defaults (default: development)
-  -F, --foreground         don't daemonize, run in the foreground
-  -L, --no-launch          don't launch the browser
-  -d, --debug              raise the log level to :debug (default: :info)
-      --app-dir APP_DIR    set the app dir where files are stored (default: ~/.vegas/mvn_plugin_config)/)
-  -P, --pid-file PID_FILE  set the path to the pid file (default: app_dir/mvn_plugin_config.pid)
-      --log-file LOG_FILE  set the path to the log file (default: app_dir/mvn_plugin_config.log)
-      --url-file URL_FILE  set the path to the URL file (default: app_dir/mvn_plugin_config.url)
+From command line:
 
+```bash
+launchy http://www.ruby-lang.org/
+```
 
+via API:
 
+```ruby
+require 'launchy'
 
+Launchy.open("http://localhost:9292")
+```
 
-DESCRIPTION
+If you want to use launchy with your rack application, do it inside **config.ru**:
 
-Launchy is helper class for launching cross-platform applications in a fire and forget manner.
+```ruby
+# config.ru
 
-There are application concepts (browser, email client, etc) that are common across all platforms, and they may be launched differently on each platform. Launchy is here to make a common approach to launching external application from within ruby programs.
-FEATURES
+$:.unshift(File::join(File::dirname(
+             File::dirname(__FILE__)), "lib"))
 
-Currently only launching a browser is supported.
-SYNOPSIS
+require 'my_app'
+require 'launchy'
 
-You can use launchy on the commandline, or via its API.
-Commandline
+run MyApp
+Launchy.open("http://localhost:9292", :application => MyApp)
 
-% launchy http://www.ruby-lang.org/
+```
 
-There are additional commandline options, use launchy --help to see them.
-Public API
+## Bonus: lunchy gem
 
-In the vein of Semantic Versioning, this is the sole supported public API.
+If your development platform is OSX and you need to frequently start/stop **launchctl agents**, there is
+a [lunchy] (lunchy gem) gem that let you to make this task extremely easy.
 
-Launchy.open( uri, options = {} ) { |exception| }
+The burden here is that in order to start/stop/etc launchctl agents, you have to specify exact file name for that agent
+as it's identifier.
 
-At the moment, the only available options are:
+When you use lunchy, you can use Ruby **regular expressions** for specifying agent's identifier and lunchy will
+find correct entry.
 
-:debug        Turn on debugging output
-:application  Explicitly state what application class is going to be used
-:host_os      Explicitly state what host operating system to pretend to be
-:ruby_engine  Explicitly state what ruby engine to pretend to be under
-:dry_run      Do nothing and print the command that would be executed on $stdout
+For example, to restart postgres server you have to run this command:
 
-If Launchy.open is invoked with a block, then no exception will be thrown, and the block will be called with the parameters passed to #open along with the exception that was raised.
-An example of using the public API:
+```bash
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+```
 
-Launchy.open( "http://www.ruby-lang.org" )
+With lunchy the tool you can shorten it:
 
-An example of using the public API and using the error block:
+```bash
+gem install lunchy
 
-uri = "http://www.ruby-lang.org"
-Launchy.open( uri ) do |exception|
-  puts "Attempted to open #{uri} and failed because #{exception}"
-end
+lunchy start postgres
+```
 
+You can see the list of available agents:
 
-#require 'launchy'
+```bash
+lunchy ls
+```
 
-#Launchy.open("http://localhost:9292")
+or manage particular agent:
 
+```bash
+lunchy start [agent]
+lunchy stop [agent]
+lunchy restart [agent]
 
+lunchy status [agent]
 
-require 'sinatra'
-require "slim"
+lunchy show [agent]
+lunchy edit [agent]
+```
 
-get "/" do
-  slim :index
-end
+or install it:
 
-__END__
+```bash
+lunchy install [file]
+```
 
-@@layout
-doctype html
-html
-head
-meta charset="utf8"
-title Test
-body
-== yield
+## Example: mvn-plugin-config gem
 
-@@index
-h1 index
+This [gem] (mvn-plugin-config gem) was created while I was working back on Java project. Generally speaking,
+Ruby can be used as facilitator for any programming language. At that time I had to create maven project
+and some of maven plugin options were undocumented.
 
+All you have to do in this situation is to go inside jar file for given plugin and locate
+**META-INF/maven/plugin.xml** file - inside you have all required information.
 
+If you do it one time - it's OK, but if you need to do it frequently, it's good case for automation. So,
+ruby gem was created to access this information in convenient way as local web server.
 
+In order to use it first install it (keep in mind - it uses Vegas gem):
+
+```bash
+gem install mvn_plugin_config
+```
+
+and then run it as daemon:
+
+```bash
+mvn-plugin-config
+```
+
+All commands described in Vegas section are accessible here.
+
+When you run the script, it starts server as daemon and opens start page in the browser.
+On this page you can see **all discovered maven plugins**, something like this:
+
+<img src="/assets/images/mvn_plugin_config1.png" style="width:600px; height:400px"/>
+
+You can click on corresponding link for interested plugin and see all discovered information
+on next page:
+
+<img src="/assets/images/mvn_plugin_config2.png" style="width:600px; height:400px"/>
+
+Look for implementation details [here] (mvn-plugin-config gem) if you are interested.
+
+[GemBox]: https://github.com/quirkey/gembox
+[Vegas gem]: http://code.quirkey.com/vegas
+[Launchy gem]: https://github.com/copiousfreetime/launchy
+[lunchy gem]: https://github.com/mperham/lunchy
+[mvn-plugin-config gem]: https://github.com/shvets/mvn-plugin-config

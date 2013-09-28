@@ -5,10 +5,196 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-09-21T00:00:00Z</updated>
+  <updated>2013-09-28T00:00:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Creating executable web applications with Ruby</title>
+    <link rel="alternate" href="/blog/2013/09/28/executable-web-apps.html"/>
+    <id>/blog/2013/09/28/executable-web-apps.html</id>
+    <published>2013-09-28T00:00:00Z</published>
+    <updated>2013-09-28T00:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Creating executable web applications with Ruby&lt;/h1&gt;
+
+&lt;h2&gt;What is it?&lt;/h2&gt;
+
+&lt;p&gt;Sometimes you have functionality that you want to &lt;strong&gt;expose as the service&lt;/strong&gt; and &lt;strong&gt;access it from the browser&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;One of such examples is &lt;a href="GemBox"&gt;GemBox&lt;/a&gt; - you run simple web server that&amp;rsquo;s aware of your &lt;strong&gt;gems repository&lt;/strong&gt;
+and you can see all installed gems inside the browser.&lt;/p&gt;
+
+&lt;p&gt;Another example is &lt;strong&gt;rubygems&lt;/strong&gt; running in server mode:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;gem server
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;It starts server on port 8808 and lets you explore installed gems from inside the browser.&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;open http://localhost:8808
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;For creating executable web applications you can use at least these 2 gems:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="Vegas gem"&gt;Vegas gem&lt;/a&gt; - let&amp;rsquo;s you &lt;strong&gt;daemonize&lt;/strong&gt; your code;&lt;/li&gt;
+&lt;li&gt;&lt;a href="Launchy gem"&gt;Launchy gem&lt;/a&gt; - helps you to &lt;strong&gt;open your application in the browser&lt;/strong&gt; when you start it.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Using Vegas gem&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="Vegas gem"&gt;Vegas&lt;/a&gt; helps to create executable version of Sinatra/Rack application.&lt;/p&gt;
+
+&lt;p&gt;You use &lt;strong&gt;Vegas::Runner&lt;/strong&gt; class for wrapping such application. For example, this
+is shell script for starting your favorite &lt;strong&gt;sinatra&lt;/strong&gt; code:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span class="c1"&gt;# bin/myapp&lt;/span&gt;
+
+&lt;span class="vg"&gt;$:&lt;/span&gt;&lt;span class="nf"&gt;.unshift&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+             &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;lib&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'vegas'&lt;/span&gt;
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'myapp.rb'&lt;/span&gt;
+
+&lt;span class="no"&gt;Vegas&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Runner&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;MyApp&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'my_app'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;and this is your sinatra application:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# my_app.rb&lt;/span&gt;
+
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'sinatra/base'&lt;/span&gt;
+
+&lt;span class="k"&gt;class &lt;/span&gt;&lt;span class="nc"&gt;MyApp&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Sinatra&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+  &lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="s1"&gt;'/'&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="s2"&gt;&amp;quot;Hello, world!&amp;quot;&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Now you can run it:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;chmod +x bin/myapp
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;bin/myapp
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;When you wrap sinatra application with Vegas, it does the following steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Starts rack application under appropriate rack handler (thin, mongrel, puma) in one of the following forms:
+
+&lt;ul&gt;
+&lt;li&gt;as daemon (default);&lt;/li&gt;
+&lt;li&gt;as standalone.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Opens start page of your service in the  browser.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can print a list of available command line options when running with -h or &amp;ndash;help option:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="gp"&gt;&amp;gt; &lt;/span&gt;bin/myapp -h
+Usage: bin/myapp &lt;span class="o"&gt;[&lt;/span&gt;options]
+...
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;If you don&amp;rsquo;t want to create a daemon and don&amp;rsquo;t want to open it in the browser, use:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;bin/myapp -F -L
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;If you still use daemon and now want to stop it, use &lt;strong&gt;-K&lt;/strong&gt; flag&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;bin/myapp -K
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;If you want to check status of your daemon, run this:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;bin/myapp -S
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Using Launchy gem&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="Launchy gem"&gt;Launchy&lt;/a&gt; is helper class for launching cross-platform applications in a &amp;ldquo;&lt;strong&gt;fire and forget manner&lt;/strong&gt;&amp;rdquo;.
+This process is slightly different on different platforms and launchy is trying to hide this
+difference.&lt;/p&gt;
+
+&lt;p&gt;You can use launchy on the command line, or via its API.&lt;/p&gt;
+
+&lt;p&gt;From command line:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;launchy http://www.ruby-lang.org/
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;via API:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'launchy'&lt;/span&gt;
+
+&lt;span class="no"&gt;Launchy&lt;/span&gt;&lt;span class="nf"&gt;.open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;http://localhost:9292&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;If you want to use launchy with your rack application, do it inside &lt;strong&gt;config.ru&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# config.ru&lt;/span&gt;
+
+&lt;span class="vg"&gt;$:&lt;/span&gt;&lt;span class="nf"&gt;.unshift&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+             &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;lib&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'my_app'&lt;/span&gt;
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'launchy'&lt;/span&gt;
+
+&lt;span class="n"&gt;run&lt;/span&gt; &lt;span class="no"&gt;MyApp&lt;/span&gt;
+&lt;span class="no"&gt;Launchy&lt;/span&gt;&lt;span class="nf"&gt;.open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;http://localhost:9292&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:application&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;MyApp&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Bonus: lunchy gem&lt;/h2&gt;
+
+&lt;p&gt;If your development platform is OSX and you need to frequently start/stop &lt;strong&gt;launchctl agents&lt;/strong&gt;, there is
+a &lt;a href="lunchy gem"&gt;lunchy&lt;/a&gt; gem that let you to make this task extremely easy.&lt;/p&gt;
+
+&lt;p&gt;The burden here is that in order to start/stop/etc launchctl agents, you have to specify exact file name for that agent
+as it&amp;rsquo;s identifier.&lt;/p&gt;
+
+&lt;p&gt;When you use lunchy, you can use Ruby &lt;strong&gt;regular expressions&lt;/strong&gt; for specifying agent&amp;rsquo;s identifier and lunchy will
+find correct entry.&lt;/p&gt;
+
+&lt;p&gt;For example, to restart postgres server you have to run this command:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;With lunchy the tool you can shorten it:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;gem install lunchy
+
+lunchy start postgres
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;You can see the list of available agents:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;lunchy ls
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;or manage particular agent:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;lunchy start &lt;span class="o"&gt;[&lt;/span&gt;agent]
+lunchy stop &lt;span class="o"&gt;[&lt;/span&gt;agent]
+lunchy restart &lt;span class="o"&gt;[&lt;/span&gt;agent]
+
+lunchy status &lt;span class="o"&gt;[&lt;/span&gt;agent]
+
+lunchy show &lt;span class="o"&gt;[&lt;/span&gt;agent]
+lunchy edit &lt;span class="o"&gt;[&lt;/span&gt;agent]
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;or install it:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;lunchy install &lt;span class="o"&gt;[&lt;/span&gt;file]
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h2&gt;Example: mvn-plugin-config gem&lt;/h2&gt;
+
+&lt;p&gt;This &lt;a href="mvn-plugin-config gem"&gt;gem&lt;/a&gt; was created while I was working back on Java project. Generally speaking,
+Ruby can be used as facilitator for any programming language. At that time I had to create maven project
+and some of maven plugin options were undocumented.&lt;/p&gt;
+
+&lt;p&gt;All you have to do in this situation is to go inside jar file for given plugin and locate
+&lt;strong&gt;META-INF/maven/plugin.xml&lt;/strong&gt; file - inside you have all required information.&lt;/p&gt;
+
+&lt;p&gt;If you do it one time - it&amp;rsquo;s OK, but if you need to do it frequently, it&amp;rsquo;s good case for automation. So,
+ruby gem was created to access this information in convenient way as local web server.&lt;/p&gt;
+
+&lt;p&gt;In order to use it first install it (keep in mind - it uses Vegas gem):&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;gem install mvn_plugin_config
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;and then run it as daemon:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;mvn-plugin-config
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;All commands described in Vegas section are accessible here.&lt;/p&gt;
+
+&lt;p&gt;When you run the script, it starts server as daemon and opens start page in the browser.
+On this page you can see &lt;strong&gt;all discovered maven plugins&lt;/strong&gt;, something like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/mvn_plugin_config1.png" style="width:600px; height:400px"/&gt;&lt;/p&gt;
+
+&lt;p&gt;You can click on corresponding link for interested plugin and see all discovered information
+on next page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/mvn_plugin_config2.png" style="width:600px; height:400px"/&gt;&lt;/p&gt;
+
+&lt;p&gt;Look for implementation details &lt;a href="mvn-plugin-config gem"&gt;here&lt;/a&gt; if you are interested.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Modularity in Javascript</title>
     <link rel="alternate" href="/blog/2013/09/21/modularity-in-javascript.html"/>
@@ -1049,131 +1235,5 @@ with corresponding values dynamically, at run time.&lt;/p&gt;
 &lt;span class="n"&gt;dev_conf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="nf"&gt;.retrieve_configuration&lt;/span&gt; &lt;span class="s1"&gt;'development'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt;
 &lt;span class="n"&gt;dev_conf&lt;/span&gt;&lt;span class="nf"&gt;.inspect&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
-  </entry>
-  <entry>
-    <title>Using Gemfile gems inside .gemspec file</title>
-    <link rel="alternate" href="/blog/2013/08/14/using_gemfile_gems_inside_gemspec.html"/>
-    <id>/blog/2013/08/14/using_gemfile_gems_inside_gemspec.html</id>
-    <published>2013-08-14T00:00:00Z</published>
-    <updated>2013-08-14T00:00:00Z</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h1&gt;Using Gemfile gems inside .gemspec file&lt;/h1&gt;
-
-&lt;h2&gt;Introduction&lt;/h2&gt;
-
-&lt;p&gt;If you have a (or plan to create new) gem, the chance is that you also have &lt;strong&gt;Gemfile&lt;/strong&gt; inside your project
-along with &lt;strong&gt;.gemspec&lt;/strong&gt; file. Here we have two different ways to describe dependencies of your ruby code.
-They don&amp;rsquo;t coexist well with each other and you have to do additional steps in order to let them work together.&lt;/p&gt;
-
-&lt;p&gt;According to &lt;a href="http://bundler.io/v1.3/rubygems.html"&gt;bundler gem help&lt;/a&gt;, all you have to do is to create simple &lt;strong&gt;Gemfile&lt;/strong&gt;
-with only one instruction (&lt;strong&gt;gemspec&lt;/strong&gt;):&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
-
-&lt;span class="n"&gt;gemspec&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;This instruction will look into corresponding &lt;strong&gt;.gemspec&lt;/strong&gt; file (you should have it as part of your gem project).
-It will create &lt;strong&gt;default&lt;/strong&gt; and &lt;strong&gt;development&lt;/strong&gt; groups and fill them out according to usage of &lt;strong&gt;add_runtime_dependency&lt;/strong&gt;
-and &lt;strong&gt;add_development_dependency&lt;/strong&gt; calls.&lt;/p&gt;
-
-&lt;p&gt;So, if you have the following &lt;strong&gt;my_gem.gemspec&lt;/strong&gt; file:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# my_gem.gemspec&lt;/span&gt;
-
-&lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.add_runtime_dependency&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;haml&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;gt;= 0&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-&lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.add_runtime_dependency&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sass&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;gt;= 0&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-
-&lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.add_development_dependency&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemcutter&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;gt;= 0&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;it will dynamically build something like this:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
-
-&lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:default&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;haml&amp;quot;&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sass&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:development&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemcutter&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;This approach has on drawback though - you have to think in terms of &lt;strong&gt;.gemspec&lt;/strong&gt; file, which is counter-intuitive.&lt;/p&gt;
-
-&lt;p&gt;It would be nice if you can do it &lt;a href="https://github.com/shvets/gemspec_deps_gen"&gt;other way around&lt;/a&gt;. We keep all
-the dependencies in &lt;strong&gt;Gemfile&lt;/strong&gt; as we would do it for &lt;strong&gt;any other ruby project&lt;/strong&gt;. We also keep &lt;strong&gt;.gemspec&lt;/strong&gt; file as
-&lt;strong&gt;ERB template&lt;/strong&gt;, so we can generate resulting &lt;strong&gt;.gemspec&lt;/strong&gt; when we need it or as part of gem release process.&lt;/p&gt;
-
-&lt;h2&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;Add this line to to your Gemfile:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemspec_deps_gen&amp;quot;&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;And then execute it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;bundle
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;Create &lt;strong&gt;Gemfile&lt;/strong&gt; file:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
-
-&lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:default&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;haml&amp;quot;&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sass&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:development&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemcutter&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Create &lt;strong&gt;my_gem.gemspec.erb&lt;/strong&gt; file:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Specification&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sample&amp;quot;&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.summary&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sx"&gt;%q{Summary.}&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sx"&gt;%q{Description.}&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.email&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;alexander.shvets@gmail.com&amp;quot;&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.authors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Alexander Shvets&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.homepage&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;http://github.com/shvets/sample&amp;quot;&lt;/span&gt;
-
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.files&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sb"&gt;`git ls-files`&lt;/span&gt;&lt;span class="nf"&gt;.split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="vg"&gt;$\&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.test_files&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;
-    &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.files.grep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;%r{^(test|spec|features)/}&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.version&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;1.0.0&amp;quot;&lt;/span&gt;
-  &lt;span class="c1"&gt;#&amp;lt;%= project_dependencies %&amp;gt;&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;You can see ERB fragment (&lt;strong&gt;project_dependencies&lt;/strong&gt;) included inside the body of the specification.&lt;/p&gt;
-
-&lt;p&gt;Now, run this command:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;gemspec_deps_gen my_gem.gemspec.erb my_gem.gemspec
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;It will generate &lt;strong&gt;my_gem.gemspec&lt;/strong&gt; and replace ERB fragment with dependencies from Gemfile:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Specification&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-  &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.add_runtime_dependency&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;haml&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;gt;= 0&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.add_runtime_dependency&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;sass&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;gt;= 0&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-  &lt;span class="n"&gt;spec&lt;/span&gt;&lt;span class="nf"&gt;.add_development_dependency&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemcutter&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;gt;= 0&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;If second parameter is missing, result will be outputted to console.&lt;/p&gt;
-
-&lt;p&gt;As alternative, you can call it as &lt;strong&gt;rake command&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gemspec_deps_gen&amp;quot;&lt;/span&gt;
-
-&lt;span class="n"&gt;project_name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'my_gem'&lt;/span&gt;
-
-&lt;span class="n"&gt;task&lt;/span&gt; &lt;span class="ss"&gt;:gen&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="n"&gt;generator&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;GemspecDepsGen&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt;
-
-  &lt;span class="n"&gt;generator&lt;/span&gt;&lt;span class="nf"&gt;.generate_dependencies&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;spec&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;project_name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;.gemspec.erb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;project_name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;.gemspec&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;And run it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rake gen
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;It will also generate &lt;strong&gt;my_gem.gemspec&lt;/strong&gt; and replace ERB fragment with dependencies from Gemfile.&lt;/p&gt;
-</content>
   </entry>
 </feed>
