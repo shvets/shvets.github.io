@@ -1,6 +1,6 @@
 ---
 title: Acceptance tricks
-date: 2013-10-05
+date: 2013-10-12
 tags: ruby, capybara, selenium, webkit
 ---
 
