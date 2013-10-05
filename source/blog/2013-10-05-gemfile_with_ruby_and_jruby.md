@@ -7,7 +7,7 @@ tags: ruby, jruby, rvm
 ## How to maintain ruby project that works with Ruby and JRuby
 
 If your Ruby/Rails project has to work with Ruby and JRuby at the same time,
-sooner or later iou will end up with **Gemfile** that has a lot of **if** logic:
+sooner or later you'll end up with **Gemfile** that has a lot of **if logic**:
 
 ```ruby
 # Gemfile
@@ -20,12 +20,12 @@ else
 end
 ```
 
-If you have a lot of dependencies this **if** logic complicates and pollutes your code.
+If you have a lot of dependencies this **if logic** complicates and pollutes your code.
 
-How can we simplify this code? Simple - you can keep two separate **Gemfile** - one for
+How can we simplify this code? Easy - keep two separate **Gemfile** - one for
 Ruby (Gemfile) and another for JRuby (Gemfile-jruby).
 
-You have to explain though to your bundler which **Gemfile** needs to be used.
+You need to tell your bundler though which **Gemfile** needs to be used.
 
 If you want to run bundler with different Gemfile, run it this way:
 
@@ -33,7 +33,7 @@ If you want to run bundler with different Gemfile, run it this way:
 BUNDLE_GEMFILE=Gemfile-jruby bundle
 ```
 
-This is fine, but you have to remember to provide additional environment variable.
+This is fine, but you have to remember to provide additional environment variable every time you run the command.
 
 If you want to select Gemfile automatically when you change ruby or gemset,
 you can use **rvm hook**. All hooks for rvm are located in **~/.rvm/hooks**  folder.
@@ -66,3 +66,5 @@ chmod +x ~/.rvm/hooks/after_use_jruby
 
 Now, every time you change directory to your project, rvm will setup all environment
 variables as before plus your **BUNDLE_GEMFILE** variable.
+
+If your current ruby (.ruby-version) is jruby, it will use **Gemfile-jruby**, otherwise - **Gemfile**.
