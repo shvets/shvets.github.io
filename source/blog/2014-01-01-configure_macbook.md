@@ -56,6 +56,7 @@ Qt is required by capybara acceptance tests.
 
 ```bash
 \curl -L https://get.rvm.io | bash -s
+\curl -L https://get.rvm.io | bash -s -- --autolibs=enable
 ```
 
 Then run this command:
