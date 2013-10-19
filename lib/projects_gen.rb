@@ -5,7 +5,7 @@ class ProjectsGen
   REPOS_URL = "https://api.github.com/users/shvets/repos"
 
   def generate_data file_name
-    r = FileUtils.mkdir_p File.dirname file_name
+    FileUtils.mkdir_p File.dirname file_name
 
     items = JSON.parse(open(REPOS_URL).read).sort_by { |attr| attr['created_at'] }
 

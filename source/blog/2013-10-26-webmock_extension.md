@@ -1,6 +1,6 @@
 ---
 title: Webmock extension
-date: 2014-01-01
+date: 2013-10-26
 tags: ruby, webmock
 ---
 
