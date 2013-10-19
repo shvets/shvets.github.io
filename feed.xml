@@ -29,16 +29,19 @@
     &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:require&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;false&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;The formatter for SimpleCov is packaged as a separate gem called &lt;strong&gt;simplecov-html&lt;/strong&gt;. You don&amp;rsquo;t have to
-include it explicitly - SimpleCov already has it as dependency.&lt;/p&gt;
+&lt;p&gt;The formatter for SimpleCov is packaged as a separate gem called &lt;a href="https://github.com/colszowka/simplecov-html"&gt;simplecov-html&lt;/a&gt;.
+You don&amp;rsquo;t have to include it explicitly - SimpleCov already has it as a dependency.&lt;/p&gt;
 
-&lt;p&gt;You don&amp;rsquo;t have to call coverage as separate command. Instead, you have to integrate it with your specs or tests.&lt;/p&gt;
+&lt;p&gt;You don&amp;rsquo;t have to call coverage as separate command. Instead, you have to integrate it with your specs or tests.
+How to do it?&lt;/p&gt;
 
-&lt;p&gt;You have to start SimpleCov before any of your specs/tests on order to be covered:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# spec_helper.rb&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
+&lt;p&gt;You have to start SimpleCov before any of your specs/tests in order to be covered:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# spec_helper.rb&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
+  &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
 
-&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt;
+  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# my_model_spec.rb&lt;/span&gt;
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'spec_helper'&lt;/span&gt;
 
@@ -49,29 +52,32 @@ include it explicitly - SimpleCov already has it as dependency.&lt;/p&gt;
 &lt;p&gt;Now you can run your specs:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rspec spec/my_model_spec.rb
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Coverage report will be saved in &lt;strong&gt;coverage&lt;/strong&gt; folder. Open up &lt;strong&gt;coverage/index.html&lt;/strong&gt; in your browser and check it out:&lt;/p&gt;
+&lt;p&gt;Coverage report will be saved in &lt;strong&gt;coverage&lt;/strong&gt; folder. Open up &lt;strong&gt;coverage/index.html&lt;/strong&gt; in your browser
+and check out results:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;open coverage/index.html
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;If you want to save result to another folder, change &lt;strong&gt;coverage_path&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;If you want to save results to another folder, change &lt;strong&gt;coverage_path&lt;/strong&gt; property:&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.coverage_path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'my_output'&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;This is how it works for simple case.&lt;/p&gt;
+&lt;p&gt;In real project you have different groups of specs executed by separate commands. If you want to &lt;strong&gt;merge&lt;/strong&gt;
+coverage results generated by each of command into total report, you have to assign &lt;strong&gt;unique command name&lt;/strong&gt;
+for each group of specs:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# model_spec_helper.rb&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
+  &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
 
-&lt;p&gt;In real project you have different groups of specs executed by separate commands. You want to merge
-coverage results generated by each of command into total report. In this case you have to assign
-&lt;strong&gt;unique command name&lt;/strong&gt; for each group of specs:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# model_spec_helper.rb&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
+  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.command_name&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;rspec:models&amp;quot;&lt;/span&gt;
 
-&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.command_name&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;rspec:models&amp;quot;&lt;/span&gt;
+  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.running&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# domains_spec_helper.rb&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
+  &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
 
-&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.running&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# domains_spec_helper.rb&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
+  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.command_name&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;rspec:domains&amp;quot;&lt;/span&gt;
 
-&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.command_name&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;rspec:domain&amp;quot;&lt;/span&gt;
-
-&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.running&lt;/span&gt;
+  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.running&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;h2&gt;SimpleCov Adapters&lt;/h2&gt;
 
@@ -98,7 +104,7 @@ and files will be includes into coverage. &lt;strong&gt;Groups&lt;/strong&gt; de
 
 &lt;p&gt;You can read more about groups and filters on &lt;a href="https://github.com/colszowka/simplecov"&gt;SimpleCov&lt;/a&gt; home page.&lt;/p&gt;
 
-&lt;p&gt;If you are not satisfied with &lt;strong&gt;rails&lt;/strong&gt; adapter, you can create your own one:&lt;/p&gt;
+&lt;p&gt;If you are not satisfied with &lt;strong&gt;rails&lt;/strong&gt; adapter, you can create your own:&lt;/p&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;register_adapter&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
     &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.adapters.define&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
       &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'/spec/'&lt;/span&gt;
@@ -116,17 +122,16 @@ and files will be includes into coverage. &lt;strong&gt;Groups&lt;/strong&gt; de
 &lt;h2&gt;Full Example&lt;/h2&gt;
 
 &lt;p&gt;Let&amp;rsquo;s create compete example that can be used in any project:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# spec_helper.rb&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# spec_helper.rb&lt;/span&gt;
   &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;init_spec&lt;/span&gt; &lt;span class="n"&gt;command_name&lt;/span&gt;
     &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-
-    &lt;span class="no"&gt;SimplecovHelper&lt;/span&gt;&lt;span class="nf"&gt;.run_simplecov&lt;/span&gt; &lt;span class="n"&gt;command_name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;your_adapter_name&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
-
+    &lt;span class="no"&gt;SimplecovHelper&lt;/span&gt;&lt;span class="nf"&gt;.run_simplecov&lt;/span&gt; &lt;span class="n"&gt;command_name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="s2"&gt;&amp;quot;your_adapter_name&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
     &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;And this is SimpleCov helper implemented as utility module:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;div class="lineno"&gt;24&lt;/div&gt;&lt;div class="lineno"&gt;25&lt;/div&gt;&lt;div class="lineno"&gt;26&lt;/div&gt;&lt;div class="lineno"&gt;27&lt;/div&gt;&lt;div class="lineno"&gt;28&lt;/div&gt;&lt;div class="lineno"&gt;29&lt;/div&gt;&lt;div class="lineno"&gt;30&lt;/div&gt;&lt;div class="lineno"&gt;31&lt;/div&gt;&lt;div class="lineno"&gt;32&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;SimplecovHelper&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;div class="lineno"&gt;24&lt;/div&gt;&lt;div class="lineno"&gt;25&lt;/div&gt;&lt;div class="lineno"&gt;26&lt;/div&gt;&lt;div class="lineno"&gt;27&lt;/div&gt;&lt;div class="lineno"&gt;28&lt;/div&gt;&lt;div class="lineno"&gt;29&lt;/div&gt;&lt;div class="lineno"&gt;30&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;SimplecovHelper&lt;/span&gt;
   &lt;span class="kp"&gt;extend&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;
 
   &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;run_simplecov&lt;/span&gt; &lt;span class="n"&gt;command_name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
@@ -149,8 +154,6 @@ and files will be includes into coverage. &lt;strong&gt;Groups&lt;/strong&gt; de
     &lt;span class="k"&gt;end&lt;/span&gt;
 
     &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
-
-    &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Coverage started&amp;quot;&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 
   &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;register_adapter&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
@@ -163,7 +166,8 @@ and files will be includes into coverage. &lt;strong&gt;Groups&lt;/strong&gt; de
 
 &lt;p&gt;Another gem dedicated to code coverage is &lt;a href="http://lkdjiin.github.io/coco/"&gt;coco gem&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;It provides simple code coverage report and it&amp;rsquo;s much easier to configure.&lt;/p&gt;
+&lt;p&gt;It provides simple code coverage report and it&amp;rsquo;s much easier to configure, but resulting report is
+much simpler and less convenient.&lt;/p&gt;
 
 &lt;p&gt;You can choose what tool to use in your project based on your preferences.&lt;/p&gt;
 </content>
