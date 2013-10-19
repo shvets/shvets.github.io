@@ -195,6 +195,9 @@ much simpler and less convenient.
 
 You can choose what tool to use in your project based on your preferences.
 
+If you need to cover your javascript code, you can visit [my previous blog article]
+(http://shvets.github.io/blog/2013/09/14/nodejs_and_karma.html).
+
 [simplecov home]: https://github.com/colszowka/simplecov
 [simplecov-html]: https://github.com/colszowka/simplecov-html
 [coco home]: http://lkdjiin.github.io/coco/

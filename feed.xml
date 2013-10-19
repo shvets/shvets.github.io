@@ -170,6 +170,8 @@ and files will be includes into coverage. &lt;strong&gt;Groups&lt;/strong&gt; de
 much simpler and less convenient.&lt;/p&gt;
 
 &lt;p&gt;You can choose what tool to use in your project based on your preferences.&lt;/p&gt;
+
+&lt;p&gt;If you need to cover your javascript code, you can visit &lt;a href="http://shvets.github.io/blog/2013/09/14/nodejs_and_karma.html"&gt;my previous blog article&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>
