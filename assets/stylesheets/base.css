@@ -142,32 +142,33 @@ a {
     font-size: 14px; }
   /* line 128, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page p {
-    font-family: "Cantarell", arial, serif; }
+    font-family: "Cantarell", arial, serif;
+    font-size: 16px; }
 
-/* line 131, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 132, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #footer {
   margin-top: 30px; }
-  /* line 133, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 134, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #footer p {
     font: 11px Helvetica;
     color: #aaaaaa; }
 
-/* line 137, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 138, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #legal {
   clear: both;
   padding-top: 17px;
   text-align: left; }
-  /* line 141, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 142, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #legal a {
     font-weight: normal;
     color: #5f5d5f; }
 
 /* misc */
-/* line 147, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 148, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #lang-selector {
   margin-bottom: 20px; }
 
-/* line 164, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 165, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 pre {
   border: solid 1px #dddddd;
   background: white;
@@ -179,11 +180,11 @@ pre {
   word-break: inherit;
   word-wrap: inherit; }
 
-/* line 175, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 176, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 .highlight td {
   padding: 8px 15px; }
 
-/* line 178, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+/* line 179, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 .gl {
   background: #fafafa;
   border-right: 1px solid #dddddd;
