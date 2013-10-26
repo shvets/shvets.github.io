@@ -128,12 +128,13 @@ a {
   color: #5f5d5f;
   line-height: 1.4em;
   text-align: justify;
-  letter-spacing: 0.03em; }
-  /* line 115, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  letter-spacing: 0.03em;
+  font-size: 16px; }
+  /* line 116, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h1, #page h2 {
     font: bold Helvetica;
     color: black; }
-  /* line 118, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 119, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h1 {
     margin: 20px 0 30px;
     font-size: 30px;
@@ -141,13 +142,12 @@ a {
     padding-bottom: 5px;
     font-variant: small-caps;
     text-transform: lowercase; }
-  /* line 126, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 127, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h2 {
     font-size: 14px; }
-  /* line 128, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
+  /* line 129, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page p {
-    font-family: "Cantarell", arial, serif;
-    font-size: 16px; }
+    font-family: "Cantarell", arial, serif; }
 
 /* line 132, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #footer {
