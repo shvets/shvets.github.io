@@ -292,3 +292,6 @@ rvm reinstall 1.9.3 --with-gcc=clang
 
 The provided compiler '/usr/bin/gcc' is LLVM based, it is not yet fully supported by ruby and gems,
 please read `rvm requirements`.
+
+[Install Ruby on Rails · Mac OS X Mavericks]: http://railsapps.github.io/installrubyonrails-mac.html
+[Setting up a Ruby on Rails development environment on Mavericks]: http://dean.io/setting-up-a-ruby-on-rails-development-environment-on-mavericks/

@@ -5,10 +5,140 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-10-19T00:00:00Z</updated>
+  <updated>2013-10-26T00:00:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Using WebMock gem in tests and web application services</title>
+    <link rel="alternate" href="/blog/2013/10/26/using_webmock_method_gem.html"/>
+    <id>/blog/2013/10/26/using_webmock_method_gem.html</id>
+    <published>2013-10-26T00:00:00Z</published>
+    <updated>2013-10-26T00:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Using WebMock gem in tests and web application services&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/bblimke/webmock"&gt;WebMock&lt;/a&gt; is gem for stubbing HTTP requests. You can use
+it in your tests if you don&amp;rsquo;t want to hit actual service while testing other functionality of your service
+(testing in isolation). For example:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'webmock'&lt;/span&gt;
+
+&lt;span class="no"&gt;WebMock&lt;/span&gt;&lt;span class="nf"&gt;.stub_request&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:any&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;www.example.com&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;.to_return&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:body&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;some body&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;Net&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;HTTP&lt;/span&gt;&lt;span class="nf"&gt;.get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;www.example.com&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="nf"&gt;.to&lt;/span&gt; &lt;span class="n"&gt;eq&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;some body&amp;quot;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;It will stub all http verbs (GET, POST, PUT etc.) thanks to &lt;strong&gt;:any&lt;/strong&gt; parameter.&lt;/p&gt;
+
+&lt;p&gt;You can also use webmock library for building &lt;strong&gt;stubbed versions&lt;/strong&gt; of your services. This approach is especially
+useful when services to be called &lt;strong&gt;are not implemented yet&lt;/strong&gt; (maybe by another team) and you still
+want to start working on your part and finish it on time.&lt;/p&gt;
+
+&lt;p&gt;In order to facilitate the creation of &lt;strong&gt;mocked service methods&lt;/strong&gt;, you can use
+&lt;a href="https://github.com/shvets/webmock_method"&gt;webmock_method&lt;/a&gt; gem.&lt;/p&gt;
+
+&lt;p&gt;How to use it?&lt;/p&gt;
+
+&lt;p&gt;First, create &lt;strong&gt;actual service wrapper&lt;/strong&gt; that works with future API of &amp;ldquo;not yet developed service&amp;rdquo;. As an example,
+we can use publicly available &lt;a href="http://api.openweathermap.org"&gt;OpenWeatherMap&lt;/a&gt; web service.&lt;/p&gt;
+
+&lt;p&gt;We will implement call to &lt;strong&gt;quote weather&lt;/strong&gt; for a given city. You have to provide &lt;strong&gt;location&lt;/strong&gt; and &lt;strong&gt;units&lt;/strong&gt; parameters:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# services/open_weather_map_service.rb&lt;/span&gt;
+
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'net/http'&lt;/span&gt;
+
+&lt;span class="k"&gt;class &lt;/span&gt;&lt;span class="nc"&gt;OpenWeatherMapService&lt;/span&gt;
+  &lt;span class="kp"&gt;attr_reader&lt;/span&gt; &lt;span class="ss"&gt;:url&lt;/span&gt;
+
+  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;initialize&lt;/span&gt;
+    &lt;span class="vi"&gt;@url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'http://api.openweathermap.org/data/2.5/weather'&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;quote&lt;/span&gt; &lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;units&lt;/span&gt;
+    &lt;span class="n"&gt;quote_url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;?q=&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;%20nj&amp;amp;units=&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;units&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+
+    &lt;span class="n"&gt;uri&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;URI&lt;/span&gt;&lt;span class="nf"&gt;.parse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;URI&lt;/span&gt;&lt;span class="nf"&gt;.escape&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;quote_url&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+    &lt;span class="no"&gt;Net&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;HTTP&lt;/span&gt;&lt;span class="nf"&gt;.get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;uri&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# At this moment, service is not developed yet...&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Then, create stub/mock for your service:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# stubs/open_weather_map_service.rb&lt;/span&gt;
+
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'webmock_method'&lt;/span&gt;
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'json'&lt;/span&gt;
+
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'services/open_weather_map_service.rb'&lt;/span&gt;
+
+&lt;span class="k"&gt;class &lt;/span&gt;&lt;span class="nc"&gt;OpenWeatherMapService&lt;/span&gt;
+  &lt;span class="kp"&gt;extend&lt;/span&gt; &lt;span class="no"&gt;WebmockMethod&lt;/span&gt;
+
+  &lt;span class="n"&gt;webmock_method&lt;/span&gt; &lt;span class="ss"&gt;:quote&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:location&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:units&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;lambda&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+      &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="nf"&gt;.open&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="nf"&gt;.dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/stubs/templates/quote_response.json.erb&amp;quot;&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="sr"&gt;/&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;WebmockMethod&lt;/span&gt;&lt;span class="nf"&gt;.url&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="sr"&gt;/&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;webmock_method&lt;/strong&gt; requires you to provide the following information:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;method name&lt;/strong&gt; to be mocked;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;parameters names&lt;/strong&gt; for the method (same as in original service);&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;proc/lambda&lt;/strong&gt; expression for building the response;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;url&lt;/strong&gt; to remote service (optional).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can build responses of arbitrary complexity with your own code or you can use &lt;strong&gt;RenderHelper&lt;/strong&gt;, that comes with this
+gem. Currently it supports &lt;strong&gt;erb&lt;/strong&gt; renderer only. Here is example of how to build xml response:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="n"&gt;webmock_method&lt;/span&gt; &lt;span class="ss"&gt;:purchase&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:amount&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:credit_card&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;lambda&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nb"&gt;binding&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+      &lt;span class="no"&gt;RenderHelper&lt;/span&gt;&lt;span class="nf"&gt;.render&lt;/span&gt; &lt;span class="ss"&gt;:erb&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="nf"&gt;.dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/templates/purchase_response.xml.erb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;binding&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;It&amp;rsquo;s possible to tweak your response on the fly:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="n"&gt;webmock_method&lt;/span&gt; &lt;span class="ss"&gt;:purchase&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:amount&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:credit_card&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;lambda&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nb"&gt;binding&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+    &lt;span class="no"&gt;RenderHelper&lt;/span&gt;&lt;span class="nf"&gt;.render&lt;/span&gt; &lt;span class="ss"&gt;:xml&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="nf"&gt;.dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/templates/purchase_response.xml.erb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;binding&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;parent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;credit_card&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;credit_card&lt;/span&gt;&lt;span class="nf"&gt;.card_type&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;VISA&amp;quot;&lt;/span&gt;
+      &lt;span class="n"&gt;define_attribute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:success&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;  &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;
+      &lt;span class="n"&gt;define_attribute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:success&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;  &lt;span class="kp"&gt;false&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+      &lt;span class="n"&gt;define_attribute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:error_message&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Unsupported Credit Card Type&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;end&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;and then, use newly defined attributes, such as &lt;strong&gt;success&lt;/strong&gt; and &lt;strong&gt;error_message&lt;/strong&gt; inside your template:&lt;/p&gt;
+&lt;pre class="highlight xml"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c"&gt;&amp;lt;!-- stubs/templates/purchase_response.xml.erb --&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;PurchaseResponse&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;Success&amp;gt;&lt;/span&gt;&lt;span class="err"&gt;&amp;lt;&lt;/span&gt;%= success %&amp;gt;&lt;span class="nt"&gt;&amp;lt;/Success&amp;gt;&lt;/span&gt;
+
+  &lt;span class="err"&gt;&amp;lt;&lt;/span&gt;% unless success %&amp;gt;
+    &lt;span class="nt"&gt;&amp;lt;ErrorMessage&amp;gt;&lt;/span&gt;&lt;span class="err"&gt;&amp;lt;&lt;/span&gt;%= error_message %&amp;gt;&lt;span class="nt"&gt;&amp;lt;/ErrorMessage&amp;gt;&lt;/span&gt;
+  &lt;span class="err"&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;
+&lt;span class="nt"&gt;&amp;lt;/PurchaseResponse&amp;gt;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;url&lt;/strong&gt; parameter is optional. If you don&amp;rsquo;t specify it, gem will try to use &lt;strong&gt;url&lt;/strong&gt; attribute defined
+on your service or you can define &lt;strong&gt;url&lt;/strong&gt; parameter for WebmockMethod:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;WebmockMethod&lt;/span&gt;&lt;span class="nf"&gt;.url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;http://api.openweathermap.org/data/2.5/weather&amp;quot;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;And finally, create spec for testing your mocked service:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;stubs/open_weather_map_service&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;describe&lt;/span&gt; &lt;span class="no"&gt;OpenWeatherMapService&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+  &lt;span class="n"&gt;describe&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;#quote&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;gets the quote&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+      &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;JSON&lt;/span&gt;&lt;span class="nf"&gt;.parse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;subject&lt;/span&gt;&lt;span class="nf"&gt;.quote&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;plainsboro, nj&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;imperial&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+      &lt;span class="n"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'sys'&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;'country'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;.to&lt;/span&gt; &lt;span class="n"&gt;eq&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;United States of America&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;end&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;There is another article on same topic from &lt;a href="http://robots.thoughtbot.com"&gt;thoughtbot&lt;/a&gt; blog. It&amp;rsquo;s written
+by Harlow Ward and describes how to &lt;a href="http://robots.thoughtbot.com/post/64474832169/how-to-stub-external-services-in-tests"&gt;create stubbed external services&lt;/a&gt;
+by using fakeweb, vcr and sinatra.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Configuring Code Coverage for Ruby/Rails project</title>
     <link rel="alternate" href="/blog/2013/10/19/configure_simplecov.html"/>
@@ -1141,385 +1271,5 @@ it and include into your html file.&lt;/p&gt;
 &lt;p&gt;With the &lt;strong&gt;require&lt;/strong&gt; argument, you load module using CommonJS style syntax.
 Other two parameters are optional and can be omitted.&lt;/p&gt;
 </content>
-  </entry>
-  <entry>
-    <title>Using Node.js and Karma Framework for Unit Tests and Code Coverage in Javascript</title>
-    <link rel="alternate" href="/blog/2013/09/14/nodejs_and_karma.html"/>
-    <id>/blog/2013/09/14/nodejs_and_karma.html</id>
-    <published>2013-09-14T00:00:00Z</published>
-    <updated>2013-09-14T00:00:00Z</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h1&gt;Using Node.js and Karma Framework for Unit Tests and Code Coverage in Javascript&lt;/h1&gt;
-
-&lt;p&gt;Your web project, whether it&amp;rsquo;s written in Java, Python or Ruby, has Javascript files that
-support front-end part of it. And unit tests and code coverage for them are two most
-&lt;strong&gt;uncovered&lt;/strong&gt; areas, &lt;strong&gt;terra incognito&lt;/strong&gt; of Javascript world.&lt;/p&gt;
-
-&lt;p&gt;New technologies, such as &lt;strong&gt;Node.js&lt;/strong&gt;, can help you to &lt;strong&gt;cover&lt;/strong&gt; it. Node.js is server-side technology, but
-we don&amp;rsquo;t plan to change the way we use Javascript in today&amp;rsquo;s projects, we just use Node.js as complimentary
-tool for packages delivery and execution of code, that is located outside of your project,
-such as unit-test runner or coverage runner.&lt;/p&gt;
-
-&lt;p&gt;Because this technology is orthogonal to your project, it can be used in virtually any project,
-whether it&amp;rsquo;s PHP, Java, Ruby or C#, as long as they have Javascript.&lt;/p&gt;
-
-&lt;p&gt;Writing unit tests and generating code coverage is superior to your project, because having unit tests
-&lt;strong&gt;increases quality&lt;/strong&gt; of code and code coverage report provides &lt;strong&gt;awareness&lt;/strong&gt; and &lt;strong&gt;better control&lt;/strong&gt;
-of what is going on with the project.&lt;/p&gt;
-
-&lt;h2&gt;Node.js: what it is?&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;It was created by &lt;strong&gt;Ryan Dahl&lt;/strong&gt; in 2009.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;It is &lt;strong&gt;scripting language&lt;/strong&gt; - no compilation required, convenient for writing automation scripts. It uses
-Google Chrome v8 Javascript engine.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;It is Javascript that&amp;rsquo;s &lt;strong&gt;freed from the browser&amp;rsquo;s chains&lt;/strong&gt; - it can be used from &lt;strong&gt;command line&lt;/strong&gt; and as
-part of &lt;strong&gt;server-side&lt;/strong&gt; collection of technologies.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;It has a lot of &lt;strong&gt;packages&lt;/strong&gt; (libraries) for easy extending existing functionality. You use &lt;strong&gt;node package manager&lt;/strong&gt;
-to deliver node packages to your computer same way as Ruby developers use RubyGems for downloading gems
-(Ruby equivalent of library).&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;It is &lt;strong&gt;technology-in-demand&lt;/strong&gt;. Some companies that use it: &lt;strong&gt;github.com&lt;/strong&gt;,  &lt;strong&gt;linkedin.com&lt;/strong&gt;,
-&lt;strong&gt;vonage.com&lt;/strong&gt;, &lt;strong&gt;ebay.com&lt;/strong&gt;, &lt;strong&gt;microsoft.com&lt;/strong&gt;, &lt;strong&gt;trello.com&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;It is &lt;strong&gt;new and promising technology&lt;/strong&gt;. See &lt;a href="http://www.dragoninnovation.com/projects/22-tessel‎"&gt;Tessel&lt;/a&gt; -
-internet-connected microcontroller progammable in Node.js.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;A lot of hosting services already support Node.js: &lt;strong&gt;Heroku&lt;/strong&gt;, &lt;strong&gt;Joyent&lt;/strong&gt;, &lt;strong&gt;CloudFoundry&lt;/strong&gt;, &lt;strong&gt;OpenShift&lt;/strong&gt;, &lt;strong&gt;Cloudnode&lt;/strong&gt;,
-&lt;strong&gt;WindowsAzure&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;If you are on Apple computer, you can use &lt;strong&gt;homebrew&lt;/strong&gt; tool to install it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install node
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;It will install &lt;strong&gt;node package manager&lt;/strong&gt; (npm) as well:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node -v
-npm -v
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;On Windows you can download node and npm as one installation from &lt;a href="http://nodejs.org/download"&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2&gt;Using Node.js: Webserver example&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s demonstrate &amp;ldquo;hello world&amp;rdquo; program for Node.js. This simple web server responds with &amp;ldquo;Hello World&amp;rdquo; string
-for every request.&lt;/p&gt;
-&lt;pre class="highlight javascript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;// hello_world.js
-&lt;/span&gt;
-&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;http&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'http'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-
-&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;server&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;http&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;createServer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;req&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-  &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;writeHead&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;200&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;'Content-Type'&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'text/plain'&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
-  &lt;span class="nx"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;end&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Hello World\n'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-&lt;span class="p"&gt;});&lt;/span&gt;
-
-&lt;span class="nx"&gt;server&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;listen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1337&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'127.0.0.1'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-
-&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Server running at http://127.0.0.1:1337/'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;To run this code, execute it from the command line:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="gp"&gt;% &lt;/span&gt;node example.js
-
-Server running at http://127.0.0.1:1337/
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Installing node packages&lt;/h2&gt;
-
-&lt;p&gt;You can install node packages in two ways:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;globally&lt;/strong&gt;, for all projects: usually in &lt;strong&gt;/usr/local//lib/node_modules&lt;/strong&gt;;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;locally&lt;/strong&gt;, for current project only: in &lt;strong&gt;your&lt;em&gt;project&lt;/em&gt;root/node_modules&lt;/strong&gt;;&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This is the example of global installation:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install -g grunt-cli
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;and local installation:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install grunt-cli
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;In examples above we are installing &lt;strong&gt;grunt&lt;/strong&gt; build tool.&lt;/p&gt;
-
-&lt;p&gt;Saving packages locally is &lt;a href="http://www.futurealoof.com/posts/nodemodules-in-git.html"&gt;good practice&lt;/a&gt; -
-this way you will have the ability to quickly reproduce your production environment -
-&lt;a href="http://www.12factor.net/dev-prod-parity"&gt;dev/prod parity&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can execute grunt command now:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;your_project_root
-
-node_modules/grunt-cli/bin/grunt -version
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Keep track of node packages used by project&lt;/h2&gt;
-
-&lt;p&gt;You can create &lt;strong&gt;package.json&lt;/strong&gt; file used by &lt;strong&gt;npm&lt;/strong&gt; to keep track of project dependencies. This is
-sample file:&lt;/p&gt;
-&lt;pre class="highlight json"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;your_project&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;1.0.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;description&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Npm package for your_project&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;author&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;John Smith &amp;lt;jsmith@site.com&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;engines&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
-    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;node&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;gt;= 0.10.16&amp;quot;&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{},&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;devDependencies&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
-    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;grunt&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;~0.4.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-    &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;grunt-cli&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;~0.1.9&amp;quot;&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;With this file in place you can install all required dependencies (grunt, grunt-cli) in one command:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;You can also install single package with automatic insert of package name/description into &lt;strong&gt;package.json&lt;/strong&gt;
-as development dependency:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install grunt-cli --save-dev
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Look: identical tools for different languages&lt;/h2&gt;
-
-&lt;p&gt;If we look at different languages as frameworks, we can see that most of them have similar tools for similar needs.&lt;/p&gt;
-
-&lt;p&gt;For example,&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;build tool:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Java - Ant/Maven&lt;/li&gt;
-&lt;li&gt;Ruby - rake/thor&lt;/li&gt;
-&lt;li&gt;Node - grunt&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;package manager:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Java - ??? (maybe Maven?)&lt;/li&gt;
-&lt;li&gt;Ruby - gem&lt;/li&gt;
-&lt;li&gt;Node - npm&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;dependencies resolver:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Java - Maven&lt;/li&gt;
-&lt;li&gt;Ruby - bundler&lt;/li&gt;
-&lt;li&gt;Node - npm&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;version manager:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Java - no&lt;/li&gt;
-&lt;li&gt;Ruby - rvm&lt;/li&gt;
-&lt;li&gt;Node - nvm&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Looks like it&amp;rsquo;s becoming &lt;strong&gt;de-facto standard&lt;/strong&gt; for contemporary popular languages to have
-at least some &lt;strong&gt;package delivery engine&lt;/strong&gt;, &lt;strong&gt;dependencies resolver&lt;/strong&gt; and &lt;strong&gt;framework version manager&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h2&gt;Karma Framework: what is it?&lt;/h2&gt;
-
-&lt;p&gt;We use Node.js primarily as &lt;strong&gt;delivery mechanism&lt;/strong&gt; for easy installation of packages that will help
-us to build &lt;strong&gt;unit tests&lt;/strong&gt; and generate &lt;strong&gt;code coverage&lt;/strong&gt;. This can be done by &lt;strong&gt;Karma&lt;/strong&gt; framework.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;It was created by &lt;strong&gt;AngularJS&lt;/strong&gt; team.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;It&amp;rsquo;s &lt;strong&gt;not&lt;/strong&gt; unit test or coverage library - it&amp;rsquo;s universal &lt;strong&gt;layer built on top&lt;/strong&gt; of existing testing/coverage
-libraries &lt;strong&gt;with common configuration&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;It&amp;rsquo;s &lt;strong&gt;agnostic to testing framework&lt;/strong&gt;: you describe your tests with Jasmine, Mocha, QUnit, or write a simple
-adapter for any framework you like.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You can plug in coverage library seamlessly.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You can test &lt;strong&gt;same code in different browsers&lt;/strong&gt; simultaneously.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You can &lt;strong&gt;debug&lt;/strong&gt; with the help of RubyMine/WebStorm IDEs, Chrome or Firefox browsers.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You can run your tests in &lt;strong&gt;headless mode&lt;/strong&gt; with the help of &lt;strong&gt;PhantomJS&lt;/strong&gt; library.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;You can install karma through &lt;strong&gt;npm&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma --save-dev
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;After &lt;strong&gt;karma&lt;/strong&gt; installation you need to create &lt;strong&gt;karma configuration file&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can keep it in javascript:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node_modules/karma/bin/karma init karma.conf.js
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;or coffeescript:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node_modules/karma/bin/karma init karma.conf.coffee
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Script will ask few questions and at the end &lt;strong&gt;karma.conf.js&lt;/strong&gt; or &lt;strong&gt;karma.conf.coffee&lt;/strong&gt; file will be created.&lt;/p&gt;
-
-&lt;p&gt;Now, you need to install additional packages. First, install browser launchers and preprocessors:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma-chrome-launcher --save-dev
-npm install karma-firefox-launcher --save-dev
-npm install karma-safari-launcher --save-dev
-npm install karma-phantomjs-launcher --save-dev
-
-npm install karma-coffee-preprocessor --save-dev
-npm install karma-html2js-preprocessor --save-dev
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Then, install support for jasmine (it&amp;rsquo;s one of supported testing libraries):&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma-jasmine --save-dev
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Revisiting Content of Karma Configuration File&lt;/h2&gt;
-
-&lt;p&gt;Below is the typical example of karma configuration file:&lt;/p&gt;
-&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;div class="lineno"&gt;24&lt;/div&gt;&lt;div class="lineno"&gt;25&lt;/div&gt;&lt;div class="lineno"&gt;26&lt;/div&gt;&lt;div class="lineno"&gt;27&lt;/div&gt;&lt;div class="lineno"&gt;28&lt;/div&gt;&lt;div class="lineno"&gt;29&lt;/div&gt;&lt;div class="lineno"&gt;30&lt;/div&gt;&lt;div class="lineno"&gt;31&lt;/div&gt;&lt;div class="lineno"&gt;32&lt;/div&gt;&lt;div class="lineno"&gt;33&lt;/div&gt;&lt;div class="lineno"&gt;34&lt;/div&gt;&lt;div class="lineno"&gt;35&lt;/div&gt;&lt;div class="lineno"&gt;36&lt;/div&gt;&lt;div class="lineno"&gt;37&lt;/div&gt;&lt;div class="lineno"&gt;38&lt;/div&gt;&lt;div class="lineno"&gt;39&lt;/div&gt;&lt;div class="lineno"&gt;40&lt;/div&gt;&lt;div class="lineno"&gt;41&lt;/div&gt;&lt;div class="lineno"&gt;42&lt;/div&gt;&lt;div class="lineno"&gt;43&lt;/div&gt;&lt;div class="lineno"&gt;44&lt;/div&gt;&lt;div class="lineno"&gt;45&lt;/div&gt;&lt;div class="lineno"&gt;46&lt;/div&gt;&lt;div class="lineno"&gt;47&lt;/div&gt;&lt;div class="lineno"&gt;48&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# karma.conf.coffee
-&lt;/span&gt;
-&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
-  &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;
-    &lt;span class="na"&gt;basePath&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'.'&lt;/span&gt;
-
-    &lt;span class="na"&gt;frameworks&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'jasmine'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="na"&gt;files&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-      &lt;span class="c1"&gt;# external libraries
-&lt;/span&gt;
-      &lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;GEM_HOME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;
-        &lt;span class="s"&gt;'/gems/jquery-rails-3.0.4/vendor/assets/javascripts/jquery.js'&lt;/span&gt;
-
-      &lt;span class="c1"&gt;# project libraries
-&lt;/span&gt;
-      &lt;span class="s"&gt;'app/assets/javascripts/*.js'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-      &lt;span class="s"&gt;'app/assets/javascripts/*.coffee'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-
-      &lt;span class="c1"&gt;# specs
-&lt;/span&gt;
-      &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'spec/javascripts/*_spec.js'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;included&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;true&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
-      &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="na"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'spec/javascripts/*_spec.coffee'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;included&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;true&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
-    &lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="c1"&gt;# list of files to exclude
-&lt;/span&gt;    &lt;span class="na"&gt;exclude&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
-
-    &lt;span class="na"&gt;preprocessors&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-      &lt;span class="s"&gt;'**/*.coffee'&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'coffee'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="na"&gt;reporters&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'dots'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="na"&gt;port&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;9876&lt;/span&gt;
-
-    &lt;span class="na"&gt;colors&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;true&lt;/span&gt;
-
-    &lt;span class="na"&gt;logLevel&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;LOG_INFO&lt;/span&gt;
-
-    &lt;span class="na"&gt;autoWatch&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;false&lt;/span&gt;
-
-    &lt;span class="na"&gt;browsers&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;PhantomJS&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="na"&gt;captureTimeout&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;60000&lt;/span&gt;
-
-    &lt;span class="na"&gt;singleRun&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="no"&gt;true&lt;/span&gt;
-
-    &lt;span class="na"&gt;reportSlowerThan&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;500&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Let&amp;rsquo;s explain some of used properties.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;basePath&lt;/strong&gt; points to the root of your project&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;frameworks&lt;/strong&gt; describes used frameworks (we use jasmine only)&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;files&lt;/strong&gt; should include&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;original javascript code to be tested&lt;/li&gt;
-&lt;li&gt;dependent external libraries&lt;/li&gt;
-&lt;li&gt;specs&lt;/li&gt;
-&lt;li&gt;fixtures (if yop plan to use them)&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;preprocessors&lt;/strong&gt; describe different actions/filters. Some of them:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;how to process coffeescript files (coffee);&lt;/li&gt;
-&lt;li&gt;how to build fixtures (html2js);&lt;/li&gt;
-&lt;li&gt;what files to include into code coverage (coverage);&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;reporters&lt;/strong&gt; define usage of &amp;ldquo;dots&amp;rdquo; reporter&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;browsers&lt;/strong&gt; describe in which browsers code should be tested. We use &lt;strong&gt;PhantomJS&lt;/strong&gt; for headless tests&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;singleRun&lt;/strong&gt;: true is useful for running in CI server&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2&gt;Using Karma&lt;/h2&gt;
-
-&lt;p&gt;You can start karma with this command:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node_modules/karma/bin/karma start
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;This command will run all specs in &lt;strong&gt;spec/javascripts&lt;/strong&gt; folder and output results to console.&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;INFO &lt;span class="o"&gt;[&lt;/span&gt;karma]: Karma v0.10.2 server started at http://localhost:9876/
-INFO &lt;span class="o"&gt;[&lt;/span&gt;launcher]: Starting browser PhantomJS
-INFO &lt;span class="o"&gt;[&lt;/span&gt;PhantomJS 1.9.1 &lt;span class="o"&gt;(&lt;/span&gt;Mac OS X&lt;span class="o"&gt;)]&lt;/span&gt;: Connected on socket _juBSCUpZSBdU1wA-URx
-...............................................
-PhantomJS 1.9.1 &lt;span class="o"&gt;(&lt;/span&gt;Mac OS X&lt;span class="o"&gt;)&lt;/span&gt;: Executed 47 of 47 SUCCESS &lt;span class="o"&gt;(&lt;/span&gt;0.167 secs / 0.027 secs&lt;span class="o"&gt;)&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Code Coverage with Karma&lt;/h2&gt;
-
-&lt;p&gt;For generating code coverage report you have to install &lt;strong&gt;karma-coverage&lt;/strong&gt; package:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;npm install karma-coverage --save-dev
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;You also have to register your javascript or coffeescript files with &lt;strong&gt;coverage&lt;/strong&gt; preprocessor,
-add &lt;strong&gt;coverage&lt;/strong&gt; reporter to the list of reporters and create &lt;strong&gt;coverageReporter&lt;/strong&gt; section:&lt;/p&gt;
-&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# karma.conf.coffee
-&lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
-  &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;
-    &lt;span class="p"&gt;...&lt;/span&gt;
-
-    &lt;span class="na"&gt;preprocessors&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-      &lt;span class="s"&gt;'app/assets/javascripts/**/*.js'&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'coverage'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-      &lt;span class="s"&gt;'app/assets/javascripts/**/*.coffee'&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'coverage'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="na"&gt;reporters&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'dots'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;'coverage'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="na"&gt;coverageReporter&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-      &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'html'&lt;/span&gt;
-      &lt;span class="na"&gt;dir&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;'coverage'&lt;/span&gt;
-    &lt;span class="p"&gt;...&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;coverageReporter&lt;/strong&gt; section describes configuration of &amp;ldquo;coverage&amp;rdquo; reporter: type of report and location of it.&lt;/p&gt;
-
-&lt;p&gt;Now, when you run karma again&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node_modules/karma/bin/karma start
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;it will create coverage report inside &lt;strong&gt;coverage&lt;/strong&gt; directory. Open it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;open coverage/PhantomJS&lt;span class="se"&gt;\ &lt;/span&gt;1.9.1&lt;span class="se"&gt;\ \(&lt;/span&gt;Mac&lt;span class="se"&gt;\ &lt;/span&gt;OS&lt;span class="se"&gt;\ &lt;/span&gt;X&lt;span class="se"&gt;\)&lt;/span&gt;/
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Using fixture for your specs&lt;/h2&gt;
-
-&lt;p&gt;If you plan to use fixtures inside your specs, you have to do these steps.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Create fixture file in &lt;strong&gt;fixtures&lt;/strong&gt; folder:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class="highlight html"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c"&gt;&amp;lt;!-- spec/javascripts/fixtures/template.html --&amp;gt;&lt;/span&gt;
-&lt;span class="nt"&gt;&amp;lt;div&amp;gt;&lt;/span&gt;something&lt;span class="nt"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;Add fixtures location to &lt;strong&gt;files&lt;/strong&gt; sections and specify &lt;strong&gt;html2js&lt;/strong&gt; preprocessor for
-html files inside &lt;strong&gt;fixtures&lt;/strong&gt; directory:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# karma.conf.coffee
-&lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
-  &lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;set&lt;/span&gt;
-    &lt;span class="p"&gt;...&lt;/span&gt;
-
-    &lt;span class="na"&gt;files&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-      &lt;span class="p"&gt;...&lt;/span&gt;
-      &lt;span class="s"&gt;'spec/javascripts/fixtures/**/*.html'&lt;/span&gt;
-    &lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="na"&gt;preprocessors&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-      &lt;span class="s"&gt;'spec/javascripts/fixtures/**/*.html'&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'html2js'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-    &lt;span class="p"&gt;...&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;Access &lt;strong&gt;fixture&lt;/strong&gt; from the spec through global &lt;strong&gt;window.__html__&lt;/strong&gt; variable:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class="highlight coffeescript"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# spec/javascripts/some_coffee_spec.coffee
-&lt;/span&gt;&lt;span class="nx"&gt;describe&lt;/span&gt; &lt;span class="s"&gt;'some_coffee_code'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
-  &lt;span class="nx"&gt;fixture&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;undefined&lt;/span&gt;
-
-  &lt;span class="nx"&gt;beforeEach&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
-    &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;__html__&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;__html__&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="p"&gt;{};&lt;/span&gt;
-    &lt;span class="nx"&gt;fixture&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;__html__&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;'spec/javascripts/fixtures/template.html'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-  &lt;span class="nx"&gt;it&lt;/span&gt; &lt;span class="s"&gt;'access div element'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;
-    &lt;span class="nx"&gt;el&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;fixture&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="na"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;'#div'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="nx"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;el&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="na"&gt;toBeDefined&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
   </entry>
 </feed>
