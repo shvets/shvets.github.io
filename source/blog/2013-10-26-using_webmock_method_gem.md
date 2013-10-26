@@ -14,7 +14,8 @@ it in your tests if you don't want to hit actual service while testing other fun
 ```ruby
 require 'webmock'
 
-WebMock.stub_request(:any, "www.example.com").to_return(:body => "some body")
+WebMock.stub_request(:any, "www.example.com").
+  to_return(:body => "some body")
 
 expect(Net::HTTP.get("www.example.com", "/")).to eq "some body"
 ```
@@ -78,10 +79,10 @@ end
 
 **webmock_method** requires you to provide the following information:
 
-* **method name** to be mocked;
-* **parameters names** for the method (same as in original service);
-* **proc/lambda** expression for building the response;
-* **url** to remote service (optional).
+- **method name** to be mocked;
+- **parameters names** for the method (same as in original service);
+- **proc/lambda** expression for building the response;
+- **url** to remote service (optional).
 
 You can build responses of arbitrary complexity with your own code or you can use **RenderHelper**, that comes with this
 gem. Currently it supports **erb** renderer only. Here is example of how to build xml response:
