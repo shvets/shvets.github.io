@@ -1,8 +1,16 @@
--#.section
--#  %h2 News 1
--#  %p
--#    some cool news
--#.section
--#  %h2 News 2
--#  %p
--#    some other cool news
+.section
+  %h2 By Year
+  %ol
+    - blog.articles.group_by {|a| a.date.year }.each do |year, articles|
+      %li
+        = link_to year, blog_year_path(year)
+        (#{articles.size})
+
+.section
+  %h2 Tags
+  %ol
+    - blog.tags.each do |tag, articles|
+      %li
+        = link_to tag, tag_path(tag)
+        (#{articles.size})
+
