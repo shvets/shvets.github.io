@@ -350,6 +350,25 @@ browser window for executing tests.</p>
 <p>In my experience, webkit and poltergeist work in 95% of cases. If you have some problems, you can switch to selenium
 driver - it&rsquo;s the most reliable one.</p>
 
+<h2>Tip 6: Chrome Driver</h2>
+
+<p>If you want to use chrome driver, you need to follow these steps:</p>
+
+<p>Register chrome driver:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div></td><td class="code"><span class="no">Capybara</span><span class="nf">.register_driver</span> <span class="ss">:chrome</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="o">|</span>
+  <span class="no">Capybara</span><span class="o">::</span><span class="no">Selenium</span><span class="o">::</span><span class="no">Driver</span><span class="nf">.new</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="ss">:browser</span> <span class="o">=&gt;</span> <span class="ss">:selenium_chrome</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="no">Capybara</span><span class="nf">.javascript_driver</span> <span class="o">=</span> <span class="ss">:chrome</span>
+<span class="k">end</span>
+
+<span class="no">On</span> <span class="no">OSX</span> <span class="n">install</span> <span class="n">chromedriver</span> <span class="n">utility</span> <span class="n">with</span> <span class="n">homebrew</span> <span class="ss">help:
+
+</span><span class="sb">```bash
+brew install chromedriver
+</span></td></tr></tbody></table></pre>
+<p>Now you can run your acceptance test with Chrome browser.</p>
+
 <h2>Acceptance Test gem</h2>
 
 <p>All ideas, described in mentioned above tips, were implemented and now available as one ruby gem:
@@ -439,7 +458,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../2013.html">2013</a>
-(11)
+(12)
 </li>
 <li>
 <a href="../../../2012.html">2012</a>
@@ -456,7 +475,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../tags/ruby.html">ruby</a>
-(8)
+(9)
 </li>
 <li>
 <a href="../../../tags/jruby.html">jruby</a>
@@ -556,6 +575,14 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
 (1)
 </li>
 </ol>

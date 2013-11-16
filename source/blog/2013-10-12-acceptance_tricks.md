@@ -392,6 +392,28 @@ Capybara.current_driver = :poltergeist
 In my experience, webkit and poltergeist work in 95% of cases. If you have some problems, you can switch to selenium
 driver - it's the most reliable one.
 
+## Tip 6: Chrome Driver
+
+If you want to use chrome driver, you need to follow these steps:
+
+Register chrome driver:
+
+```ruby
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, :browser => :selenium_chrome)
+end
+
+Capybara.javascript_driver = :chrome
+end
+
+On OSX install chromedriver utility with homebrew help:
+
+```bash
+brew install chromedriver
+```
+
+Now you can run your acceptance test with Chrome browser.
+
 ## Acceptance Test gem
 
 All ideas, described in mentioned above tips, were implemented and now available as one ruby gem:
@@ -482,5 +504,5 @@ RUN_SERVER=true rspec your_acceptance_spec.rb
 [Selenium Home]: http://docs.seleniumhq.org/
 [shared context]: https://www.relishapp.com/rspec/rspec-core/v/2-11/docs/example-groups/shared-context
 [acceptance test gem]: https://github.com/shvets/acceptance_test
-
-
+[selenium help]: http://makandracards.com/makandra/8381-run-chrome-in-a-specific-resolution-or-user-agent-with-selenium
+[Introducing Capybara 2.1]: http://www.elabs.se/blog/60-introducing-capybara-2-1
