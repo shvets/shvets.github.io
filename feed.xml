@@ -19,6 +19,43 @@
       <name>Article Author</name>
     </author>
     <content type="html">&lt;h1&gt;Creating gems-wrappers for executable java jars&lt;/h1&gt;
+
+&lt;p&gt;Today I want to share little trick that lets us to use ruby distribution system (&lt;strong&gt;rubygems&lt;/strong&gt;)
+as delivery mechanism for java libraries/executables. The idea was borrowed
+from &lt;a href="https://github.com/redcar/redcar"&gt;redcar project&lt;/a&gt; which in turn was borrowed/extracted from
+&lt;a href="https://github.com/jashkenas/ruby-processing"&gt;ruby-processing gem&lt;/a&gt;. I am trying to extract important logic into separate
+&lt;a href="https://github.com/shvets/jar_wrapper"&gt;jar_wrapper gem&lt;/a&gt;, so it can be easily used in any ruby project.&lt;/p&gt;
+
+&lt;p&gt;Install jar_wrapper with this command:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;$ gem install jar_wrapper
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Now you can use it in your program directly or create gem for delivering java jar file(s).
+For example, this code will upload remote file:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'jar_wrapper'&lt;/span&gt;
+
+&lt;span class="n"&gt;wrapper&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;JarWrapper&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Runner&lt;/span&gt;&lt;span class="nf"&gt;.new&lt;/span&gt;
+&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="nf"&gt;.java_opts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-Xmx1024m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;-Xss1024k&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;
+
+&lt;span class="c1"&gt;# install jar file from source URL into target file:&lt;/span&gt;
+
+&lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;http://selenium.googlecode.com/files/selenium-server-2.37.0.zip&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;target&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;selenium-server.zip&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="nf"&gt;.install&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;You can aldo execute jar file (a.k.a. &amp;ldquo;java -jar jar_file.jar&amp;rdquo;)&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="nf"&gt;.jar_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;jar_file.jar&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="nf"&gt;.run&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Or you can execute java jar file by specifying &lt;strong&gt;main class&lt;/strong&gt; (a.k.a. &amp;ldquo;java -cp some&lt;em&gt;class&lt;/em&gt;path main_class&amp;rdquo;):&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="nf"&gt;.classpath&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;some_class_path&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="nf"&gt;.main_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;main_class&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="nf"&gt;.run&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;If you need more details on how to use it for practical gem, visit &lt;a href="https://github.com/shvets/selenium"&gt;selenium gem&lt;/a&gt;.
+This gem downloads and create launcher for standalone selenium server.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -338,6 +375,17 @@ avoid memory leaks. One possibe solution could be using modified DSL class imple
 &lt;p&gt;Some other examples of DSL can be found &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/meta_tricks/simple_dsl.rb"&gt;here&lt;/a&gt;, &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl11.rb"&gt;here&lt;/a&gt;, &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl12.rb"&gt;here&lt;/a&gt;,
 &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl13.rb"&gt;here&lt;/a&gt; and &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl2.rb"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>
+  </entry>
+  <entry>
+    <title>Using WebMock gem in tests and web application services</title>
+    <link rel="alternate" href="/blog/2013/11/09/two_simple_dsl_examples.html"/>
+    <id>/blog/2013/11/09/two_simple_dsl_examples.html</id>
+    <published>2013-11-09T00:00:00Z</published>
+    <updated>2013-11-09T00:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html"></content>
   </entry>
   <entry>
     <title>Using WebMock gem in tests and web application services</title>
@@ -1049,65 +1097,5 @@ brew install chromedriver
 &lt;p&gt;&lt;strong&gt;RUN_SERVER&lt;/strong&gt; - default is false; use it if you want to run internal server with capybara:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nv"&gt;RUN_SERVER&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;true &lt;/span&gt;rspec your_acceptance_spec.rb
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
-  </entry>
-  <entry>
-    <title>How to maintain ruby project that works with Ruby and JRuby</title>
-    <link rel="alternate" href="/blog/2013/10/05/gemfile_with_ruby_and_jruby.html"/>
-    <id>/blog/2013/10/05/gemfile_with_ruby_and_jruby.html</id>
-    <published>2013-10-05T00:00:00Z</published>
-    <updated>2013-10-05T00:00:00Z</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h2&gt;How to maintain ruby project that works with Ruby and JRuby&lt;/h2&gt;
-
-&lt;p&gt;If your Ruby/Rails project has to work with Ruby and JRuby at the same time,
-sooner or later you&amp;rsquo;ll end up with &lt;strong&gt;Gemfile&lt;/strong&gt; that has a lot of &lt;strong&gt;if logic&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
-
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;RUBY_PLATFORM&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;java&amp;quot;&lt;/span&gt; &lt;span class="c1"&gt;# jruby&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;jdbc-postgres&amp;quot;&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;activerecord-jdbcpostgresql-adapter&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;else&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;pg&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'0.13.2'&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;If you have a lot of dependencies this &lt;strong&gt;if logic&lt;/strong&gt; complicates and pollutes your code.&lt;/p&gt;
-
-&lt;p&gt;How can we simplify this code? Easy - keep two separate &lt;strong&gt;Gemfile&lt;/strong&gt; - one for
-Ruby (Gemfile) and another for JRuby (Gemfile-jruby).&lt;/p&gt;
-
-&lt;p&gt;You need to tell your bundler though which &lt;strong&gt;Gemfile&lt;/strong&gt; needs to be used.&lt;/p&gt;
-
-&lt;p&gt;If you want to run bundler with different Gemfile, run it this way:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nv"&gt;BUNDLE_GEMFILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;Gemfile-jruby bundle
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;This is fine, but you have to remember to provide additional environment variable every time you run the command.&lt;/p&gt;
-
-&lt;p&gt;If you want to select Gemfile automatically when you change ruby or gemset,
-you can use &lt;strong&gt;rvm hook&lt;/strong&gt;. All hooks for rvm are located in &lt;strong&gt;~/.rvm/hooks&lt;/strong&gt;  folder.&lt;/p&gt;
-
-&lt;p&gt;Create or edit this file:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;vi ~/.rvm/hooks/after_use_jruby
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Locate line with &lt;strong&gt;if [[ &amp;ldquo;${rvm&lt;em&gt;ruby&lt;/em&gt;string}&amp;rdquo; =~ &amp;ldquo;jruby&amp;rdquo; ]]&lt;/strong&gt; and add your code:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c"&gt;#!/usr/bin/env bash&lt;/span&gt;
-&lt;span class="se"&gt;\.&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;rvm_path&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/scripts/functions/hooks/jruby&amp;quot;&lt;/span&gt;
-
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;rvm_ruby_string&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;~ &lt;span class="s2"&gt;&amp;quot;jruby&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt;
-&lt;span class="k"&gt;then
-  &lt;/span&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;BUNDLE_GEMFILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Gemfile-jruby&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;else
-  &lt;/span&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;BUNDLE_GEMFILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Gemfile&amp;quot;&lt;/span&gt;
-&lt;span class="k"&gt;fi&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Change rights for this file to make it executable:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;chmod +x ~/.rvm/hooks/after_use_jruby
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Now, every time you change directory to your project, rvm will setup all environment
-variables as before plus your &lt;strong&gt;BUNDLE_GEMFILE&lt;/strong&gt; variable.&lt;/p&gt;
-
-&lt;p&gt;If your current ruby (.ruby-version) is jruby, it will use &lt;strong&gt;Gemfile-jruby&lt;/strong&gt;, otherwise - &lt;strong&gt;Gemfile&lt;/strong&gt;.&lt;/p&gt;
-</content>
   </entry>
 </feed>
