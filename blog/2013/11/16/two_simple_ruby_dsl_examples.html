@@ -164,7 +164,7 @@ code of the object. As a result, all private methods and fields are available:</
 <p>We cannot do anything with accessing private methods/fields, but we can make methods from calling context available.
 if you provide parent context as an additional parameter, you can redirect  calls to missing object directly to
 the parent (proxy object):</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div></td><td class="code"><span class="k">module</span> <span class="nn">Proxy</span>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div></td><td class="code"><span class="k">module</span> <span class="nn">Proxy</span>
   <span class="k">def </span><span class="nf">subject</span><span class="o">=</span> <span class="n">subject</span>
     <span class="vi">@subject</span> <span class="o">=</span> <span class="n">subject</span>
   <span class="k">end</span>
@@ -173,9 +173,8 @@ the parent (proxy object):</p>
     <span class="vi">@subject</span><span class="nf">.send</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="k">end</span>
 
-  <span class="k">def </span><span class="nf">respond_to?</span><span class="p">(</span><span class="nb">method</span><span class="p">)</span>
-    <span class="vi">@subject</span><span class="nf">.respond_to?</span><span class="p">(</span><span class="nb">method</span><span class="p">)</span>
-    <span class="k">super</span>
+  <span class="k">def </span><span class="nf">respond_to?</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">include_private</span> <span class="o">=</span> <span class="kp">false</span><span class="p">)</span>
+    <span class="vi">@subject</span><span class="nf">.respond_to?</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="o">||</span> <span class="k">super</span>
   <span class="k">end</span>
 <span class="k">end</span>
 </td></tr></tbody></table></pre>
@@ -362,7 +361,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../2013.html">2013</a>
-(12)
+(13)
 </li>
 <li>
 <a href="../../../2012.html">2012</a>
@@ -379,7 +378,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../tags/ruby.html">ruby</a>
-(9)
+(10)
 </li>
 <li>
 <a href="../../../tags/jruby.html">jruby</a>
@@ -487,6 +486,10 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
 (1)
 </li>
 </ol>

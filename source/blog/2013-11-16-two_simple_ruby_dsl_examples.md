@@ -158,9 +158,8 @@ module Proxy
     @subject.send(name, *args, &block)
   end
 
-  def respond_to?(method)
-    @subject.respond_to?(method)
-    super
+  def respond_to?(name, include_private = false)
+    @subject.respond_to?(name) || super
   end
 end
 ```
