@@ -1,4 +1,4 @@
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Unit Tests and Code Coverage
 # in Javascript  with Help of Node.js
@@ -11,7 +11,7 @@
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Goals of this presentation
 
@@ -24,7 +24,7 @@
 * We use Node.js as **complimentary technology** that doesn't replace your current one.
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Why is it important?
 
@@ -37,7 +37,7 @@
 
 
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Node.js
 
@@ -45,11 +45,10 @@
 >
 >
 
-![nodejs] (images/nodejs.png)
+![nodejs](03/images/nodejs.png)
 
 
-
-!SLIDE content transition=cover incremental
+%!SLIDE content transition=cover incremental
 
 # What is it?
 
@@ -73,7 +72,7 @@ sponsored by **Joyent**, his former employer.
 * It's **technology-in-demand**. Some companies that use it: **github.com**,  **linkedin.com**,
 **vonage.com**, **ebay.com**, **microsoft.com**, **trello.com**.
 
-* It's **new and promising technology**. See [Tessel] (http://www.dragoninnovation.com/projects/22-tessel‎) -
+* It's **new and promising technology**. See [Tessel](http://www.dragoninnovation.com/projects/22-tessel‎) -
 internet-connected microcontroller progammable in Node.js.
 
 * A lot of hosting services support Node.js: **Heroku**, **Joyent**, **CloudFoundry**, **OpenShift**, **Cloudnode**,
@@ -81,7 +80,7 @@ internet-connected microcontroller progammable in Node.js.
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Installation
 
@@ -99,11 +98,11 @@ node -v
 npm -v
 ```
 
-On Windows you can download node and npm as one installation from [Node.js Downloads Page] (http://nodejs.org/download).
+On Windows you can download node and npm as one installation from [Node.js Downloads Page](http://nodejs.org/download).
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Using Node.js: Webserver example
 
@@ -134,7 +133,7 @@ Server running at http://127.0.0.1:1337/
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Installing node packages
 
@@ -156,8 +155,8 @@ and local installation:
 npm install grunt-cli
 ```
 
-Saving packages locally is [good practice] (http://www.futurealoof.com/posts/nodemodules-in-git.html) -
-this way you will have the ability to quickly reproduce your production environment - [dev/prod parity] (http://www.12factor.net/dev-prod-parity).
+Saving packages locally is [good practice](http://www.futurealoof.com/posts/nodemodules-in-git.html) -
+this way you will have the ability to quickly reproduce your production environment - [dev/prod parity](http://www.12factor.net/dev-prod-parity).
 
 In example above we are installing **grunt** build tool.
 
@@ -171,8 +170,7 @@ node_modules/grunt-cli/bin/grunt -version
 ```
 
 
-
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Keep track of node packages used by project
 
@@ -211,7 +209,7 @@ npm install grunt-cli --save-dev
 
 
 
-!SLIDE title-and-content columns transition=cover
+%!SLIDE title-and-content columns transition=cover
 
 # Memo for Java/Ruby Developers
 
@@ -243,7 +241,7 @@ npm install grunt-cli --save-dev
 * ???
 * ant/maven
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Karma Framework
 
@@ -251,11 +249,9 @@ npm install grunt-cli --save-dev
 >
 >
 
-![nodejs] (images/karma.jpg)
+![nodejs](03/images/karma.jpg)
 
-
-
-!SLIDE content transition=cover incremental
+%!SLIDE content transition=cover incremental
 
 # What is it?
 
@@ -276,7 +272,7 @@ adapter for any framework you like.
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Installation
 
@@ -302,7 +298,7 @@ Script will ask few questions and at the end create **karma.conf.js** or **karma
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Installation (continued)
 
@@ -332,7 +328,7 @@ npm install karma-jasmine --save-dev
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Karma Configuration File
 
@@ -369,8 +365,7 @@ module.exports = (config) ->
 ```
 
 
-
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Karma Configuration File (continued)
 
@@ -400,7 +395,7 @@ module.exports = (config) ->
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Karma Configuration File (continued)
 
@@ -426,7 +421,7 @@ module.exports = (config) ->
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Using Karma
 
@@ -448,7 +443,7 @@ PhantomJS 1.9.1 (Mac OS X): Executed 47 of 47 SUCCESS (0.167 secs / 0.027 secs)
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Code Coverage with Karma
 
@@ -483,7 +478,7 @@ module.exports = (config) ->
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Using fixture for your specs
 
@@ -514,9 +509,7 @@ module.exports = (config) ->
     ...
 ```
 
-
-
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Using fixture for the spec (continued)
 
@@ -536,7 +529,7 @@ describe 'some_coffee_code', ->
     expect(el).toBeDefined()
 ```
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Modularity in Node.js and Browser Javascript
 
@@ -544,11 +537,11 @@ describe 'some_coffee_code', ->
 >
 >
 
-![nodejs] (images/modularity.jpg)
+![nodejs](03/images/modularity.jpg)
 
 
 
-!SLIDE content transition=cover incremental
+%!SLIDE content transition=cover incremental
 
 # Options
 
@@ -564,7 +557,7 @@ describe 'some_coffee_code', ->
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Using Anonymous Closure
 
@@ -603,7 +596,7 @@ MyModule.bar(); // error
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Using JQuery.extend
 
@@ -641,8 +634,7 @@ var Modularity = new ModularityLibrary();
 ```
 
 
-
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Using JQuery.extend (continued)
 
@@ -670,7 +662,7 @@ custoModule.display();
 
 ```
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Working with CommonJS
 
@@ -709,7 +701,7 @@ describe('example', function() {
 ```
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Working with CommonJS (continued)
 
@@ -739,8 +731,7 @@ describe('example', function() {
 * You add **commonjs** as framework and mark files that use CommonJS with **commonjs** preprocessor.
 
 
-
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # CommonJS implementations
 
@@ -754,10 +745,10 @@ of **require** and **module.exports**.
 
   * NodeJS - asynchronous implementation of CommonJS specification.
 
-  * [List of other solutions] (http://wiki.commonjs.org/wiki/Implementations)
+  * [List of other solutions](http://wiki.commonjs.org/wiki/Implementations)
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Working with RequireJS
 
@@ -783,8 +774,7 @@ define('example', function() {
 ```
 
 
-
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Working with RequireJS (continued)
 
@@ -824,8 +814,7 @@ require(['example'], function(example) {
 You don't have to preprocess requirejs files - it's already part of karma framework.
 
 
-
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Working with RequireJS (continued)
 
@@ -864,18 +853,18 @@ requirejs.config({
 });
 ```
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Using RequireJS in browser
 
-* For using RequireJS in browser you have to [download] (http://requirejs.org/docs/download.html)
+* For using RequireJS in browser you have to [download](http://requirejs.org/docs/download.html)
 it and include into your html file.
 
 * Your **html template file**:
 
 ```haml
-%html{:lang => "en"}
-  %head
+\%html{:lang => "en"}
+  \%head
     = javascript_include_tag "requirejs-2.1.8.min"
     = javascript_include_tag  "helper"
     = javascript_include_tag  "application"
@@ -899,20 +888,21 @@ require(['jquery-1.10.2.min', 'helper'], function($, helper) {
 });
 ```
 
-!SLIDE title-and_content transition=cover
+
+%!SLIDE title-and_content transition=cover
 
 # Links
 
-* [Node.js Home - http://nodejs.org] (http://nodejs.org‎)
-* [Node Weekly newspaper archive - http://nodeweekly.com/archive] (http://nodeweekly.com/archive)
-* [Javascript Weekly newspaper archive - http://javascriptweekly.com/archive] (http://javascriptweekly.com/archive)
+* [Node.js Home - http://nodejs.org](http://nodejs.org‎)
+* [Node Weekly newspaper archive - http://nodeweekly.com/archive](http://nodeweekly.com/archive)
+* [Javascript Weekly newspaper archive - http://javascriptweekly.com/archive](http://javascriptweekly.com/archive)
  (http://nodeweekly.com/archive‎)
-* [Karma Runner Home - https://github.com/karma-runner/karma] (https://github.com/karma-runner/karma)
-* [CommonJS Home - http://www.commonjs.org/] (http://www.commonjs.org/)
-* [CommonJS: Why and How - http://0fps.wordpress.com/2013/01/22/commonjs-why-and-how] (http://0fps.wordpress.com/2013/01/22/commonjs-why-and-how)
+* [Karma Runner Home - https://github.com/karma-runner/karma](https://github.com/karma-runner/karma)
+* [CommonJS Home - http://www.commonjs.org/](http://www.commonjs.org/)
+* [CommonJS: Why and How - http://0fps.wordpress.com/2013/01/22/commonjs-why-and-how](http://0fps.wordpress.com/2013/01/22/commonjs-why-and-how)
 * [JavaScript Module Pattern: In-Depth - http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html]
  (http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html)
-* [RequireJS Home - http://requirejs.org] (http://requirejs.org)
+* [RequireJS Home - http://requirejs.org](http://requirejs.org)
 * [Writing JavaScript Modules for Both Browser and Node.js - http://www.matteoagosti.com/blog/2013/02/24/writing-javascript-modules-for-both-browser-and-node]
 (http://www.matteoagosti.com/blog/2013/02/24/writing-javascript-modules-for-both-browser-and-node)
 * [Tessel: internet-connected microcontroller progammable in Node.js - http://www.dragoninnovation.com/projects/22-tessel]
@@ -925,7 +915,7 @@ require(['jquery-1.10.2.min', 'helper'], function($, helper) {
  (http://tech.pro/blog/1561/five-helpful-tips-when-using-requirejs)
 
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 >
 

@@ -1,4 +1,4 @@
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Boosting developer's productivity:
 # Better code quality with tests.
@@ -11,7 +11,7 @@
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Goals of this presentation
 
@@ -28,7 +28,7 @@ for supporting projects in other languages, such as Java.
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Why Ruby?
 
@@ -53,7 +53,7 @@ for supporting projects in other languages, such as Java.
 
 * Hosting services (PaaS), such as **Heroku**, **EngineYard**, **GoogleApps**, **Shelly Cloud** support it.
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # How can we classify tests?
 
@@ -68,7 +68,7 @@ for supporting projects in other languages, such as Java.
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example: Cucumber script
 
@@ -88,7 +88,7 @@ Scenario: Adding a subpage
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Exampe: RSpec script
 
@@ -110,7 +110,7 @@ end
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example: Capybara script
 
@@ -128,7 +128,7 @@ click_button "Submit"
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Types of tests
 
@@ -152,7 +152,7 @@ And worse, for professional software testers it means something different.
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Unit Tests
 
@@ -173,7 +173,7 @@ And worse, for professional software testers it means something different.
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Integration and Functional Tests
 
@@ -192,7 +192,7 @@ even if units work perfectly in isolation.
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Acceptance Tests
 
@@ -208,7 +208,7 @@ even if units work perfectly in isolation.
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Relationships between different test types
 
@@ -226,7 +226,7 @@ confidence that the **system as a whole works**.
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Test Coverage Strategies
 
@@ -241,7 +241,7 @@ confidence that the **system as a whole works**.
 * **Unit, acceptance and integration tests** - fits for most medium to large projects.
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # TDD vs. BDD
 
@@ -253,18 +253,18 @@ confidence that the **system as a whole works**.
 
 
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Red/Green/Refactor Cycle: TDD Concept
 
 >
 >
 
-![red_green_refactor] (images/red_green_refactor.jpg)
+![red_green_refactor](02/images/red_green_refactor.jpg)
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Steps of Red/Green/Refactor cycle
 
@@ -278,7 +278,7 @@ does not esxist yet.
 * <span style="color:black">Repeat</span> - Add new tests, repeating whole process (Red-Green-Refactor) again and again.
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Refactoring as Process
 
@@ -291,17 +291,17 @@ does not esxist yet.
 
 
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Given-When-Then triad: BDD Concept
 
 >
 
-![given_when_then] (images/given_when_then.jpg)
+![given_when_then](02/images/given_when_then.jpg)
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Description of Given-When-Then triad
 
@@ -319,7 +319,7 @@ does not esxist yet.
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Consequences of using TDD/BDD
 
@@ -338,7 +338,7 @@ Thus, you can concentrate on one aspect of your code - reducing time spend for i
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Common recommendations for writing tests
 
@@ -353,17 +353,17 @@ You need to start rearranging your code by minimizing/optimizing dependencies.
 
 * If you see **two tests that contradict each other**, you have inconsistency in your specification/story.
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # RSpec
 
 >
 
-![rspec] (images/rspec.jpg)
+![rspec](02/images/rspec.jpg)
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # What is it?
 
@@ -381,7 +381,7 @@ You need to start rearranging your code by minimizing/optimizing dependencies.
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example: rspec script
 
@@ -418,17 +418,17 @@ Finished in 0.00436 seconds
 1 example, 0 failures
 ```
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Cucumber
 
 >
 
-![cucumber] (images/cucumber.jpg)
+![cucumber](02/images/cucumber.jpg)
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # What is it?
 
@@ -450,7 +450,7 @@ Finished in 0.00436 seconds
 adapted for a given language.
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Installation
 
@@ -479,7 +479,7 @@ require 'cucumber'
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example: Google Search
 
@@ -515,7 +515,7 @@ Feature: Using Google
 ```
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example: Google Search (continued)
 
@@ -556,7 +556,7 @@ end
 ```
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example: Google Search in other language
 
@@ -591,7 +591,7 @@ end
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 
 # Example: Proteus Subscribe
@@ -619,7 +619,7 @@ Feature: Subscribe to Vonage phone service through Triton UI
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example: Proteus Subscribe (continued)
 
@@ -655,7 +655,7 @@ end
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example: Proteus Subscribe (continued)
 
@@ -679,7 +679,7 @@ end
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # How to run
 
@@ -717,17 +717,17 @@ Feature: Using Google
 0m9.280s
 ```
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Automated Acceptance Tests
 
 >
 
-![acceptance] (images/acceptance.jpg)
+![acceptance](02/images/acceptance.jpg)
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Automated Acceptance Tests: Why?
 
@@ -740,7 +740,7 @@ Unit or integration tests do not know about new functionality and cannot fail on
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Existing solutions for Acceptance Tests
 
@@ -751,39 +751,39 @@ Unit or integration tests do not know about new functionality and cannot fail on
 * Capybara
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Existing solutions based on Selenium
 
-* [Appium] (https://github.com/appium/appium) - test automation tool for native and hybrid mobile apps on iOS,
+* [Appium](https://github.com/appium/appium) - test automation tool for native and hybrid mobile apps on iOS,
 Android, and FirefoxOS platforms
 
-* [Selendroid] (https://github.com/DominikDary/selendroid) - test automate native or hybrid Android apps
+* [Selendroid](https://github.com/DominikDary/selendroid) - test automate native or hybrid Android apps
 with Selendroid.
 
-* [Calabash IOS] (https://github.com/calabash/calabash-ios) - lets you run Cucumber features on your
+* [Calabash IOS](https://github.com/calabash/calabash-ios) - lets you run Cucumber features on your
 IOS device or emulator.
 
-* [Calabash Android] (https://github.com/calabash/calabash-android) - lets you run Cucumber features on
+* [Calabash Android](https://github.com/calabash/calabash-android) - lets you run Cucumber features on
 your Android device or emulator.
 
-* [iPhone Driver] (http://code.google.com/p/selenium/wiki/IPhoneDriver) - allows testing on a UIWebView
+* [iPhone Driver](http://code.google.com/p/selenium/wiki/IPhoneDriver) - allows testing on a UIWebView
 (a webkit browser accessible for 3rd party applications) on the iphone.
 It works through the use of an iphone application running on your iphone, ipod touch or iphone simulator.
 
-* [ios-driver] (http://ios-driver.github.io/ios-driver) - IOS automation for native, hybrid and mobile web.
+* [ios-driver](http://ios-driver.github.io/ios-driver) - IOS automation for native, hybrid and mobile web.
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Capybara
 
 >
 
-![capybara] (images/capybara.jpg)
+![capybara](02/images/capybara.jpg)
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # What is it?
 
@@ -800,7 +800,7 @@ Example: **selenium** or **webkit** driver.
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Choices for writing acceptance tests
 
@@ -812,7 +812,7 @@ Example: **selenium** or **webkit** driver.
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example 1: Java with selenium-webdriver
 
@@ -847,7 +847,7 @@ element.submit();
 * Does not support smart auto-waiting feature.
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example 2: Ruby with selenium-webdriver
 
@@ -883,7 +883,7 @@ element.submit();
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example 3: Capybara script for Proteus
 
@@ -919,7 +919,7 @@ page.should have_content
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example 3: Capybara script for Proteus (continued)
 
@@ -947,7 +947,7 @@ page.should have_content "Enter your contact information"
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Example 4: Capybara script for MOLA
 
@@ -978,7 +978,7 @@ page.should have_content "Features"
 ```
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # Headless mode
 
@@ -997,7 +997,7 @@ page.should have_content "Features"
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Running in headless mode
 
@@ -1017,17 +1017,17 @@ Capybara.current_driver = :webkit
 [capybara gem home]: https://github.com/jnicklas/capybara
 
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 # Jasmine
 
 >
 
-![jasmine] (images/jasmine.jpg)
+![jasmine](02/images/jasmine.jpg)
 
 
 
-!SLIDE title-and-content transition=cover incremental
+%!SLIDE title-and-content transition=cover incremental
 
 # What is it?
 
@@ -1043,7 +1043,7 @@ Capybara.current_driver = :webkit
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Installation
 
@@ -1069,7 +1069,7 @@ src_files, e.g.:
 
 
 
-!SLIDE title-and-content columns transition=cover
+%!SLIDE title-and-content columns transition=cover
 
 # Example: Jasmine Test vs. RSpec
 
@@ -1121,7 +1121,7 @@ end
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Usage
 
@@ -1139,7 +1139,7 @@ open http://localhost:8888
 
 
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Command line interface (selenium mode)
 
@@ -1168,7 +1168,7 @@ Waiting for suite to finish in browser ...
 ..........
 ```
 
-!SLIDE title-and-content transition=cover
+%!SLIDE title-and-content transition=cover
 
 # Command line interface (webkit mode)
 
@@ -1199,7 +1199,7 @@ Running Jasmine specs...
 PASS: 11 tests, 0 failures, 0.018 secs.
 ```
 
-!SLIDE title-and_content transition=cover
+%!SLIDE title-and_content transition=cover
 
 # Links
 
@@ -1207,21 +1207,21 @@ PASS: 11 tests, 0 failures, 0.018 secs.
  (www.growing-object-oriented-software.com/‎)
 * [The RSpec Book: Behaviour Driven Development with Rspec, Cucumber, and Friends - http://www.amazon.com/RSpec-Book-Behaviour-Development-Cucumber/dp/1934356379]
 (http://www.amazon.com/RSpec-Book-Behaviour-Development-Cucumber/dp/1934356379)
-* [Cucumber Home - https://github.com/cucumber] (https://github.com/cucumber)
-* [Rspec Home - http://rspec.info] (http://rspec.info)
-* [Capybara Home - https://github.com/jnicklas/capybara] (https://github.com/jnicklas/capybara)
-* [Jasmine - *http://pivotal.github.io/jasmine*] (http://pivotal.github.io/jasmine)
+* [Cucumber Home - https://github.com/cucumber](https://github.com/cucumber)
+* [Rspec Home - http://rspec.info](http://rspec.info)
+* [Capybara Home - https://github.com/jnicklas/capybara](https://github.com/jnicklas/capybara)
+* [Jasmine - *http://pivotal.github.io/jasmine*](http://pivotal.github.io/jasmine)
 * [jasmine-headless-webkit gem - *http://johnbintz.github.io/jasmine-headless-webkit*]
   (http://johnbintz.github.io/jasmine-headless-webkit)
 * [Why wait_until was removed from Capybara - *http://www.elabs.se/blog/53-why-wait_until-was-removed-from-capybara*]
 (http://www.elabs.se/blog/53-why-wait_until-was-removed-from-capybara)
-* [Ruby Bindings for Selenium - *http://code.google.com/p/selenium/wiki/RubyBindings*] (http://code.google.com/p/selenium/wiki/RubyBindings)
+* [Ruby Bindings for Selenium - *http://code.google.com/p/selenium/wiki/RubyBindings*](http://code.google.com/p/selenium/wiki/RubyBindings)
 * [rspec-rails and capybara 2.0: what you need to know - http://alindeman.github.io/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html]
 (http://alindeman.github.io/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html)
-* [Top 10 Sites Built with Ruby on Rails - http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails] (http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails)
+* [Top 10 Sites Built with Ruby on Rails - http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails](http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails)
 
 
-!SLIDE content transition=cover
+%!SLIDE content transition=cover
 
 >
 
