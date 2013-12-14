@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Using thor as rake replacement</h1>
+
+<p><a href="thor">Thor</a> is a ruby library for building powerful command-line interfaces. It also can be
+used for writing build scripts similar to <a href="rake">rake</a> scripts. Because thor tasks are implemented
+as classes, it is possible to <strong>reuse</strong> them in <strong>more object-oriented way</strong>.</p>
+
+<p>We want to keep different thor tasks in separate files and even in separate <strong>thor</strong> folder. To do
+it we need to put this code into <strong>Thorfile</strong> within your project:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code"><span class="c1"># Thorfile</span>
+
+<span class="c1"># load thor files</span>
+<span class="no">Dir</span><span class="nf">.glob</span><span class="p">(</span><span class="s2">&quot;thor/**/*.thor&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span>
+  <span class="no">Thor</span><span class="o">::</span><span class="no">Util</span><span class="nf">.load_thorfile</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
+<p>If you want to debug thor script, add this code to the beginning of <em>Thorfile</em>:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div></td><td class="code"><span class="c1"># Thorfile</span>
+
+<span class="k">unless</span> <span class="n">defined?</span> <span class="no">Thor</span><span class="o">::</span><span class="no">Runner</span>
+  <span class="nb">require</span> <span class="s1">'bundler'</span>
+
+  <span class="n">gems</span> <span class="o">=</span> <span class="no">Bundler</span><span class="o">::</span><span class="no">Definition</span><span class="nf">.build</span><span class="p">(</span><span class="no">Bundler</span><span class="nf">.default_gemfile</span><span class="p">,</span> <span class="no">Bundler</span><span class="nf">.default_lockfile</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span><span class="nf">.requested_specs</span>
+
+  <span class="n">gem</span> <span class="o">=</span> <span class="n">gems</span><span class="nf">.find</span> <span class="p">{</span> <span class="o">|</span><span class="n">gem</span><span class="o">|</span> <span class="n">gem</span><span class="nf">.name</span> <span class="o">==</span> <span class="s1">'thor'</span><span class="p">}</span>
+
+  <span class="nb">load</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">'GEM_HOME'</span><span class="o">]</span><span class="si">}</span><span class="s2">/gems/</span><span class="si">#{</span><span class="n">gem</span><span class="nf">.name</span><span class="si">}</span><span class="s2">-</span><span class="si">#{</span><span class="n">gem</span><span class="nf">.version</span><span class="si">}</span><span class="s2">/bin/thor&quot;</span>
+<span class="k">end</span>
+
+<span class="c1"># load thor files</span>
+<span class="nf">..</span><span class="o">.</span>
+</td></tr></tbody></table></pre>
+<p>This code will try to load thor command as if it was started from command line. This lets us
+to run <strong>Thorfile</strong> as a regular ruby file:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">ruby Thorfile
+</td></tr></tbody></table></pre>
+<p>As a result, all debugging abilities are available:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">rdebug-ide --host 0.0.0.0 --port 1234 -- Thorfile
+</td></tr></tbody></table></pre>
+<p>Now let&rsquo;s build something useful for your current project. We want to automate some
+routine day-to-day tasks, like restarting postgres, initialize database, check status
+of jenkins CI server etc.:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div><div class="lineno">31</div><div class="lineno">32</div><div class="lineno">33</div><div class="lineno">34</div><div class="lineno">35</div><div class="lineno">36</div><div class="lineno">37</div><div class="lineno">38</div><div class="lineno">39</div><div class="lineno">40</div><div class="lineno">41</div><div class="lineno">42</div><div class="lineno">43</div><div class="lineno">44</div><div class="lineno">45</div><div class="lineno">46</div><div class="lineno">47</div><div class="lineno">48</div><div class="lineno">49</div><div class="lineno">50</div><div class="lineno">51</div><div class="lineno">52</div><div class="lineno">53</div><div class="lineno">54</div><div class="lineno">55</div><div class="lineno">56</div><div class="lineno">57</div><div class="lineno">58</div><div class="lineno">59</div><div class="lineno">60</div><div class="lineno">61</div><div class="lineno">62</div><div class="lineno">63</div><div class="lineno">64</div><div class="lineno">65</div><div class="lineno">66</div><div class="lineno">67</div><div class="lineno">68</div><div class="lineno">69</div><div class="lineno">70</div></td><td class="code"><span class="k">class </span><span class="nc">Utils</span> <span class="o">&lt;</span> <span class="no">Thor</span>
+  <span class="n">desc</span> <span class="s2">&quot;pg_restart&quot;</span><span class="p">,</span> <span class="s2">&quot;Restarts Postgres server&quot;</span>
+  <span class="k">def </span><span class="nf">pg_restart</span>
+
+    <span class="nb">exec</span> <span class="sx">%Q(
+        launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+        launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+      )</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="n">desc</span> <span class="s2">&quot;create_tables&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;Creates user and all required DB tables&quot;</span>
+  <span class="k">def </span><span class="nf">create_tables</span>
+    <span class="nb">exec</span> <span class="sx">%Q(
+      createuser -s -d -r rails_user
+
+      createdb -U rails_user rails_test
+      createdb -U rails_user rails_dev
+    )</span>
+  <span class="k">end</span>
+
+  <span class="n">desc</span> <span class="s2">&quot;drop_tables&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;Removes all required DB tables and user&quot;</span>
+  <span class="k">def </span><span class="nf">drop_tables</span>
+    <span class="nb">exec</span> <span class="sx">%Q(
+      dropdb rails_test
+      dropdb rails_dev
+
+      dropuser rails_user
+    )</span>
+  <span class="k">end</span>
+
+  <span class="n">desc</span> <span class="s2">&quot;show_jenkins&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;Displays projects on particular jenkins server&quot;</span>
+  <span class="k">def </span><span class="nf">show</span> <span class="n">jenkins_url</span>
+    <span class="nb">require</span> <span class="s1">'json'</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="n">get_request</span><span class="p">(</span><span class="n">jenkins_url</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="nf">.request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="n">json</span> <span class="o">=</span> <span class="no">JSON</span><span class="nf">.parse</span><span class="p">(</span><span class="n">response</span><span class="nf">.body</span><span class="p">)</span>
+
+    <span class="n">jobs</span> <span class="o">=</span> <span class="n">json</span><span class="o">[</span><span class="s1">'jobs'</span><span class="o">]</span>
+
+    <span class="n">jobs</span><span class="nf">.each</span> <span class="k">do</span> <span class="o">|</span><span class="n">job</span><span class="o">|</span>
+      <span class="n">status</span> <span class="o">=</span> <span class="k">case</span> <span class="n">job</span><span class="o">[</span><span class="s1">'color'</span><span class="o">]</span>
+        <span class="k">when</span> <span class="sr">/blue/i</span> <span class="k">then</span>
+          <span class="s2">&quot;success&quot;</span>
+        <span class="k">when</span> <span class="sr">/red/i</span> <span class="k">then</span>
+          <span class="s2">&quot;failure&quot;</span>
+        <span class="k">else</span>
+          <span class="s2">&quot;failure&quot;</span>
+      <span class="k">end</span>
+
+      <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">job</span><span class="o">[</span><span class="s1">'name'</span><span class="o">]</span><span class="si">}</span><span class="s2"> -- </span><span class="si">#{</span><span class="n">status</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="k">end</span>
+
+    <span class="nb">puts</span> <span class="s2">&quot;Total: </span><span class="si">#{</span><span class="n">jobs</span><span class="nf">.size</span><span class="si">}</span><span class="s2"> jobs.&quot;</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def </span><span class="nf">get_request</span> <span class="n">url</span>
+    <span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="nf">.parse</span><span class="p">(</span><span class="no">URI</span><span class="nf">.escape</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+    <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="nf">.new</span><span class="p">(</span><span class="n">uri</span><span class="nf">.host</span><span class="p">,</span> <span class="n">uri</span><span class="nf">.port</span><span class="p">)</span>
+
+    <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="nf">.new</span><span class="p">(</span><span class="n">uri</span><span class="nf">.request_uri</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
+<p>Now you can run these commands:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code">thor -T
+
+thor utils:pg_restart
+thor utils:create_tables
+thor utils:drop_tables
+thor utils:show_jenkins jenkins_server.your_domain.com
+</td></tr></tbody></table></pre>
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2013.html">2013</a>
+(14)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(11)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/lunchy.html">lunchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rvm.html">rvm</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capybara.html">capybara</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/selenium.html">selenium</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webkit.html">webkit</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/phantomjs.html">phantomjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/qt.html">qt</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/acceptance-tests.html">acceptance tests</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/simplecov.html">simplecov</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/ci.html">CI</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jar.html">jar</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rake.html">rake</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/thor.html">thor</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>
