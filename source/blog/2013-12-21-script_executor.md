@@ -1,14 +1,14 @@
 ---
-title: "ScriptExecutor: Ruby library for executing shell scripts locally or on remote server"
+title: "ScriptExecutor: Ruby library for executing shell scripts, locally or on remote server"
 date: 2013-12-21
 tags: ruby, capistrano, chef
 ---
 
-# ScriptExecutor: Ruby library for executing shell scripts locally or on remote server
+# ScriptExecutor: Ruby library for executing shell scripts, locally or on remote server
 
 ## Introduction
 
-There are few libraries for automating deployment tasks:
+There are few libraries for automating deployment tasks in **remote** environment:
 
 * [Capistrano](capistrano)
 * [Chef](chef)
@@ -17,41 +17,70 @@ There are few libraries for automating deployment tasks:
 
 All of them tend to be too complicated, especially for relatively simple tasks. For example:
 
-* capistrano is tailored for same set of commands for group of servers. If you want
+* capistrano is tailored for same set of commands executed over group of servers. If you want
 to create small script for executing code on unique server, you have to "respect"
-capistrano restrictions, e.g. create "Capfile", "config/deploy.rb" etc.
+capistrano restrictions, e.g. create **Capfile**, **config/deploy.rb** etc.
 
 * Chef is implemented as huge framework with servers and clients and only "chef-solo" is
-relevant for our goal.
+relevant to our conversation.
 
-* Most of them are rake-centric, so it's difficult to reuse developed code in other
+* Most of these libraries are rake-centric, so it's difficult to reuse developed code in other
 applications.
 
-In most cases deployment task can be done over ssh protocol. You can use 'net-ssh' gem
-for it - it's pure Ruby implementation of an SSH (protocol 2) client.
+In most cases, deployment task can be done over **ssh protocol**. You can use [net-ssh](net-ssh) gem
+as implementation - it's pure Ruby implementation of a SSH (protocol 2) client.
 
-When you execute shell script locally, you have plenty of ways to do it in ruby:
+When you execute shell script **locally**, you have plenty of ways to do it with ruby:
 
-1. %x{ }
+1. **%x** expression:
 
-2. `` - backticks
+```ruby
+%x{ pwd }
+```
 
-3. system ""
+2. backticks:
 
-4. exec ""
+```ruby
+`pwd`
+```
 
-5. spawn ""
+3. **system** command:
 
-6. IO.popen
+```ruby
+ system "pwd"
+```
 
-7. Open3
+4. **exec** command:
 
+```ruby
+exec "pwd"
+```
 
-"Open3 grants you access to stdin, stdout, stderr and a thread to wait the child process when running another program. You can specify various attributes, redirections, current directory, etc., of the program as Process.spawn." Quoted from the docs
-Use open3 when you have to explicitly manage all input, output, and errors.
+5. **spawn** command:
 
+```ruby
+spawn "pwd"
+```
 
-With this gem we want to build common interface for executing whether local or remote code.
+6. **popen** command:
+
+```ruby
+IO.popen "pwd"
+```
+
+7. using **open3** library:
+
+```ruby
+require "open3"
+
+Open3.popen3('pwd') { |stdin, stdout, stderr| ... }
+
+stdout, stderr, status = Open3.capture3('pwd',
+  :stdin_data => stdin) # another example
+```
+
+With [script_executor](script_executor) gem we are trying to build common interface for executing
+both local and remote code in unified way.
 
 
 ## Installation
@@ -75,8 +104,9 @@ gem install script_executor
 
 ## Usage
 
+* Create executor
+
 ```ruby
-# Create executor
 executor = ScriptExecutor.new
 ```
 
@@ -102,7 +132,8 @@ executor.execute server_info.merge(:script => "ls -al")
 * Execute remote command as 'sudo':
 
 ```ruby
-executor.execute server_info.merge({:sudo => true, :script => "/etc/init.d/tomcat stop"})
+executor.execute server_info.merge({:sudo => true,
+  :script => "/etc/init.d/tomcat stop"})
 ```
 
 * Execute remote command with code block:
@@ -116,12 +147,14 @@ executor.execute server_info.merge(:sudo => true) do
 end
 ```
 
-* Execute remote command while capturing and suppressing output (default is 'false'):
+* Execute remote command while capturing and suppressing output (default is 'false' for both):
 
 ```ruby
-server_info.merge(:capture_output => true, :suppress_output => true)
+server_info.merge(:capture_output => true,
+                  :suppress_output => true)
 
-result = executor.execute server_info.merge(:script => "whoami")
+result = executor.execute server_info.merge(
+  :script => "whoami")
 
 puts result # ENV['USER']
 ```
@@ -136,13 +169,13 @@ executor.execute server_info.merge(:script => "whoami") # generate commands with
 
 ## Using ScriptLocator
 
-You can keep scripts that needs to be executed embedded into your code (as in examples above),
-move them into separate file or keep them in same file behind "__END__" Ruby directive.
-The latter gives you the ability to keep command and code together thus simplifying
-access to code.
+You can keep scripts that need to be executed, embedded into your code (as in examples above),
+move them into separate file or keep them in same file behind **\_\_END\_\_** Ruby directive.
+The latter gives you the ability to keep commands and code together thus simplifying
+access to the code, making maintenance easier.
 
 For example, if you want to create script with 2 commands (command1, command2), you can use
-"scripts" and "evaluate_script_body" methods:
+**scripts** and **evaluate\_script\_body** methods:
 
 ```ruby
 require 'script_locator'
@@ -167,7 +200,9 @@ echo "<%= name %>"
 echo "test2"
 ```
 
-Example:
+Let's build more sophisticated example. We want to automate generating public/private
+keys for ssh access and copying public key to remote server for password-less access
+to the server.
 
 ```ruby
 require "highline/import"
@@ -187,14 +222,12 @@ class Ssh < Thor
 
   desc "cp_key", "cp_key"
   def cp_key(host)
-    ENV['USER'] = "ashvets"
-
     scripts = scripts(__FILE__)
 
-    execute { evaluate_script_body(scripts['cp_key1'], binding) }
+    execute { evaluate_script_body(scripts['scp_public_key'], binding) }
 
     execute(:remote => true, :domain => host, :user => ENV['USER']) do
-      evaluate_script_body(scripts['cp_key2'], binding)
+      evaluate_script_body(scripts['install_key'], binding)
     end
   end
 end
@@ -208,23 +241,35 @@ echo "Generating ssh key..."
 cd ~/.ssh
 ssh-keygen
 
-[cp_key1]
+[scp_public_key]
 
 echo "Copying public key to remote server..."
 
 scp ~/.ssh/id_rsa.pub <%= ENV['USER'] %>@<%= host %>:~/pubkey.txt
 
-[cp_key2]
+[install_key]
 
 mkdir -p ~/.ssh
 chmod 700 .ssh
 cat pubkey.txt >> ~/.ssh/authorized_keys
 rm ~/pubkey.txt
 chmod 600 ~/.ssh/*
+```
 
+This example has 3 scripts: **gen\_key**, **scp\_public\_key** and **install\_key**. They are self-explanatory.
+Also, pay attention at using **Executable** module. It is used when we want to add ScriptExecutor functionality
+as part of class.
+
+In order to execute new commands you have to use **thor** tool:
+
+```bash
+thor ssh:gen_key
+thor ssh:cp_key your.remote.server.com
 ```
 
 [capistrano]: https://github.com/capistrano/capistrano
 [chef]: https://github.com/opscode/chef
 [mina]: https://github.com/nadarei/mina
 [vlad]: https://github.com/seattlerb/vlad
+[net-ssh]: https://github.com/net-ssh/net-ssh
+[script_executor]: https://github.com/shvets/script_executor

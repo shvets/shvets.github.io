@@ -1,6 +1,6 @@
 ---
 title: Provisioning for Macbook
-date: 2015-01-01
+date: 2013-12-28
 tags: ruby, thor, script_executor
 ---
 

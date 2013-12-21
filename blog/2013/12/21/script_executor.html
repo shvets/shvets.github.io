@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>ScriptExecutor: Ruby library for executing shell scripts, locally or on remote server</h1>
+
+<h2>Introduction</h2>
+
+<p>There are few libraries for automating deployment tasks in <strong>remote</strong> environment:</p>
+
+<ul>
+<li><a href="capistrano">Capistrano</a></li>
+<li><a href="chef">Chef</a></li>
+<li><a href="mina">Mina</a></li>
+<li><a href="vlad">Vlad</a></li>
+</ul>
+
+<p>All of them tend to be too complicated, especially for relatively simple tasks. For example:</p>
+
+<ul>
+<li><p>capistrano is tailored for same set of commands executed over group of servers. If you want
+to create small script for executing code on unique server, you have to &ldquo;respect&rdquo;
+capistrano restrictions, e.g. create <strong>Capfile</strong>, <strong>config/deploy.rb</strong> etc.</p></li>
+<li><p>Chef is implemented as huge framework with servers and clients and only &ldquo;chef-solo&rdquo; is
+relevant to our conversation.</p></li>
+<li><p>Most of these libraries are rake-centric, so it&rsquo;s difficult to reuse developed code in other
+applications.</p></li>
+</ul>
+
+<p>In most cases, deployment task can be done over <strong>ssh protocol</strong>. You can use <a href="net-ssh">net-ssh</a> gem
+as implementation - it&rsquo;s pure Ruby implementation of a SSH (protocol 2) client.</p>
+
+<p>When you execute shell script <strong>locally</strong>, you have plenty of ways to do it with ruby:</p>
+
+<ol>
+<li><strong>%x</strong> expression:</li>
+</ol>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="sx">%x{ pwd }</span>
+</td></tr></tbody></table></pre>
+<ol>
+<li>backticks:</li>
+</ol>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="sb">`pwd`</span>
+</td></tr></tbody></table></pre>
+<ol>
+<li><strong>system</strong> command:</li>
+</ol>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"> <span class="nb">system</span> <span class="s2">&quot;pwd&quot;</span>
+</td></tr></tbody></table></pre>
+<ol>
+<li><strong>exec</strong> command:</li>
+</ol>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="nb">exec</span> <span class="s2">&quot;pwd&quot;</span>
+</td></tr></tbody></table></pre>
+<ol>
+<li><strong>spawn</strong> command:</li>
+</ol>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">spawn</span> <span class="s2">&quot;pwd&quot;</span>
+</td></tr></tbody></table></pre>
+<ol>
+<li><strong>popen</strong> command:</li>
+</ol>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="no">IO</span><span class="nf">.popen</span> <span class="s2">&quot;pwd&quot;</span>
+</td></tr></tbody></table></pre>
+<ol>
+<li>using <strong>open3</strong> library:</li>
+</ol>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;open3&quot;</span>
+
+<span class="no">Open3</span><span class="nf">.popen3</span><span class="p">(</span><span class="s1">'pwd'</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">stdin</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="o">|</span> <span class="nf">..</span><span class="o">.</span> <span class="p">}</span>
+
+<span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="no">Open3</span><span class="nf">.capture3</span><span class="p">(</span><span class="s1">'pwd'</span><span class="p">,</span>
+  <span class="ss">:stdin_data</span> <span class="o">=&gt;</span> <span class="n">stdin</span><span class="p">)</span> <span class="c1"># another example</span>
+</td></tr></tbody></table></pre>
+<p>With <a href="script_executor">script_executor</a> gem we are trying to build common interface for executing
+both local and remote code in unified way.</p>
+
+<h2>Installation</h2>
+
+<p>Add this line to your application&rsquo;s Gemfile:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem <span class="s1">'script_executor'</span>
+</td></tr></tbody></table></pre>
+<p>And then execute:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bundle
+</td></tr></tbody></table></pre>
+<p>Or install it yourself as:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem install script_executor
+</td></tr></tbody></table></pre>
+<h2>Usage</h2>
+
+<ul>
+<li>Create executor</li>
+</ul>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">executor</span> <span class="o">=</span> <span class="no">ScriptExecutor</span><span class="nf">.new</span>
+</td></tr></tbody></table></pre>
+<ul>
+<li>Execute local command:</li>
+</ul>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">executor</span><span class="nf">.execute</span> <span class="s2">&quot;ls&quot;</span>
+</td></tr></tbody></table></pre>
+<ul>
+<li>Execute remote command:</li>
+</ul>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="n">server_info</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">:remote</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+  <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;some_host&quot;</span><span class="p">,</span>
+  <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="s2">&quot;some_user&quot;</span><span class="p">,</span>
+  <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="s2">&quot;some_password&quot;</span>
+<span class="p">}</span>
+
+<span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">&quot;ls -al&quot;</span><span class="p">)</span>
+</td></tr></tbody></table></pre>
+<ul>
+<li>Execute remote command as &lsquo;sudo&rsquo;:</li>
+</ul>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code"><span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">({</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+  <span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">&quot;/etc/init.d/tomcat stop&quot;</span><span class="p">})</span>
+</td></tr></tbody></table></pre>
+<ul>
+<li>Execute remote command with code block:</li>
+</ul>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code"><span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+  <span class="sx">%Q(
+    /etc/init.d/tomcat stop
+    /etc/init.d/tomcat start
+  )</span>
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
+<ul>
+<li>Execute remote command while capturing and suppressing output (default is &lsquo;false&rsquo; for both):</li>
+</ul>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:capture_output</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+                  <span class="ss">:suppress_output</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span>
+  <span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">&quot;whoami&quot;</span><span class="p">)</span>
+
+<span class="nb">puts</span> <span class="n">result</span> <span class="c1"># ENV['USER']</span>
+</td></tr></tbody></table></pre>
+<ul>
+<li>Simulate remote execution:</li>
+</ul>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:simulate</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+
+<span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">&quot;whoami&quot;</span><span class="p">)</span> <span class="c1"># generate commands without actual execution</span>
+</td></tr></tbody></table></pre>
+<h2>Using ScriptLocator</h2>
+
+<p>You can keep scripts that need to be executed, embedded into your code (as in examples above),
+move them into separate file or keep them in same file behind <strong>__END__</strong> Ruby directive.
+The latter gives you the ability to keep commands and code together thus simplifying
+access to the code, making maintenance easier.</p>
+
+<p>For example, if you want to create script with 2 commands (command1, command2), you can use
+<strong>scripts</strong> and <strong>evaluate_script_body</strong> methods:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div></td><td class="code"><span class="nb">require</span> <span class="s1">'script_locator'</span>
+
+<span class="kp">include</span> <span class="no">ScriptLocator</span>
+
+<span class="nb">puts</span> <span class="n">scripts</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span> <span class="c1"># [command1, command2]</span>
+
+<span class="nb">name</span> <span class="o">=</span> <span class="s2">&quot;john&quot;</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">result</span><span class="o">[</span><span class="s1">'command1'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span>
+
+<span class="nb">puts</span> <span class="n">result</span> <span class="c1"># john</span>
+<span class="cp">__END__
+
+[command1]
+
+echo &quot;&lt;%= name %&gt;&quot;
+
+[command2]
+
+echo &quot;test2&quot;
+</span></td></tr></tbody></table></pre>
+<p>Let&rsquo;s build more sophisticated example. We want to automate generating public/private
+keys for ssh access and copying public key to remote server for password-less access
+to the server.</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div><div class="lineno">31</div><div class="lineno">32</div><div class="lineno">33</div><div class="lineno">34</div><div class="lineno">35</div><div class="lineno">36</div><div class="lineno">37</div><div class="lineno">38</div><div class="lineno">39</div><div class="lineno">40</div><div class="lineno">41</div><div class="lineno">42</div><div class="lineno">43</div><div class="lineno">44</div><div class="lineno">45</div><div class="lineno">46</div><div class="lineno">47</div><div class="lineno">48</div><div class="lineno">49</div><div class="lineno">50</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;highline/import&quot;</span>
+<span class="nb">require</span> <span class="s1">'script_executor/executable'</span>
+<span class="nb">require</span> <span class="s1">'script_executor/script_locator'</span>
+<span class="nb">require</span> <span class="s1">'file_utils/file_utils'</span>
+
+<span class="k">class </span><span class="nc">Ssh</span> <span class="o">&lt;</span> <span class="no">Thor</span>
+  <span class="kp">include</span> <span class="no">Executable</span><span class="p">,</span> <span class="no">ScriptLocator</span><span class="p">,</span> <span class="no">FileUtils</span>
+
+  <span class="n">desc</span> <span class="s2">&quot;gen_key&quot;</span><span class="p">,</span> <span class="s2">&quot;gen_key&quot;</span>
+  <span class="k">def </span><span class="nf">gen_key</span>
+    <span class="n">scripts</span> <span class="o">=</span> <span class="n">scripts</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span>
+
+    <span class="n">execute</span> <span class="p">{</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="o">[</span><span class="s1">'gen_key'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span> <span class="p">}</span>
+  <span class="k">end</span>
+
+  <span class="n">desc</span> <span class="s2">&quot;cp_key&quot;</span><span class="p">,</span> <span class="s2">&quot;cp_key&quot;</span>
+  <span class="k">def </span><span class="nf">cp_key</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+    <span class="n">scripts</span> <span class="o">=</span> <span class="n">scripts</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span>
+
+    <span class="n">execute</span> <span class="p">{</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="o">[</span><span class="s1">'scp_public_key'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span> <span class="p">}</span>
+
+    <span class="n">execute</span><span class="p">(</span><span class="ss">:remote</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="n">host</span><span class="p">,</span> <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'USER'</span><span class="o">]</span><span class="p">)</span> <span class="k">do</span>
+      <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="o">[</span><span class="s1">'install_key'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="cp">__END__
+
+[gen_key]
+
+echo &quot;Generating ssh key...&quot;
+
+cd ~/.ssh
+ssh-keygen
+
+[scp_public_key]
+
+echo &quot;Copying public key to remote server...&quot;
+
+scp ~/.ssh/id_rsa.pub &lt;%= ENV['USER'] %&gt;@&lt;%= host %&gt;:~/pubkey.txt
+
+[install_key]
+
+mkdir -p ~/.ssh
+chmod 700 .ssh
+cat pubkey.txt &gt;&gt; ~/.ssh/authorized_keys
+rm ~/pubkey.txt
+chmod 600 ~/.ssh/*
+</span></td></tr></tbody></table></pre>
+<p>This example has 3 scripts: <strong>gen_key</strong>, <strong>scp_public_key</strong> and <strong>install_key</strong>. They are self-explanatory.
+Also, pay attention at using <strong>Executable</strong> module. It is used when we want to add ScriptExecutor functionality
+as part of class.</p>
+
+<p>In order to execute new commands you have to use <strong>thor</strong> tool:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code">thor ssh:gen_key
+thor ssh:cp_key your.remote.server.com
+</td></tr></tbody></table></pre>
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2013.html">2013</a>
+(15)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(12)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/lunchy.html">lunchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rvm.html">rvm</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capybara.html">capybara</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/selenium.html">selenium</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webkit.html">webkit</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/phantomjs.html">phantomjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/qt.html">qt</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/acceptance-tests.html">acceptance tests</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/simplecov.html">simplecov</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/ci.html">CI</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jar.html">jar</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rake.html">rake</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/thor.html">thor</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capistrano.html">capistrano</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/chef.html">chef</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>
