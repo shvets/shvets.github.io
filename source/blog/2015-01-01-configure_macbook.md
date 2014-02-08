@@ -52,6 +52,16 @@ brew install qt
 
 Qt is required by capybara acceptance tests.
 
+# Install Sublime 3 Text Editor
+
+Download it from http://www.sublimetext.com.
+
+Create link:
+
+```bash
+ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl $USER/Dropbox/bin/subl
+```
+
 # Install RVM:
 
 ```bash
@@ -134,7 +144,7 @@ Initialize database:
 initdb /usr/local/var/postgres -E utf8
 ```
 
-Fix Mountain Lion related issue:
+Fix Mountain Lion related issue:ifconfig
 
 ```bash
 sudo mkdir /var/pgsql_socket

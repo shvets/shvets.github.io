@@ -205,7 +205,6 @@ keys for ssh access and copying public key to remote server for password-less ac
 to the server.
 
 ```ruby
-require "highline/import"
 require 'script_executor/executable'
 require 'script_executor/script_locator'
 require 'file_utils/file_utils'
@@ -265,6 +264,14 @@ In order to execute new commands you have to use **thor** tool:
 ```bash
 thor ssh:gen_key
 thor ssh:cp_key your.remote.server.com
+```
+
+You can achieve same goal with homebrew tool:
+
+```bash
+brew install ssh-copy-id
+
+ssh-copy-id $USER@your.remote.server.com
 ```
 
 [capistrano]: https://github.com/capistrano/capistrano

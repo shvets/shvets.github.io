@@ -7,6 +7,6 @@ tags: ruby, java, CI
 # Jenkins tricks
 
 
- 	Jenkins TextFinder plugin
+Jenkins TextFinder plugin
 
- 	HTML Publisher Plugin
+HTML Publisher Plugin
