@@ -53,6 +53,17 @@ for supporting projects in other languages, such as Java.
 
 * Hosting services (PaaS), such as **Heroku**, **EngineYard**, **GoogleApps**, **Shelly Cloud** support it.
 
+
+
+%!SLIDE title-and-content transition=cover incremental
+
+# Why tests?
+
+* to have an automated way to check if code is doing what it supposed to do (verify its correctness).
+* to have an example of how to use code. You have to follow some formatting rules [here][xunit_structure].
+
+
+
 %!SLIDE title-and-content transition=cover incremental
 
 # How can we classify tests?
@@ -1219,7 +1230,8 @@ PASS: 11 tests, 0 failures, 0.018 secs.
 * [rspec-rails and capybara 2.0: what you need to know - http://alindeman.github.io/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html]
 (http://alindeman.github.io/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html)
 * [Top 10 Sites Built with Ruby on Rails - http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails](http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails)
-
+* [40 Sites Built with Ruby on Rails - http://designwebkit.com/inspiration/40-websites-built-with-ruby-on-rails/](http://designwebkit.com/inspiration/40-websites-built-with-ruby-on-rails/)
+* [Improve your test readability using the xUnit structure - http://blog.plataformatec.com.br/2014/04/improve-your-test-readability-using-the-xunit-structure][xunit_structure]
 
 %!SLIDE content transition=cover
 
@@ -1233,6 +1245,9 @@ PASS: 11 tests, 0 failures, 0.018 secs.
 
 # Questions?
 # Suggestions?
+
+
+[xunit_structure]: http://blog.plataformatec.com.br/2014/04/improve-your-test-readability-using-the-xunit-structure
 
 
 

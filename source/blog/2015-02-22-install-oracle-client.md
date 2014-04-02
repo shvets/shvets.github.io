@@ -1,3 +1,11 @@
+---
+title: Provisioning for Macbook
+date: 2015-02-22
+tags: ruby, thor, script_executor
+---
+
+# Install Oracle Client
+
 1. Download Client Basic and SDK for Linux 32 bits (http://www.oracle.com/technetwork/topics/linuxsoft-082809.html).
 
 basic-10.2.0.5.0-linux.zip

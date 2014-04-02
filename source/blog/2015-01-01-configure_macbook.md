@@ -1,5 +1,5 @@
 ---
-title: Configure Macbook
+title: Configure Macbook for Ruby/Rails Development
 date: 2015-01-01
 tags: ruby, osx, mavericks
 ---
@@ -8,25 +8,23 @@ tags: ruby, osx, mavericks
 
 * Iterm2
 * Firefox
-* Sublime2
 * DropBox
 * Skype
 * RubyMine
 * Moroshka File Manager
 * MU Commander
-* ForkLift
 * VLC
 
 # Install appropriate XCode and Command Line Tools for XCode
 
+Install XCode from AppStore. Install Command Line Tools.
+
 Read and agree to Xcode license:
 
 ```bash
-xcodebuild -license
+sudo xcodebuild -license
 ```
 # Install Homebrew
-
-See this [article] (http://dhruba.name/2012/07/29/installing-g-and-gcc-on-mac-os-x-10-8-command-line) for details.
 
 ```bash
 ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
@@ -36,37 +34,53 @@ brew tap homebrew/dupes
 brew tap --repair homebrew/dupes
 brew tap homebrew/versions
 
-brew install autoconf automake apple-gcc42
-
 brew doctor
 ```
 
 # Install command line tools
 
+Install base tools:
+
 ```bash
 brew install wget
 brew install mc
 brew install git
+```
+
+'Qt' package is required by Capybara acceptance tests.
+
+```bash
 brew install qt
 ```
 
-Qt is required by capybara acceptance tests.
+'Node' is used for jasmine javascript unit test and other javascript management.
+It will install **node package manager** (npm) as well:
+
+```bash
+brew install node
+```
+
+Test it:
+
+```bash
+node -v
+npm -v
+```
 
 # Install Sublime 3 Text Editor
 
 Download it from http://www.sublimetext.com.
 
-Create link:
+Create convenient link:
 
 ```bash
-ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl $USER/Dropbox/bin/subl
+ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl $HOME/Dropbox/bin/subl
 ```
 
 # Install RVM:
 
 ```bash
-\curl -L https://get.rvm.io | bash -s
-\curl -L https://get.rvm.io | bash -s -- --autolibs=enable
+\curl -sSL https://get.rvm.io | bash
 ```
 
 Then run this command:
@@ -77,12 +91,6 @@ source ~/.rvm/scripts/rvm
 
 or reopen another Terminal.
 
-Enable autolibs option. It will automatically install missing packages, like libyaml, libxml2, libxslt, openssl, sqlite:
-
-```bash
-rvm autolibs enable
-rvm autolibs homebrew
-```
 
 Install required packages:
 
@@ -99,34 +107,27 @@ rvm install 1.9.3
 
 ```
 
-Add to ~/.bash_profile:
-
-```bash
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
-
-rvm use 1.8.7
-ruby -v
-```
-
 Install jruby:
 
 ```bash
 rvm install jruby
 ```
 
-Install Ruby 1.8.7 (32 bit):
+# Update .bash_profile
+
+Add to ~/.bash_profile the following lines:
+
 
 ```bash
-rvm install ruby-1.8.7-p371 -n i386 --with-arch=i386 --enable-shared --without-tk --without-tcl
-``
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/opt/local/bin:$PATH
 
-Note: i386 arch is important if you plan to use Oracle Instant Client on Mountain Lion.
+export EDITOR='subl -w'
+export PS1='${LOGNAME}@$(hostname): [$(~/.rvm/bin/rvm-prompt)] (\w):\n> '
 
-Install Ruby 1.8.7 (64 bit):
+[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
 
-```bash
-rvm install ruby-1.8.7-p371 --enable-shared --without-tk --without-tcl
+rvm use 1.9.3
+ruby -v
 ```
 
 # Install postgres server:
@@ -144,17 +145,17 @@ Initialize database:
 initdb /usr/local/var/postgres -E utf8
 ```
 
-Fix Mountain Lion related issue:ifconfig
+Fix Mountain Lion related issue:
 
 ```bash
 sudo mkdir /var/pgsql_socket
 sudo chown $USER /var/pgsql_socket
 ```bash
 
-Open 'subl /usr/local/var/postgres/postgresql.conf' in a text editor, and uncomment + edit the unix_socket_directory key to:
+Open 'subl /usr/local/var/postgres/postgresql.conf' in a text editor, and uncomment + edit the unix_socket_directories key to:
 
 ```
-unix_socket_directory = '/var/pgsql_socket'
+unix_socket_directories = '/var/pgsql_socket'
 ``
 
 ```bash
@@ -162,26 +163,10 @@ export PGHOST=/var/pgsql_socket
 
 mkdir -p ~/Library/LaunchAgents
 sudo chown $USER ~/Library/LaunchAgents
-cp /usr/local/Cellar/postgresql/9.2.4/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
+cp /usr/local/Cellar/postgresql/9.3.3/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
 
 launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-```
-
-You can now start the database server   manually using:
-
-```bash
-    postgres -D /usr/local/var/postgres
-```
-or
-
-```bash
-    pg_ctl -D /usr/local/var/postgres -l logfile start
-```
-And stop with:
-
-```bash
-    pg_ctl -D /usr/local/var/postgres stop -s -m fast
 ```
 
 Create users and databases, e.g.:
@@ -193,6 +178,15 @@ Create users and databases, e.g.:
     createdb -U rails_app_tmpl rails_app_tmpl_prod
 
 rake db:migrate
+```
+
+or with psql
+
+```bash
+psql -c 'create user rails_app_tmp;' -s -d -r
+
+psql -c 'create database rails_app_tmpl_dev;' -U rails_app_tmpl -h 127.0.0.1
+psql -c 'create database rails_app_tmpl_test;' -U rails_app_tmpl -h 127.0.0.1
 ```
 
 # Install mysql server:
@@ -215,21 +209,6 @@ or
     lunchy start mysql
 ```
 
-Or you can start the MySQL daemon manually with:
-
-```bash
-cd /usr/local/Cellar/mysql/$MYSQL_VERSION ; /usr/local/Cellar/mysql/$MYSQL_VERSION/bin/mysqld_safe &
-```
-
-Configure Mysql (32 bit):
-
-Download installation from here: http://dev.mysql.com/downloads/mysql.
-
-Look for something like mysql-5.6.10-osx10.6-x86.dmg.
-
-Install it. In System Preferences | MySQL start the server. Check the flag to start MySQL on restart.
-
-
 Set up mysql root password:
 
 ```bash
@@ -251,7 +230,7 @@ Run mysql script:
        exit;
 ```bash
 
-or
+or with mysql:
 
 ```bash
 mysql -h localhost -u root -p"root" -e "flush  priveleges;"
@@ -264,44 +243,40 @@ mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_test;"
 mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_prod;"
 ```
 
-# Install oracle server (out of scope)
 
-Note: The JDBC driver jar file is expected to be placed in %JBOSS_HOME%/server/< serverName>/lib folder. It won't be
-used from the WEB-INF/lib folder
-
-
-# Install app on heroku:
+# Install selenium standalone server
 
 ```bash
-> heroku create rails-app-tmpl -s cedar
-# --buildpack https://github.com/carlhoerberg/heroku-buildpack-jruby.git
-> git push heroku master
-> heroku run rake db:migrate
-> heroku open
-> heroku destroy rails-app-tmpl --confirm rails-app-tmpl
+brew install selenium-server-standalone
 ```
 
+Standalone selenium server is implemented as launchd agent.
+
+To have launchd start selenium-server-standalone at login, create soft link:
+
+```bash
+ln -sfv /usr/local/opt/selenium-server-standalone/*.plist ~/Library/LaunchAgents
+```
+
+Then load selenium-server-standalone agent:
+
+```bash
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
+```
+
+It will run selenium server on port 4444.
+
+If you don't want to use agent, use java directly:
+
+```bash
+java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
 
 
+# Create or load your project
 
-git clone https://github.com/cldwalker/debugger-ruby_core_source.git
-cp -R debugger-ruby_core_source ~/.rvm/gems/ruby-1.9.3-p448@n1/gems/debugger-ruby_core_source-1.2.3
-
-cp -R ~/Dropbox/Alex/work/projects/debugger-ruby_core_source ~/.rvm/gems/ruby-1.9.3-p448@n1/gems/debugger-ruby_core_source-1.2.3
-
-
-brew link libpng
-brew install libxml2 libxslt
-brew unlink libxml2
-brew unlink libxslt
-
-
-rvm install ruby-1.9.3-p392 -n i386 --with-arch=i386 --with-gcc=clang
-
-rvm reinstall 1.9.3 --with-gcc=clang
-
-The provided compiler '/usr/bin/gcc' is LLVM based, it is not yet fully supported by ruby and gems,
-please read `rvm requirements`.
+```bash
+npm install
+```
 
 [Install Ruby on Rails · Mac OS X Mavericks]: http://railsapps.github.io/installrubyonrails-mac.html
 [Setting up a Ruby on Rails development environment on Mavericks]: http://dean.io/setting-up-a-ruby-on-rails-development-environment-on-mavericks/

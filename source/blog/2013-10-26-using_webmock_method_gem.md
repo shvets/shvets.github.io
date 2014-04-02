@@ -85,10 +85,11 @@ end
 * **url** to remote service (optional).
 
 You can build responses of arbitrary complexity with your own code or you can use **RenderHelper**, that comes with this
-gem. Currently it supports **erb** renderer only. Here is example of how to build xml response:
+gem. Currently it supports **erb** and **haml** renderers only. Here is example of how to build xml response:
 
 ```ruby
-  webmock_method :purchase, [:amount, :credit_card], lambda { |binding|
+  webmock_method :purchase, [:amount, :credit_card],
+    lambda { |binding|
       RenderHelper.render :erb, "#{File.dirname(__FILE__)}/templates/purchase_response.xml.erb", binding
     }
 ```
@@ -144,12 +145,45 @@ describe OpenWeatherMapService do
 end
 ```
 
+If you need to simulate exception raised inside the mocked method, do the following:
+
+```ruby
+  webmock_method :purchase, [:amount, :credit_card],
+                 lambda { |binding|
+                    # prepare response
+                    ...
+                  } do |parent, amount, credit_card|
+    define_attribute(parent, :error, create_error(parent, "Negative amount")) if amount < 0
+
+    ...
+  end
+
+  def self.create_error parent, reason
+    define_attribute(parent, :error, Exception.new(reason))
+  end
+
+end
+```
+
+**webmock** gem code is aware of **error** variable and will throw this exception, so yo can verify it inside
+your test:
+
+```ruby
+  it "returns error response if amount is negative" do
+    expect{subject.purchase(-1000, valid_credit_card)}.to raise_exception(Exception)
+  end
+```
+
 There is another article on same topic from [thoughtbot] [thoughtbot blog] blog. It's written
 by Harlow Ward and describes how to [create stubbed external services] [How To Stub External Services In Tests]
 by using fakeweb, vcr and sinatra.
+
+One more project, intereestion in my opinion, is [mock 5 gem] [mock5]. It lets you to mock external APIs with
+simple Sinatra Rack app.
 
 
 [webmock gem home]: https://github.com/bblimke/webmock
 [webmock_method gem home]: https://github.com/shvets/webmock_method
 [How To Stub External Services In Tests]: http://robots.thoughtbot.com/post/64474832169/how-to-stub-external-services-in-tests
 [thoughtbot blog]: http://robots.thoughtbot.com
+[mock5]: https://github.com/rwz/mock5
