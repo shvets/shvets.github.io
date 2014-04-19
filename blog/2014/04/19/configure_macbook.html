@@ -185,16 +185,16 @@ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
 <pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">mysqladmin -u root password <span class="s1">'root'</span>
 </td></tr></tbody></table></pre>
 <p>Run mysql script:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div></td><td class="code">    mysql -u root -p<span class="s1">'root'</span>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div></td><td class="code">mysql -u root -p<span class="s1">'root'</span>
 
-       CREATE USER <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> IDENTIFIED BY <span class="s1">'rails_app_tmpl'</span>;
-       grant all privileges on <span class="k">*</span>.<span class="k">*</span> to <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> identified by <span class="s1">'rails_app_tmpl'</span> with grant option;
-       grant all privileges on <span class="k">*</span>.<span class="k">*</span> to <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'%'</span> identified by <span class="s1">'rails_app_tmpl'</span> with grant option;
-       create database rails_app_tmpl_dev;
-       create database rails_app_tmpl_test;
-       create database rails_app_tmpl_prod;
+   CREATE USER <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> IDENTIFIED BY <span class="s1">'rails_app_tmpl'</span>;
+   grant all privileges on <span class="k">*</span>.<span class="k">*</span> to <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> identified by <span class="s1">'rails_app_tmpl'</span> with grant option;
+   grant all privileges on <span class="k">*</span>.<span class="k">*</span> to <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'%'</span> identified by <span class="s1">'rails_app_tmpl'</span> with grant option;
+   create database rails_app_tmpl_dev;
+   create database rails_app_tmpl_test;
+   create database rails_app_tmpl_prod;
 
-       <span class="nb">exit</span>;
+   <span class="nb">exit</span>;
 <span class="sb">```</span>bash
 
 or with mysql:

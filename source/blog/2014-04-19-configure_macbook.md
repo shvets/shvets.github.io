@@ -213,16 +213,16 @@ mysqladmin -u root password 'root'
 Run mysql script:
 
 ```bash
-    mysql -u root -p'root'
+mysql -u root -p'root'
 
-       CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';
-       grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;
-       grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;
-       create database rails_app_tmpl_dev;
-       create database rails_app_tmpl_test;
-       create database rails_app_tmpl_prod;
+   CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';
+   grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;
+   grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;
+   create database rails_app_tmpl_dev;
+   create database rails_app_tmpl_test;
+   create database rails_app_tmpl_prod;
 
-       exit;
+   exit;
 ```bash
 
 or with mysql:
