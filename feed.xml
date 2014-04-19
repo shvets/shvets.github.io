@@ -18,7 +18,9 @@
     <author>
       <name>Article Author</name>
     </author>
-    <content type="html">&lt;h1&gt;Install UI applications:&lt;/h1&gt;
+    <content type="html">&lt;h1&gt;Configure Macbook for Ruby/Rails Development&lt;/h1&gt;
+
+&lt;h2&gt;Install UI applications:&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Iterm2&lt;/li&gt;
@@ -31,7 +33,7 @@
 &lt;li&gt;VLC&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h1&gt;Install appropriate XCode and Command Line Tools for XCode&lt;/h1&gt;
+&lt;h2&gt;Install appropriate XCode and Command Line Tools for XCode&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;Install XCode from AppStore.&lt;/p&gt;&lt;/li&gt;
@@ -40,7 +42,7 @@
 &lt;/ul&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;sudo xcodebuild -license
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install Homebrew&lt;/h1&gt;
+&lt;h2&gt;Install Homebrew&lt;/h2&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;ruby -e &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;curl -fsSkL raw.github.com/mxcl/homebrew/go&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
 
 brew update
@@ -50,7 +52,7 @@ brew tap homebrew/versions
 
 brew doctor
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install command line tools&lt;/h1&gt;
+&lt;h2&gt;Install command line tools&lt;/h2&gt;
 
 &lt;p&gt;Install base tools:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install wget
@@ -68,14 +70,14 @@ It will install &lt;strong&gt;node package manager&lt;/strong&gt; (npm) as well:
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node -v
 npm -v
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install Sublime 3 Text Editor&lt;/h1&gt;
+&lt;h2&gt;Install Sublime 3 Text Editor&lt;/h2&gt;
 
 &lt;p&gt;Download it from &lt;a href="http://www.sublimetext.com"&gt;http://www.sublimetext.com&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Create convenient link:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;ln -s /Applications/Sublime&lt;span class="se"&gt;\ &lt;/span&gt;Text.app/Contents/SharedSupport/bin/subl &lt;span class="nv"&gt;$HOME&lt;/span&gt;/bin/subl
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install RVM:&lt;/h1&gt;
+&lt;h2&gt;Install RVM:&lt;/h2&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="se"&gt;\c&lt;/span&gt;url -sSL https://get.rvm.io | bash
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;Then run this command:&lt;/p&gt;
@@ -86,7 +88,7 @@ npm -v
 &lt;p&gt;Install required packages:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm requirements
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install various rubies:&lt;/h1&gt;
+&lt;h2&gt;Install various rubies:&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Ruby 1.9.3:&lt;/li&gt;
@@ -99,7 +101,7 @@ npm -v
 &lt;/ul&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm install jruby
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Update .bash_profile&lt;/h1&gt;
+&lt;h2&gt;Update .bash_profile&lt;/h2&gt;
 
 &lt;p&gt;Add to ~/.bash_profile the following lines:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/opt/local/bin:&lt;span class="nv"&gt;$PATH&lt;/span&gt;
@@ -112,7 +114,7 @@ npm -v
 rvm use 1.9.3
 ruby -v
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install postgres server:&lt;/h1&gt;
+&lt;h2&gt;Install postgres server:&lt;/h2&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install postgres
 
 sudo sysctl -w kern.sysv.shmall&lt;span class="o"&gt;=&lt;/span&gt;65536
@@ -154,7 +156,7 @@ rake db:migrate
 psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_dev;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
 psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_test;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install mysql server:&lt;/h1&gt;
+&lt;h2&gt;Install mysql server:&lt;/h2&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install mysql
 
 mkdir -p ~/Library/LaunchAgents
@@ -193,7 +195,7 @@ mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;
 mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;create database rails_app_tmpl_test;&amp;quot;&lt;/span&gt;
 mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;create database rails_app_tmpl_prod;&amp;quot;&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h1&gt;Install selenium standalone server&lt;/h1&gt;
+&lt;h2&gt;Install selenium standalone server&lt;/h2&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install selenium-server-standalone
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;Standalone selenium server is implemented as launchd agent.&lt;/p&gt;
@@ -210,7 +212,7 @@ mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
 
 
-&lt;span class="c"&gt;# Create or load your project&lt;/span&gt;
+&lt;span class="c"&gt;## Create or load your project&lt;/span&gt;
 
 &lt;span class="k"&gt;*&lt;/span&gt; Create folder with ruby and/or rails.
 

@@ -4,7 +4,9 @@ date: 2014-04-19
 tags: ruby, osx, mavericks
 ---
 
-# Install UI applications:
+# Configure Macbook for Ruby/Rails Development
+
+## Install UI applications:
 
 * Iterm2
 * Firefox
@@ -15,7 +17,7 @@ tags: ruby, osx, mavericks
 * MU Commander
 * VLC
 
-# Install appropriate XCode and Command Line Tools for XCode
+## Install appropriate XCode and Command Line Tools for XCode
 
 * Install XCode from AppStore.
 
@@ -26,7 +28,8 @@ tags: ruby, osx, mavericks
 ```bash
 sudo xcodebuild -license
 ```
-# Install Homebrew
+
+## Install Homebrew
 
 ```bash
 ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
@@ -39,7 +42,7 @@ brew tap homebrew/versions
 brew doctor
 ```
 
-# Install command line tools
+## Install command line tools
 
 Install base tools:
 
@@ -69,7 +72,7 @@ node -v
 npm -v
 ```
 
-# Install Sublime 3 Text Editor
+## Install Sublime 3 Text Editor
 
 Download it from http://www.sublimetext.com.
 
@@ -79,7 +82,7 @@ Create convenient link:
 ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl $HOME/bin/subl
 ```
 
-# Install RVM:
+## Install RVM:
 
 ```bash
 \curl -sSL https://get.rvm.io | bash
@@ -99,7 +102,7 @@ Install required packages:
 rvm requirements
 ```
 
-# Install various rubies:
+## Install various rubies:
 
 * Install Ruby 1.9.3:
 
@@ -114,7 +117,7 @@ rvm install 1.9.3
 rvm install jruby
 ```
 
-# Update .bash_profile
+## Update .bash_profile
 
 Add to ~/.bash_profile the following lines:
 
@@ -131,7 +134,7 @@ rvm use 1.9.3
 ruby -v
 ```
 
-# Install postgres server:
+## Install postgres server:
 
 ```bash
 brew install postgres
@@ -190,7 +193,7 @@ psql -c 'create database rails_app_tmpl_dev;' -U rails_app_tmpl -h 127.0.0.1
 psql -c 'create database rails_app_tmpl_test;' -U rails_app_tmpl -h 127.0.0.1
 ```
 
-# Install mysql server:
+## Install mysql server:
 
 ```bash
 brew install mysql
@@ -238,7 +241,7 @@ mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_test;"
 mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_prod;"
 ```
 
-# Install selenium standalone server
+## Install selenium standalone server
 
 ```bash
 brew install selenium-server-standalone
@@ -266,7 +269,7 @@ If you don't want to use agent, use java directly:
 java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
 
 
-# Create or load your project
+## Create or load your project
 
 * Create folder with ruby and/or rails.
 
