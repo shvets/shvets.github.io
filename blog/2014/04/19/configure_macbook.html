@@ -105,22 +105,12 @@ npm -v
 <p>Install required packages:</p>
 <pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">rvm requirements
 </td></tr></tbody></table></pre>
-<h2>Install various rubies:</h2>
+<h2>Install various ruby versions:</h2>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div></td><td class="code">rvm install 1.9.3
 
-<ul>
-<li>Install Ruby 1.9.3:</li>
-</ul>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">rvm install 1.9.3
-</td></tr></tbody></table></pre>
-<ul>
-<li>Install Ruby 2.1.1:</li>
-</ul>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">rvm install 2.1.1
-</td></tr></tbody></table></pre>
-<ul>
-<li>Install jruby:</li>
-</ul>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">rvm install jruby
+rvm install 2.1.1
+
+rvm install jruby
 </td></tr></tbody></table></pre>
 <h2>Update .bash_profile</h2>
 
@@ -153,18 +143,20 @@ launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 <pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">initdb /usr/local/var/postgres -E utf8
 </td></tr></tbody></table></pre>
 <p>Create users and databases from command line:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code">createuser -s -d -r rails_app_tmpl
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code">createuser -s -d -r rails_app_tmpl
 
 createdb -U rails_app_tmpl rails_app_tmpl_dev
+createdb -U rails_app_tmpl rails_app_tmpl_test
 createdb -U rails_app_tmpl rails_app_tmpl_prod
 
 rake db:migrate
 </td></tr></tbody></table></pre>
 <p>or with psql tool:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code">psql -c <span class="s1">'create user rails_app_tmp;'</span> -s -d -r
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div></td><td class="code">psql -c <span class="s1">'create user rails_app_tmp;'</span> -s -d -r
 
 psql -c <span class="s1">'create database rails_app_tmpl_dev;'</span> -U rails_app_tmpl -h 127.0.0.1
 psql -c <span class="s1">'create database rails_app_tmpl_test;'</span> -U rails_app_tmpl -h 127.0.0.1
+psql -c <span class="s1">'create database rails_app_tmpl_prod;'</span> -U rails_app_tmpl -h 127.0.0.1
 </td></tr></tbody></table></pre>
 <h2>Install mysql server:</h2>
 
@@ -184,21 +176,26 @@ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
 <pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">mysqladmin -u root password <span class="s1">'root'</span>
 </td></tr></tbody></table></pre>
 <p>Create users and databases from command line:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code">mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;flush  priveleges;&quot;</span>
-mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;drop user 'rails_app_tmpl'@'localhost';&quot;</span>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div></td><td class="code">--mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;flush  priveleges;&quot;</span>
+--mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;drop user 'rails_app_tmpl'@'localhost';&quot;</span>
+
 mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';&quot;</span>
+
 mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;&quot;</span>
 mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;&quot;</span>
+
 mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;create database rails_app_tmpl_dev;&quot;</span>
 mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;create database rails_app_tmpl_test;&quot;</span>
 mysql -h localhost -u root -p<span class="s2">&quot;root&quot;</span> -e <span class="s2">&quot;create database rails_app_tmpl_prod;&quot;</span>
 </td></tr></tbody></table></pre>
 <p>or with mysql tool interactively:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div></td><td class="code">mysql -u root -p<span class="s1">'root'</span>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div></td><td class="code">mysql -u root -p<span class="s1">'root'</span>
 
   CREATE USER <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> IDENTIFIED BY <span class="s1">'rails_app_tmpl'</span>;
+
   grant all privileges on <span class="k">*</span>.<span class="k">*</span> to <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> identified by <span class="s1">'rails_app_tmpl'</span> with grant option;
   grant all privileges on <span class="k">*</span>.<span class="k">*</span> to <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'%'</span> identified by <span class="s1">'rails_app_tmpl'</span> with grant option;
+
   create database rails_app_tmpl_dev;
   create database rails_app_tmpl_test;
   create database rails_app_tmpl_prod;

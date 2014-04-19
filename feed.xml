@@ -89,22 +89,12 @@ npm -v
 &lt;p&gt;Install required packages:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm requirements
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Install various rubies:&lt;/h2&gt;
+&lt;h2&gt;Install various ruby versions:&lt;/h2&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm install 1.9.3
 
-&lt;ul&gt;
-&lt;li&gt;Install Ruby 1.9.3:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm install 1.9.3
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;Install Ruby 2.1.1:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm install 2.1.1
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;Install jruby:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm install jruby
+rvm install 2.1.1
+
+rvm install jruby
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;h2&gt;Update .bash_profile&lt;/h2&gt;
 
@@ -137,18 +127,20 @@ launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;initdb /usr/local/var/postgres -E utf8
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;Create users and databases from command line:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;createuser -s -d -r rails_app_tmpl
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;createuser -s -d -r rails_app_tmpl
 
 createdb -U rails_app_tmpl rails_app_tmpl_dev
+createdb -U rails_app_tmpl rails_app_tmpl_test
 createdb -U rails_app_tmpl rails_app_tmpl_prod
 
 rake db:migrate
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;or with psql tool:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;psql -c &lt;span class="s1"&gt;'create user rails_app_tmp;'&lt;/span&gt; -s -d -r
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;psql -c &lt;span class="s1"&gt;'create user rails_app_tmp;'&lt;/span&gt; -s -d -r
 
 psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_dev;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
 psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_test;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
+psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_prod;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;h2&gt;Install mysql server:&lt;/h2&gt;
 
@@ -168,21 +160,26 @@ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;mysqladmin -u root password &lt;span class="s1"&gt;'root'&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;Create users and databases from command line:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;flush  priveleges;&amp;quot;&lt;/span&gt;
-mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;drop user 'rails_app_tmpl'@'localhost';&amp;quot;&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;--mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;flush  priveleges;&amp;quot;&lt;/span&gt;
+--mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;drop user 'rails_app_tmpl'@'localhost';&amp;quot;&lt;/span&gt;
+
 mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';&amp;quot;&lt;/span&gt;
+
 mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;&amp;quot;&lt;/span&gt;
 mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;&amp;quot;&lt;/span&gt;
+
 mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;create database rails_app_tmpl_dev;&amp;quot;&lt;/span&gt;
 mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;create database rails_app_tmpl_test;&amp;quot;&lt;/span&gt;
 mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;create database rails_app_tmpl_prod;&amp;quot;&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;p&gt;or with mysql tool interactively:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;mysql -u root -p&lt;span class="s1"&gt;'root'&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;mysql -u root -p&lt;span class="s1"&gt;'root'&lt;/span&gt;
 
   CREATE USER &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;@&lt;span class="s1"&gt;'localhost'&lt;/span&gt; IDENTIFIED BY &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;;
+
   grant all privileges on &lt;span class="k"&gt;*&lt;/span&gt;.&lt;span class="k"&gt;*&lt;/span&gt; to &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;@&lt;span class="s1"&gt;'localhost'&lt;/span&gt; identified by &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt; with grant option;
   grant all privileges on &lt;span class="k"&gt;*&lt;/span&gt;.&lt;span class="k"&gt;*&lt;/span&gt; to &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;@&lt;span class="s1"&gt;'%'&lt;/span&gt; identified by &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt; with grant option;
+
   create database rails_app_tmpl_dev;
   create database rails_app_tmpl_test;
   create database rails_app_tmpl_prod;

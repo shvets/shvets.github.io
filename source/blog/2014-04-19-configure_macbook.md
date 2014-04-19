@@ -103,23 +103,13 @@ Install required packages:
 rvm requirements
 ```
 
-## Install various rubies:
-
-* Install Ruby 1.9.3:
+## Install various ruby versions:
 
 ```bash
 rvm install 1.9.3
-```
 
-* Install Ruby 2.1.1:
-
-```bash
 rvm install 2.1.1
-```
 
-* Install jruby:
-
-```bash
 rvm install jruby
 ```
 
@@ -172,6 +162,7 @@ Create users and databases from command line:
 createuser -s -d -r rails_app_tmpl
 
 createdb -U rails_app_tmpl rails_app_tmpl_dev
+createdb -U rails_app_tmpl rails_app_tmpl_test
 createdb -U rails_app_tmpl rails_app_tmpl_prod
 
 rake db:migrate
@@ -184,6 +175,7 @@ psql -c 'create user rails_app_tmp;' -s -d -r
 
 psql -c 'create database rails_app_tmpl_dev;' -U rails_app_tmpl -h 127.0.0.1
 psql -c 'create database rails_app_tmpl_test;' -U rails_app_tmpl -h 127.0.0.1
+psql -c 'create database rails_app_tmpl_prod;' -U rails_app_tmpl -h 127.0.0.1
 ```
 
 ## Install mysql server:
@@ -215,11 +207,14 @@ mysqladmin -u root password 'root'
 Create users and databases from command line:
 
 ```bash
-mysql -h localhost -u root -p"root" -e "flush  priveleges;"
-mysql -h localhost -u root -p"root" -e "drop user 'rails_app_tmpl'@'localhost';"
+--mysql -h localhost -u root -p"root" -e "flush  priveleges;"
+--mysql -h localhost -u root -p"root" -e "drop user 'rails_app_tmpl'@'localhost';"
+
 mysql -h localhost -u root -p"root" -e "CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';"
+
 mysql -h localhost -u root -p"root" -e "grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;"
 mysql -h localhost -u root -p"root" -e "grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;"
+
 mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_dev;"
 mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_test;"
 mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_prod;"
@@ -231,8 +226,10 @@ or with mysql tool interactively:
 mysql -u root -p'root'
 
   CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';
+
   grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;
   grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;
+
   create database rails_app_tmpl_dev;
   create database rails_app_tmpl_test;
   create database rails_app_tmpl_prod;
