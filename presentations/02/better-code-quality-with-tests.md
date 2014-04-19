@@ -1229,8 +1229,9 @@ PASS: 11 tests, 0 failures, 0.018 secs.
 * [Ruby Bindings for Selenium - *http://code.google.com/p/selenium/wiki/RubyBindings*](http://code.google.com/p/selenium/wiki/RubyBindings)
 * [rspec-rails and capybara 2.0: what you need to know - http://alindeman.github.io/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html]
 (http://alindeman.github.io/2012/11/11/rspec-rails-and-capybara-2.0-what-you-need-to-know.html)
-* [Top 10 Sites Built with Ruby on Rails - http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails](http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails)
-* [40 Sites Built with Ruby on Rails - http://designwebkit.com/inspiration/40-websites-built-with-ruby-on-rails/](http://designwebkit.com/inspiration/40-websites-built-with-ruby-on-rails/)
+* [Top 5 Sites Built with Ruby on Rails - http://www.bacancytechnology.com/blog/top-5-sites-built-with-ruby-on-rails][top5]
+* [Top 10 Sites Built with Ruby on Rails - http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails][top10]
+* [40 Sites Built with Ruby on Rails - http://designwebkit.com/inspiration/40-websites-built-with-ruby-on-rails/][top40]
 * [Improve your test readability using the xUnit structure - http://blog.plataformatec.com.br/2014/04/improve-your-test-readability-using-the-xunit-structure][xunit_structure]
 
 %!SLIDE content transition=cover
@@ -1246,7 +1247,9 @@ PASS: 11 tests, 0 failures, 0.018 secs.
 # Questions?
 # Suggestions?
 
-
+[top5]: http://www.bacancytechnology.com/blog/top-5-sites-built-with-ruby-on-rails
+[top10]: http://blog.netguru.co/post/58995145341/top-10-sites-built-with-ruby-on-rails
+[top40]: http://designwebkit.com/inspiration/40-websites-built-with-ruby-on-rails
 [xunit_structure]: http://blog.plataformatec.com.br/2014/04/improve-your-test-readability-using-the-xunit-structure
 
 

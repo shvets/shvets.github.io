@@ -107,14 +107,16 @@ we can use publicly available <a href="http://api.openweathermap.org">OpenWeathe
 </ul>
 
 <p>You can build responses of arbitrary complexity with your own code or you can use <strong>RenderHelper</strong>, that comes with this
-gem. Currently it supports <strong>erb</strong> renderer only. Here is example of how to build xml response:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="nb">binding</span><span class="o">|</span>
+gem. Currently it supports <strong>erb</strong> and <strong>haml</strong> renderers only. Here is example of how to build xml response:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code">  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
+    <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="nb">binding</span><span class="o">|</span>
       <span class="no">RenderHelper</span><span class="nf">.render</span> <span class="ss">:erb</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">File</span><span class="nf">.dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/templates/purchase_response.xml.erb&quot;</span><span class="p">,</span> <span class="nb">binding</span>
     <span class="p">}</span>
 </td></tr></tbody></table></pre>
 <p>It&rsquo;s possible to tweak your response on the fly:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div></td><td class="code">  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="nb">binding</span><span class="o">|</span>
-    <span class="no">RenderHelper</span><span class="nf">.render</span> <span class="ss">:xml</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">File</span><span class="nf">.dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/templates/purchase_response.xml.erb&quot;</span><span class="p">,</span> <span class="nb">binding</span>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div></td><td class="code">  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
+    <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="nb">binding</span><span class="o">|</span>
+      <span class="no">RenderHelper</span><span class="nf">.render</span> <span class="ss">:erb</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">File</span><span class="nf">.dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/templates/purchase_response.xml.erb&quot;</span><span class="p">,</span> <span class="nb">binding</span>
     <span class="p">}</span> <span class="k">do</span> <span class="o">|</span><span class="n">parent</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">credit_card</span><span class="o">|</span>
     <span class="k">if</span> <span class="n">credit_card</span><span class="nf">.card_type</span> <span class="o">==</span> <span class="s2">&quot;VISA&quot;</span>
       <span class="n">define_attribute</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="ss">:success</span><span class="p">,</span>  <span class="kp">true</span><span class="p">)</span>
@@ -151,9 +153,35 @@ on your service or you can define <strong>url</strong> parameter for WebmockMeth
   <span class="k">end</span>
 <span class="k">end</span>
 </td></tr></tbody></table></pre>
+<p>If you need to simulate exception raised inside the mocked method, do the following:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code">  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
+                 <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="nb">binding</span><span class="o">|</span>
+                    <span class="c1"># prepare response</span>
+                    <span class="nf">..</span><span class="o">.</span>
+                  <span class="p">}</span> <span class="k">do</span> <span class="o">|</span><span class="n">parent</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">credit_card</span><span class="o">|</span>
+    <span class="n">define_attribute</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="ss">:error</span><span class="p">,</span> <span class="n">create_error</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="s2">&quot;Negative amount&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span>
+
+    <span class="nf">..</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def </span><span class="nc">self</span><span class="o">.</span><span class="nf">create_error</span> <span class="n">parent</span><span class="p">,</span> <span class="n">reason</span>
+    <span class="n">define_attribute</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="ss">:error</span><span class="p">,</span> <span class="no">Exception</span><span class="nf">.new</span><span class="p">(</span><span class="n">reason</span><span class="p">))</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</td></tr></tbody></table></pre>
+<p><strong>webmock</strong> gem code is aware of <strong>error</strong> variable and will throw this exception, so yo can verify it inside
+your test:</p>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">  <span class="n">it</span> <span class="s2">&quot;returns error response if amount is negative&quot;</span> <span class="k">do</span>
+    <span class="n">expect</span><span class="p">{</span><span class="n">subject</span><span class="nf">.purchase</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="n">valid_credit_card</span><span class="p">)}</span><span class="nf">.to</span> <span class="n">raise_exception</span><span class="p">(</span><span class="no">Exception</span><span class="p">)</span>
+  <span class="k">end</span>
+</td></tr></tbody></table></pre>
 <p>There is another article on same topic from <a href="http://robots.thoughtbot.com">thoughtbot</a> blog. It&rsquo;s written
 by Harlow Ward and describes how to <a href="http://robots.thoughtbot.com/post/64474832169/how-to-stub-external-services-in-tests">create stubbed external services</a>
 by using fakeweb, vcr and sinatra.</p>
+
+<p>One more project, intereestion in my opinion, is <a href="https://github.com/rwz/mock5">mock 5 gem</a>. It lets you to mock external APIs with
+simple Sinatra Rack app.</p>
 
 <div id='footer'>
 <p id='legal'>

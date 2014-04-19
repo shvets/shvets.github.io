@@ -209,8 +209,7 @@ echo &quot;test2&quot;
 <p>Let&rsquo;s build more sophisticated example. We want to automate generating public/private
 keys for ssh access and copying public key to remote server for password-less access
 to the server.</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div><div class="lineno">31</div><div class="lineno">32</div><div class="lineno">33</div><div class="lineno">34</div><div class="lineno">35</div><div class="lineno">36</div><div class="lineno">37</div><div class="lineno">38</div><div class="lineno">39</div><div class="lineno">40</div><div class="lineno">41</div><div class="lineno">42</div><div class="lineno">43</div><div class="lineno">44</div><div class="lineno">45</div><div class="lineno">46</div><div class="lineno">47</div><div class="lineno">48</div><div class="lineno">49</div><div class="lineno">50</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;highline/import&quot;</span>
-<span class="nb">require</span> <span class="s1">'script_executor/executable'</span>
+<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div><div class="lineno">31</div><div class="lineno">32</div><div class="lineno">33</div><div class="lineno">34</div><div class="lineno">35</div><div class="lineno">36</div><div class="lineno">37</div><div class="lineno">38</div><div class="lineno">39</div><div class="lineno">40</div><div class="lineno">41</div><div class="lineno">42</div><div class="lineno">43</div><div class="lineno">44</div><div class="lineno">45</div><div class="lineno">46</div><div class="lineno">47</div><div class="lineno">48</div><div class="lineno">49</div></td><td class="code"><span class="nb">require</span> <span class="s1">'script_executor/executable'</span>
 <span class="nb">require</span> <span class="s1">'script_executor/script_locator'</span>
 <span class="nb">require</span> <span class="s1">'file_utils/file_utils'</span>
 
@@ -266,6 +265,11 @@ as part of class.</p>
 <p>In order to execute new commands you have to use <strong>thor</strong> tool:</p>
 <pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code">thor ssh:gen_key
 thor ssh:cp_key your.remote.server.com
+</td></tr></tbody></table></pre>
+<p>You can achieve same goal with homebrew tool:</p>
+<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">brew install ssh-copy-id
+
+ssh-copy-id <span class="nv">$USER</span>@your.remote.server.com
 </td></tr></tbody></table></pre>
 <div id='footer'>
 <p id='legal'>
