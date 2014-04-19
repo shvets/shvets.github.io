@@ -17,13 +17,13 @@ tags: ruby, osx, mavericks
 * MU Commander
 * VLC
 
-## Install appropriate XCode and Command Line Tools for XCode
+## Install XCode and XCode Tools
 
 * Install XCode from AppStore.
 
-* Install XCode Command Line Tools.
+* Install XCode Command Line Tools from inside XCode.
 
-* Read and agree to Xcode license:
+* Read and agree to Xcode license from command line:
 
 ```bash
 sudo xcodebuild -license
@@ -31,12 +31,13 @@ sudo xcodebuild -license
 
 ## Install Homebrew
 
+It is package manager for MacOS written in ruby:
+
 ```bash
 ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
 
 brew update
 brew tap homebrew/dupes
-brew tap --repair homebrew/dupes
 brew tap homebrew/versions
 
 brew doctor
@@ -52,14 +53,14 @@ brew install mc
 brew install git
 ```
 
-'Qt' package is required by Capybara acceptance tests.
+**Qt** package is required by Capybara acceptance tests.
 
 ```bash
 brew install qt
 ```
 
-'Node' is used for jasmine javascript unit test and for various javascript tasks.
-It will install **node package manager** (npm) as well:
+**Node** is used for jasmine javascript unit test and for various javascript tasks.
+It will install **node package manager** (**npm**) as well:
 
 ```bash
 brew install node
@@ -94,7 +95,7 @@ Then run this command:
 source ~/.rvm/scripts/rvm
 ```
 
-or reopen in another Terminal.
+or reopen in another terminal window.
 
 Install required packages:
 
@@ -108,7 +109,12 @@ rvm requirements
 
 ```bash
 rvm install 1.9.3
+```
 
+* Install Ruby 2.1.1:
+
+```bash
+rvm install 2.1.1
 ```
 
 * Install jruby:
@@ -119,7 +125,7 @@ rvm install jruby
 
 ## Update .bash_profile
 
-Add to ~/.bash_profile the following lines:
+Add to **~/.bash_profile** the following lines:
 
 
 ```bash
@@ -136,11 +142,22 @@ ruby -v
 
 ## Install postgres server:
 
+Install it:
+
 ```bash
 brew install postgres
+```
 
-sudo sysctl -w kern.sysv.shmall=65536
-sudo sysctl -w kern.sysv.shmmax=16777216
+Start it:
+
+```bash
+mkdir -p ~/Library/LaunchAgents
+sudo chown $USER ~/Library/LaunchAgents
+
+cp /usr/local/Cellar/postgresql/9.3.3/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
+
+launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 ```
 
 Initialize database:
@@ -149,42 +166,18 @@ Initialize database:
 initdb /usr/local/var/postgres -E utf8
 ```
 
-Fix Mountain Lion related issue:
+Create users and databases from command line:
 
 ```bash
-sudo mkdir /var/pgsql_socket
-sudo chown $USER /var/pgsql_socket
-```bash
+createuser -s -d -r rails_app_tmpl
 
-Open 'subl /usr/local/var/postgres/postgresql.conf' in a text editor, and uncomment + edit the unix_socket_directories key to:
-
-```
-unix_socket_directories = '/var/pgsql_socket'
-``
-
-```bash
-export PGHOST=/var/pgsql_socket
-
-mkdir -p ~/Library/LaunchAgents
-sudo chown $USER ~/Library/LaunchAgents
-cp /usr/local/Cellar/postgresql/9.3.3/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
-
-launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-```
-
-Create users and databases, e.g.:
-
-```bash
-    createuser -s -d -r rails_app_tmpl
-
-    createdb -U rails_app_tmpl rails_app_tmpl_dev
-    createdb -U rails_app_tmpl rails_app_tmpl_prod
+createdb -U rails_app_tmpl rails_app_tmpl_dev
+createdb -U rails_app_tmpl rails_app_tmpl_prod
 
 rake db:migrate
 ```
 
-or with psql
+or with psql tool:
 
 ```bash
 psql -c 'create user rails_app_tmp;' -s -d -r
@@ -195,9 +188,15 @@ psql -c 'create database rails_app_tmpl_test;' -U rails_app_tmpl -h 127.0.0.1
 
 ## Install mysql server:
 
+Install it:
+
 ```bash
 brew install mysql
+```
 
+Start it:
+
+```bash
 mkdir -p ~/Library/LaunchAgents
 sudo chown $USER ~/Library/LaunchAgents
 
@@ -213,22 +212,7 @@ Set up mysql root password:
 mysqladmin -u root password 'root'
 ```
 
-Run mysql script:
-
-```bash
-mysql -u root -p'root'
-
-   CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';
-   grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;
-   grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;
-   create database rails_app_tmpl_dev;
-   create database rails_app_tmpl_test;
-   create database rails_app_tmpl_prod;
-
-   exit;
-```bash
-
-or with mysql:
+Create users and databases from command line:
 
 ```bash
 mysql -h localhost -u root -p"root" -e "flush  priveleges;"
@@ -240,6 +224,21 @@ mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_dev;"
 mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_test;"
 mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_prod;"
 ```
+
+or with mysql tool interactively:
+
+```bash
+mysql -u root -p'root'
+
+  CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';
+  grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;
+  grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;
+  create database rails_app_tmpl_dev;
+  create database rails_app_tmpl_test;
+  create database rails_app_tmpl_prod;
+
+  exit;
+```bash
 
 ## Install selenium standalone server
 
@@ -267,7 +266,7 @@ If you don't want to use agent, use java directly:
 
 ```bash
 java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
-
+```
 
 ## Create or load your project
 
