@@ -5,10 +5,229 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-12-21T00:00:00Z</updated>
+  <updated>2014-04-19T00:00:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Configure Macbook for Ruby/Rails Development</title>
+    <link rel="alternate" href="/blog/2014/04/19/configure_macbook.html"/>
+    <id>/blog/2014/04/19/configure_macbook.html</id>
+    <published>2014-04-19T00:00:00Z</published>
+    <updated>2014-04-19T00:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Install UI applications:&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Iterm2&lt;/li&gt;
+&lt;li&gt;Firefox&lt;/li&gt;
+&lt;li&gt;DropBox&lt;/li&gt;
+&lt;li&gt;Skype&lt;/li&gt;
+&lt;li&gt;RubyMine&lt;/li&gt;
+&lt;li&gt;Moroshka File Manager&lt;/li&gt;
+&lt;li&gt;MU Commander&lt;/li&gt;
+&lt;li&gt;VLC&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Install appropriate XCode and Command Line Tools for XCode&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Install XCode from AppStore.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install XCode Command Line Tools.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Read and agree to Xcode license:&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;sudo xcodebuild -license
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Install Homebrew&lt;/h1&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;ruby -e &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;curl -fsSkL raw.github.com/mxcl/homebrew/go&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+
+brew update
+brew tap homebrew/dupes
+brew tap --repair homebrew/dupes
+brew tap homebrew/versions
+
+brew doctor
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Install command line tools&lt;/h1&gt;
+
+&lt;p&gt;Install base tools:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install wget
+brew install mc
+brew install git
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&amp;lsquo;Qt&amp;rsquo; package is required by Capybara acceptance tests.&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install qt
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&amp;lsquo;Node&amp;rsquo; is used for jasmine javascript unit test and for various javascript tasks.
+It will install &lt;strong&gt;node package manager&lt;/strong&gt; (npm) as well:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install node
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Test it:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;node -v
+npm -v
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Install Sublime 3 Text Editor&lt;/h1&gt;
+
+&lt;p&gt;Download it from &lt;a href="http://www.sublimetext.com"&gt;http://www.sublimetext.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Create convenient link:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;ln -s /Applications/Sublime&lt;span class="se"&gt;\ &lt;/span&gt;Text.app/Contents/SharedSupport/bin/subl &lt;span class="nv"&gt;$HOME&lt;/span&gt;/bin/subl
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Install RVM:&lt;/h1&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="se"&gt;\c&lt;/span&gt;url -sSL https://get.rvm.io | bash
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Then run this command:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; ~/.rvm/scripts/rvm
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;or reopen in another Terminal.&lt;/p&gt;
+
+&lt;p&gt;Install required packages:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm requirements
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Install various rubies:&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Install Ruby 1.9.3:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm install 1.9.3
+
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Install jruby:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rvm install jruby
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Update .bash_profile&lt;/h1&gt;
+
+&lt;p&gt;Add to ~/.bash_profile the following lines:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/opt/local/bin:&lt;span class="nv"&gt;$PATH&lt;/span&gt;
+
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;EDITOR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'subl -w'&lt;/span&gt;
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PS1&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'${LOGNAME}@$(hostname): [$(~/.rvm/bin/rvm-prompt)] (\w):\n&amp;gt; '&lt;/span&gt;
+
+&lt;span class="o"&gt;[[&lt;/span&gt; -r &lt;span class="nv"&gt;$rvm_path&lt;/span&gt;/scripts/completion &lt;span class="o"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; . &lt;span class="nv"&gt;$rvm_path&lt;/span&gt;/scripts/completion
+
+rvm use 1.9.3
+ruby -v
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Install postgres server:&lt;/h1&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install postgres
+
+sudo sysctl -w kern.sysv.shmall&lt;span class="o"&gt;=&lt;/span&gt;65536
+sudo sysctl -w kern.sysv.shmmax&lt;span class="o"&gt;=&lt;/span&gt;16777216
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Initialize database:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;initdb /usr/local/var/postgres -E utf8
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Fix Mountain Lion related issue:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;sudo mkdir /var/pgsql_socket
+sudo chown &lt;span class="nv"&gt;$USER&lt;/span&gt; /var/pgsql_socket
+&lt;span class="sb"&gt;```&lt;/span&gt;bash
+
+Open &lt;span class="s1"&gt;'subl /usr/local/var/postgres/postgresql.conf'&lt;/span&gt; &lt;span class="k"&gt;in &lt;/span&gt;a text editor, and uncomment + edit the unix_socket_directories key to:
+
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;unix&lt;em&gt;socket&lt;/em&gt;directories = &amp;lsquo;/var/pgsql_socket&amp;rsquo;
+&amp;ldquo;&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PGHOST&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/var/pgsql_socket
+
+mkdir -p ~/Library/LaunchAgents
+sudo chown &lt;span class="nv"&gt;$USER&lt;/span&gt; ~/Library/LaunchAgents
+cp /usr/local/Cellar/postgresql/9.3.3/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
+
+launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Create users and databases, e.g.:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;    createuser -s -d -r rails_app_tmpl
+
+    createdb -U rails_app_tmpl rails_app_tmpl_dev
+    createdb -U rails_app_tmpl rails_app_tmpl_prod
+
+rake db:migrate
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;or with psql&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;psql -c &lt;span class="s1"&gt;'create user rails_app_tmp;'&lt;/span&gt; -s -d -r
+
+psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_dev;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
+psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_test;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Install mysql server:&lt;/h1&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install mysql
+
+mkdir -p ~/Library/LaunchAgents
+sudo chown &lt;span class="nv"&gt;$USER&lt;/span&gt; ~/Library/LaunchAgents
+
+ln -sfv /usr/local/opt/mysql/&lt;span class="k"&gt;*&lt;/span&gt;.plist ~/Library/LaunchAgents
+
+launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Set up mysql root password:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;mysqladmin -u root password &lt;span class="s1"&gt;'root'&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Run mysql script:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;    mysql -u root -p&lt;span class="s1"&gt;'root'&lt;/span&gt;
+
+       CREATE USER &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;@&lt;span class="s1"&gt;'localhost'&lt;/span&gt; IDENTIFIED BY &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;;
+       grant all privileges on &lt;span class="k"&gt;*&lt;/span&gt;.&lt;span class="k"&gt;*&lt;/span&gt; to &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;@&lt;span class="s1"&gt;'localhost'&lt;/span&gt; identified by &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt; with grant option;
+       grant all privileges on &lt;span class="k"&gt;*&lt;/span&gt;.&lt;span class="k"&gt;*&lt;/span&gt; to &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;@&lt;span class="s1"&gt;'%'&lt;/span&gt; identified by &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt; with grant option;
+       create database rails_app_tmpl_dev;
+       create database rails_app_tmpl_test;
+       create database rails_app_tmpl_prod;
+
+       &lt;span class="nb"&gt;exit&lt;/span&gt;;
+&lt;span class="sb"&gt;```&lt;/span&gt;bash
+
+or with mysql:
+
+&lt;span class="sb"&gt;```&lt;/span&gt;bash
+mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;flush  priveleges;&amp;quot;&lt;/span&gt;
+mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;drop user 'rails_app_tmpl'@'localhost';&amp;quot;&lt;/span&gt;
+mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';&amp;quot;&lt;/span&gt;
+mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;&amp;quot;&lt;/span&gt;
+mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;&amp;quot;&lt;/span&gt;
+mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;create database rails_app_tmpl_dev;&amp;quot;&lt;/span&gt;
+mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;create database rails_app_tmpl_test;&amp;quot;&lt;/span&gt;
+mysql -h localhost -u root -p&lt;span class="s2"&gt;&amp;quot;root&amp;quot;&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;create database rails_app_tmpl_prod;&amp;quot;&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;h1&gt;Install selenium standalone server&lt;/h1&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;brew install selenium-server-standalone
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Standalone selenium server is implemented as launchd agent.&lt;/p&gt;
+
+&lt;p&gt;To have launchd start selenium-server-standalone at login, create soft link:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;ln -sfv /usr/local/opt/selenium-server-standalone/&lt;span class="k"&gt;*&lt;/span&gt;.plist ~/Library/LaunchAgents
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Then load selenium-server-standalone agent:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;It will run selenium server on port 4444.&lt;/p&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t want to use agent, use java directly:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
+
+
+&lt;span class="c"&gt;# Create or load your project&lt;/span&gt;
+
+&lt;span class="k"&gt;*&lt;/span&gt; Create folder with ruby and/or rails.
+
+&lt;span class="k"&gt;*&lt;/span&gt; Create &lt;span class="k"&gt;**&lt;/span&gt;Gemfile&lt;span class="k"&gt;**&lt;/span&gt; with all dependent ruby gems.
+
+&lt;span class="k"&gt;*&lt;/span&gt; Create &lt;span class="k"&gt;**&lt;/span&gt;package.json&lt;span class="k"&gt;**&lt;/span&gt; with all dependent javascript nodes.
+
+&lt;span class="k"&gt;*&lt;/span&gt;Install ruby gems and js nodes:
+
+&lt;span class="sb"&gt;```&lt;/span&gt;bash
+bundle install
+
+npm install
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Other instructions on Mac configuration are available here &lt;a href="link1"&gt;here&lt;/a&gt; and &lt;a href="lik2"&gt;here&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>ScriptExecutor: Ruby library for executing shell scripts, locally or on remote server</title>
     <link rel="alternate" href="/blog/2013/12/21/script_executor.html"/>
@@ -99,7 +318,7 @@ both local and remote code in unified way.&lt;/p&gt;
 &lt;p&gt;And then execute:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;bundle
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Or install it yourself as:&lt;/p&gt;
+&lt;p&gt;Or install it yourself:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;gem install script_executor
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;h2&gt;Usage&lt;/h2&gt;
@@ -143,7 +362,7 @@ both local and remote code in unified way.&lt;/p&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;Execute remote command while capturing and suppressing output (default is &amp;lsquo;false&amp;rsquo; for both):&lt;/li&gt;
+&lt;li&gt;Execute remote command while capturing and suppressing output (default is &amp;lsquo;false&amp;rsquo; for both parameters):&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="nf"&gt;.merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:capture_output&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
                   &lt;span class="ss"&gt;:suppress_output&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -151,7 +370,7 @@ both local and remote code in unified way.&lt;/p&gt;
 &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="nf"&gt;.execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="nf"&gt;.merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
   &lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;whoami&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# ENV['USER']&lt;/span&gt;
+&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# ENV['USER'] on remote server&lt;/span&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;Simulate remote execution:&lt;/li&gt;
@@ -910,171 +1129,6 @@ by using fakeweb, vcr and sinatra.&lt;/p&gt;
 
 &lt;p&gt;One more project, intereestion in my opinion, is &lt;a href="https://github.com/rwz/mock5"&gt;mock 5 gem&lt;/a&gt;. It lets you to mock external APIs with
 simple Sinatra Rack app.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Configuring Code Coverage for Ruby/Rails project</title>
-    <link rel="alternate" href="/blog/2013/10/19/configure_simplecov.html"/>
-    <id>/blog/2013/10/19/configure_simplecov.html</id>
-    <published>2013-10-19T00:00:00Z</published>
-    <updated>2013-10-19T00:00:00Z</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h1&gt;Configuring Code Coverage for Ruby/Rails project&lt;/h1&gt;
-
-&lt;h2&gt;Getting Started&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/colszowka/simplecov"&gt;SimpleCov&lt;/a&gt; is a code coverage analytical tool for Ruby 1.9 built as ruby gem.&lt;/p&gt;
-
-&lt;p&gt;In order to use it in your project add this gems to your Gemfile:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:coverage&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-    &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:require&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;false&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;The formatter for SimpleCov is packaged as a separate gem called &lt;a href="https://github.com/colszowka/simplecov-html"&gt;simplecov-html&lt;/a&gt;.
-You don&amp;rsquo;t have to include it explicitly - SimpleCov already has it as a dependency.&lt;/p&gt;
-
-&lt;p&gt;You don&amp;rsquo;t have to call coverage as separate command. Instead, you have to integrate it with your specs or tests.
-How to do it?&lt;/p&gt;
-
-&lt;p&gt;You have to start SimpleCov before any of your specs/tests in order to be covered:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# spec_helper.rb&lt;/span&gt;
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
-  &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
-
-  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# my_model_spec.rb&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'spec_helper'&lt;/span&gt;
-
-&lt;span class="n"&gt;describe&lt;/span&gt; &lt;span class="no"&gt;MyModel&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-&lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Now you can run your specs:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;rspec spec/my_model_spec.rb
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Coverage report will be saved in &lt;strong&gt;coverage&lt;/strong&gt; folder. Open up &lt;strong&gt;coverage/index.html&lt;/strong&gt; in your browser
-and check out results:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;open coverage/index.html
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;If you want to save results to another folder, change &lt;strong&gt;coverage_path&lt;/strong&gt; property:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.coverage_path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'my_output'&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;In real project you have different groups of specs executed by separate commands. If you want to &lt;strong&gt;merge&lt;/strong&gt;
-coverage results generated by each of command into total report, you have to assign &lt;strong&gt;unique command name&lt;/strong&gt;
-for each group of specs:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# model_spec_helper.rb&lt;/span&gt;
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
-  &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
-
-  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.command_name&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;rspec:models&amp;quot;&lt;/span&gt;
-
-  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.running&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# domains_spec_helper.rb&lt;/span&gt;
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
-  &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
-
-  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.command_name&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;rspec:domains&amp;quot;&lt;/span&gt;
-
-  &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.running&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;SimpleCov Adapters&lt;/h2&gt;
-
-&lt;p&gt;SimpleCov understands notion of &lt;strong&gt;adapter&lt;/strong&gt;. You can start SimpleCov with preconfigured &lt;strong&gt;rails&lt;/strong&gt; adapter:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="s1"&gt;'rails'&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;Let&amp;rsquo;s look closer at definition of &lt;strong&gt;rails&lt;/strong&gt; adapter:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.adapters.define&lt;/span&gt; &lt;span class="s1"&gt;'rails'&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-  &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'/config/'&lt;/span&gt;
-  &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'/db/'&lt;/span&gt;
-  &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'/vendor/bundle/'&lt;/span&gt;
-
-  &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s1"&gt;'Controllers'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'app/controllers'&lt;/span&gt;
-  &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s1"&gt;'Models'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'app/models'&lt;/span&gt;
-  &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s1"&gt;'Mailers'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'app/mailers'&lt;/span&gt;
-  &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s1"&gt;'Helpers'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'app/helpers'&lt;/span&gt;
-  &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s1"&gt;'Libraries'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'lib'&lt;/span&gt;
-  &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s1"&gt;'Plugins'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'vendor/plugins'&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;As you can see, adapter definition includes &lt;strong&gt;filters&lt;/strong&gt; and &lt;strong&gt;groups&lt;/strong&gt;. &lt;strong&gt;Filters&lt;/strong&gt; specify which directories
-and files will be includes into coverage. &lt;strong&gt;Groups&lt;/strong&gt; define separate tabs of coverage report.&lt;/p&gt;
-
-&lt;p&gt;You can read more about groups and filters on &lt;a href="https://github.com/colszowka/simplecov"&gt;SimpleCov&lt;/a&gt; home page.&lt;/p&gt;
-
-&lt;p&gt;If you are not satisfied with &lt;strong&gt;rails&lt;/strong&gt; adapter, you can create your own:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;register_adapter&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
-    &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.adapters.define&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-      &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'/spec/'&lt;/span&gt;
-      &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'/db/'&lt;/span&gt;
-      &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'lib/tasks/'&lt;/span&gt;
-      &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'/vendor/'&lt;/span&gt;
-      &lt;span class="n"&gt;add_filter&lt;/span&gt; &lt;span class="s1"&gt;'/config/'&lt;/span&gt;
-
-      &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Domain&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;app/domain&amp;quot;&lt;/span&gt;
-      &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Models&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;app/models&amp;quot;&lt;/span&gt;
-      &lt;span class="n"&gt;add_group&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Services&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;app/services&amp;quot;&lt;/span&gt;
-    &lt;span class="k"&gt;end&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Full Example&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s create compete example that can be used in any project:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c1"&gt;# spec_helper.rb&lt;/span&gt;
-  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;init_spec&lt;/span&gt; &lt;span class="n"&gt;command_name&lt;/span&gt;
-    &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-    &lt;span class="no"&gt;SimplecovHelper&lt;/span&gt;&lt;span class="nf"&gt;.run_simplecov&lt;/span&gt; &lt;span class="n"&gt;command_name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-      &lt;span class="s2"&gt;&amp;quot;your_adapter_name&amp;quot;&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'COVERAGE'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'true'&lt;/span&gt;
-    &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;p&gt;And this is SimpleCov helper implemented as utility module:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;div class="lineno"&gt;21&lt;/div&gt;&lt;div class="lineno"&gt;22&lt;/div&gt;&lt;div class="lineno"&gt;23&lt;/div&gt;&lt;div class="lineno"&gt;24&lt;/div&gt;&lt;div class="lineno"&gt;25&lt;/div&gt;&lt;div class="lineno"&gt;26&lt;/div&gt;&lt;div class="lineno"&gt;27&lt;/div&gt;&lt;div class="lineno"&gt;28&lt;/div&gt;&lt;div class="lineno"&gt;29&lt;/div&gt;&lt;div class="lineno"&gt;30&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;SimplecovHelper&lt;/span&gt;
-  &lt;span class="kp"&gt;extend&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;
-
-  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;run_simplecov&lt;/span&gt; &lt;span class="n"&gt;command_name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
-    &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'simplecov'&lt;/span&gt;
-
-    &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.command_name&lt;/span&gt; &lt;span class="n"&gt;command_name&lt;/span&gt;
-
-    &lt;span class="n"&gt;start_simplecov&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adapter_name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.running&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="kp"&gt;private&lt;/span&gt;
-
-  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;start_simplecov&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
-    &lt;span class="n"&gt;register_adapter&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
-
-    &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.formatter&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Formatter&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;HTMLFormatter&lt;/span&gt;
-
-    &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.at_exit&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-      &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.result.format!&lt;/span&gt;
-    &lt;span class="k"&gt;end&lt;/span&gt;
-
-    &lt;span class="no"&gt;SimpleCov&lt;/span&gt;&lt;span class="nf"&gt;.start&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def &lt;/span&gt;&lt;span class="nf"&gt;register_adapter&lt;/span&gt; &lt;span class="n"&gt;adapter_name&lt;/span&gt;
-    &lt;span class="nf"&gt;..&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-    &lt;span class="c1"&gt;# see implementation in previous section&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
-&lt;h2&gt;Alternatives&lt;/h2&gt;
-
-&lt;p&gt;Another gem dedicated to code coverage is &lt;a href="http://lkdjiin.github.io/coco/"&gt;coco gem&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;It provides simple code coverage report and it&amp;rsquo;s much easier to configure, but resulting report is
-much simpler and less convenient.&lt;/p&gt;
-
-&lt;p&gt;You can choose what tool to use in your project based on your preferences.&lt;/p&gt;
-
-&lt;p&gt;If you need to cover your javascript code, you can visit &lt;a href="http://shvets.github.io/blog/2013/09/14/nodejs_and_karma.html"&gt;my previous blog article&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>

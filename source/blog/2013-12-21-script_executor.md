@@ -90,13 +90,14 @@ Add this line to your application's Gemfile:
 ```bash
 gem 'script_executor'
 ```
+
 And then execute:
 
 ```bash
 bundle
 ```
 
-Or install it yourself as:
+Or install it yourself:
 
 ```bash
 gem install script_executor
@@ -147,7 +148,7 @@ executor.execute server_info.merge(:sudo => true) do
 end
 ```
 
-* Execute remote command while capturing and suppressing output (default is 'false' for both):
+* Execute remote command while capturing and suppressing output (default is 'false' for both parameters):
 
 ```ruby
 server_info.merge(:capture_output => true,
@@ -156,7 +157,7 @@ server_info.merge(:capture_output => true,
 result = executor.execute server_info.merge(
   :script => "whoami")
 
-puts result # ENV['USER']
+puts result # ENV['USER'] on remote server
 ```
 
 * Simulate remote execution:

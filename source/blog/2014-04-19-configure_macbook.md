@@ -1,6 +1,6 @@
 ---
 title: Configure Macbook for Ruby/Rails Development
-date: 2015-01-01
+date: 2014-04-19
 tags: ruby, osx, mavericks
 ---
 
@@ -17,9 +17,11 @@ tags: ruby, osx, mavericks
 
 # Install appropriate XCode and Command Line Tools for XCode
 
-Install XCode from AppStore. Install Command Line Tools.
+* Install XCode from AppStore.
 
-Read and agree to Xcode license:
+* Install XCode Command Line Tools.
+
+* Read and agree to Xcode license:
 
 ```bash
 sudo xcodebuild -license
@@ -53,7 +55,7 @@ brew install git
 brew install qt
 ```
 
-'Node' is used for jasmine javascript unit test and other javascript management.
+'Node' is used for jasmine javascript unit test and for various javascript tasks.
 It will install **node package manager** (npm) as well:
 
 ```bash
@@ -74,7 +76,7 @@ Download it from http://www.sublimetext.com.
 Create convenient link:
 
 ```bash
-ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl $HOME/Dropbox/bin/subl
+ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl $HOME/bin/subl
 ```
 
 # Install RVM:
@@ -89,8 +91,7 @@ Then run this command:
 source ~/.rvm/scripts/rvm
 ```
 
-or reopen another Terminal.
-
+or reopen in another Terminal.
 
 Install required packages:
 
@@ -107,7 +108,7 @@ rvm install 1.9.3
 
 ```
 
-Install jruby:
+* Install jruby:
 
 ```bash
 rvm install jruby
@@ -203,12 +204,6 @@ launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
 ```
 
-or
-
-```bash
-    lunchy start mysql
-```
-
 Set up mysql root password:
 
 ```bash
@@ -243,7 +238,6 @@ mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_test;"
 mysql -h localhost -u root -p"root" -e "create database rails_app_tmpl_prod;"
 ```
 
-
 # Install selenium standalone server
 
 ```bash
@@ -274,9 +268,21 @@ java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2
 
 # Create or load your project
 
+* Create folder with ruby and/or rails.
+
+* Create **Gemfile** with all dependent ruby gems.
+
+* Create **package.json** with all dependent javascript nodes.
+
+*Install ruby gems and js nodes:
+
 ```bash
+bundle install
+
 npm install
 ```
 
-[Install Ruby on Rails · Mac OS X Mavericks]: http://railsapps.github.io/installrubyonrails-mac.html
-[Setting up a Ruby on Rails development environment on Mavericks]: http://dean.io/setting-up-a-ruby-on-rails-development-environment-on-mavericks/
+Other instructions on Mac configuration are available here [here](link1) and [here](lik2).
+
+[link1]: http://railsapps.github.io/installrubyonrails-mac.html
+[link2]: http://dean.io/setting-up-a-ruby-on-rails-development-environment-on-mavericks/
