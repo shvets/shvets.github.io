@@ -1,10 +1,10 @@
 ---
 title: Provisioning for Macbook
-date: 2015-02-22
+date: 2015-04-26
 tags: ruby, thor, script_executor
 ---
 
-# Install Oracle Client
+# Install Oracle Client and Oracle oci8 Ruby Driver on Macbook
 
 1. Download Client Basic and SDK for Linux 32 bits (http://www.oracle.com/technetwork/topics/linuxsoft-082809.html).
 
