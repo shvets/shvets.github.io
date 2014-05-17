@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -64,32 +64,36 @@ as parameters.</p>
 <h1>Example</h1>
 
 <p>Let&rsquo;s have some simple class for building arrays:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div></td><td class="code"><span class="k">class </span><span class="nc">Collector</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Collector</span>
 
-  <span class="k">def </span><span class="nf">initialize</span>
+  <span class="k">def</span> <span class="nf">initialize</span>
     <span class="vi">@array</span> <span class="o">=</span> <span class="o">[]</span>
   <span class="k">end</span>
 
-  <span class="k">def </span><span class="nf">add</span> <span class="n">element</span>
+  <span class="k">def</span> <span class="nf">add</span> <span class="n">element</span>
     <span class="vi">@array</span> <span class="o">&lt;&lt;</span> <span class="n">element</span>
   <span class="k">end</span>
 
-  <span class="k">def </span><span class="nf">remove</span> <span class="n">element</span>
-    <span class="vi">@array</span><span class="nf">.delete</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">remove</span> <span class="n">element</span>
+    <span class="vi">@array</span><span class="p">.</span><span class="nf">delete</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
   <span class="k">end</span>
 
-  <span class="k">def </span><span class="nf">to_a</span>
+  <span class="k">def</span> <span class="nf">to_a</span>
     <span class="vi">@array</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
-<p>We can use this class now:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div></td><td class="code"><span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="nf">.new</span>
+</pre></td></tr></tbody></table>
+</div>
 
-<span class="n">collector</span><span class="nf">.add</span> <span class="s2">&quot;1&quot;</span>
-<span class="n">collector</span><span class="nf">.add</span> <span class="s2">&quot;2&quot;</span>
-<span class="n">collector</span><span class="nf">.add</span> <span class="s2">&quot;3&quot;</span>
-</td></tr></tbody></table></pre>
+<p>We can use this class now:</p>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre></td><td class="code"><pre><span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="p">.</span><span class="nf">new</span>
+
+<span class="n">collector</span><span class="p">.</span><span class="nf">add</span> <span class="s2">"1"</span>
+<span class="n">collector</span><span class="p">.</span><span class="nf">add</span> <span class="s2">"2"</span>
+<span class="n">collector</span><span class="p">.</span><span class="nf">add</span> <span class="s2">"3"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>This is regular program and as any other program it&rsquo;s verbose. We can remove noise by applying some
 metaprogramming tricks. We&rsquo;ll try to remove method receiver: <strong>&ldquo;collector.&rdquo;</strong> from the code by making it implicit.</p>
 
@@ -97,110 +101,124 @@ metaprogramming tricks. We&rsquo;ll try to remove method receiver: <strong>&ldqu
 
 <p>One way of doing DSL in Ruby is based on <strong>instance_eval</strong> method. It takes <strong>block of code</strong> as input parameter
 and evaluates it in the <strong>context of the calling object</strong>:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="k">class </span><span class="nc">DSL</span>
-  <span class="k">def </span><span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
-    <span class="n">object</span><span class="nf">.instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">DSL</span>
+  <span class="k">def</span> <span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
   <span class="k">end</span>
 <span class="k">end</span>
 
-<span class="n">dsl</span> <span class="o">=</span> <span class="no">DSL</span><span class="nf">.new</span>
-</td></tr></tbody></table></pre>
+<span class="n">dsl</span> <span class="o">=</span> <span class="no">DSL</span><span class="p">.</span><span class="nf">new</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now, let&rsquo;s test our code with this example:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div></td><td class="code"><span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="nf">.new</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre></td><td class="code"><pre><span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="p">.</span><span class="nf">new</span>
 
 <span class="c1"># one way of doing DSL with direct code block</span>
 
-<span class="n">dsl</span><span class="nf">.build</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span> <span class="k">do</span>
-  <span class="n">add</span> <span class="s2">&quot;1&quot;</span>
-  <span class="n">add</span> <span class="s2">&quot;2&quot;</span>
-  <span class="n">add</span> <span class="s2">&quot;3&quot;</span>
+<span class="n">dsl</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">add</span> <span class="s2">"1"</span>
+  <span class="n">add</span> <span class="s2">"2"</span>
+  <span class="n">add</span> <span class="s2">"3"</span>
 <span class="k">end</span>
 
 <span class="c1"># another way of doing DSL with lambda</span>
 
 <span class="n">code</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="k">do</span> <span class="o">|</span><span class="n">_</span><span class="o">|</span>
-  <span class="n">add</span> <span class="s2">&quot;4&quot;</span>
-  <span class="n">add</span> <span class="s2">&quot;5&quot;</span>
-  <span class="n">add</span> <span class="s2">&quot;6&quot;</span>
+  <span class="n">add</span> <span class="s2">"4"</span>
+  <span class="n">add</span> <span class="s2">"5"</span>
+  <span class="n">add</span> <span class="s2">"6"</span>
 <span class="k">end</span>
 
-<span class="n">dsl</span><span class="nf">.build</span><span class="p">(</span><span class="n">collector</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span><span class="p">)</span>
+<span class="n">dsl</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="n">collector</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span><span class="p">)</span>
 
-<span class="nb">puts</span> <span class="n">collector</span><span class="nf">.to_a.join</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span> <span class="c1"># $ 1 2 3 4 5 6</span>
-</td></tr></tbody></table></pre>
+<span class="nb">puts</span> <span class="n">collector</span><span class="p">.</span><span class="nf">to_a</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span> <span class="c1"># $ 1 2 3 4 5 6</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You have to keep in mind two thing though:</p>
 
 <ul>
 <li><strong>instance_eval</strong> changes evaluation context, so code passed for evaluation is treated as original
 code of the object. As a result, all private methods and fields are available:</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div></td><td class="code"><span class="n">dsl</span><span class="nf">.build</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span> <span class="k">do</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre></td><td class="code"><pre><span class="n">dsl</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span> <span class="k">do</span>
   <span class="nb">puts</span> <span class="vi">@array</span> <span class="c1"># this field is accessible,</span>
               <span class="c1"># self is pointing to 'collector' object</span>
-  <span class="nb">puts</span> <span class="nb">self</span>   <span class="c1"># &quot;collector&quot; instance</span>
+  <span class="nb">puts</span> <span class="nb">self</span>   <span class="c1"># "collector" instance</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Because of context switch, you loose access to the calling context:</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div></td><td class="code"><span class="k">class </span><span class="nc">DSL</span>
-  <span class="k">def </span><span class="nf">dsl_method</span>
-    <span class="s2">&quot;dsl_method&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">DSL</span>
+  <span class="k">def</span> <span class="nf">dsl_method</span>
+    <span class="s2">"dsl_method"</span>
   <span class="k">end</span>
 <span class="k">end</span>
 
-<span class="n">dsl</span> <span class="o">=</span> <span class="no">DSL</span><span class="nf">.new</span>
+<span class="n">dsl</span> <span class="o">=</span> <span class="no">DSL</span><span class="p">.</span><span class="nf">new</span>
 
-<span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="nf">.new</span>
+<span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="p">.</span><span class="nf">new</span>
 
-<span class="n">dsl</span><span class="nf">.build</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span> <span class="k">do</span>
+<span class="n">dsl</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span> <span class="k">do</span>
   <span class="k">begin</span>
     <span class="nb">puts</span> <span class="n">dsl_method</span> <span class="c1"># raises exception</span>
   <span class="k">rescue</span>
-    <span class="nb">puts</span> <span class="s2">&quot;'dsl_method' not available&quot;</span>
+    <span class="nb">puts</span> <span class="s2">"'dsl_method' not available"</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>We cannot do anything with accessing private methods/fields, but we can make methods from calling context available.
 if you provide parent context as an additional parameter, you can redirect  calls to missing object directly to
 the parent (proxy object):</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div></td><td class="code"><span class="k">module</span> <span class="nn">Proxy</span>
-  <span class="k">def </span><span class="nf">subject</span><span class="o">=</span> <span class="n">subject</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre></td><td class="code"><pre><span class="k">module</span> <span class="nn">Proxy</span>
+  <span class="k">def</span> <span class="nf">subject</span><span class="o">=</span> <span class="n">subject</span>
     <span class="vi">@subject</span> <span class="o">=</span> <span class="n">subject</span>
   <span class="k">end</span>
 
-  <span class="k">def </span><span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-    <span class="vi">@subject</span><span class="nf">.send</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+    <span class="vi">@subject</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="k">end</span>
 
-  <span class="k">def </span><span class="nf">respond_to?</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">include_private</span> <span class="o">=</span> <span class="kp">false</span><span class="p">)</span>
-    <span class="vi">@subject</span><span class="nf">.respond_to?</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="o">||</span> <span class="k">super</span>
+  <span class="k">def</span> <span class="nf">respond_to?</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">include_private</span> <span class="o">=</span> <span class="kp">false</span><span class="p">)</span>
+    <span class="vi">@subject</span><span class="p">.</span><span class="nf">respond_to?</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="o">||</span> <span class="k">super</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Here is our modified DSL class:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="k">class </span><span class="nc">DSL</span>
-  <span class="k">def </span><span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
-    <span class="n">object</span><span class="nf">.extend</span> <span class="no">Proxy</span>
-    <span class="n">object</span><span class="nf">.subject</span> <span class="o">=</span> <span class="n">parent</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">DSL</span>
+  <span class="k">def</span> <span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">extend</span> <span class="no">Proxy</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">subject</span> <span class="o">=</span> <span class="n">parent</span>
 
-    <span class="n">object</span><span class="nf">.instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you know that code block is coming from the parent scope, you can calculate parent
 dynamically, this way you may reduce amount of input parameters:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div></td><td class="code"><span class="k">class </span><span class="nc">DSL</span>
-  <span class="k">def </span><span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">code</span><span class="nf">.binding.eval</span> <span class="s1">'self'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">DSL</span>
+  <span class="k">def</span> <span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">code</span><span class="p">.</span><span class="nf">binding</span><span class="p">.</span><span class="nf">eval</span> <span class="s1">'self'</span>
 
-    <span class="n">object</span><span class="nf">.extend</span> <span class="no">Proxy</span>
-    <span class="n">object</span><span class="nf">.subject</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">extend</span> <span class="no">Proxy</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">subject</span> <span class="o">=</span> <span class="n">parent</span>
 
-    <span class="n">object</span><span class="nf">.instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h1>Building something useful</h1>
 
 <p>Now, let&rsquo;s apply our knowledge to build something useful. We will try to build DSL for
@@ -214,131 +232,151 @@ so you can use similar code for building zip files and for copying files.</p>
 <p><a href="https://github.com/shvets/zip_dsl">ZipDSL</a> is library for working with zip files in DSL way.</p>
 
 <p>Install new gem:</p>
-<pre class="highlight text"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">$ gem i zip_dsl
-</td></tr></tbody></table></pre>
+<div class="highlight plaintext"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>$ gem i zip_dsl
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now you can create new archive:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div></td><td class="code"><span class="nb">require</span> <span class="s1">'zip_dsl'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'zip_dsl'</span>
 
-<span class="n">zip_file</span> <span class="o">=</span> <span class="s2">&quot;test.zip&quot;</span>
-<span class="n">from_dir</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+<span class="n">zip_file</span> <span class="o">=</span> <span class="s2">"test.zip"</span>
+<span class="n">from_dir</span> <span class="o">=</span> <span class="s2">"."</span>
 
-<span class="n">zip_builder</span> <span class="o">=</span> <span class="no">ZipDSL</span><span class="nf">.new</span> <span class="n">zip_file</span><span class="p">,</span> <span class="n">from_dir</span>
+<span class="n">zip_builder</span> <span class="o">=</span> <span class="no">ZipDSL</span><span class="p">.</span><span class="nf">new</span> <span class="n">zip_file</span><span class="p">,</span> <span class="n">from_dir</span>
 
-<span class="n">zip_builder</span><span class="nf">.build</span> <span class="k">do</span>
+<span class="n">zip_builder</span><span class="p">.</span><span class="nf">build</span> <span class="k">do</span>
   <span class="c1"># files from 'from_dir'</span>
-  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Gemfile&quot;</span>
-  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Rakefile&quot;</span><span class="p">,</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;my_config&quot;</span>
-  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;spec/spec_helper.rb&quot;</span><span class="p">,</span>
-       <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;my_config&quot;</span>
+  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"Gemfile"</span>
+  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"Rakefile"</span><span class="p">,</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">"my_config"</span>
+  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"spec/spec_helper.rb"</span><span class="p">,</span>
+       <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">"my_config"</span>
 
   <span class="c1"># create empty directory</span>
-  <span class="n">directory</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;my_config&quot;</span>
+  <span class="n">directory</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">"my_config"</span>
 
   <span class="c1"># copy from one directory to another</span>
-  <span class="n">directory</span> <span class="ss">:from_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;spec&quot;</span><span class="p">,</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;my_spec&quot;</span>
+  <span class="n">directory</span> <span class="ss">:from_dir</span> <span class="o">=&gt;</span> <span class="s2">"spec"</span><span class="p">,</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">"my_spec"</span>
 
   <span class="c1"># create zip entry from arbitrary source:</span>
   <span class="c1"># string or StringIO</span>
-  <span class="n">content</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;README&quot;</span><span class="p">,</span>
-          <span class="ss">:source</span> <span class="o">=&gt;</span> <span class="s2">&quot;My README file content&quot;</span>
+  <span class="n">content</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"README"</span><span class="p">,</span>
+          <span class="ss">:source</span> <span class="o">=&gt;</span> <span class="s2">"My README file content"</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
-<p>or update existing archive:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code"><span class="n">zip_builder</span><span class="nf">.update</span> <span class="k">do</span>
-  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;README.md&quot;</span>
-  <span class="n">directory</span> <span class="ss">:from_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;lib&quot;</span>
-<span class="k">end</span>
-</td></tr></tbody></table></pre>
-<p>You can also display all entries from archive&rsquo;s folder:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">zip_builder</span><span class="nf">.list</span><span class="p">(</span><span class="s2">&quot;lib/zip_dsl&quot;</span><span class="p">)</span>
-</td></tr></tbody></table></pre>
-<p>or display entries:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="n">zip_builder</span><span class="nf">.each_entry</span><span class="p">(</span><span class="s2">&quot;lib/zip_dsl&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">entry</span>
-  <span class="nb">puts</span> <span class="n">entry</span><span class="nf">.name</span>
+</pre></td></tr></tbody></table>
+</div>
 
-  <span class="n">content</span> <span class="o">=</span> <span class="n">entry</span><span class="nf">.get_input_stream.read</span>
+<p>or update existing archive:</p>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre></td><td class="code"><pre><span class="n">zip_builder</span><span class="p">.</span><span class="nf">update</span> <span class="k">do</span>
+  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"README.md"</span>
+  <span class="n">directory</span> <span class="ss">:from_dir</span> <span class="o">=&gt;</span> <span class="s2">"lib"</span>
+<span class="k">end</span>
+</pre></td></tr></tbody></table>
+</div>
+
+<p>You can also display all entries from archive&rsquo;s folder:</p>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">zip_builder</span><span class="p">.</span><span class="nf">list</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span>
+</pre></td></tr></tbody></table>
+</div>
+
+<p>or display entries:</p>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre><span class="n">zip_builder</span><span class="p">.</span><span class="nf">each_entry</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">entry</span>
+  <span class="nb">puts</span> <span class="n">entry</span><span class="p">.</span><span class="nf">name</span>
+
+  <span class="n">content</span> <span class="o">=</span> <span class="n">entry</span><span class="p">.</span><span class="nf">get_input_stream</span><span class="p">.</span><span class="nf">read</span>
 
   <span class="nb">puts</span> <span class="n">content</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>When you work with zip file, you have to decide how to allocate/release resources (zip files) in order to
 avoid memory leaks. One possibe solution could be using modified DSL class implementation:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code"><span class="k">class </span><span class="nc">DSL</span>
-  <span class="k">def </span><span class="nf">build</span> <span class="n">create_code</span><span class="p">,</span> <span class="n">destroy_code</span><span class="o">=</span><span class="kp">nil</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
-    <span class="n">parent_binding</span> <span class="o">=</span> <span class="n">code</span><span class="nf">.binding</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">parent_binding</span><span class="nf">.eval</span> <span class="s1">'self'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">DSL</span>
+  <span class="k">def</span> <span class="nf">build</span> <span class="n">create_code</span><span class="p">,</span> <span class="n">destroy_code</span><span class="o">=</span><span class="kp">nil</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
+    <span class="n">parent_binding</span> <span class="o">=</span> <span class="n">code</span><span class="p">.</span><span class="nf">binding</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">parent_binding</span><span class="p">.</span><span class="nf">eval</span> <span class="s1">'self'</span>
 
-    <span class="n">object</span> <span class="o">=</span> <span class="n">create_code</span><span class="nf">.kind_of?</span><span class="p">(</span><span class="no">Proc</span><span class="p">)</span> <span class="p">?</span> <span class="n">create_code</span><span class="nf">.call</span> <span class="p">:</span> <span class="n">create_code</span>
+    <span class="n">object</span> <span class="o">=</span> <span class="n">create_code</span><span class="p">.</span><span class="nf">kind_of?</span><span class="p">(</span><span class="no">Proc</span><span class="p">)</span> <span class="p">?</span> <span class="n">create_code</span><span class="p">.</span><span class="nf">call</span> <span class="p">:</span> <span class="n">create_code</span>
 
-    <span class="n">object</span><span class="nf">.extend</span> <span class="no">Proxy</span>
-    <span class="n">object</span><span class="nf">.subject</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">extend</span> <span class="no">Proxy</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">subject</span> <span class="o">=</span> <span class="n">parent</span>
 
-    <span class="n">object</span><span class="nf">.instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
   <span class="k">ensure</span>
-    <span class="n">destroy_code</span><span class="nf">.call</span><span class="p">(</span><span class="n">object</span><span class="p">)</span> <span class="k">if</span> <span class="n">destroy_code</span> <span class="o">&amp;&amp;</span> <span class="n">object</span>
+    <span class="n">destroy_code</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">object</span><span class="p">)</span> <span class="k">if</span> <span class="n">destroy_code</span> <span class="o">&amp;&amp;</span> <span class="n">object</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>For example, we can wrap ZipInputStream in this way:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div></td><td class="code"><span class="k">class </span><span class="nc">Reader</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Reader</span>
   <span class="kp">include</span> <span class="no">DSL</span>
 
-   <span class="k">def </span><span class="nf">each_entry</span> <span class="nb">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
+   <span class="k">def</span> <span class="nf">each_entry</span> <span class="nb">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
     <span class="n">create_code</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span>
-      <span class="no">Zip</span><span class="o">::</span><span class="no">ZipInputStream</span><span class="nf">.new</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+      <span class="no">Zip</span><span class="o">::</span><span class="no">ZipInputStream</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="p">}</span>
-    <span class="n">destroy_code</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">|</span><span class="n">zis</span><span class="o">|</span> <span class="n">zis</span><span class="nf">.close</span> <span class="p">}</span>
+    <span class="n">destroy_code</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">|</span><span class="n">zis</span><span class="o">|</span> <span class="n">zis</span><span class="p">.</span><span class="nf">close</span> <span class="p">}</span>
     <span class="n">execute_code</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="k">do</span> <span class="o">|</span><span class="n">zis</span><span class="o">|</span>
-      <span class="n">zis</span><span class="nf">.rewind</span>
+      <span class="n">zis</span><span class="p">.</span><span class="nf">rewind</span>
 
-      <span class="k">while</span> <span class="p">(</span><span class="n">entry</span> <span class="o">=</span> <span class="n">zis</span><span class="nf">.get_next_entry</span><span class="p">)</span>
-        <span class="k">next</span> <span class="k">if</span> <span class="n">entry</span><span class="nf">.name</span> <span class="o">=~</span> <span class="sr">%r{</span><span class="se">\.\.</span><span class="sr">}</span>
-        <span class="n">code</span><span class="nf">.call</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+      <span class="k">while</span> <span class="p">(</span><span class="n">entry</span> <span class="o">=</span> <span class="n">zis</span><span class="p">.</span><span class="nf">get_next_entry</span><span class="p">)</span>
+        <span class="k">next</span> <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="nf">name</span> <span class="o">=~</span> <span class="sr">%r{</span><span class="se">\.\.</span><span class="sr">}</span>
+        <span class="n">code</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
       <span class="k">end</span>
     <span class="k">end</span>
 
     <span class="n">build</span><span class="p">(</span><span class="n">create_code</span><span class="p">,</span> <span class="n">destroy_code</span><span class="p">,</span> <span class="n">execute_code</span><span class="p">)</span>
    <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h1>DirDSL gem</h1>
 
 <p><a href="dir_dsl%20home">DirDSL</a> is library for working with files and directories (create, copy) in DSL way.</p>
 
 <p>Install it with this command:</p>
-<pre class="highlight text"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">$ gem install dir_dsl
-</td></tr></tbody></table></pre>
+<div class="highlight plaintext"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>$ gem install dir_dsl
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You can create new directory now:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div></td><td class="code"><span class="nb">require</span> <span class="s1">'dir_dsl'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre><pre class="lineno">26</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'dir_dsl'</span>
 
-<span class="n">from_dir</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
-<span class="n">to_dir</span> <span class="o">=</span> <span class="s2">&quot;build&quot;</span>
+<span class="n">from_dir</span> <span class="o">=</span> <span class="s2">"."</span>
+<span class="n">to_dir</span> <span class="o">=</span> <span class="s2">"build"</span>
 
-<span class="n">dir_builder</span> <span class="o">=</span> <span class="no">DirDSL</span><span class="nf">.new</span> <span class="n">from_dir</span><span class="p">,</span> <span class="n">to_dir</span>
+<span class="n">dir_builder</span> <span class="o">=</span> <span class="no">DirDSL</span><span class="p">.</span><span class="nf">new</span> <span class="n">from_dir</span><span class="p">,</span> <span class="n">to_dir</span>
 
-<span class="n">dir_builder</span><span class="nf">.build</span> <span class="k">do</span>
+<span class="n">dir_builder</span><span class="p">.</span><span class="nf">build</span> <span class="k">do</span>
   <span class="c1"># files from 'from_dir'</span>
-  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Gemfile&quot;</span>
-  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Rakefile&quot;</span><span class="p">,</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;my_config&quot;</span>
-  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;spec/spec_helper.rb&quot;</span><span class="p">,</span>
-       <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;my_config&quot;</span>
+  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"Gemfile"</span>
+  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"Rakefile"</span><span class="p">,</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">"my_config"</span>
+  <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"spec/spec_helper.rb"</span><span class="p">,</span>
+       <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">"my_config"</span>
 
   <span class="c1"># create empty directory</span>
-  <span class="n">directory</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;my_config&quot;</span>
+  <span class="n">directory</span> <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">"my_config"</span>
 
   <span class="c1"># copy from one directory to another</span>
-  <span class="n">directory</span> <span class="ss">:from_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;spec&quot;</span><span class="p">,</span>
-            <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">&quot;my_spec&quot;</span>
+  <span class="n">directory</span> <span class="ss">:from_dir</span> <span class="o">=&gt;</span> <span class="s2">"spec"</span><span class="p">,</span>
+            <span class="ss">:to_dir</span> <span class="o">=&gt;</span> <span class="s2">"my_spec"</span>
 
   <span class="c1"># create zip entry from arbitrary source:</span>
   <span class="c1"># string or StringIO</span>
-  <span class="n">content</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;README&quot;</span><span class="p">,</span>
-          <span class="ss">:source</span> <span class="o">=&gt;</span> <span class="s2">&quot;My README file content&quot;</span>
+  <span class="n">content</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"README"</span><span class="p">,</span>
+          <span class="ss">:source</span> <span class="o">=&gt;</span> <span class="s2">"My README file content"</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>And display all entries from the folder:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">dir_builder</span><span class="nf">.list</span><span class="p">(</span><span class="s2">&quot;lib/zip_dsl&quot;</span><span class="p">)</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">dir_builder</span><span class="p">.</span><span class="nf">list</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Some other examples of DSL can be found <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/meta_tricks/simple_dsl.rb">here</a>, <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl11.rb">here</a>, <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl12.rb">here</a>,
 <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl13.rb">here</a> and <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl2.rb">here</a>.</p>
 

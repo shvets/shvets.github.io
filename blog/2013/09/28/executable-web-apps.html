@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -44,11 +44,15 @@
 and you can see all installed gems inside the browser.</p>
 
 <p>Another example is <strong>rubygems</strong> running in server mode:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem server
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>gem server
+</pre></td></tr></tbody></table>
+</div>
+
 <p>It starts server on port 8808 and lets you explore installed gems from inside the browser.</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">open http://localhost:8808
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>open http://localhost:8808
+</pre></td></tr></tbody></table>
+</div>
+
 <p>For creating executable web applications you can use at least these 2 gems:</p>
 
 <ul>
@@ -62,32 +66,40 @@ and you can see all installed gems inside the browser.</p>
 
 <p>You use <strong>Vegas::Runner</strong> class for wrapping such application. For example, this
 is shell script for starting your favorite <strong>sinatra</strong> code:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div></td><td class="code"><span class="c1">#!/usr/bin/env ruby</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre></td><td class="code"><pre><span class="c1">#!/usr/bin/env ruby</span>
 <span class="c1"># bin/myapp</span>
 
-<span class="vg">$:</span><span class="nf">.unshift</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span>
-             <span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)),</span> <span class="s2">&quot;lib&quot;</span><span class="p">))</span>
+<span class="vg">$:</span><span class="p">.</span><span class="nf">unshift</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span>
+             <span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)),</span> <span class="s2">"lib"</span><span class="p">))</span>
 
 <span class="nb">require</span> <span class="s1">'vegas'</span>
 <span class="nb">require</span> <span class="s1">'myapp.rb'</span>
 
-<span class="no">Vegas</span><span class="o">::</span><span class="no">Runner</span><span class="nf">.new</span><span class="p">(</span><span class="no">MyApp</span><span class="p">,</span> <span class="s1">'my_app'</span><span class="p">)</span>
-</td></tr></tbody></table></pre>
+<span class="no">Vegas</span><span class="o">::</span><span class="no">Runner</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="no">MyApp</span><span class="p">,</span> <span class="s1">'my_app'</span><span class="p">)</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>and this is your sinatra application:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div></td><td class="code"><span class="c1"># my_app.rb</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre></td><td class="code"><pre><span class="c1"># my_app.rb</span>
 
 <span class="nb">require</span> <span class="s1">'sinatra/base'</span>
 
-<span class="k">class </span><span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
+<span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">get</span> <span class="s1">'/'</span> <span class="k">do</span>
-    <span class="s2">&quot;Hello, world!&quot;</span>
+    <span class="s2">"Hello, world!"</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now you can run it:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">chmod +x bin/myapp
-</td></tr></tbody></table></pre><pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bin/myapp
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>chmod +x bin/myapp
+</pre></td></tr></tbody></table>
+</div>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>bin/myapp
+</pre></td></tr></tbody></table>
+</div>
+
 <p>When you wrap sinatra application with Vegas, it does the following steps:</p>
 
 <ul>
@@ -101,19 +113,27 @@ is shell script for starting your favorite <strong>sinatra</strong> code:</p>
 </ul>
 
 <p>You can print a list of available command line options when running with -h or &ndash;help option:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="gp">&gt; </span>bin/myapp -h
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="gp">&gt; </span>bin/myapp -h
 Usage: bin/myapp <span class="o">[</span>options]
 ...
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you don&rsquo;t want to create a daemon and don&rsquo;t want to open it in the browser, use:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bin/myapp -F -L
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>bin/myapp -F -L
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you still use daemon and now want to stop it, use <strong>-K</strong> flag</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bin/myapp -K
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>bin/myapp -K
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you want to check status of your daemon, run this:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bin/myapp -S
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>bin/myapp -S
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Using Launchy gem</h2>
 
 <p><a href="https://github.com/copiousfreetime/launchy">Launchy</a> is helper class for launching cross-platform applications in a &ldquo;<strong>fire and forget manner</strong>&rdquo;.
@@ -123,26 +143,32 @@ difference.</p>
 <p>You can use launchy on the command line, or via its API.</p>
 
 <p>From command line:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">launchy http://www.ruby-lang.org/
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>launchy http://www.ruby-lang.org/
+</pre></td></tr></tbody></table>
+</div>
+
 <p>via API:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="nb">require</span> <span class="s1">'launchy'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'launchy'</span>
 
-<span class="no">Launchy</span><span class="nf">.open</span><span class="p">(</span><span class="s2">&quot;http://localhost:9292&quot;</span><span class="p">)</span>
-</td></tr></tbody></table></pre>
+<span class="no">Launchy</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s2">"http://localhost:9292"</span><span class="p">)</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you want to use launchy with your rack application, do it inside <strong>config.ru</strong>:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div></td><td class="code"><span class="c1"># config.ru</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre></td><td class="code"><pre><span class="c1"># config.ru</span>
 
-<span class="vg">$:</span><span class="nf">.unshift</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span>
-             <span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)),</span> <span class="s2">&quot;lib&quot;</span><span class="p">))</span>
+<span class="vg">$:</span><span class="p">.</span><span class="nf">unshift</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span>
+             <span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)),</span> <span class="s2">"lib"</span><span class="p">))</span>
 
 <span class="nb">require</span> <span class="s1">'my_app'</span>
 <span class="nb">require</span> <span class="s1">'launchy'</span>
 
 <span class="n">run</span> <span class="no">MyApp</span>
-<span class="no">Launchy</span><span class="nf">.open</span><span class="p">(</span><span class="s2">&quot;http://localhost:9292&quot;</span><span class="p">,</span> <span class="ss">:application</span> <span class="o">=&gt;</span> <span class="no">MyApp</span><span class="p">)</span>
+<span class="no">Launchy</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s2">"http://localhost:9292"</span><span class="p">,</span> <span class="ss">:application</span> <span class="o">=&gt;</span> <span class="no">MyApp</span><span class="p">)</span>
 
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Bonus: lunchy gem</h2>
 
 <p>If your development platform is OSX and you need to frequently start/stop <strong>launchctl agents</strong>, there is
@@ -155,18 +181,24 @@ as it&rsquo;s identifier.</p>
 find correct entry.</p>
 
 <p>For example, to restart postgres server you have to run this command:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+</pre></td></tr></tbody></table>
+</div>
+
 <p>With lunchy the tool you can shorten it:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">gem install lunchy
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre>gem install lunchy
 
 lunchy start postgres
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You can see the list of available agents:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">lunchy ls
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>lunchy ls
+</pre></td></tr></tbody></table>
+</div>
+
 <p>or manage particular agent:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code">lunchy start <span class="o">[</span>agent]
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre>lunchy start <span class="o">[</span>agent]
 lunchy stop <span class="o">[</span>agent]
 lunchy restart <span class="o">[</span>agent]
 
@@ -174,10 +206,14 @@ lunchy status <span class="o">[</span>agent]
 
 lunchy show <span class="o">[</span>agent]
 lunchy edit <span class="o">[</span>agent]
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>or install it:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">lunchy install <span class="o">[</span>file]
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>lunchy install <span class="o">[</span>file]
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Example: mvn-plugin-config gem</h2>
 
 <p>This <a href="https://github.com/shvets/mvn-plugin-config">gem</a> was created while I was working back on Java project. Generally speaking,
@@ -191,11 +227,15 @@ and some of maven plugin options were undocumented.</p>
 ruby gem was created to access this information in convenient way as local web server.</p>
 
 <p>In order to use it first install it (keep in mind - it uses Vegas gem):</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem install mvn_plugin_config
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>gem install mvn_plugin_config
+</pre></td></tr></tbody></table>
+</div>
+
 <p>and then run it as daemon:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">mvn-plugin-config
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>mvn-plugin-config
+</pre></td></tr></tbody></table>
+</div>
+
 <p>All commands described in Vegas section are accessible here.</p>
 
 <p>When you run the script, it starts server as daemon and opens start page in the browser.

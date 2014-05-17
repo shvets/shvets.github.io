@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -44,34 +44,40 @@ They don&rsquo;t coexist well with each other and you have to do additional step
 
 <p>According to <a href="http://bundler.io/v1.3/rubygems.html">bundler gem help</a>, all you have to do is to create simple <strong>Gemfile</strong>
 with only one instruction (<strong>gemspec</strong>):</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="c1"># Gemfile</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="c1"># Gemfile</span>
 
 <span class="n">gemspec</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>This instruction will look into corresponding <strong>.gemspec</strong> file (you should have it as part of your gem project).
 It will create <strong>default</strong> and <strong>development</strong> groups and fill them out according to usage of <strong>add_runtime_dependency</strong>
 and <strong>add_development_dependency</strong> calls.</p>
 
 <p>So, if you have the following <strong>my_gem.gemspec</strong> file:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code"><span class="c1"># my_gem.gemspec</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre></td><td class="code"><pre><span class="c1"># my_gem.gemspec</span>
 
-<span class="n">spec</span><span class="nf">.add_runtime_dependency</span> <span class="s2">&quot;haml&quot;</span><span class="p">,</span> <span class="o">[</span><span class="s2">&quot;&gt;= 0&quot;</span><span class="o">]</span>
-<span class="n">spec</span><span class="nf">.add_runtime_dependency</span> <span class="s2">&quot;sass&quot;</span><span class="p">,</span> <span class="o">[</span><span class="s2">&quot;&gt;= 0&quot;</span><span class="o">]</span>
+<span class="n">spec</span><span class="p">.</span><span class="nf">add_runtime_dependency</span> <span class="s2">"haml"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
+<span class="n">spec</span><span class="p">.</span><span class="nf">add_runtime_dependency</span> <span class="s2">"sass"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
 
-<span class="n">spec</span><span class="nf">.add_development_dependency</span> <span class="s2">&quot;gemcutter&quot;</span><span class="p">,</span> <span class="o">[</span><span class="s2">&quot;&gt;= 0&quot;</span><span class="o">]</span>
-</td></tr></tbody></table></pre>
+<span class="n">spec</span><span class="p">.</span><span class="nf">add_development_dependency</span> <span class="s2">"gemcutter"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>it will dynamically build something like this:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div></td><td class="code"><span class="c1"># Gemfile</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre></td><td class="code"><pre><span class="c1"># Gemfile</span>
 
 <span class="n">group</span> <span class="ss">:default</span> <span class="k">do</span>
-  <span class="n">gem</span> <span class="s2">&quot;haml&quot;</span>
-  <span class="n">gem</span> <span class="s2">&quot;sass&quot;</span>
+  <span class="n">gem</span> <span class="s2">"haml"</span>
+  <span class="n">gem</span> <span class="s2">"sass"</span>
 <span class="k">end</span>
 
 <span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
-  <span class="n">gem</span> <span class="s2">&quot;gemcutter&quot;</span>
+  <span class="n">gem</span> <span class="s2">"gemcutter"</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>This approach has on drawback though - you have to think in terms of <strong>.gemspec</strong> file, which is counter-intuitive.</p>
 
 <p>It would be nice if you can do it <a href="https://github.com/shvets/gemspec_deps_gen">other way around</a>. We keep all
@@ -81,73 +87,89 @@ the dependencies in <strong>Gemfile</strong> as we would do it for <strong>any o
 <h2>Installation</h2>
 
 <p>Add this line to to your Gemfile:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">gem</span> <span class="s2">&quot;gemspec_deps_gen&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">gem</span> <span class="s2">"gemspec_deps_gen"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>And then execute it:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bundle
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>bundle
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Usage</h2>
 
 <p>Create <strong>Gemfile</strong> file:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div></td><td class="code"><span class="c1"># Gemfile</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre></td><td class="code"><pre><span class="c1"># Gemfile</span>
 
 <span class="n">group</span> <span class="ss">:default</span> <span class="k">do</span>
-  <span class="n">gem</span> <span class="s2">&quot;haml&quot;</span>
-  <span class="n">gem</span> <span class="s2">&quot;sass&quot;</span>
+  <span class="n">gem</span> <span class="s2">"haml"</span>
+  <span class="n">gem</span> <span class="s2">"sass"</span>
 <span class="k">end</span>
 
 <span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
-  <span class="n">gem</span> <span class="s2">&quot;gemcutter&quot;</span>
+  <span class="n">gem</span> <span class="s2">"gemcutter"</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Create <strong>my_gem.gemspec.erb</strong> file:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code"><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="nf">.new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
-  <span class="n">spec</span><span class="nf">.name</span> <span class="o">=</span> <span class="s2">&quot;sample&quot;</span>
-  <span class="n">spec</span><span class="nf">.summary</span> <span class="o">=</span> <span class="sx">%q{Summary.}</span>
-  <span class="n">spec</span><span class="nf">.description</span> <span class="o">=</span> <span class="sx">%q{Description.}</span>
-  <span class="n">spec</span><span class="nf">.email</span> <span class="o">=</span> <span class="s2">&quot;alexander.shvets@gmail.com&quot;</span>
-  <span class="n">spec</span><span class="nf">.authors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;Alexander Shvets&quot;</span><span class="o">]</span>
-  <span class="n">spec</span><span class="nf">.homepage</span> <span class="o">=</span> <span class="s2">&quot;http://github.com/shvets/sample&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre></td><td class="code"><pre><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">name</span> <span class="o">=</span> <span class="s2">"sample"</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">summary</span> <span class="o">=</span> <span class="sx">%q{Summary.}</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">description</span> <span class="o">=</span> <span class="sx">%q{Description.}</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">email</span> <span class="o">=</span> <span class="s2">"alexander.shvets@gmail.com"</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">authors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"Alexander Shvets"</span><span class="o">]</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">homepage</span> <span class="o">=</span> <span class="s2">"http://github.com/shvets/sample"</span>
 
-  <span class="n">spec</span><span class="nf">.files</span> <span class="o">=</span> <span class="sb">`git ls-files`</span><span class="nf">.split</span><span class="p">(</span><span class="vg">$\</span><span class="p">)</span>
-  <span class="n">spec</span><span class="nf">.test_files</span> <span class="o">=</span>
-    <span class="n">spec</span><span class="nf">.files.grep</span><span class="p">(</span><span class="sr">%r{^(test|spec|features)/}</span><span class="p">)</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">files</span> <span class="o">=</span> <span class="sb">`git ls-files`</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="vg">$\</span><span class="p">)</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">test_files</span> <span class="o">=</span>
+    <span class="n">spec</span><span class="p">.</span><span class="nf">files</span><span class="p">.</span><span class="nf">grep</span><span class="p">(</span><span class="sr">%r{^(test|spec|features)/}</span><span class="p">)</span>
 
-  <span class="n">spec</span><span class="nf">.version</span> <span class="o">=</span> <span class="s2">&quot;1.0.0&quot;</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">version</span> <span class="o">=</span> <span class="s2">"1.0.0"</span>
   <span class="c1">#&lt;%= project_dependencies %&gt;</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You can see ERB fragment (<strong>project_dependencies</strong>) included inside the body of the specification.</p>
 
 <p>Now, run this command:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="gp">$ </span>gemspec_deps_gen my_gem.gemspec.erb my_gem.gemspec
-</td></tr></tbody></table></pre>
-<p>It will generate <strong>my_gem.gemspec</strong> and replace ERB fragment with dependencies from Gemfile:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="nf">.new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
-  <span class="nf">..</span><span class="o">.</span>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="gp">$ </span>gemspec_deps_gen my_gem.gemspec.erb my_gem.gemspec
+</pre></td></tr></tbody></table>
+</div>
 
-  <span class="n">spec</span><span class="nf">.add_runtime_dependency</span> <span class="s2">&quot;haml&quot;</span><span class="p">,</span> <span class="o">[</span><span class="s2">&quot;&gt;= 0&quot;</span><span class="o">]</span>
-  <span class="n">spec</span><span class="nf">.add_runtime_dependency</span> <span class="s2">&quot;sass&quot;</span><span class="p">,</span> <span class="o">[</span><span class="s2">&quot;&gt;= 0&quot;</span><span class="o">]</span>
-  <span class="n">spec</span><span class="nf">.add_development_dependency</span> <span class="s2">&quot;gemcutter&quot;</span><span class="p">,</span> <span class="o">[</span><span class="s2">&quot;&gt;= 0&quot;</span><span class="o">]</span>
+<p>It will generate <strong>my_gem.gemspec</strong> and replace ERB fragment with dependencies from Gemfile:</p>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
+  <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+
+  <span class="n">spec</span><span class="p">.</span><span class="nf">add_runtime_dependency</span> <span class="s2">"haml"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">add_runtime_dependency</span> <span class="s2">"sass"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
+  <span class="n">spec</span><span class="p">.</span><span class="nf">add_development_dependency</span> <span class="s2">"gemcutter"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
 
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If second parameter is missing, result will be outputted to console.</p>
 
 <p>As alternative, you can call it as <strong>rake command</strong>:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;gemspec_deps_gen&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s2">"gemspec_deps_gen"</span>
 
 <span class="n">project_name</span> <span class="o">=</span> <span class="s1">'my_gem'</span>
 
 <span class="n">task</span> <span class="ss">:gen</span> <span class="k">do</span>
-  <span class="n">generator</span> <span class="o">=</span> <span class="no">GemspecDepsGen</span><span class="nf">.new</span>
+  <span class="n">generator</span> <span class="o">=</span> <span class="no">GemspecDepsGen</span><span class="p">.</span><span class="nf">new</span>
 
-  <span class="n">generator</span><span class="nf">.generate_dependencies</span> <span class="s2">&quot;spec&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec.erb&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec&quot;</span>
+  <span class="n">generator</span><span class="p">.</span><span class="nf">generate_dependencies</span> <span class="s2">"spec"</span><span class="p">,</span> <span class="s2">"</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec.erb"</span><span class="p">,</span> <span class="s2">"</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec"</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>And run it:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">rake gen
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>rake gen
+</pre></td></tr></tbody></table>
+</div>
+
 <p>It will also generate <strong>my_gem.gemspec</strong> and replace ERB fragment with dependencies from Gemfile.</p>
 
 <div id='footer'>

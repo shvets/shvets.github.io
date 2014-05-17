@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -43,33 +43,41 @@ from <a href="https://github.com/redcar/redcar">redcar project</a> which in turn
 <a href="https://github.com/shvets/jar_wrapper">jar_wrapper gem</a>, so it can be easily used in any ruby project.</p>
 
 <p>Install jar_wrapper with this command:</p>
-<pre class="highlight text"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">$ gem install jar_wrapper
-</td></tr></tbody></table></pre>
+<div class="highlight plaintext"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>$ gem install jar_wrapper
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now you can use it in your program directly or create gem for delivering java jar file(s).
 For example, this code will upload remote file:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div></td><td class="code"><span class="nb">require</span> <span class="s1">'jar_wrapper'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'jar_wrapper'</span>
 
-<span class="n">wrapper</span> <span class="o">=</span> <span class="no">JarWrapper</span><span class="o">::</span><span class="no">Runner</span><span class="nf">.new</span>
-<span class="n">wrapper</span><span class="nf">.java_opts</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;-Xmx1024m&quot;</span><span class="p">,</span> <span class="s2">&quot;-Xss1024k&quot;</span> <span class="o">]</span>
+<span class="n">wrapper</span> <span class="o">=</span> <span class="no">JarWrapper</span><span class="o">::</span><span class="no">Runner</span><span class="p">.</span><span class="nf">new</span>
+<span class="n">wrapper</span><span class="p">.</span><span class="nf">java_opts</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"-Xmx1024m"</span><span class="p">,</span> <span class="s2">"-Xss1024k"</span> <span class="o">]</span>
 
 <span class="c1"># install jar file from source URL into target file:</span>
 
-<span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;http://selenium.googlecode.com/files/selenium-server-2.37.0.zip&quot;</span>
-<span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;selenium-server.zip&quot;</span>
+<span class="n">source</span> <span class="o">=</span> <span class="s2">"http://selenium.googlecode.com/files/selenium-server-2.37.0.zip"</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s2">"selenium-server.zip"</span>
 
-<span class="n">wrapper</span><span class="nf">.install</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span>
-</td></tr></tbody></table></pre>
+<span class="n">wrapper</span><span class="p">.</span><span class="nf">install</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You can aldo execute jar file (a.k.a. &ldquo;java -jar jar_file.jar&rdquo;)</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="n">wrapper</span><span class="nf">.jar_file</span> <span class="o">=</span> <span class="s2">&quot;jar_file.jar&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="n">wrapper</span><span class="p">.</span><span class="nf">jar_file</span> <span class="o">=</span> <span class="s2">"jar_file.jar"</span>
 
-<span class="n">wrapper</span><span class="nf">.run</span>
-</td></tr></tbody></table></pre>
+<span class="n">wrapper</span><span class="p">.</span><span class="nf">run</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Or you can execute java jar file by specifying <strong>main class</strong> (a.k.a. &ldquo;java -cp some<em>class</em>path main_class&rdquo;):</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code"><span class="n">wrapper</span><span class="nf">.classpath</span> <span class="o">=</span> <span class="s2">&quot;some_class_path&quot;</span>
-<span class="n">wrapper</span><span class="nf">.main_class</span> <span class="o">=</span> <span class="s2">&quot;main_class&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre></td><td class="code"><pre><span class="n">wrapper</span><span class="p">.</span><span class="nf">classpath</span> <span class="o">=</span> <span class="s2">"some_class_path"</span>
+<span class="n">wrapper</span><span class="p">.</span><span class="nf">main_class</span> <span class="o">=</span> <span class="s2">"main_class"</span>
 
-<span class="n">wrapper</span><span class="nf">.run</span>
-</td></tr></tbody></table></pre>
+<span class="n">wrapper</span><span class="p">.</span><span class="nf">run</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you need more details on how to use it for practical gem, visit <a href="https://github.com/shvets/selenium">selenium gem</a>.
 This gem downloads and create launcher for standalone selenium server.</p>
 

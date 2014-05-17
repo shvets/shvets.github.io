@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -38,15 +38,17 @@
 
 <p>If your Ruby/Rails project has to work with Ruby and JRuby at the same time,
 sooner or later you&rsquo;ll end up with <strong>Gemfile</strong> that has a lot of <strong>if logic</strong>:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="c1"># Gemfile</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="c1"># Gemfile</span>
 
-<span class="k">if</span> <span class="no">RUBY_PLATFORM</span> <span class="o">==</span> <span class="s2">&quot;java&quot;</span> <span class="c1"># jruby</span>
-  <span class="n">gem</span> <span class="s2">&quot;jdbc-postgres&quot;</span>
-  <span class="n">gem</span> <span class="s2">&quot;activerecord-jdbcpostgresql-adapter&quot;</span>
+<span class="k">if</span> <span class="no">RUBY_PLATFORM</span> <span class="o">==</span> <span class="s2">"java"</span> <span class="c1"># jruby</span>
+  <span class="n">gem</span> <span class="s2">"jdbc-postgres"</span>
+  <span class="n">gem</span> <span class="s2">"activerecord-jdbcpostgresql-adapter"</span>
 <span class="k">else</span>
-  <span class="n">gem</span> <span class="s2">&quot;pg&quot;</span><span class="p">,</span> <span class="s1">'0.13.2'</span>
+  <span class="n">gem</span> <span class="s2">"pg"</span><span class="p">,</span> <span class="s1">'0.13.2'</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you have a lot of dependencies this <strong>if logic</strong> complicates and pollutes your code.</p>
 
 <p>How can we simplify this code? Easy - keep two separate <strong>Gemfile</strong> - one for
@@ -55,30 +57,38 @@ Ruby (Gemfile) and another for JRuby (Gemfile-jruby).</p>
 <p>You need to tell your bundler though which <strong>Gemfile</strong> needs to be used.</p>
 
 <p>If you want to run bundler with different Gemfile, run it this way:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span>Gemfile-jruby bundle
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span>Gemfile-jruby bundle
+</pre></td></tr></tbody></table>
+</div>
+
 <p>This is fine, but you have to remember to provide additional environment variable every time you run the command.</p>
 
 <p>If you want to select Gemfile automatically when you change ruby or gemset,
 you can use <strong>rvm hook</strong>. All hooks for rvm are located in <strong>~/.rvm/hooks</strong>  folder.</p>
 
 <p>Create or edit this file:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">vi ~/.rvm/hooks/after_use_jruby
-</td></tr></tbody></table></pre>
-<p>Locate line with <strong>if [[ &ldquo;${rvm<em>ruby</em>string}&rdquo; =~ &ldquo;jruby&rdquo; ]]</strong> and add your code:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div></td><td class="code"><span class="c">#!/usr/bin/env bash</span>
-<span class="se">\.</span> <span class="s2">&quot;</span><span class="k">${</span><span class="nv">rvm_path</span><span class="k">}</span><span class="s2">/scripts/functions/hooks/jruby&quot;</span>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>vi ~/.rvm/hooks/after_use_jruby
+</pre></td></tr></tbody></table>
+</div>
 
-<span class="k">if</span> <span class="o">[[</span> <span class="s2">&quot;</span><span class="k">${</span><span class="nv">rvm_ruby_string</span><span class="k">}</span><span class="s2">&quot;</span> <span class="o">=</span>~ <span class="s2">&quot;jruby&quot;</span> <span class="o">]]</span>
+<p>Locate line with <strong>if [[ &ldquo;${rvm<em>ruby</em>string}&rdquo; =~ &ldquo;jruby&rdquo; ]]</strong> and add your code:</p>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre></td><td class="code"><pre><span class="c">#!/usr/bin/env bash</span>
+<span class="se">\.</span> <span class="s2">"</span><span class="k">${</span><span class="nv">rvm_path</span><span class="k">}</span><span class="s2">/scripts/functions/hooks/jruby"</span>
+
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">rvm_ruby_string</span><span class="k">}</span><span class="s2">"</span> <span class="o">=</span>~ <span class="s2">"jruby"</span> <span class="o">]]</span>
 <span class="k">then
-  </span><span class="nb">export </span><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span><span class="s2">&quot;Gemfile-jruby&quot;</span>
+  </span><span class="nb">export </span><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span><span class="s2">"Gemfile-jruby"</span>
 <span class="k">else
-  </span><span class="nb">export </span><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span><span class="s2">&quot;Gemfile&quot;</span>
+  </span><span class="nb">export </span><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span><span class="s2">"Gemfile"</span>
 <span class="k">fi</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Change rights for this file to make it executable:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">chmod +x ~/.rvm/hooks/after_use_jruby
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>chmod +x ~/.rvm/hooks/after_use_jruby
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now, every time you change directory to your project, rvm will setup all environment
 variables as before plus your <strong>BUNDLE_GEMFILE</strong> variable.</p>
 

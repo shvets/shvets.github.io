@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -67,115 +67,149 @@ as implementation - it&rsquo;s pure Ruby implementation of a SSH (protocol 2) cl
 <ol>
 <li><strong>%x</strong> expression:</li>
 </ol>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="sx">%x{ pwd }</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="sx">%x{ pwd }</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ol>
 <li>backticks:</li>
 </ol>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="sb">`pwd`</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="sb">`pwd`</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ol>
 <li><strong>system</strong> command:</li>
 </ol>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"> <span class="nb">system</span> <span class="s2">&quot;pwd&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre> <span class="nb">system</span> <span class="s2">"pwd"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ol>
 <li><strong>exec</strong> command:</li>
 </ol>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="nb">exec</span> <span class="s2">&quot;pwd&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="nb">exec</span> <span class="s2">"pwd"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ol>
 <li><strong>spawn</strong> command:</li>
 </ol>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">spawn</span> <span class="s2">&quot;pwd&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">spawn</span> <span class="s2">"pwd"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ol>
 <li><strong>popen</strong> command:</li>
 </ol>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="no">IO</span><span class="nf">.popen</span> <span class="s2">&quot;pwd&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="no">IO</span><span class="p">.</span><span class="nf">popen</span> <span class="s2">"pwd"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ol>
 <li>using <strong>open3</strong> library:</li>
 </ol>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;open3&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s2">"open3"</span>
 
-<span class="no">Open3</span><span class="nf">.popen3</span><span class="p">(</span><span class="s1">'pwd'</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">stdin</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="o">|</span> <span class="nf">..</span><span class="o">.</span> <span class="p">}</span>
+<span class="no">Open3</span><span class="p">.</span><span class="nf">popen3</span><span class="p">(</span><span class="s1">'pwd'</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">stdin</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="o">|</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span> <span class="p">}</span>
 
-<span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="no">Open3</span><span class="nf">.capture3</span><span class="p">(</span><span class="s1">'pwd'</span><span class="p">,</span>
+<span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="no">Open3</span><span class="p">.</span><span class="nf">capture3</span><span class="p">(</span><span class="s1">'pwd'</span><span class="p">,</span>
   <span class="ss">:stdin_data</span> <span class="o">=&gt;</span> <span class="n">stdin</span><span class="p">)</span> <span class="c1"># another example</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>With <a href="script_executor">script_executor</a> gem we are trying to build common interface for executing
 both local and remote code in unified way.</p>
 
 <h2>Installation</h2>
 
 <p>Add this line to your application&rsquo;s Gemfile:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem <span class="s1">'script_executor'</span>
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>gem <span class="s1">'script_executor'</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>And then execute:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">bundle
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>bundle
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Or install it yourself:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem install script_executor
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>gem install script_executor
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Usage</h2>
 
 <ul>
 <li>Create executor</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">executor</span> <span class="o">=</span> <span class="no">ScriptExecutor</span><span class="nf">.new</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">executor</span> <span class="o">=</span> <span class="no">ScriptExecutor</span><span class="p">.</span><span class="nf">new</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Execute local command:</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">executor</span><span class="nf">.execute</span> <span class="s2">&quot;ls&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="s2">"ls"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Execute remote command:</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="n">server_info</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="n">server_info</span> <span class="o">=</span> <span class="p">{</span>
   <span class="ss">:remote</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
-  <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">&quot;some_host&quot;</span><span class="p">,</span>
-  <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="s2">&quot;some_user&quot;</span><span class="p">,</span>
-  <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="s2">&quot;some_password&quot;</span>
+  <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">"some_host"</span><span class="p">,</span>
+  <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="s2">"some_user"</span><span class="p">,</span>
+  <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="s2">"some_password"</span>
 <span class="p">}</span>
 
-<span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">&quot;ls -al&quot;</span><span class="p">)</span>
-</td></tr></tbody></table></pre>
+<span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">"ls -al"</span><span class="p">)</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Execute remote command as &lsquo;sudo&rsquo;:</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code"><span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">({</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
-  <span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">&quot;/etc/init.d/tomcat stop&quot;</span><span class="p">})</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">({</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+  <span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">"/etc/init.d/tomcat stop"</span><span class="p">})</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Execute remote command with code block:</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code"><span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre></td><td class="code"><pre><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
   <span class="sx">%Q(
     /etc/init.d/tomcat stop
     /etc/init.d/tomcat start
   )</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Execute remote command while capturing and suppressing output (default is &lsquo;false&rsquo; for both parameters):</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:capture_output</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre><span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:capture_output</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
                   <span class="ss">:suppress_output</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
 
-<span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span>
-  <span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">&quot;whoami&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span>
+  <span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">"whoami"</span><span class="p">)</span>
 
 <span class="nb">puts</span> <span class="n">result</span> <span class="c1"># ENV['USER'] on remote server</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Simulate remote execution:</li>
 </ul>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:simulate</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:simulate</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
 
-<span class="n">executor</span><span class="nf">.execute</span> <span class="n">server_info</span><span class="nf">.merge</span><span class="p">(</span><span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">&quot;whoami&quot;</span><span class="p">)</span> <span class="c1"># generate commands without actual execution</span>
-</td></tr></tbody></table></pre>
+<span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">"whoami"</span><span class="p">)</span> <span class="c1"># generate commands without actual execution</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Using ScriptLocator</h2>
 
 <p>You can keep scripts that need to be executed, embedded into your code (as in examples above),
@@ -185,13 +219,13 @@ access to the code, making maintenance easier.</p>
 
 <p>For example, if you want to create script with 2 commands (command1, command2), you can use
 <strong>scripts</strong> and <strong>evaluate_script_body</strong> methods:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div></td><td class="code"><span class="nb">require</span> <span class="s1">'script_locator'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'script_locator'</span>
 
 <span class="kp">include</span> <span class="no">ScriptLocator</span>
 
 <span class="nb">puts</span> <span class="n">scripts</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span> <span class="c1"># [command1, command2]</span>
 
-<span class="nb">name</span> <span class="o">=</span> <span class="s2">&quot;john&quot;</span>
+<span class="nb">name</span> <span class="o">=</span> <span class="s2">"john"</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">result</span><span class="o">[</span><span class="s1">'command1'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span>
 
@@ -200,31 +234,33 @@ access to the code, making maintenance easier.</p>
 
 [command1]
 
-echo &quot;&lt;%= name %&gt;&quot;
+echo "&lt;%= name %&gt;"
 
 [command2]
 
-echo &quot;test2&quot;
-</span></td></tr></tbody></table></pre>
+echo "test2"
+</span></pre></td></tr></tbody></table>
+</div>
+
 <p>Let&rsquo;s build more sophisticated example. We want to automate generating public/private
 keys for ssh access and copying public key to remote server for password-less access
 to the server.</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div><div class="lineno">31</div><div class="lineno">32</div><div class="lineno">33</div><div class="lineno">34</div><div class="lineno">35</div><div class="lineno">36</div><div class="lineno">37</div><div class="lineno">38</div><div class="lineno">39</div><div class="lineno">40</div><div class="lineno">41</div><div class="lineno">42</div><div class="lineno">43</div><div class="lineno">44</div><div class="lineno">45</div><div class="lineno">46</div><div class="lineno">47</div><div class="lineno">48</div><div class="lineno">49</div></td><td class="code"><span class="nb">require</span> <span class="s1">'script_executor/executable'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre><pre class="lineno">26</pre><pre class="lineno">27</pre><pre class="lineno">28</pre><pre class="lineno">29</pre><pre class="lineno">30</pre><pre class="lineno">31</pre><pre class="lineno">32</pre><pre class="lineno">33</pre><pre class="lineno">34</pre><pre class="lineno">35</pre><pre class="lineno">36</pre><pre class="lineno">37</pre><pre class="lineno">38</pre><pre class="lineno">39</pre><pre class="lineno">40</pre><pre class="lineno">41</pre><pre class="lineno">42</pre><pre class="lineno">43</pre><pre class="lineno">44</pre><pre class="lineno">45</pre><pre class="lineno">46</pre><pre class="lineno">47</pre><pre class="lineno">48</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'script_executor/executable'</span>
 <span class="nb">require</span> <span class="s1">'script_executor/script_locator'</span>
 <span class="nb">require</span> <span class="s1">'file_utils/file_utils'</span>
 
-<span class="k">class </span><span class="nc">Ssh</span> <span class="o">&lt;</span> <span class="no">Thor</span>
+<span class="k">class</span> <span class="nc">Ssh</span> <span class="o">&lt;</span> <span class="no">Thor</span>
   <span class="kp">include</span> <span class="no">Executable</span><span class="p">,</span> <span class="no">ScriptLocator</span><span class="p">,</span> <span class="no">FileUtils</span>
 
-  <span class="n">desc</span> <span class="s2">&quot;gen_key&quot;</span><span class="p">,</span> <span class="s2">&quot;gen_key&quot;</span>
-  <span class="k">def </span><span class="nf">gen_key</span>
+  <span class="n">desc</span> <span class="s2">"gen_key"</span><span class="p">,</span> <span class="s2">"gen_key"</span>
+  <span class="k">def</span> <span class="nf">gen_key</span>
     <span class="n">scripts</span> <span class="o">=</span> <span class="n">scripts</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span>
 
     <span class="n">execute</span> <span class="p">{</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="o">[</span><span class="s1">'gen_key'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span> <span class="p">}</span>
   <span class="k">end</span>
 
-  <span class="n">desc</span> <span class="s2">&quot;cp_key&quot;</span><span class="p">,</span> <span class="s2">&quot;cp_key&quot;</span>
-  <span class="k">def </span><span class="nf">cp_key</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+  <span class="n">desc</span> <span class="s2">"cp_key"</span><span class="p">,</span> <span class="s2">"cp_key"</span>
+  <span class="k">def</span> <span class="nf">cp_key</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
     <span class="n">scripts</span> <span class="o">=</span> <span class="n">scripts</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span>
 
     <span class="n">execute</span> <span class="p">{</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="o">[</span><span class="s1">'scp_public_key'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span> <span class="p">}</span>
@@ -239,14 +275,14 @@ to the server.</p>
 
 [gen_key]
 
-echo &quot;Generating ssh key...&quot;
+echo "Generating ssh key..."
 
 cd ~/.ssh
 ssh-keygen
 
 [scp_public_key]
 
-echo &quot;Copying public key to remote server...&quot;
+echo "Copying public key to remote server..."
 
 scp ~/.ssh/id_rsa.pub &lt;%= ENV['USER'] %&gt;@&lt;%= host %&gt;:~/pubkey.txt
 
@@ -257,20 +293,26 @@ chmod 700 .ssh
 cat pubkey.txt &gt;&gt; ~/.ssh/authorized_keys
 rm ~/pubkey.txt
 chmod 600 ~/.ssh/*
-</span></td></tr></tbody></table></pre>
+</span></pre></td></tr></tbody></table>
+</div>
+
 <p>This example has 3 scripts: <strong>gen_key</strong>, <strong>scp_public_key</strong> and <strong>install_key</strong>. They are self-explanatory.
 Also, pay attention at using <strong>Executable</strong> module. It is used when we want to add ScriptExecutor functionality
 as part of class.</p>
 
 <p>In order to execute new commands you have to use <strong>thor</strong> tool:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code">thor ssh:gen_key
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre>thor ssh:gen_key
 thor ssh:cp_key your.remote.server.com
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You can achieve same goal with homebrew tool:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">brew install ssh-copy-id
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre>brew install ssh-copy-id
 
 ssh-copy-id <span class="nv">$USER</span>@your.remote.server.com
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <div id='footer'>
 <p id='legal'>
 &copy; All Right Reserved (2013), Alexander Shvets.

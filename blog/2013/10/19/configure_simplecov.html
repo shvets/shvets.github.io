@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -41,10 +41,12 @@
 <p><a href="https://github.com/colszowka/simplecov">SimpleCov</a> is a code coverage analytical tool for Ruby 1.9 built as ruby gem.</p>
 
 <p>In order to use it in your project add this gems to your Gemfile:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">  <span class="n">group</span> <span class="ss">:coverage</span> <span class="k">do</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre>  <span class="n">group</span> <span class="ss">:coverage</span> <span class="k">do</span>
     <span class="n">gem</span> <span class="s1">'simplecov'</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="kp">false</span>
   <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>The formatter for SimpleCov is packaged as a separate gem called <a href="https://github.com/colszowka/simplecov-html">simplecov-html</a>.
 You don&rsquo;t have to include it explicitly - SimpleCov already has it as a dependency.</p>
 
@@ -52,57 +54,73 @@ You don&rsquo;t have to include it explicitly - SimpleCov already has it as a de
 How to do it?</p>
 
 <p>You have to start SimpleCov before any of your specs/tests in order to be covered:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code"><span class="c1"># spec_helper.rb</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre></td><td class="code"><pre><span class="c1"># spec_helper.rb</span>
 <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'COVERAGE'</span><span class="o">]</span> <span class="o">==</span> <span class="s1">'true'</span>
   <span class="nb">require</span> <span class="s1">'simplecov'</span>
 
-  <span class="no">SimpleCov</span><span class="nf">.start</span>
+  <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">start</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre><pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div></td><td class="code"><span class="c1"># my_model_spec.rb</span>
+</pre></td></tr></tbody></table>
+</div>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre></td><td class="code"><pre><span class="c1"># my_model_spec.rb</span>
 <span class="nb">require</span> <span class="s1">'spec_helper'</span>
 
 <span class="n">describe</span> <span class="no">MyModel</span> <span class="k">do</span>
-<span class="nf">..</span><span class="o">.</span>
+<span class="p">.</span><span class="nf">.</span><span class="o">.</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now you can run your specs:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">rspec spec/my_model_spec.rb
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>rspec spec/my_model_spec.rb
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Coverage report will be saved in <strong>coverage</strong> folder. Open up <strong>coverage/index.html</strong> in your browser
 and check out results:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">open coverage/index.html
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>open coverage/index.html
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you want to save results to another folder, change <strong>coverage_path</strong> property:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="no">SimpleCov</span><span class="nf">.coverage_path</span> <span class="o">=</span> <span class="s1">'my_output'</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="no">SimpleCov</span><span class="p">.</span><span class="nf">coverage_path</span> <span class="o">=</span> <span class="s1">'my_output'</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>In real project you have different groups of specs executed by separate commands. If you want to <strong>merge</strong>
 coverage results generated by each of command into total report, you have to assign <strong>unique command name</strong>
 for each group of specs:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="c1"># model_spec_helper.rb</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="c1"># model_spec_helper.rb</span>
 <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'COVERAGE'</span><span class="o">]</span> <span class="o">==</span> <span class="s1">'true'</span>
   <span class="nb">require</span> <span class="s1">'simplecov'</span>
 
-  <span class="no">SimpleCov</span><span class="nf">.command_name</span> <span class="s2">&quot;rspec:models&quot;</span>
+  <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">command_name</span> <span class="s2">"rspec:models"</span>
 
-  <span class="no">SimpleCov</span><span class="nf">.start</span> <span class="k">unless</span> <span class="no">SimpleCov</span><span class="nf">.running</span>
+  <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">start</span> <span class="k">unless</span> <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">running</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre><pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="c1"># domains_spec_helper.rb</span>
+</pre></td></tr></tbody></table>
+</div>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="c1"># domains_spec_helper.rb</span>
 <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'COVERAGE'</span><span class="o">]</span> <span class="o">==</span> <span class="s1">'true'</span>
   <span class="nb">require</span> <span class="s1">'simplecov'</span>
 
-  <span class="no">SimpleCov</span><span class="nf">.command_name</span> <span class="s2">&quot;rspec:domains&quot;</span>
+  <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">command_name</span> <span class="s2">"rspec:domains"</span>
 
-  <span class="no">SimpleCov</span><span class="nf">.start</span> <span class="k">unless</span> <span class="no">SimpleCov</span><span class="nf">.running</span>
+  <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">start</span> <span class="k">unless</span> <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">running</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>SimpleCov Adapters</h2>
 
 <p>SimpleCov understands notion of <strong>adapter</strong>. You can start SimpleCov with preconfigured <strong>rails</strong> adapter:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="no">SimpleCov</span><span class="nf">.start</span> <span class="s1">'rails'</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="no">SimpleCov</span><span class="p">.</span><span class="nf">start</span> <span class="s1">'rails'</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Let&rsquo;s look closer at definition of <strong>rails</strong> adapter:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div></td><td class="code"><span class="no">SimpleCov</span><span class="nf">.adapters.define</span> <span class="s1">'rails'</span> <span class="k">do</span>
-  <span class="nf">..</span><span class="o">.</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre></td><td class="code"><pre><span class="no">SimpleCov</span><span class="p">.</span><span class="nf">adapters</span><span class="p">.</span><span class="nf">define</span> <span class="s1">'rails'</span> <span class="k">do</span>
+  <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
   <span class="n">add_filter</span> <span class="s1">'/config/'</span>
   <span class="n">add_filter</span> <span class="s1">'/db/'</span>
   <span class="n">add_filter</span> <span class="s1">'/vendor/bundle/'</span>
@@ -114,70 +132,78 @@ for each group of specs:</p>
   <span class="n">add_group</span> <span class="s1">'Libraries'</span><span class="p">,</span> <span class="s1">'lib'</span>
   <span class="n">add_group</span> <span class="s1">'Plugins'</span><span class="p">,</span> <span class="s1">'vendor/plugins'</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>As you can see, adapter definition includes <strong>filters</strong> and <strong>groups</strong>. <strong>Filters</strong> specify which directories
 and files will be includes into coverage. <strong>Groups</strong> define separate tabs of coverage report.</p>
 
 <p>You can read more about groups and filters on <a href="https://github.com/colszowka/simplecov">SimpleCov</a> home page.</p>
 
 <p>If you are not satisfied with <strong>rails</strong> adapter, you can create your own:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div></td><td class="code">  <span class="k">def </span><span class="nf">register_adapter</span> <span class="n">adapter_name</span>
-    <span class="no">SimpleCov</span><span class="nf">.adapters.define</span> <span class="n">adapter_name</span> <span class="k">do</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre></td><td class="code"><pre>  <span class="k">def</span> <span class="nf">register_adapter</span> <span class="n">adapter_name</span>
+    <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">adapters</span><span class="p">.</span><span class="nf">define</span> <span class="n">adapter_name</span> <span class="k">do</span>
       <span class="n">add_filter</span> <span class="s1">'/spec/'</span>
       <span class="n">add_filter</span> <span class="s1">'/db/'</span>
       <span class="n">add_filter</span> <span class="s1">'lib/tasks/'</span>
       <span class="n">add_filter</span> <span class="s1">'/vendor/'</span>
       <span class="n">add_filter</span> <span class="s1">'/config/'</span>
 
-      <span class="n">add_group</span> <span class="s2">&quot;Domain&quot;</span><span class="p">,</span> <span class="s2">&quot;app/domain&quot;</span>
-      <span class="n">add_group</span> <span class="s2">&quot;Models&quot;</span><span class="p">,</span> <span class="s2">&quot;app/models&quot;</span>
-      <span class="n">add_group</span> <span class="s2">&quot;Services&quot;</span><span class="p">,</span> <span class="s2">&quot;app/services&quot;</span>
+      <span class="n">add_group</span> <span class="s2">"Domain"</span><span class="p">,</span> <span class="s2">"app/domain"</span>
+      <span class="n">add_group</span> <span class="s2">"Models"</span><span class="p">,</span> <span class="s2">"app/models"</span>
+      <span class="n">add_group</span> <span class="s2">"Services"</span><span class="p">,</span> <span class="s2">"app/services"</span>
     <span class="k">end</span>
   <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Full Example</h2>
 
 <p>Let&rsquo;s create compete example that can be used in any project:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="c1"># spec_helper.rb</span>
-  <span class="k">def </span><span class="nf">init_spec</span> <span class="n">command_name</span>
-    <span class="nf">..</span><span class="o">.</span>
-    <span class="no">SimplecovHelper</span><span class="nf">.run_simplecov</span> <span class="n">command_name</span><span class="p">,</span>
-      <span class="s2">&quot;your_adapter_name&quot;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'COVERAGE'</span><span class="o">]</span> <span class="o">==</span> <span class="s1">'true'</span>
-    <span class="nf">..</span><span class="o">.</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre><span class="c1"># spec_helper.rb</span>
+  <span class="k">def</span> <span class="nf">init_spec</span> <span class="n">command_name</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+    <span class="no">SimplecovHelper</span><span class="p">.</span><span class="nf">run_simplecov</span> <span class="n">command_name</span><span class="p">,</span>
+      <span class="s2">"your_adapter_name"</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'COVERAGE'</span><span class="o">]</span> <span class="o">==</span> <span class="s1">'true'</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
   <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>And this is SimpleCov helper implemented as utility module:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div></td><td class="code"><span class="k">module</span> <span class="nn">SimplecovHelper</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre><pre class="lineno">26</pre><pre class="lineno">27</pre><pre class="lineno">28</pre><pre class="lineno">29</pre><pre class="lineno">30</pre></td><td class="code"><pre><span class="k">module</span> <span class="nn">SimplecovHelper</span>
   <span class="kp">extend</span> <span class="nb">self</span>
 
-  <span class="k">def </span><span class="nf">run_simplecov</span> <span class="n">command_name</span><span class="p">,</span> <span class="n">adapter_name</span>
+  <span class="k">def</span> <span class="nf">run_simplecov</span> <span class="n">command_name</span><span class="p">,</span> <span class="n">adapter_name</span>
     <span class="nb">require</span> <span class="s1">'simplecov'</span>
 
-    <span class="no">SimpleCov</span><span class="nf">.command_name</span> <span class="n">command_name</span>
+    <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">command_name</span> <span class="n">command_name</span>
 
-    <span class="n">start_simplecov</span><span class="p">(</span><span class="n">adapter_name</span><span class="p">)</span> <span class="k">unless</span> <span class="no">SimpleCov</span><span class="nf">.running</span>
+    <span class="n">start_simplecov</span><span class="p">(</span><span class="n">adapter_name</span><span class="p">)</span> <span class="k">unless</span> <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">running</span>
   <span class="k">end</span>
 
   <span class="kp">private</span>
 
-  <span class="k">def </span><span class="nf">start_simplecov</span> <span class="n">adapter_name</span>
+  <span class="k">def</span> <span class="nf">start_simplecov</span> <span class="n">adapter_name</span>
     <span class="n">register_adapter</span> <span class="n">adapter_name</span>
 
-    <span class="no">SimpleCov</span><span class="nf">.formatter</span> <span class="o">=</span> <span class="no">SimpleCov</span><span class="o">::</span><span class="no">Formatter</span><span class="o">::</span><span class="no">HTMLFormatter</span>
+    <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">formatter</span> <span class="o">=</span> <span class="no">SimpleCov</span><span class="o">::</span><span class="no">Formatter</span><span class="o">::</span><span class="no">HTMLFormatter</span>
 
-    <span class="no">SimpleCov</span><span class="nf">.at_exit</span> <span class="k">do</span>
-      <span class="no">SimpleCov</span><span class="nf">.result.format!</span>
+    <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">at_exit</span> <span class="k">do</span>
+      <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">result</span><span class="p">.</span><span class="nf">format!</span>
     <span class="k">end</span>
 
-    <span class="no">SimpleCov</span><span class="nf">.start</span> <span class="n">adapter_name</span>
+    <span class="no">SimpleCov</span><span class="p">.</span><span class="nf">start</span> <span class="n">adapter_name</span>
   <span class="k">end</span>
 
-  <span class="k">def </span><span class="nf">register_adapter</span> <span class="n">adapter_name</span>
-    <span class="nf">..</span><span class="o">.</span>
+  <span class="k">def</span> <span class="nf">register_adapter</span> <span class="n">adapter_name</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
     <span class="c1"># see implementation in previous section</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Alternatives</h2>
 
 <p>Another gem dedicated to code coverage is <a href="http://lkdjiin.github.io/coco/">coco gem</a>.</p>

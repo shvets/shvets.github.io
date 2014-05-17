@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -53,82 +53,106 @@ around <strong>http/https</strong> ruby standard classes. You can get such imple
 <h2>Installation</h2>
 
 <p>Add this line to to your Gemfile:</p>
-<pre class="highlight text"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">gem &quot;resource_accessor&quot;
-</td></tr></tbody></table></pre>
+<div class="highlight plaintext"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>gem "resource_accessor"
+</pre></td></tr></tbody></table>
+</div>
+
 <p>And then execute:</p>
-<pre class="highlight text"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">$ bundle
-</td></tr></tbody></table></pre>
+<div class="highlight plaintext"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>$ bundle
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Usage</h2>
 
 <p>Create accessor object:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="nb">require</span> <span class="s1">'resource_accessor'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'resource_accessor'</span>
 
-<span class="n">accessor</span> <span class="o">=</span> <span class="no">ResourceAccessor</span><span class="nf">.new</span>
-</td></tr></tbody></table></pre>
+<span class="n">accessor</span> <span class="o">=</span> <span class="no">ResourceAccessor</span><span class="p">.</span><span class="nf">new</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you want to access unprotected resource, located at <strong>some_url</strong>, execute this line:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
-</td></tr></tbody></table></pre>
-<p>If you want to get protected resource, first get the cookie and then access protected resource:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div></td><td class="code"><span class="c1"># 1. Get cookie</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
+</pre></td></tr></tbody></table>
+</div>
 
-<span class="n">cookie</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_cookie</span> <span class="n">login_url</span><span class="p">,</span> <span class="n">user_name</span><span class="p">,</span> <span class="n">password</span>
+<p>If you want to get protected resource, first get the cookie and then access protected resource:</p>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre></td><td class="code"><pre><span class="c1"># 1. Get cookie</span>
+
+<span class="n">cookie</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_cookie</span> <span class="n">login_url</span><span class="p">,</span> <span class="n">user_name</span><span class="p">,</span> <span class="n">password</span>
 
 <span class="c1"># 2.a. Get protected resource through POST and post body as hash</span>
 
-<span class="n">some_hash</span> <span class="o">=</span> <span class="p">{</span><span class="nf">..</span><span class="o">.</span><span class="p">}</span>
+<span class="n">some_hash</span> <span class="o">=</span> <span class="p">{.</span><span class="nf">.</span><span class="o">.</span><span class="p">}</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">,</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">,</span>
                                  <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:post</span><span class="p">,</span>
                                  <span class="ss">:cookie</span> <span class="o">=&gt;</span> <span class="n">cookie</span><span class="p">,</span>
                                  <span class="ss">:body</span> <span class="o">=&gt;</span> <span class="n">some_hash</span>
 
 <span class="c1"># 2.b. Get protected resource through POST and post body as string</span>
 
-<span class="n">some_string</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
+<span class="n">some_string</span> <span class="o">=</span> <span class="s2">"..."</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">,</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">,</span>
                                  <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:post</span><span class="p">,</span>
                                  <span class="ss">:cookie</span> <span class="o">=&gt;</span> <span class="n">cookie</span><span class="p">,</span>
                                  <span class="ss">:body</span> <span class="o">=&gt;</span> <span class="n">some_string</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You have to specify HTTP method explicitly here (post).</p>
 
 <p>If you want to get AJAX resource, add special header to the request or
 use dedicated method:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code"><span class="n">response1</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre></td><td class="code"><pre><span class="n">response1</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
   <span class="p">{</span><span class="s1">'X-Requested-With'</span> <span class="o">=&gt;</span> <span class="s1">'XMLHttpRequest'</span><span class="p">}</span>
 
-<span class="n">response2</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_ajax_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
-</td></tr></tbody></table></pre>
+<span class="n">response2</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_ajax_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you want to get SOAP resource, same as before, add special header to the request
 or use dedicated method:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div></td><td class="code"><span class="n">response1</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre></td><td class="code"><pre><span class="n">response1</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
   <span class="p">{</span><span class="s1">'SOAPAction'</span> <span class="o">=&gt;</span> <span class="s1">'someSoapOperation'</span><span class="p">,</span>
   <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'text/xml;charset=UTF-8'</span><span class="p">}</span>
 
-<span class="n">response2</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_soap_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
-</td></tr></tbody></table></pre>
+<span class="n">response2</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_soap_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you want to get JSON resource, same as before, add special header to the request
 or use dedicated method:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code"><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
-  <span class="p">{</span><span class="s1">'Content-Type&quot; =&gt; &quot;application/json;charset=UTF-8'</span><span class="p">}</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre></td><td class="code"><pre><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">'Content-Type" =&gt; "application/json;charset=UTF-8'</span><span class="p">}</span>
 
-<span class="n">response2</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_json_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
-</td></tr></tbody></table></pre>
+<span class="n">response2</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_json_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you want to provide additional parameters in GET call, use <strong>query</strong> parameter:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">,</span> <span class="ss">:query</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:param1</span> <span class="o">=&gt;</span> <span class="s1">'p1'</span><span class="p">,</span> <span class="ss">:param2</span> <span class="o">=&gt;</span> <span class="s1">'p2'</span><span class="p">}</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">,</span> <span class="ss">:query</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:param1</span> <span class="o">=&gt;</span> <span class="s1">'p1'</span><span class="p">,</span> <span class="ss">:param2</span> <span class="o">=&gt;</span> <span class="s1">'p2'</span><span class="p">}</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>or</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="nf">.get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">some_url?param1</span><span class="o">=</span><span class="n">p1</span><span class="o">&amp;</span><span class="n">param2</span><span class="o">=</span><span class="n">p2</span><span class="si">}</span><span class="s2">&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">some_url?param1</span><span class="o">=</span><span class="n">p1</span><span class="o">&amp;</span><span class="n">param2</span><span class="o">=</span><span class="n">p2</span><span class="si">}</span><span class="s2">"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You can setup timeout for your accessor object in milliseconds:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="n">accessor</span><span class="nf">.timeout</span> <span class="o">=</span> <span class="mi">10000</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">accessor</span><span class="p">.</span><span class="nf">timeout</span> <span class="o">=</span> <span class="mi">10000</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you need to work over ssl, enable certificate validation and certificate file location
  before the call:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code"><span class="n">accessor</span><span class="nf">.validate_ssl_cert</span> <span class="o">=</span> <span class="kp">true</span>
-<span class="n">accessor</span><span class="nf">.ca_file</span> <span class="o">=</span> <span class="s1">'your cert file location'</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre><span class="n">accessor</span><span class="p">.</span><span class="nf">validate_ssl_cert</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="n">accessor</span><span class="p">.</span><span class="nf">ca_file</span> <span class="o">=</span> <span class="s1">'your cert file location'</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <div id='footer'>
 <p id='legal'>
 &copy; All Right Reserved (2013), Alexander Shvets.

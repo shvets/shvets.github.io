@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -74,19 +74,23 @@ internet-connected microcontroller progammable in Node.js.</p></li>
 <h2>Installation</h2>
 
 <p>If you are on Apple computer, you can use <strong>homebrew</strong> tool to install it:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">brew install node
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>brew install node
+</pre></td></tr></tbody></table>
+</div>
+
 <p>It will install <strong>node package manager</strong> (npm) as well:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code">node -v
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre>node -v
 npm -v
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>On Windows you can download node and npm as one installation from <a href="http://nodejs.org/download">here</a>.</p>
 
 <h2>Using Node.js: Webserver example</h2>
 
 <p>Let&rsquo;s demonstrate &ldquo;hello world&rdquo; program for Node.js. This simple web server responds with &ldquo;Hello World&rdquo; string
 for every request.</p>
-<pre class="highlight javascript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div></td><td class="code"><span class="c1">// hello_world.js
+<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre></td><td class="code"><pre><span class="c1">// hello_world.js
 </span>
 <span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
 
@@ -98,12 +102,16 @@ for every request.</p>
 <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">1337</span><span class="p">,</span> <span class="s1">'127.0.0.1'</span><span class="p">);</span>
 
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Server running at http://127.0.0.1:1337/'</span><span class="p">);</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>To run this code, execute it from the command line:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="gp">% </span>node example.js
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="gp">% </span>node example.js
 
 Server running at http://127.0.0.1:1337/
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Installing node packages</h2>
 
 <p>You can install node packages in two ways:</p>
@@ -114,11 +122,15 @@ Server running at http://127.0.0.1:1337/
 </ul>
 
 <p>This is the example of global installation:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">npm install -g grunt-cli
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>npm install -g grunt-cli
+</pre></td></tr></tbody></table>
+</div>
+
 <p>and local installation:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">npm install grunt-cli
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>npm install grunt-cli
+</pre></td></tr></tbody></table>
+</div>
+
 <p>In examples above we are installing <strong>grunt</strong> build tool.</p>
 
 <p>Saving packages locally is <a href="http://www.futurealoof.com/posts/nodemodules-in-git.html">good practice</a> -
@@ -126,36 +138,44 @@ this way you will have the ability to quickly reproduce your production environm
 <a href="http://www.12factor.net/dev-prod-parity">dev/prod parity</a>.</p>
 
 <p>You can execute grunt command now:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="nb">cd </span>your_project_root
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="nb">cd </span>your_project_root
 
 node_modules/grunt-cli/bin/grunt -version
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Keep track of node packages used by project</h2>
 
 <p>You can create <strong>package.json</strong> file used by <strong>npm</strong> to keep track of project dependencies. This is
 sample file:</p>
-<pre class="highlight json"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code"><span class="p">{</span><span class="w">
-  </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your_project&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="s2">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="s2">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Npm package for your_project&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="s2">&quot;author&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John Smith &lt;jsmith@site.com&gt;&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="s2">&quot;engines&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">&quot;node&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&gt;= 0.10.16&quot;</span><span class="w">
+<div class="highlight json"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre></td><td class="code"><pre><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"your_project"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Npm package for your_project"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Smith &lt;jsmith@site.com&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"engines"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"node"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&gt;= 0.10.16"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="s2">&quot;dependencies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
-  </span><span class="s2">&quot;devDependencies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">&quot;grunt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;~0.4.1&quot;</span><span class="p">,</span><span class="w">
-    </span><span class="s2">&quot;grunt-cli&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;~0.1.9&quot;</span><span class="w">
+  </span><span class="s2">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+  </span><span class="s2">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"grunt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"~0.4.1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"grunt-cli"</span><span class="p">:</span><span class="w"> </span><span class="s2">"~0.1.9"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></td></tr></tbody></table></pre>
+</span></pre></td></tr></tbody></table>
+</div>
+
 <p>With this file in place you can install all required dependencies (grunt, grunt-cli) in one command:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">npm install
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>npm install
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You can also install single package with automatic insert of package name/description into <strong>package.json</strong>
 as development dependency:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">npm install grunt-cli --save-dev
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>npm install grunt-cli --save-dev
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Look: identical tools for different languages</h2>
 
 <p>If we look at different languages as frameworks, we can see that most of them have similar tools for similar needs.</p>
@@ -216,34 +236,44 @@ adapter for any framework you like.</p></li>
 <h2>Installation</h2>
 
 <p>You can install karma through <strong>npm</strong>:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">npm install karma --save-dev
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>npm install karma --save-dev
+</pre></td></tr></tbody></table>
+</div>
+
 <p>After <strong>karma</strong> installation you need to create <strong>karma configuration file</strong>.</p>
 
 <p>You can keep it in javascript:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">node_modules/karma/bin/karma init karma.conf.js
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>node_modules/karma/bin/karma init karma.conf.js
+</pre></td></tr></tbody></table>
+</div>
+
 <p>or coffeescript:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">node_modules/karma/bin/karma init karma.conf.coffee
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>node_modules/karma/bin/karma init karma.conf.coffee
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Script will ask few questions and at the end <strong>karma.conf.js</strong> or <strong>karma.conf.coffee</strong> file will be created.</p>
 
 <p>Now, you need to install additional packages. First, install browser launchers and preprocessors:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code">npm install karma-chrome-launcher --save-dev
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre>npm install karma-chrome-launcher --save-dev
 npm install karma-firefox-launcher --save-dev
 npm install karma-safari-launcher --save-dev
 npm install karma-phantomjs-launcher --save-dev
 
 npm install karma-coffee-preprocessor --save-dev
 npm install karma-html2js-preprocessor --save-dev
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Then, install support for jasmine (it&rsquo;s one of supported testing libraries):</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">npm install karma-jasmine --save-dev
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>npm install karma-jasmine --save-dev
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Revisiting Content of Karma Configuration File</h2>
 
 <p>Below is the typical example of karma configuration file:</p>
-<pre class="highlight coffeescript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div><div class="lineno">26</div><div class="lineno">27</div><div class="lineno">28</div><div class="lineno">29</div><div class="lineno">30</div><div class="lineno">31</div><div class="lineno">32</div><div class="lineno">33</div><div class="lineno">34</div><div class="lineno">35</div><div class="lineno">36</div><div class="lineno">37</div><div class="lineno">38</div><div class="lineno">39</div><div class="lineno">40</div><div class="lineno">41</div><div class="lineno">42</div><div class="lineno">43</div><div class="lineno">44</div><div class="lineno">45</div><div class="lineno">46</div><div class="lineno">47</div><div class="lineno">48</div></td><td class="code"><span class="c1"># karma.conf.coffee
+<div class="highlight coffeescript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre><pre class="lineno">26</pre><pre class="lineno">27</pre><pre class="lineno">28</pre><pre class="lineno">29</pre><pre class="lineno">30</pre><pre class="lineno">31</pre><pre class="lineno">32</pre><pre class="lineno">33</pre><pre class="lineno">34</pre><pre class="lineno">35</pre><pre class="lineno">36</pre><pre class="lineno">37</pre><pre class="lineno">38</pre><pre class="lineno">39</pre><pre class="lineno">40</pre><pre class="lineno">41</pre><pre class="lineno">42</pre><pre class="lineno">43</pre><pre class="lineno">44</pre><pre class="lineno">45</pre><pre class="lineno">46</pre><pre class="lineno">47</pre><pre class="lineno">48</pre></td><td class="code"><pre><span class="c1"># karma.conf.coffee
 </span>
 <span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
   <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
@@ -284,14 +314,16 @@ npm install karma-html2js-preprocessor --save-dev
 
     <span class="na">autoWatch</span><span class="o">:</span> <span class="no">false</span>
 
-    <span class="na">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s">&quot;PhantomJS&quot;</span><span class="p">]</span>
+    <span class="na">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s">"PhantomJS"</span><span class="p">]</span>
 
     <span class="na">captureTimeout</span><span class="o">:</span> <span class="mi">60000</span>
 
     <span class="na">singleRun</span><span class="o">:</span> <span class="no">true</span>
 
     <span class="na">reportSlowerThan</span><span class="o">:</span> <span class="mi">500</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Let&rsquo;s explain some of used properties.</p>
 
 <ul>
@@ -320,23 +352,29 @@ npm install karma-html2js-preprocessor --save-dev
 <h2>Using Karma</h2>
 
 <p>You can start karma with this command:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">node_modules/karma/bin/karma start
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>node_modules/karma/bin/karma start
+</pre></td></tr></tbody></table>
+</div>
+
 <p>This command will run all specs in <strong>spec/javascripts</strong> folder and output results to console.</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div></td><td class="code">INFO <span class="o">[</span>karma]: Karma v0.10.2 server started at http://localhost:9876/
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre></td><td class="code"><pre>INFO <span class="o">[</span>karma]: Karma v0.10.2 server started at http://localhost:9876/
 INFO <span class="o">[</span>launcher]: Starting browser PhantomJS
 INFO <span class="o">[</span>PhantomJS 1.9.1 <span class="o">(</span>Mac OS X<span class="o">)]</span>: Connected on socket _juBSCUpZSBdU1wA-URx
 ...............................................
 PhantomJS 1.9.1 <span class="o">(</span>Mac OS X<span class="o">)</span>: Executed 47 of 47 SUCCESS <span class="o">(</span>0.167 secs / 0.027 secs<span class="o">)</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Code Coverage with Karma</h2>
 
 <p>For generating code coverage report you have to install <strong>karma-coverage</strong> package:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">npm install karma-coverage --save-dev
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>npm install karma-coverage --save-dev
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You also have to register your javascript or coffeescript files with <strong>coverage</strong> preprocessor,
 add <strong>coverage</strong> reporter to the list of reporters and create <strong>coverageReporter</strong> section:</p>
-<pre class="highlight coffeescript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code"><span class="c1"># karma.conf.coffee
+<div class="highlight coffeescript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre></td><td class="code"><pre><span class="c1"># karma.conf.coffee
 </span><span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
   <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
     <span class="p">...</span>
@@ -351,15 +389,21 @@ add <strong>coverage</strong> reporter to the list of reporters and create <stro
       <span class="na">type</span><span class="o">:</span> <span class="s">'html'</span>
       <span class="na">dir</span><span class="o">:</span> <span class="s">'coverage'</span>
     <span class="p">...</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p><strong>coverageReporter</strong> section describes configuration of &ldquo;coverage&rdquo; reporter: type of report and location of it.</p>
 
 <p>Now, when you run karma again</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">node_modules/karma/bin/karma start
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>node_modules/karma/bin/karma start
+</pre></td></tr></tbody></table>
+</div>
+
 <p>it will create coverage report inside <strong>coverage</strong> directory. Open it:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">open coverage/PhantomJS<span class="se">\ </span>1.9.1<span class="se">\ \(</span>Mac<span class="se">\ </span>OS<span class="se">\ </span>X<span class="se">\)</span>/
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>open coverage/PhantomJS<span class="se">\ </span>1.9.1<span class="se">\ \(</span>Mac<span class="se">\ </span>OS<span class="se">\ </span>X<span class="se">\)</span>/
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Using fixture for your specs</h2>
 
 <p>If you plan to use fixtures inside your specs, you have to do these steps.</p>
@@ -367,14 +411,16 @@ add <strong>coverage</strong> reporter to the list of reporters and create <stro
 <ul>
 <li>Create fixture file in <strong>fixtures</strong> folder:</li>
 </ul>
-<pre class="highlight html"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div></td><td class="code"><span class="c">&lt;!-- spec/javascripts/fixtures/template.html --&gt;</span>
+<div class="highlight html"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre><span class="c">&lt;!-- spec/javascripts/fixtures/template.html --&gt;</span>
 <span class="nt">&lt;div&gt;</span>something<span class="nt">&lt;/div&gt;</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Add fixtures location to <strong>files</strong> sections and specify <strong>html2js</strong> preprocessor for
 html files inside <strong>fixtures</strong> directory:</li>
 </ul>
-<pre class="highlight coffeescript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div></td><td class="code"><span class="c1"># karma.conf.coffee
+<div class="highlight coffeescript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre></td><td class="code"><pre><span class="c1"># karma.conf.coffee
 </span><span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
   <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
     <span class="p">...</span>
@@ -388,11 +434,13 @@ html files inside <strong>fixtures</strong> directory:</li>
       <span class="s">'spec/javascripts/fixtures/**/*.html'</span><span class="o">:</span> <span class="p">[</span><span class="s">'html2js'</span><span class="p">]</span>
 
     <span class="p">...</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <ul>
 <li>Access <strong>fixture</strong> from the spec through global <strong>window.__html__</strong> variable:</li>
 </ul>
-<pre class="highlight coffeescript"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div></td><td class="code"><span class="c1"># spec/javascripts/some_coffee_spec.coffee
+<div class="highlight coffeescript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre></td><td class="code"><pre><span class="c1"># spec/javascripts/some_coffee_spec.coffee
 </span><span class="nx">describe</span> <span class="s">'some_coffee_code'</span><span class="p">,</span> <span class="o">-&gt;</span>
   <span class="nx">fixture</span> <span class="o">=</span> <span class="no">undefined</span>
 
@@ -403,7 +451,9 @@ html files inside <strong>fixtures</strong> directory:</li>
   <span class="nx">it</span> <span class="s">'access div element'</span><span class="p">,</span> <span class="o">-&gt;</span>
     <span class="nx">el</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">fixture</span><span class="p">).</span><span class="na">find</span><span class="p">(</span><span class="s">'#div'</span><span class="p">)</span>
     <span class="nx">expect</span><span class="p">(</span><span class="nx">el</span><span class="p">).</span><span class="na">toBeDefined</span><span class="p">()</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <div id='footer'>
 <p id='legal'>
 &copy; All Right Reserved (2013), Alexander Shvets.

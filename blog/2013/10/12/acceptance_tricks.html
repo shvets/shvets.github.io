@@ -7,7 +7,7 @@
 <meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
 <meta content='github, ruby, java, rails' name='keywords'>
 <title>GitHub --- Alexander Shvets's Web Page</title>
-<link href="/assets/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
 <script src="/assets/javascripts/application.js" type="text/javascript"></script>
 </head>
 <body>
@@ -92,46 +92,56 @@ to user interaction. You can use existing or write your own drivers that fit int
 <p>Because of neutral capybara API, it could be used with both <strong>rspec</strong> and <strong>cucumber</strong>.</p>
 
 <p>In order to start using capybara, add it to your Gemfile:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  gem <span class="s2">&quot;capybara&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  gem <span class="s2">"capybara"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>and require it inside your code:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="nb">require</span> <span class="s1">'capybara'</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'capybara'</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you plan to use selenium driver, install it:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  <span class="n">gem</span> <span class="s2">&quot;selenium-webdriver&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  <span class="n">gem</span> <span class="s2">"selenium-webdriver"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Below is the typical example of capybara script:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div></td><td class="code"><span class="nb">require</span> <span class="s2">&quot;capybara/dsl&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s2">"capybara/dsl"</span>
 
-<span class="no">Capybara</span><span class="nf">.app_host</span> <span class="o">=</span> <span class="s1">'http://www.google.com'</span>
-<span class="no">Capybara</span><span class="nf">.default_wait_time</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="no">Capybara</span><span class="p">.</span><span class="nf">app_host</span> <span class="o">=</span> <span class="s1">'http://www.google.com'</span>
+<span class="no">Capybara</span><span class="p">.</span><span class="nf">default_wait_time</span> <span class="o">=</span> <span class="mi">15</span>
 
-<span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+<span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
 
 <span class="kp">include</span> <span class="no">Capybara</span><span class="o">::</span><span class="no">DSL</span>
 
-<span class="n">visit</span> <span class="s2">&quot;/&quot;</span>
+<span class="n">visit</span> <span class="s2">"/"</span>
 
-<span class="n">fill_in</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s2">&quot;Capybara&quot;</span>
-<span class="n">find</span><span class="p">(</span><span class="s2">&quot;#gbqfbw button&quot;</span><span class="p">)</span><span class="nf">.click</span>
+<span class="n">fill_in</span> <span class="s2">"q"</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s2">"Capybara"</span>
+<span class="n">find</span><span class="p">(</span><span class="s2">"#gbqfbw button"</span><span class="p">).</span><span class="nf">click</span>
 
-<span class="n">page</span><span class="nf">.should</span> <span class="n">have_content</span> <span class="s1">'Capybara'</span>
-</td></tr></tbody></table></pre>
+<span class="n">page</span><span class="p">.</span><span class="nf">should</span> <span class="n">have_content</span> <span class="s1">'Capybara'</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Capybara: auto-waiting</h2>
 
 <p>Capybara provides <strong>auto-waiting</strong> feature - powerful synchronization for asynchronous processes, like AJAX calls.</p>
 
 <p>Capybara 1 uses <strong>wait_until</strong> API for waiting on asynchronous events. This way you can build scripts of arbitrary
 complexity. For example:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div></td><td class="code"><span class="n">visit</span> <span class="s2">&quot;/&quot;</span>
-<span class="n">click_button</span> <span class="s2">&quot;Submit&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="n">visit</span> <span class="s2">"/"</span>
+<span class="n">click_button</span> <span class="s2">"Submit"</span>
 
-<span class="n">wait_until</span> <span class="p">{</span> <span class="n">page</span><span class="nf">.find</span><span class="p">(</span><span class="s2">&quot;some_element_id&quot;</span><span class="p">)</span><span class="nf">.visible?</span> <span class="p">}</span>
+<span class="n">wait_until</span> <span class="p">{</span> <span class="n">page</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="s2">"some_element_id"</span><span class="p">).</span><span class="nf">visible?</span> <span class="p">}</span>
 
 <span class="n">wait_until</span> <span class="k">do</span>
-  <span class="n">execute_script</span><span class="p">(</span><span class="s1">'return jQuery(&quot;.response .success&quot;).is(&quot;:visible&quot;)'</span><span class="p">)</span>
+  <span class="n">execute_script</span><span class="p">(</span><span class="s1">'return jQuery(".response .success").is(":visible")'</span><span class="p">)</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>This approach has one drawback though: <strong>wait_until</strong> makes scripts bulky, hard to read and maintain.</p>
 
 <p>In Capybara 2 wait_until <a href="http://www.elabs.se/blog/53-why-wait_until-was-removed-from-capybara">was removed completely</a>. Why?</p>
@@ -151,13 +161,17 @@ to become available.</p></li>
 </ul>
 
 <p>Below is an example of incorrect usage of new API:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  <span class="n">page</span><span class="nf">.find</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span><span class="nf">.text.should</span> <span class="n">contain</span><span class="p">(</span><span class="s2">&quot;login failed&quot;</span><span class="p">)</span>
-</td></tr></tbody></table></pre>
-<p>This is correct usage:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code">  <span class="n">page</span><span class="nf">.find</span><span class="p">(</span><span class="s2">&quot;#foo&quot;</span><span class="p">)</span><span class="nf">.should</span> <span class="n">have_content</span><span class="p">(</span><span class="s2">&quot;login failed&quot;</span><span class="p">)</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  <span class="n">page</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">).</span><span class="nf">text</span><span class="p">.</span><span class="nf">should</span> <span class="n">contain</span><span class="p">(</span><span class="s2">"login failed"</span><span class="p">)</span>
+</pre></td></tr></tbody></table>
+</div>
 
-  <span class="n">page</span><span class="nf">.should</span> <span class="n">have_selector</span><span class="p">(</span><span class="s2">&quot;#foo&quot;</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">&quot;login failed&quot;</span><span class="p">)</span>
-</td></tr></tbody></table></pre>
+<p>This is correct usage:</p>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre>  <span class="n">page</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="s2">"#foo"</span><span class="p">).</span><span class="nf">should</span> <span class="n">have_content</span><span class="p">(</span><span class="s2">"login failed"</span><span class="p">)</span>
+
+  <span class="n">page</span><span class="p">.</span><span class="nf">should</span> <span class="n">have_selector</span><span class="p">(</span><span class="s2">"#foo"</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"login failed"</span><span class="p">)</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>What&rsquo;s wrong in first example?</p>
 
 <ul>
@@ -175,21 +189,29 @@ never have to use wait_until explicitly.</p>
 web site to be tested.</p>
 
 <p>Don&rsquo;t forget to install it. On OSX you can do it with one homebrew command:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">brew install selenium-server-standalone
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>brew install selenium-server-standalone
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Standalone selenium server is implemented as launchd agent.</p>
 
 <p>To have launchd start selenium-server-standalone at login, create soft link:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">ln -sfv /usr/local/opt/selenium-server-standalone/<span class="k">*</span>.plist ~/Library/LaunchAgents
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>ln -sfv /usr/local/opt/selenium-server-standalone/<span class="k">*</span>.plist ~/Library/LaunchAgents
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Then load selenium-server-standalone agent:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
+</pre></td></tr></tbody></table>
+</div>
+
 <p>It will run selenium server on port 4444.</p>
 
 <p>If you don&rsquo;t want to use agent, use java directly:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Tips</h2>
 
 <p>You can get plenty of information about how to configure capybara on <a href="https://github.com/jnicklas/capybara">capybara home page</a>.</p>
@@ -201,152 +223,180 @@ web site to be tested.</p>
 <h2>Tip 1: Executing Selenium server on remote machine</h2>
 
 <p>In order to run Selenium on another machine you have to register <strong>selenium remote driver</strong>:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div></td><td class="code">
-  <span class="k">def </span><span class="nf">register_remote_selenium_driver</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre></td><td class="code"><pre>
+  <span class="k">def</span> <span class="nf">register_remote_selenium_driver</span>
       <span class="n">selenium_host</span><span class="p">,</span> <span class="n">selenium_port</span>
     <span class="n">selenium_url</span> <span class="o">=</span>
-      <span class="s2">&quot;http://</span><span class="si">#{</span><span class="n">selenium_host</span><span class="si">}</span><span class="s2">:</span><span class="si">#{</span><span class="n">selenium_port</span><span class="si">}</span><span class="s2">/wd/hub&quot;</span>
+      <span class="s2">"http://</span><span class="si">#{</span><span class="n">selenium_host</span><span class="si">}</span><span class="s2">:</span><span class="si">#{</span><span class="n">selenium_port</span><span class="si">}</span><span class="s2">/wd/hub"</span>
 
-    <span class="no">Capybara</span><span class="nf">.register_driver</span> <span class="ss">:selenium_remote</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="o">|</span>
-      <span class="no">Capybara</span><span class="o">::</span><span class="no">Selenium</span><span class="o">::</span><span class="no">Driver</span><span class="nf">.new</span><span class="p">(</span><span class="n">app</span><span class="p">,</span>
+    <span class="no">Capybara</span><span class="p">.</span><span class="nf">register_driver</span> <span class="ss">:selenium_remote</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="o">|</span>
+      <span class="no">Capybara</span><span class="o">::</span><span class="no">Selenium</span><span class="o">::</span><span class="no">Driver</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">app</span><span class="p">,</span>
         <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">selenium_url</span><span class="p">,</span> <span class="ss">:browser</span> <span class="o">=&gt;</span> <span class="ss">:remote</span><span class="p">})</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
-  <span class="n">selenium_host</span> <span class="o">=</span> <span class="s2">&quot;some-selenium-host&quot;</span>
-  <span class="n">selenium_port</span> <span class="o">=</span> <span class="s2">&quot;some-selenium-port&quot;</span>
+  <span class="n">selenium_host</span> <span class="o">=</span> <span class="s2">"some-selenium-host"</span>
+  <span class="n">selenium_port</span> <span class="o">=</span> <span class="s2">"some-selenium-port"</span>
 
   <span class="n">register_remote_selenium_driver</span> <span class="n">selenium_host</span><span class="p">,</span> <span class="n">selenium_port</span>
 
   <span class="c1"># Use registered driver</span>
-  <span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="ss">:selenium_remote</span>
-</td></tr></tbody></table></pre>
+  <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="ss">:selenium_remote</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Tip 2: Using RSpec metadata for easy switching between drivers</h2>
 
 <p>You can use <strong>rspec metadata</strong> if you need to  use or change driver whether for single test
 or for the whole test suite.</p>
 
 <p>First, create <a href="https://www.relishapp.com/rspec/rspec-core/v/2-11/docs/example-groups/shared-context">shared context</a> named <strong>CapybaraTest</strong>:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div></td><td class="code"><span class="n">shared_context</span> <span class="s2">&quot;CapybaraTest&quot;</span> <span class="k">do</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre></td><td class="code"><pre><span class="n">shared_context</span> <span class="s2">"CapybaraTest"</span> <span class="k">do</span>
 
   <span class="n">before</span> <span class="k">do</span>
-    <span class="k">if</span> <span class="n">example</span><span class="nf">.metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
-      <span class="n">new_driver</span> <span class="o">=</span> <span class="n">example</span><span class="nf">.metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
+    <span class="k">if</span> <span class="n">example</span><span class="p">.</span><span class="nf">metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
+      <span class="n">new_driver</span> <span class="o">=</span> <span class="n">example</span><span class="p">.</span><span class="nf">metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
 
-      <span class="k">if</span> <span class="o">[</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:webkit</span><span class="p">,</span> <span class="ss">:selenium</span><span class="o">]</span><span class="nf">.include?</span> <span class="n">new_driver</span>
-        <span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
+      <span class="k">if</span> <span class="o">[</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:webkit</span><span class="p">,</span> <span class="ss">:selenium</span><span class="o">]</span><span class="p">.</span><span class="nf">include?</span> <span class="n">new_driver</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
       <span class="k">else</span>
-        <span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="nf">.default_driver</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="p">.</span><span class="nf">default_driver</span>
       <span class="k">end</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
   <span class="n">after</span> <span class="k">do</span>
-    <span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="nf">.default_driver</span>
+    <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="p">.</span><span class="nf">default_driver</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now, you can specify driver for single test:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div></td><td class="code"><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
-  <span class="n">include_context</span> <span class="s2">&quot;CapybaraTest&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre></td><td class="code"><pre><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"CapybaraTest"</span>
 
   <span class="n">it</span> <span class="s1">'does something'</span><span class="p">,</span> <span class="ss">driver: :webkit</span> <span class="k">do</span>
-    <span class="nf">..</span><span class="o">.</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
   <span class="k">end</span>
 
   <span class="n">it</span> <span class="s1">'does something else'</span><span class="p">,</span> <span class="ss">driver: :selenium</span> <span class="k">do</span>
-    <span class="nf">..</span><span class="o">.</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>or for the whole test suite:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div></td><td class="code"><span class="n">describe</span> <span class="no">SomeClass</span><span class="p">,</span> <span class="ss">driver: :webkit</span> <span class="k">do</span>
-  <span class="n">include_context</span> <span class="s2">&quot;CapybaraTest&quot;</span>
-  <span class="nf">..</span><span class="o">.</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre></td><td class="code"><pre><span class="n">describe</span> <span class="no">SomeClass</span><span class="p">,</span> <span class="ss">driver: :webkit</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"CapybaraTest"</span>
+  <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Tip 3: Using remote selenium with RSpec metadata</h2>
 
 <p>If you want to integrate remote selenium with rspec metadata, you need to register new driver type
 for it, e.g. <strong>selenium_remote</strong>:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div><div class="lineno">24</div><div class="lineno">25</div></td><td class="code"><span class="n">shared_context</span> <span class="s2">&quot;CapybaraTest&quot;</span> <span class="k">do</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre></td><td class="code"><pre><span class="n">shared_context</span> <span class="s2">"CapybaraTest"</span> <span class="k">do</span>
 
   <span class="n">before</span> <span class="k">do</span>
-    <span class="k">if</span> <span class="n">example</span><span class="nf">.metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
-      <span class="n">new_driver</span> <span class="o">=</span> <span class="n">example</span><span class="nf">.metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
+    <span class="k">if</span> <span class="n">example</span><span class="p">.</span><span class="nf">metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
+      <span class="n">new_driver</span> <span class="o">=</span> <span class="n">example</span><span class="p">.</span><span class="nf">metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
 
-      <span class="k">if</span> <span class="o">[</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:webkit</span><span class="p">,</span> <span class="ss">:selenium</span><span class="o">]</span><span class="nf">.include?</span> <span class="n">new_driver</span>
-        <span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
-      <span class="k">elsif</span> <span class="o">[</span><span class="ss">:selenium_remote</span><span class="o">]</span><span class="nf">.include?</span> <span class="n">new_driver</span>
+      <span class="k">if</span> <span class="o">[</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:webkit</span><span class="p">,</span> <span class="ss">:selenium</span><span class="o">]</span><span class="p">.</span><span class="nf">include?</span> <span class="n">new_driver</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
+      <span class="k">elsif</span> <span class="o">[</span><span class="ss">:selenium_remote</span><span class="o">]</span><span class="p">.</span><span class="nf">include?</span> <span class="n">new_driver</span>
         <span class="n">setup_remote_selenium</span> <span class="no">SELENIUM_CONFIG_FILE_NAME</span><span class="p">,</span> <span class="n">config_name</span><span class="p">()</span>
-        <span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
       <span class="k">else</span>
-        <span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="nf">.default_driver</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="p">.</span><span class="nf">default_driver</span>
       <span class="k">end</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
-  <span class="k">def </span><span class="nf">setup_remote_selenium</span> <span class="n">config_file_name</span><span class="p">,</span> <span class="n">config_name</span>
-    <span class="n">config</span> <span class="o">=</span> <span class="nf">..</span><span class="o">.</span> <span class="c1"># load selenium configuration from file</span>
+  <span class="k">def</span> <span class="nf">setup_remote_selenium</span> <span class="n">config_file_name</span><span class="p">,</span> <span class="n">config_name</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span> <span class="c1"># load selenium configuration from file</span>
 
     <span class="c1"># see implementation in Tip 1</span>
     <span class="n">register_remote_selenium_driver</span> <span class="n">config</span><span class="o">[</span><span class="ss">:selenium_host</span><span class="o">]</span><span class="p">,</span>
       <span class="n">config</span><span class="o">[</span><span class="ss">:selenium_port</span><span class="o">]</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now you can specify new driver name per single test or test suite:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
-  <span class="n">include_context</span> <span class="s2">&quot;CapybaraTest&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"CapybaraTest"</span>
 
   <span class="n">it</span> <span class="s1">'does something else'</span><span class="p">,</span> <span class="ss">driver: :selenium_remote</span> <span class="k">do</span>
-    <span class="nf">..</span><span class="o">.</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Tip 4: Ignoring specs</h2>
 
 <p>First, configure your rspec:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div></td><td class="code"><span class="no">RSpec</span><span class="nf">.configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-  <span class="n">config</span><span class="nf">.filter_run_excluding</span> <span class="ss">:exclude</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre><span class="no">RSpec</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">filter_run_excluding</span> <span class="ss">:exclude</span> <span class="o">=&gt;</span> <span class="kp">true</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Now, if you want to exclude particular test from the execution, use <strong>exclude</strong> meta-attribute:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div></td><td class="code"><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
-  <span class="n">include_context</span> <span class="s2">&quot;CapybaraTest&quot;</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"CapybaraTest"</span>
 
   <span class="n">it</span> <span class="s1">'does something else'</span><span class="p">,</span> <span class="ss">driver: :selenium</span><span class="p">,</span> <span class="ss">exclude: </span><span class="kp">true</span> <span class="k">do</span>
-    <span class="nf">..</span><span class="o">.</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <h2>Tip 5: Headless mode</h2>
 
 <p>You can run capybara in headless mode with the help of  <strong>webkit</strong> driver.</p>
 
 <p>Add gem for webkit driver to your Gemfile:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  <span class="n">gem</span> <span class="s2">&quot;capybara-webkit&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  <span class="n">gem</span> <span class="s2">"capybara-webkit"</span><span class="p">,</span> <span class="s2">"1.0.0"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>If you are on OSX, you also need to install <strong>QT library</strong> with homebrew help. It&rsquo;s used for rendering:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">brew install qt
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>brew install qt
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Even though it&rsquo;s headless driver, it still can execute javascript code and it&rsquo;s faster than selenium driver.</p>
 
 <p>Also, comparing to selenium driver, you don&rsquo;t have to run separate selenium server and you don&rsquo;t have to open
 browser window for executing tests.</p>
 
 <p>In order to use it, change current capybara driver:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="ss">:webkit</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="ss">:webkit</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>Another example of headless driver is <strong>phantomjs driver</strong>. First, install phantomjs:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">brew install phantomjs
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>brew install phantomjs
+</pre></td></tr></tbody></table>
+</div>
+
 <p>And then, include poltergeist gem into your Gemfile:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  <span class="n">gem</span> <span class="s2">&quot;poltergeist&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  <span class="n">gem</span> <span class="s2">"poltergeist"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>In order to use it, change current capybara driver:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="no">Capybara</span><span class="nf">.current_driver</span> <span class="o">=</span> <span class="ss">:poltergeist</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="ss">:poltergeist</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>In my experience, webkit and poltergeist work in 95% of cases. If you have some problems, you can switch to selenium
 driver - it&rsquo;s the most reliable one.</p>
 
@@ -355,18 +405,20 @@ driver - it&rsquo;s the most reliable one.</p>
 <p>If you want to use chrome driver, you need to follow these steps:</p>
 
 <p>Register chrome driver:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div></td><td class="code"><span class="no">Capybara</span><span class="nf">.register_driver</span> <span class="ss">:chrome</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="o">|</span>
-  <span class="no">Capybara</span><span class="o">::</span><span class="no">Selenium</span><span class="o">::</span><span class="no">Driver</span><span class="nf">.new</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="ss">:browser</span> <span class="o">=&gt;</span> <span class="ss">:selenium_chrome</span><span class="p">)</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre></td><td class="code"><pre><span class="no">Capybara</span><span class="p">.</span><span class="nf">register_driver</span> <span class="ss">:chrome</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="o">|</span>
+  <span class="no">Capybara</span><span class="o">::</span><span class="no">Selenium</span><span class="o">::</span><span class="no">Driver</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="ss">:browser</span> <span class="o">=&gt;</span> <span class="ss">:selenium_chrome</span><span class="p">)</span>
 <span class="k">end</span>
 
-<span class="no">Capybara</span><span class="nf">.javascript_driver</span> <span class="o">=</span> <span class="ss">:chrome</span>
+<span class="no">Capybara</span><span class="p">.</span><span class="nf">javascript_driver</span> <span class="o">=</span> <span class="ss">:chrome</span>
 <span class="k">end</span>
 
 <span class="no">On</span> <span class="no">OSX</span> <span class="n">install</span> <span class="n">chromedriver</span> <span class="n">utility</span> <span class="n">with</span> <span class="n">homebrew</span> <span class="ss">help:
 
 </span><span class="sb">```bash
 brew install chromedriver
-</span></td></tr></tbody></table></pre>
+</span></pre></td></tr></tbody></table>
+</div>
+
 <p>Now you can run your acceptance test with Chrome browser.</p>
 
 <h2>Acceptance Test gem</h2>
@@ -375,70 +427,80 @@ brew install chromedriver
 <a href="https://github.com/shvets/acceptance_test">acceptance test gem</a>.</p>
 
 <p>All you have to do is to include it into yor Gemfile:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code">  <span class="n">gem</span> <span class="s2">&quot;acceptance_test&quot;</span>
-</td></tr></tbody></table></pre>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  <span class="n">gem</span> <span class="s2">"acceptance_test"</span>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>It&rsquo;s implemented as rspec&rsquo;s shared context, so you need to do the following in your acceptance test:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div><div class="lineno">21</div><div class="lineno">22</div><div class="lineno">23</div></td><td class="code"><span class="nb">require</span> <span class="s1">'acceptance_test'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'acceptance_test'</span>
 
 <span class="n">describe</span> <span class="s1">'Google Search'</span> <span class="k">do</span>
-  <span class="n">include_context</span> <span class="s2">&quot;AcceptanceTest&quot;</span>
+  <span class="n">include_context</span> <span class="s2">"AcceptanceTest"</span>
 
   <span class="n">before</span> <span class="ss">:all</span> <span class="k">do</span>
-    <span class="n">acceptance_test</span><span class="nf">.app_host</span> <span class="o">=</span> <span class="s2">&quot;http://www.google.com&quot;</span>
+    <span class="n">acceptance_test</span><span class="p">.</span><span class="nf">app_host</span> <span class="o">=</span> <span class="s2">"http://www.google.com"</span>
   <span class="k">end</span>
 
   <span class="n">before</span> <span class="k">do</span>
-    <span class="nb">puts</span> <span class="s2">&quot;Using driver: </span><span class="si">#{</span><span class="no">Capybara</span><span class="nf">.current_driver</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="nb">puts</span> <span class="s2">"Using driver: </span><span class="si">#{</span><span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span><span class="si">}</span><span class="s2">."</span>
   <span class="k">end</span>
 
-  <span class="n">it</span> <span class="s2">&quot;uses selenium driver&quot;</span><span class="p">,</span> <span class="ss">driver: :selenium</span><span class="p">,</span> <span class="ss">exclude: </span><span class="kp">false</span> <span class="k">do</span>
+  <span class="n">it</span> <span class="s2">"uses selenium driver"</span><span class="p">,</span> <span class="ss">driver: :selenium</span><span class="p">,</span> <span class="ss">exclude: </span><span class="kp">false</span> <span class="k">do</span>
     <span class="n">visit</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
 
-    <span class="n">fill_in</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s2">&quot;Capybara&quot;</span>
+    <span class="n">fill_in</span> <span class="s2">"q"</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s2">"Capybara"</span>
 
-    <span class="n">find</span><span class="p">(</span><span class="s2">&quot;#gbqfbw button&quot;</span><span class="p">)</span><span class="nf">.click</span>
+    <span class="n">find</span><span class="p">(</span><span class="s2">"#gbqfbw button"</span><span class="p">).</span><span class="nf">click</span>
 
-    <span class="n">all</span><span class="p">(</span><span class="ss">:xpath</span><span class="p">,</span> <span class="s2">&quot;//li[@class='g']/h3/a&quot;</span><span class="p">)</span><span class="nf">.each</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">a</span><span class="o">[</span><span class="ss">:href</span><span class="o">]</span> <span class="p">}</span>
+    <span class="n">all</span><span class="p">(</span><span class="ss">:xpath</span><span class="p">,</span> <span class="s2">"//li[@class='g']/h3/a"</span><span class="p">).</span><span class="nf">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">a</span><span class="o">[</span><span class="ss">:href</span><span class="o">]</span> <span class="p">}</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p>You can specify which tests to exclude and which drivers to use.</p>
 
 <p>As you can see, withing your test you have access to <strong>acceptance_test</strong> variable.</p>
 
 <p>If you want to use external configuration for selenium, use <strong>load_selenium_config</strong> method:</p>
-<pre class="highlight ruby"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div></td><td class="code"><span class="nb">require</span> <span class="s1">'acceptance_test'</span>
+<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'acceptance_test'</span>
 
 <span class="n">describe</span> <span class="s1">'Google Search'</span> <span class="k">do</span>
-  <span class="n">include_context</span> <span class="s2">&quot;AcceptanceTest&quot;</span>
+  <span class="n">include_context</span> <span class="s2">"AcceptanceTest"</span>
 
   <span class="n">before</span> <span class="ss">:all</span> <span class="k">do</span>
-    <span class="n">acceptance_test</span><span class="nf">.app_host</span> <span class="o">=</span> <span class="s2">&quot;http://www.google.com&quot;</span>
+    <span class="n">acceptance_test</span><span class="p">.</span><span class="nf">app_host</span> <span class="o">=</span> <span class="s2">"http://www.google.com"</span>
 
-    <span class="n">selenium_config_file</span> <span class="o">=</span> <span class="s2">&quot;spec/features/selenium.yml&quot;</span>
-    <span class="n">selenium_config_name</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span>
+    <span class="n">selenium_config_file</span> <span class="o">=</span> <span class="s2">"spec/features/selenium.yml"</span>
+    <span class="n">selenium_config_name</span> <span class="o">=</span> <span class="s2">"test"</span>
 
-    <span class="n">acceptance_test</span><span class="nf">.load_selenium_config</span>
+    <span class="n">acceptance_test</span><span class="p">.</span><span class="nf">load_selenium_config</span>
       <span class="n">selenium_config_file</span><span class="p">,</span> <span class="n">selenium_config_name</span>
   <span class="k">end</span>
 
-  <span class="n">it</span> <span class="s2">&quot;do something&quot;</span> <span class="k">do</span>
+  <span class="n">it</span> <span class="s2">"do something"</span> <span class="k">do</span>
     <span class="c1"># ...</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</td></tr></tbody></table></pre>
+</pre></td></tr></tbody></table>
+</div>
+
 <p><strong>acceptance_test</strong> gem understand few external variables.</p>
 
 <p><strong>DRIVER</strong> - if you want to overrides drivers for all tests and use only one driver type:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="nv">DRIVER</span><span class="o">=</span>selenium rspec your_acceptance_spec.rb
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="nv">DRIVER</span><span class="o">=</span>selenium rspec your_acceptance_spec.rb
+</pre></td></tr></tbody></table>
+</div>
+
 <p><strong>APP_HOST</strong> - overrides host to be tested;</p>
 
 <p><strong>WAIT_TIME</strong> - overrides used wait time for long operations;</p>
 
 <p><strong>RUN_SERVER</strong> - default is false; use it if you want to run internal server with capybara:</p>
-<pre class="highlight shell"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div></td><td class="code"><span class="nv">RUN_SERVER</span><span class="o">=</span><span class="nb">true </span>rspec your_acceptance_spec.rb
-</td></tr></tbody></table></pre>
+<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="nv">RUN_SERVER</span><span class="o">=</span><span class="nb">true </span>rspec your_acceptance_spec.rb
+</pre></td></tr></tbody></table>
+</div>
+
 <div id='footer'>
 <p id='legal'>
 &copy; All Right Reserved (2013), Alexander Shvets.
