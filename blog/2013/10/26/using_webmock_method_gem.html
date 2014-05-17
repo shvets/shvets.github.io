@@ -39,14 +39,13 @@
 <p><a href="https://github.com/bblimke/webmock">WebMock</a> is gem for stubbing HTTP requests. You can use
 it in your tests if you don&rsquo;t want to hit actual service while testing other functionality of your service
 (testing in isolation). For example:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s1">'webmock'</span>
+<pre class="highlight ruby"><span class="nb">require</span> <span class="s1">'webmock'</span>
 
 <span class="no">WebMock</span><span class="p">.</span><span class="nf">stub_request</span><span class="p">(</span><span class="ss">:any</span><span class="p">,</span> <span class="s2">"www.example.com"</span><span class="p">)</span><span class="o">.</span>
   <span class="n">to_return</span><span class="p">(</span><span class="ss">:body</span> <span class="o">=&gt;</span> <span class="s2">"some body"</span><span class="p">)</span>
 
 <span class="n">expect</span><span class="p">(</span><span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s2">"www.example.com"</span><span class="p">,</span> <span class="s2">"/"</span><span class="p">)).</span><span class="nf">to</span> <span class="n">eq</span> <span class="s2">"some body"</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>It will stub all http verbs (GET, POST, PUT etc.) thanks to <strong>:any</strong> parameter.</p>
 
@@ -63,7 +62,7 @@ want to start working on your part and finish it on time.</p>
 we can use publicly available <a href="http://api.openweathermap.org">OpenWeatherMap</a> web service.</p>
 
 <p>We will implement call to <strong>quote weather</strong> for a given city. You have to provide <strong>location</strong> and <strong>units</strong> parameters:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre></td><td class="code"><pre><span class="c1"># services/open_weather_map_service.rb</span>
+<pre class="highlight ruby"><span class="c1"># services/open_weather_map_service.rb</span>
 
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 
@@ -82,11 +81,10 @@ we can use publicly available <a href="http://api.openweathermap.org">OpenWeathe
     <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="c1"># At this moment, service is not developed yet...</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Then, create stub/mock for your service:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre></td><td class="code"><pre><span class="c1"># stubs/open_weather_map_service.rb</span>
+<pre class="highlight ruby"><span class="c1"># stubs/open_weather_map_service.rb</span>
 
 <span class="nb">require</span> <span class="s1">'webmock_method'</span>
 <span class="nb">require</span> <span class="s1">'json'</span>
@@ -100,8 +98,7 @@ we can use publicly available <a href="http://api.openweathermap.org">OpenWeathe
       <span class="no">File</span><span class="p">.</span><span class="nf">open</span> <span class="s2">"</span><span class="si">#{</span><span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/stubs/templates/quote_response.json.erb"</span>
     <span class="p">},</span> <span class="sr">/</span><span class="si">#{</span><span class="no">WebmockMethod</span><span class="p">.</span><span class="nf">url</span><span class="si">}</span><span class="sr">/</span>
 <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p><strong>webmock_method</strong> requires you to provide the following information:</p>
 
@@ -114,15 +111,14 @@ we can use publicly available <a href="http://api.openweathermap.org">OpenWeathe
 
 <p>You can build responses of arbitrary complexity with your own code or you can use <strong>RenderHelper</strong>, that comes with this
 gem. Currently it supports <strong>erb</strong> and <strong>haml</strong> renderers only. Here is example of how to build xml response:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre></td><td class="code"><pre>  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
+<pre class="highlight ruby">  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
     <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="nb">binding</span><span class="o">|</span>
       <span class="no">RenderHelper</span><span class="p">.</span><span class="nf">render</span> <span class="ss">:erb</span><span class="p">,</span> <span class="s2">"</span><span class="si">#{</span><span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/templates/purchase_response.xml.erb"</span><span class="p">,</span> <span class="nb">binding</span>
     <span class="p">}</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>It&rsquo;s possible to tweak your response on the fly:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre></td><td class="code"><pre>  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
+<pre class="highlight ruby">  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
     <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="nb">binding</span><span class="o">|</span>
       <span class="no">RenderHelper</span><span class="p">.</span><span class="nf">render</span> <span class="ss">:erb</span><span class="p">,</span> <span class="s2">"</span><span class="si">#{</span><span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/templates/purchase_response.xml.erb"</span><span class="p">,</span> <span class="nb">binding</span>
     <span class="p">}</span> <span class="k">do</span> <span class="o">|</span><span class="n">parent</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">credit_card</span><span class="o">|</span>
@@ -133,11 +129,10 @@ gem. Currently it supports <strong>erb</strong> and <strong>haml</strong> render
       <span class="n">define_attribute</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="ss">:error_message</span><span class="p">,</span> <span class="s2">"Unsupported Credit Card Type"</span><span class="p">)</span>
     <span class="k">end</span>
   <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>and then, use newly defined attributes, such as <strong>success</strong> and <strong>error_message</strong> inside your template:</p>
-<div class="highlight xml"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="c">&lt;!-- stubs/templates/purchase_response.xml.erb --&gt;</span>
+<pre class="highlight xml"><span class="c">&lt;!-- stubs/templates/purchase_response.xml.erb --&gt;</span>
 <span class="nt">&lt;PurchaseResponse&gt;</span>
   <span class="nt">&lt;Success&gt;</span><span class="err">&lt;</span>%= success %&gt;<span class="nt">&lt;/Success&gt;</span>
 
@@ -145,17 +140,15 @@ gem. Currently it supports <strong>erb</strong> and <strong>haml</strong> render
     <span class="nt">&lt;ErrorMessage&gt;</span><span class="err">&lt;</span>%= error_message %&gt;<span class="nt">&lt;/ErrorMessage&gt;</span>
   <span class="err">&lt;</span>% end %&gt;
 <span class="nt">&lt;/PurchaseResponse&gt;</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p><strong>url</strong> parameter is optional. If you don&rsquo;t specify it, gem will try to use <strong>url</strong> attribute defined
 on your service or you can define <strong>url</strong> parameter for WebmockMethod:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="no">WebmockMethod</span><span class="p">.</span><span class="nf">url</span> <span class="o">=</span> <span class="s2">"http://api.openweathermap.org/data/2.5/weather"</span>
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight ruby"><span class="no">WebmockMethod</span><span class="p">.</span><span class="nf">url</span> <span class="o">=</span> <span class="s2">"http://api.openweathermap.org/data/2.5/weather"</span>
+</pre>
 
 <p>And finally, create spec for testing your mocked service:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s2">"stubs/open_weather_map_service"</span>
+<pre class="highlight ruby"><span class="nb">require</span> <span class="s2">"stubs/open_weather_map_service"</span>
 
 <span class="n">describe</span> <span class="no">OpenWeatherMapService</span> <span class="k">do</span>
   <span class="n">describe</span> <span class="s2">"#quote"</span> <span class="k">do</span>
@@ -166,11 +159,10 @@ on your service or you can define <strong>url</strong> parameter for WebmockMeth
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>If you need to simulate exception raised inside the mocked method, do the following:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre></td><td class="code"><pre>  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
+<pre class="highlight ruby">  <span class="n">webmock_method</span> <span class="ss">:purchase</span><span class="p">,</span> <span class="o">[</span><span class="ss">:amount</span><span class="p">,</span> <span class="ss">:credit_card</span><span class="o">]</span><span class="p">,</span>
                  <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="nb">binding</span><span class="o">|</span>
                     <span class="c1"># prepare response</span>
                     <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
@@ -185,16 +177,14 @@ on your service or you can define <strong>url</strong> parameter for WebmockMeth
   <span class="k">end</span>
 
 <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p><strong>webmock</strong> gem code is aware of <strong>error</strong> variable and will throw this exception, so yo can verify it inside
 your test:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre>  <span class="n">it</span> <span class="s2">"returns error response if amount is negative"</span> <span class="k">do</span>
+<pre class="highlight ruby">  <span class="n">it</span> <span class="s2">"returns error response if amount is negative"</span> <span class="k">do</span>
     <span class="n">expect</span><span class="p">{</span><span class="n">subject</span><span class="p">.</span><span class="nf">purchase</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="n">valid_credit_card</span><span class="p">)}.</span><span class="nf">to</span> <span class="n">raise_exception</span><span class="p">(</span><span class="no">Exception</span><span class="p">)</span>
   <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>There is another article on same topic from <a href="http://robots.thoughtbot.com">thoughtbot</a> blog. It&rsquo;s written
 by Harlow Ward and describes how to <a href="http://robots.thoughtbot.com/post/64474832169/how-to-stub-external-services-in-tests">create stubbed external services</a>
@@ -222,7 +212,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../2014.html">2014</a>
-(1)
+(2)
 </li>
 <li>
 <a href="../../../2013.html">2013</a>
@@ -243,7 +233,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../tags/ruby.html">ruby</a>
-(13)
+(14)
 </li>
 <li>
 <a href="../../../tags/jruby.html">jruby</a>
@@ -383,6 +373,14 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/mavericks.html">mavericks</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
 (1)
 </li>
 </ol>

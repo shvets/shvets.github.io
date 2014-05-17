@@ -55,16 +55,15 @@
 
 <p>You can simulate modularity in Javascript with the help of anonymous closure. It creates an anonymous
 function and execute it immediately. All of the code inside the function lives in a closure:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre></td><td class="code"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<pre class="highlight javascript"><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="c1">// - all vars and functions are in this scope only
 </span>  <span class="c1">// - still maintains access to all globals
 </span><span class="p">}());</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Notice the <strong>()</strong> brackets around the anonymous function. Including <strong>()</strong> creates <strong>function expression</strong> instead of
 <strong>function declaration</strong>. For example:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre></td><td class="code"><pre><span class="kd">var</span> <span class="nx">MyModule</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<pre class="highlight javascript"><span class="kd">var</span> <span class="nx">MyModule</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">exports</span> <span class="o">=</span> <span class="p">{};</span>
 
   <span class="c1">// Export foo to the outside world
@@ -81,13 +80,12 @@ function and execute it immediately. All of the code inside the function lives i
 
 <span class="nx">MyModule</span><span class="p">.</span><span class="nx">foo</span><span class="p">();</span> <span class="c1">// OK
 </span><span class="nx">MyModule</span><span class="p">.</span><span class="nx">bar</span><span class="p">();</span> <span class="c1">// error
-</span></pre></td></tr></tbody></table>
-</div>
+</span></pre>
 
 <h2>Using JQuery.extend</h2>
 
 <p>You can use jquery&rsquo;s <strong>extend</strong> API in order to implement module:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre><pre class="lineno">26</pre><pre class="lineno">27</pre><pre class="lineno">28</pre><pre class="lineno">29</pre><pre class="lineno">30</pre></td><td class="code"><pre><span class="kd">function</span> <span class="nx">ModularityLibrary</span><span class="p">()</span> <span class="p">{}</span>
+<pre class="highlight javascript"><span class="kd">function</span> <span class="nx">ModularityLibrary</span><span class="p">()</span> <span class="p">{}</span>
 
 <span class="nx">ModularityLibrary</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">definitions</span><span class="p">,</span>
   <span class="nx">extra_definitions</span><span class="p">)</span> <span class="p">{</span>
@@ -117,11 +115,10 @@ function and execute it immediately. All of the code inside the function lives i
 <span class="p">};</span>
 
 <span class="kd">var</span> <span class="nx">Modularity</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ModularityLibrary</span><span class="p">();</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Now you can use it in your code:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre></td><td class="code"><pre><span class="c1">// Create new class
+<pre class="highlight javascript"><span class="c1">// Create new class
 </span>
 <span class="kd">var</span> <span class="nx">DisplayModule</span> <span class="o">=</span> <span class="nx">Modularity</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
   <span class="na">initialize</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{},</span>
@@ -136,8 +133,7 @@ function and execute it immediately. All of the code inside the function lives i
 
 <span class="c1">// Call instance function
 </span><span class="nx">displayObject</span><span class="p">.</span><span class="nx">display</span><span class="p">();</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <h2>Working with CommonJS</h2>
 
@@ -154,7 +150,7 @@ in their own <strong>unique module context</strong>.</p>
 </ul>
 
 <p>For example, Javascript class and jasmine spec for it could look like this:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre></td><td class="code"><pre><span class="c1">// app/assets/javascripts/commonjs/example.js
+<pre class="highlight javascript"><span class="c1">// app/assets/javascripts/commonjs/example.js
 </span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="s1">'Hello World'</span><span class="p">;</span>
@@ -169,16 +165,14 @@ in their own <strong>unique module context</strong>.</p>
     <span class="nx">example</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
   <span class="p">});</span>
 <span class="p">});</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>If you use <a href="https://github.com/karma-runner/karma">karma framework</a> for your <a href="http://shvets.github.io/blog/2013/09/14/nodejs_and_karma.html">unit testing and code coverage</a>, you need to install <strong>karma-commonjs</strong> plugin:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>npm install karma-commonjs --save-dev
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight shell">npm install karma-commonjs --save-dev
+</pre>
 
 <p>and modify <strong>karma.conf.coffee</strong> file in order to <strong>recognize</strong> commonjs:</p>
-<div class="highlight coffeescript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre></td><td class="code"><pre><span class="c1"># karma.conf.coffee
+<pre class="highlight coffeescript"><span class="c1"># karma.conf.coffee
 </span> <span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
    <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
      <span class="p">...</span>
@@ -198,8 +192,7 @@ in their own <strong>unique module context</strong>.</p>
        '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/commonjs/</span><span class="o">*</span><span class="nx">_spec</span><span class="p">.</span><span class="na">js</span><span class="s">': ['</span><span class="nx">commonjs</span><span class="s">']
        '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="sr">/commonjs/</span><span class="o">*</span><span class="nx">_spec</span><span class="p">.</span><span class="na">coffee</span><span class="s">': ['</span><span class="nx">commonjs</span><span class="s">']
      ...
-</span></pre></td></tr></tbody></table>
-</div>
+</span></pre>
 
 <p>You have to add <strong>commonjs</strong> as framework and mark files that use CommonJS with <strong>commonjs</strong> preprocessor.</p>
 
@@ -230,7 +223,7 @@ the Dojo web framework.</p>
 </ul>
 
 <p>First, create RequireJS-compatible js code:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre></td><td class="code"><pre><span class="c1">// app/assets/javascripts/requirejs/example.js
+<pre class="highlight javascript"><span class="c1">// app/assets/javascripts/requirejs/example.js
 </span>
 <span class="nx">define</span><span class="p">(</span><span class="s1">'example'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s2">"Hello!"</span><span class="p">;</span>
@@ -239,11 +232,10 @@ the Dojo web framework.</p>
     <span class="na">message</span><span class="p">:</span> <span class="nx">message</span>
   <span class="p">};</span>
 <span class="p">});</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Then, create jasmine spec for it:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre></td><td class="code"><pre><span class="c1">// spec/javascripts/requirejs/example.js
+<pre class="highlight javascript"><span class="c1">// spec/javascripts/requirejs/example.js
 </span>
 <span class="nx">require</span><span class="p">([</span><span class="s1">'example'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">example</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">describe</span><span class="p">(</span><span class="s2">"Example"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -253,11 +245,10 @@ the Dojo web framework.</p>
     <span class="p">});</span>
   <span class="p">});</span>
 <span class="p">});</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Configure <strong>karma.conf.coffee</strong> to recognize RequireJS framework:</p>
-<div class="highlight coffeescript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre></td><td class="code"><pre><span class="c1"># karma.conf.coffee
+<pre class="highlight coffeescript"><span class="c1"># karma.conf.coffee
 </span> <span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
    <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
      <span class="p">...</span>
@@ -270,13 +261,12 @@ the Dojo web framework.</p>
        '</span><span class="nx">spec</span><span class="o">/</span><span class="nx">javascripts</span><span class="o">/</span><span class="nx">requirejs</span><span class="o">/</span><span class="nx">spec</span><span class="o">-</span><span class="nx">main</span><span class="p">.</span><span class="na">js</span><span class="s">'
      ]
      ...
-</span></pre></td></tr></tbody></table>
-</div>
+</span></pre>
 
 <p>You don&rsquo;t have to preprocess requirejs files - it&rsquo;s already part of karma framework.</p>
 
 <p>Create <strong>main</strong> RequireJS file for tests only:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre><pre class="lineno">26</pre><pre class="lineno">27</pre><pre class="lineno">28</pre><pre class="lineno">29</pre><pre class="lineno">30</pre></td><td class="code"><pre><span class="c1">// spec/javascripts/requirejs/spec-main.js
+<pre class="highlight javascript"><span class="c1">// spec/javascripts/requirejs/spec-main.js
 </span>
 <span class="c1">// Grabs specs
 </span><span class="kd">var</span> <span class="nx">specs</span> <span class="o">=</span> <span class="p">[];</span>
@@ -306,8 +296,7 @@ the Dojo web framework.</p>
   <span class="c1">// start test run, once Require.js is done
 </span>  <span class="nl">callback</span><span class="p">:</span> <span class="nb">window</span><span class="p">.</span><span class="nx">__karma__</span><span class="p">.</span><span class="nx">start</span>
 <span class="p">});</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <h2>Using RequireJS in browser</h2>
 
@@ -315,7 +304,7 @@ the Dojo web framework.</p>
 it and include into your html file.</p>
 
 <p>Your sample  <strong>haml template file</strong>:</p>
-<div class="highlight haml"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre></td><td class="code"><pre><span class="c">-#index.haml
+<pre class="highlight haml"><span class="c">-#index.haml
 </span><span class="nt">%html</span><span class="p">{</span><span class="ss">:lang</span> <span class="o">=&gt;</span> <span class="s2">"en"</span><span class="p">}</span>
   <span class="nt">%head</span>
     <span class="p">=</span> <span class="n">javascript_include_tag</span> <span class="s2">"requirejs-2.1.8.min"</span>
@@ -324,11 +313,10 @@ it and include into your html file.</p>
 
   <span class="nt">%body</span>
     <span class="p">=</span> <span class="s2">"Hello, Web!"</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>and <strong>main</strong> RequireJS file:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre></td><td class="code"><pre><span class="c1">// application.js
+<pre class="highlight javascript"><span class="c1">// application.js
 </span><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
   <span class="na">baseUrl</span><span class="p">:</span> <span class="s1">'assets/javascripts'</span><span class="p">,</span>
 
@@ -341,13 +329,11 @@ it and include into your html file.</p>
 </span><span class="nx">require</span><span class="p">([</span><span class="s1">'jquery-1.10.2.min'</span><span class="p">,</span> <span class="s1">'helper'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">helper</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">helper</span><span class="p">.</span><span class="nx">do_something</span><span class="p">();</span>
 <span class="p">});</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Now you can open it in the browser:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>open index.html
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight shell">open index.html
+</pre>
 
 <h2>Calling CommonJS module from RequireJS</h2>
 
@@ -359,7 +345,7 @@ it and include into your html file.</p>
 </ul>
 
 <p>See example below:</p>
-<div class="highlight javascript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre></td><td class="code"><pre><span class="c1">// app/assets/javascripts/commonjs/example.js
+<pre class="highlight javascript"><span class="c1">// app/assets/javascripts/commonjs/example.js
 </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="s1">'Hello World'</span><span class="p">;</span>
 <span class="p">};</span>
@@ -374,8 +360,7 @@ it and include into your html file.</p>
     <span class="p">}</span>
   <span class="p">};</span>
 <span class="p">});</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>With the <strong>require</strong> argument, you load module using CommonJS style syntax.
 Other two parameters are optional and can be omitted.</p>
@@ -399,7 +384,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../2014.html">2014</a>
-(1)
+(2)
 </li>
 <li>
 <a href="../../../2013.html">2013</a>
@@ -420,7 +405,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../tags/ruby.html">ruby</a>
-(13)
+(14)
 </li>
 <li>
 <a href="../../../tags/jruby.html">jruby</a>
@@ -560,6 +545,14 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/mavericks.html">mavericks</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
 (1)
 </li>
 </ol>

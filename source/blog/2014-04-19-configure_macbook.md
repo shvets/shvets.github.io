@@ -281,7 +281,7 @@ bundle install
 npm install
 ```
 
-Other instructions on Mac configuration are available here [here](link1) and [here](lik2).
+Other instructions on Mac configuration are available here [here](link1) and [here](link2).
 
 [link1]: http://railsapps.github.io/installrubyonrails-mac.html
 [link2]: http://dean.io/setting-up-a-ruby-on-rails-development-environment-on-mavericks/

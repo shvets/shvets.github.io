@@ -47,39 +47,35 @@ extension support. So, I decided to convert my existing web site to work with mi
 <ul>
 <li><strong>.ruby-version</strong>:</li>
 </ul>
-<div class="highlight plaintext"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>1.9.3
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight plaintext">1.9.3
+</pre>
 
 <ul>
 <li><strong>.ruby-gemset</strong>:</li>
 </ul>
-<div class="highlight plaintext"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>your_gemset_name
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight plaintext">your_gemset_name
+</pre>
 
 <p>This is the <a href="http://blog.railsapps.org/post/47051459677/project-gemsets-with-rvm">new way</a> of handling <strong>ruby version</strong> and <strong>gemset name</strong> introduced in latest
 versions of bundler.</p>
 
 <p><strong>2.</strong> Include into your <strong>Gemfile</strong> at least these gems:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre></td><td class="code"><pre><span class="n">gem</span> <span class="s2">"middleman"</span>
+<pre class="highlight ruby"><span class="n">gem</span> <span class="s2">"middleman"</span>
 <span class="n">gem</span> <span class="s2">"middleman-livereload"</span>
 <span class="n">gem</span> <span class="s2">"haml"</span>
 <span class="n">gem</span> <span class="s2">"redcarpet"</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>In this minimal configuration we have support for dynamic reloading of web pages when they get changed
 and support for haml and markdown engines.</p>
 
 <p><strong>3.</strong> Move all files from your <strong>content</strong> folder into new <strong>sources</strong> folder.:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>mv content <span class="nb">source</span>
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight shell">mv content <span class="nb">source</span>
+</pre>
 
 <p><strong>4.</strong> Remove <strong>compass_config.rb</strong> and create new <strong>config.rb</strong> file. This is configuration file for
 middleman:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre></td><td class="code"><pre><span class="n">set</span> <span class="ss">:build_dir</span><span class="p">,</span> <span class="s2">"public"</span>
+<pre class="highlight ruby"><span class="n">set</span> <span class="ss">:build_dir</span><span class="p">,</span> <span class="s2">"public"</span>
 
 <span class="n">set</span> <span class="ss">:css_dir</span><span class="p">,</span> <span class="s2">"assets/stylesheets"</span>
 <span class="n">set</span> <span class="ss">:js_dir</span><span class="p">,</span> <span class="s2">"assets/javascripts"</span>
@@ -91,8 +87,7 @@ middleman:</p>
     <span class="ss">gh_blockcode: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">lax_spacing: </span><span class="kp">true</span>
 
 <span class="n">set</span> <span class="ss">:haml</span><span class="p">,</span> <span class="p">{</span> <span class="ss">ugly: </span><span class="kp">true</span> <span class="p">}</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Make sure that your styles, javascripts and images are located in:</p>
 
@@ -105,31 +100,28 @@ middleman:</p>
 <p><strong>5.</strong> Adding language highlight support</p>
 
 <p>If you want support for language highlight in markdown files, include this gem into <strong>Gemfile</strong>:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">gem</span> <span class="s2">"middleman-syntax"</span>
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight ruby"><span class="n">gem</span> <span class="s2">"middleman-syntax"</span>
+</pre>
 
 <p>and these lines to <strong>config.rb</strong> file:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre><span class="n">configure</span> <span class="ss">:development</span> <span class="k">do</span>
+<pre class="highlight ruby"><span class="n">configure</span> <span class="ss">:development</span> <span class="k">do</span>
   <span class="n">activate</span> <span class="ss">:syntax</span><span class="p">,</span> <span class="ss">:line_numbers</span> <span class="o">=&gt;</span> <span class="kp">true</span>
 <span class="k">end</span>
 
 <span class="n">configure</span> <span class="ss">:build</span> <span class="k">do</span>
   <span class="n">activate</span> <span class="ss">:syntax</span><span class="p">,</span> <span class="ss">:line_numbers</span> <span class="o">=&gt;</span> <span class="kp">true</span>
 <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Make sure that you activated syntax highlight in development configuration too.</p>
 
 <p><strong>6.</strong> Adding partials support</p>
 
 <p>If you need partials in your project, use <strong>partial</strong> command:</p>
-<div class="highlight haml"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre>  <span class="nf">#main-column</span>
+<pre class="highlight haml">  <span class="nf">#main-column</span>
     <span class="nf">#logo</span>
       <span class="p">=</span> <span class="n">partial</span> <span class="s2">"common/header"</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p><strong>7.</strong> Other miscellaneous changes</p>
 
@@ -140,17 +132,15 @@ middleman:</p>
 </ul>
 
 <p><strong>8.</strong> Generate static web site:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre>rm -rf public
+<pre class="highlight shell">rm -rf public
 middleman build
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p><strong>9.</strong> Start middleman and then access your web site from the browser:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre></td><td class="code"><pre>middleman &amp;
+<pre class="highlight shell">middleman &amp;
 
 open http://localhost:4567
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <div id='footer'>
 <p id='legal'>
@@ -171,7 +161,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../2014.html">2014</a>
-(1)
+(2)
 </li>
 <li>
 <a href="../../../2013.html">2013</a>
@@ -192,7 +182,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../tags/ruby.html">ruby</a>
-(13)
+(14)
 </li>
 <li>
 <a href="../../../tags/jruby.html">jruby</a>
@@ -332,6 +322,14 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/mavericks.html">mavericks</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
 (1)
 </li>
 </ol>

@@ -126,10 +126,8 @@ helpers do
 end
 
 configure :development do
-  activate :syntax, :line_numbers => true
-           #:linenos => 'inline',
-           #:anchorlinenos => true,
-           #:linenostart => 2
+  activate :syntax
+  #, :line_numbers => true
 end
 
 # Build-specific configuration
@@ -140,7 +138,8 @@ configure :build do
   # Minify Javascript on build
   # activate :minify_javascript
 
-  activate :syntax, :line_numbers => true
+  activate :syntax
+  #, :line_numbers => true
 
   # Enable cache buster
   # activate :asset_hash

@@ -52,15 +52,13 @@ installation of JRuby that will provide us with gems repository.</p>
 
 <p>First of all, you have to install <a title="RVM Home" href="https://rvm.io">rvm</a>. This is a tool for installing different ruby versions under Mac/Unix
 platforms. Once you have <strong>rvm</strong> installed, install jruby and then use it:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre>rvm install jruby-1.5.6
+<pre class="highlight shell">rvm install jruby-1.5.6
 rvm use jruby
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Check, if you have correct ruby version:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>ruby -v
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight shell">ruby -v
+</pre>
 
 <p>It should be <strong>jruby 1.5.6</strong>.</p>
 
@@ -69,7 +67,7 @@ rvm use jruby
 <h3>Step 1: Defining dependencies</h3>
 
 <p>We need to document dependencies for our plugin in <strong>Gemfile</strong>:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre><span class="n">source</span> <span class="s2">"http://rubygems.org"</span>
+<pre class="highlight ruby"><span class="n">source</span> <span class="s2">"http://rubygems.org"</span>
 
 <span class="n">gem</span> <span class="s2">"haml"</span><span class="p">,</span> <span class="s2">"3.0.24"</span>
 <span class="n">gem</span> <span class="s2">"hpricot"</span><span class="p">,</span> <span class="s2">"0.8.3"</span>
@@ -77,18 +75,16 @@ rvm use jruby
 <span class="n">gem</span> <span class="s2">"erubis"</span><span class="p">,</span> <span class="s2">"2.6.6"</span>
 <span class="n">gem</span> <span class="s2">"sexp_processor"</span><span class="p">,</span> <span class="s2">"3.0.5"</span>
 <span class="n">gem</span> <span class="s2">"ruby_parser"</span><span class="p">,</span> <span class="s2">"2.0.5"</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Now you can install dependencies with one command:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre><span class="n">bundle</span> <span class="n">install</span>
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight ruby"><span class="n">bundle</span> <span class="n">install</span>
+</pre>
 
 <h3>Step 2: Loading dependencies</h3>
 
 <p>The following method loads all required gems into memory:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre></td><td class="code"><pre><span class="kp">include</span> <span class="no">Java</span>
+<pre class="highlight ruby"><span class="kp">include</span> <span class="no">Java</span>
 
 <span class="k">def</span> <span class="nf">load_required_gems</span>
   <span class="n">jruby_home</span> <span class="o">=</span> <span class="s2">"</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">'HOME'</span><span class="o">]</span><span class="si">}</span><span class="s2">/.rvm/gems/jruby-1.5.6@haml-sass-converters"</span>
@@ -104,27 +100,25 @@ rvm use jruby
 <span class="k">end</span>
 
 <span class="n">load_required_gems</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <h3>Step 3: &ldquo;Requiring&rdquo; libraries</h3>
 
 <p>Now we need to <strong>require</strong> libraries for working with <strong>HAML/SASS</strong> and <strong>RubyMine</strong>:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre></td><td class="code"><pre><span class="nb">require</span> <span class="s2">"haml"</span>
+<pre class="highlight ruby"><span class="nb">require</span> <span class="s2">"haml"</span>
 <span class="nb">require</span> <span class="s2">"haml/html"</span>
 <span class="nb">require</span> <span class="s2">"sass/css"</span>
 
 <span class="nb">require</span> <span class="s1">'default_scripts_groups'</span>
 <span class="nb">require</span> <span class="s1">'editor_action_helper'</span>
 <span class="nb">require</span> <span class="s1">'action_group_helper'</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <h3>Step 4: Building conversion logic</h3>
 
 <p>We encapsulate all conversion logic into <strong>Converter</strong> class. We need to integrate logic from HAML/SASS library
 with RubyMine API. Because this class will be executed in RubyMine environment, we have access to <strong>editor</strong> object:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre><pre class="lineno">23</pre><pre class="lineno">24</pre><pre class="lineno">25</pre><pre class="lineno">26</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Converter</span>
+<pre class="highlight ruby"><span class="k">class</span> <span class="nc">Converter</span>
   <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">convert_selection</span> <span class="n">editor</span>
     <span class="k">if</span> <span class="n">editor</span><span class="p">.</span><span class="nf">has_selection?</span>
       <span class="n">text</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="nf">selection</span>
@@ -150,13 +144,12 @@ with RubyMine API. Because this class will be executed in RubyMine environment, 
     <span class="no">Sass</span><span class="o">::</span><span class="no">CSS</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">css</span><span class="p">).</span><span class="nf">render</span><span class="p">(</span><span class="ss">:scss</span><span class="p">)</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <h3>Step 5: Registering editor actions</h3>
 
 <p>Now we need to register conversion methods of <strong>Converter</strong> class as editor actions for HTML/HAML conversions:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre></td><td class="code"><pre><span class="n">register_editor_action</span> <span class="s2">"html_to_haml"</span><span class="p">,</span>
+<pre class="highlight ruby"><span class="n">register_editor_action</span> <span class="s2">"html_to_haml"</span><span class="p">,</span>
                        <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Convert Html to Haml"</span><span class="p">,</span>
                        <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">"Converts Html content to Haml content."</span><span class="p">,</span>
                        <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">"EditorPopupMenu"</span><span class="p">,</span>
@@ -176,12 +169,11 @@ with RubyMine API. Because this class will be executed in RubyMine environment, 
     <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_to_haml</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>For executing CSS/SASS conversions we will create new &ldquo;Css&rdquo; group under &lsquo;Tools|Extensions&rsquo; menu item.
 We also need to register <strong>Converter</strong> class methods as editor actions for CSS/SASS conversions:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre><pre class="lineno">10</pre><pre class="lineno">11</pre><pre class="lineno">12</pre><pre class="lineno">13</pre><pre class="lineno">14</pre><pre class="lineno">15</pre><pre class="lineno">16</pre><pre class="lineno">17</pre><pre class="lineno">18</pre><pre class="lineno">19</pre><pre class="lineno">20</pre><pre class="lineno">21</pre><pre class="lineno">22</pre></td><td class="code"><pre><span class="n">register_action_group</span> <span class="s2">"ScriptsCss"</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Css"</span>
+<pre class="highlight ruby"><span class="n">register_action_group</span> <span class="s2">"ScriptsCss"</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Css"</span>
 
 <span class="n">register_editor_action</span> <span class="s2">"css_to_sass"</span><span class="p">,</span>
                        <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Convert CSS to SASS"</span><span class="p">,</span>
@@ -203,23 +195,20 @@ We also need to register <strong>Converter</strong> class methods as editor acti
     <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_to_sass</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <h1>Install plugin</h1>
 
 <p>Above is th explanation of how plugin works. If you just want to use plugin, install
 <a title="Haml/SASS Converters" href="http://github.com/shvets/haml-sass-converters">haml-sass-converters</a> gem into <strong>haml-sass-converters</strong> gemset:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre>rvm use jruby@haml-sass-converters --create
+<pre class="highlight shell">rvm use jruby@haml-sass-converters --create
 gem i haml-sass-converters
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>Run install script in your project&rsquo;s root (or some other location) in order to copy the script:</p>
-<div class="highlight shell"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre><span class="nb">cd</span> &lt;your-project-root&gt;
+<pre class="highlight shell"><span class="nb">cd</span> &lt;your-project-root&gt;
 haml-sass-converters-install
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p>New <strong>&ldquo;scripts&rdquo;</strong> folder will be created with <strong>&ldquo;converters.rb&rdquo;</strong> as a plugin.</p>
 
@@ -257,7 +246,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../2014.html">2014</a>
-(1)
+(2)
 </li>
 <li>
 <a href="../../../2013.html">2013</a>
@@ -278,7 +267,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../tags/ruby.html">ruby</a>
-(13)
+(14)
 </li>
 <li>
 <a href="../../../tags/jruby.html">jruby</a>
@@ -418,6 +407,14 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/mavericks.html">mavericks</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
 (1)
 </li>
 </ol>

@@ -37,12 +37,11 @@
 <h2>How to use CoffeeScript with nanoc</h2>
 
 <p><strong>Step 1</strong>: Add <strong>coffee-script</strong> to <strong>Gemflie</strong>:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  <span class="n">gem</span> <span class="s1">'coffee-script'</span>
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight ruby">  <span class="n">gem</span> <span class="s1">'coffee-script'</span>
+</pre>
 
 <p><strong>Step 2</strong>: Add <strong>coffee_filter.rb</strong> file to <strong>lib</strong> folder:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre><pre class="lineno">9</pre></td><td class="code"><pre>  <span class="nb">require</span> <span class="s1">'coffee-script'</span>
+<pre class="highlight ruby">  <span class="nb">require</span> <span class="s1">'coffee-script'</span>
 
   <span class="k">class</span> <span class="nc">CoffeeFilter</span> <span class="o">&lt;</span> <span class="no">Nanoc3</span><span class="o">::</span><span class="no">Filter</span>
     <span class="n">identifier</span> <span class="ss">:coffee</span>
@@ -51,11 +50,10 @@
       <span class="no">CoffeeScript</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
     <span class="k">end</span>
   <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p><strong>Step 3</strong>: Add new rules to <strong>Rules</strong> file for compiling <strong>coffee-script</strong> files into <strong>javascript</strong> files:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre><pre class="lineno">6</pre><pre class="lineno">7</pre><pre class="lineno">8</pre></td><td class="code"><pre>  <span class="n">compile</span> <span class="s1">'/assets/coffee/*/'</span> <span class="k">do</span>
+<pre class="highlight ruby">  <span class="n">compile</span> <span class="s1">'/assets/coffee/*/'</span> <span class="k">do</span>
     <span class="n">filter</span> <span class="ss">:coffee</span>
   <span class="k">end</span>
 
@@ -63,35 +61,30 @@
   <span class="n">route</span> <span class="s1">'/assets/coffee/*/'</span> <span class="k">do</span>
     <span class="n">item</span><span class="p">.</span><span class="nf">identifier</span><span class="p">.</span><span class="nf">sub</span><span class="p">(</span><span class="sr">%r{^/assets/coffee}</span><span class="p">,</span> <span class="s1">'/javascripts'</span><span class="p">).</span><span class="nf">chop</span> <span class="o">+</span> <span class="s1">'.js'</span>
   <span class="k">end</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p><strong>Step 4</strong>: Create your first coffescript file in <strong>source/assets/coffee</strong> directory:</p>
-<div class="highlight coffeescript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre><pre class="lineno">3</pre><pre class="lineno">4</pre><pre class="lineno">5</pre></td><td class="code"><pre>  <span class="c1"># test.coffee
+<pre class="highlight coffeescript">  <span class="c1"># test.coffee
 </span>
   <span class="nx">notify</span> <span class="o">-&gt;</span> <span class="nx">alert</span> <span class="s">"Hello, user!"</span>
 
   <span class="nx">notify</span><span class="p">()</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <p><strong>Step 5</strong>: Compile your web site.</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  <span class="n">nanoc3</span> <span class="n">compile</span>
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight ruby">  <span class="n">nanoc3</span> <span class="n">compile</span>
+</pre>
 
 <p>Compiled javascript files should be located in <strong>javascrips</strong> folder.</p>
 
 <p>If you want to use coffee-script inside your haml partials, include this gem into &lsquo;Gemfile&rsquo;:</p>
-<div class="highlight ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre></td><td class="code"><pre>  <span class="n">gem</span> <span class="s1">'coffee-filter'</span>
-</pre></td></tr></tbody></table>
-</div>
+<pre class="highlight ruby">  <span class="n">gem</span> <span class="s1">'coffee-filter'</span>
+</pre>
 
 <p>And include this fragment into partial:</p>
-<div class="highlight coffeescript"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1</pre><pre class="lineno">2</pre></td><td class="code"><pre><span class="o">:</span><span class="nx">coffeescript</span>
+<pre class="highlight coffeescript"><span class="o">:</span><span class="nx">coffeescript</span>
   <span class="nb">window</span><span class="p">.</span><span class="na">notify</span> <span class="o">=</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="nx">alert</span> <span class="s">'Hello, user!'</span>
-</pre></td></tr></tbody></table>
-</div>
+</pre>
 
 <div id='footer'>
 <p id='legal'>
@@ -112,7 +105,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../2014.html">2014</a>
-(1)
+(2)
 </li>
 <li>
 <a href="../../../2013.html">2013</a>
@@ -133,7 +126,7 @@ Get feed
 <ol>
 <li>
 <a href="../../../tags/ruby.html">ruby</a>
-(13)
+(14)
 </li>
 <li>
 <a href="../../../tags/jruby.html">jruby</a>
@@ -273,6 +266,14 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/mavericks.html">mavericks</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
 (1)
 </li>
 </ol>
