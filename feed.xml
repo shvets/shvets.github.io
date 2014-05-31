@@ -5,10 +5,190 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2014-05-16T20:00:00-04:00</updated>
+  <updated>2014-05-30T20:00:00-04:00</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Oracle Instant Client Installer</title>
+    <link rel="alternate" href="/blog/2014/05/31/install_oracle_client.html"/>
+    <id>/blog/2014/05/31/install_oracle_client.html</id>
+    <published>2014-05-30T20:00:00-04:00</published>
+    <updated>2014-05-30T20:00:00-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Oracle Instant Client Installer - thor-based tasks for facilitating oracle client installation&lt;/h1&gt;
+
+&lt;h2&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Installing database driver for Oracle (activerecord-oracle_enhanced-adapter) is not a simple process.
+First, you need to install Oracle Instant Client. Second, you have to install ruby wrapper around Instant Client
+(ruby-oci8 gem). On some platforms second step requires compiling source code. Only after that
+you can install oracle database driver. Here we discuss how to do it for OSX 10 operating system.&lt;/p&gt;
+
+&lt;h2&gt;Create new gem group&lt;/h2&gt;
+
+&lt;p&gt;Create separate group (e.g. &amp;ldquo;oracle&amp;rdquo;) in Gemfile for oracle ruby-oci8 client wrapper. You have to keep
+this gem in separate group because it requires special steps to be done before database driver
+can be installed.&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
+
+&lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:oracle&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;"ruby-oci8"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"2.1.7"&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;h2&gt;Install gems for the project (except ruby-oci8 gem)&lt;/h2&gt;
+
+&lt;p&gt;Install ruby gems for your project with bundler tool. You have to bypass oracle client wrapper installation:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;without&lt;/strong&gt; parameter will exclude &lt;strong&gt;oracle&lt;/strong&gt; bundler group from the execution.&lt;/p&gt;
+
+&lt;p&gt;Check that you don&amp;rsquo;t have ruby-oci8 installed yet:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;gem list
+&lt;/pre&gt;
+
+&lt;h2&gt;Download Oracle Instant Client&lt;/h2&gt;
+
+&lt;p&gt;Download Oracle Instant Client packages and save them locally (e.g. in &amp;ldquo;downloads&amp;rdquo; folder). You can find
+installation packages on &lt;strong&gt;&lt;a href="http://www.oracle.com"&gt;www.oracle.com&lt;/a&gt;&lt;/strong&gt; web site (you have to be registered user though).&lt;/p&gt;
+
+&lt;h2&gt;Configuration file&lt;/h2&gt;
+
+&lt;p&gt;Create configuration file for the installation (.oracle_client_installer.json) in the root of your project.
+It will define where you have downloaded files and some other parameters:&lt;/p&gt;
+&lt;pre class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['USER']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['HOME']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"ruby_home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['MY_RUBY_HOME']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"oracle_base"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"/usr/local/oracle"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"oracle_version"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"11.2.0.4.0"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"ruby_oci_version"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"2.1.7"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"tns_admin_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{oracle_base}/network/admin"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"src_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"downloads"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"dest_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{oracle_base}/instantclient_11_2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"basic_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{src_dir}/instantclient-basic-macos.x64-#{oracle_version}.zip"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"sdk_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{src_dir}/instantclient-sdk-macos.x64-#{oracle_version}.zip"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"sqlplus_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{src_dir}/instantclient-sqlplus-macos.x64-#{oracle_version}.zip"&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/pre&gt;
+
+&lt;p&gt;We are going to run ruby from &lt;strong&gt;ruby_home&lt;/strong&gt; on behalf of the &lt;strong&gt;user&lt;/strong&gt; and we will use specific versions
+of &lt;strong&gt;oracle&lt;/strong&gt; client and &lt;strong&gt;ruby-oci8&lt;/strong&gt; gem. We also specify where to look for installation packages (src_dir)
+and where to install Instant Client (dest_dir). Also, as you can see, we are using &lt;strong&gt;macos&lt;/strong&gt; as a platform
+and &lt;strong&gt;x64&lt;/strong&gt; as an architecture.&lt;/p&gt;
+
+&lt;h2&gt;Provide execution script&lt;/h2&gt;
+
+&lt;p&gt;Library itself if written in ruby, but for launching it&amp;rsquo;s code you have to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt;. I provide
+thor script here as an example:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'thor'&lt;/span&gt;
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'oracle_client_installer'&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OracleClient&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;initialize&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;params&lt;/span&gt;
+    &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;OracleClientInstaller&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="s2"&gt;".oracle_client_installer.json"&lt;/span&gt;
+
+    &lt;span class="k"&gt;super&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;params&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"install"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Installs Oracle Instant Client"&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;install&lt;/span&gt;
+    &lt;span class="vi"&gt;@installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;install&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"uninstall"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Uninstalls Oracle Instant Client"&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;uninstall&lt;/span&gt;
+    &lt;span class="vi"&gt;@installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uninstall&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"verify"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Verifies Oracle Instant Client connection"&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;verify&lt;/span&gt;
+    &lt;span class="n"&gt;username&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"scott"&lt;/span&gt;
+    &lt;span class="n"&gt;password&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"tiger"&lt;/span&gt;
+    &lt;span class="n"&gt;schema&lt;/span&gt;   &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"ORCL"&lt;/span&gt;
+    &lt;span class="n"&gt;sql&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"SELECT * FROM emp where rownum &amp;lt;= 10"&lt;/span&gt;
+
+    &lt;span class="vi"&gt;@installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;verify&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+      &lt;span class="s2"&gt;"require 'oci8'; OCI8.new('&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;','&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;','&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;schema&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;').exec('&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;sql&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;') do |r| puts r.join(','); end"&lt;/span&gt;
+    &lt;span class="k"&gt;end&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;h2&gt;Install Oracle Instant Client&lt;/h2&gt;
+
+&lt;p&gt;Run this &lt;strong&gt;thor&lt;/strong&gt; command:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;thor oracle_client:install
+&lt;/pre&gt;
+
+&lt;p&gt;After execution all Instant Client packages (basic, sdk and sqlplus) will be installed at the right location
+(dest_dir) on your computer.&lt;/p&gt;
+
+&lt;h2&gt;Again: install gems for the project (now with ruby-oci8 gem)&lt;/h2&gt;
+
+&lt;p&gt;Remove .bundle folder in order to include &amp;ldquo;oracle&amp;rdquo; group into bundle execution and
+then run bundler with &amp;ldquo;oracle&amp;rdquo; group:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;rm -rf .bundle
+
+bundle
+&lt;/pre&gt;
+
+&lt;h2&gt;Verify the installation&lt;/h2&gt;
+
+&lt;p&gt;If you have Oracle installed locally with &lt;strong&gt;scott/tiger/ORCL&lt;/strong&gt;, you can test it now:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;thor oracle_client:verify
+&lt;/pre&gt;
+
+&lt;p&gt;If you have oracle installed somewhere on the network, you can add TNS names inside your
+&lt;strong&gt;tnsnames.ora&lt;/strong&gt; file located inside &lt;strong&gt;/usr/local/oracle/network/admin&lt;/strong&gt; folder. You can set up
+this location via &lt;strong&gt;tns_admin_dir&lt;/strong&gt; property inside your configuration file.&lt;/p&gt;
+
+&lt;p&gt;tnsnames.ora file will have this section:&lt;/p&gt;
+&lt;pre class="highlight plaintext"&gt;MY_ORCL=
+    (DESCRIPTION=
+        (ADDRESS=
+            (PROTOCOL=TCP)
+            (HOST=db.your_host.com)
+            (PORT=1521)
+        )
+        (CONNECT_DATA=
+            (SID=MY_ORCL)
+        )
+    )
+&lt;/pre&gt;
+
+&lt;p&gt;where you define &lt;strong&gt;MY_ORCL&lt;/strong&gt; schema on &lt;strong&gt;db.your_host.com&lt;/strong&gt; running on port &lt;strong&gt;1521&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;In order to use oracle driver inside rails application, you have to include it into your Gemfile:&lt;/p&gt;
+&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
+
+&lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:oracle&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'activerecord-oracle_enhanced-adapter'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'1.5.3'&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;h1&gt;Summary: all steps all together&lt;/h1&gt;
+&lt;pre class="highlight shell"&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
+
+thor oracle_client:install
+
+rm -rf .bundle
+
+bundle
+
+thor oracle_client:verify
+&lt;/pre&gt;
+</content>
+  </entry>
   <entry>
     <title>Text Interpolator gem</title>
     <link rel="alternate" href="/blog/2014/05/17/text_interpolator.html"/>
@@ -835,343 +1015,6 @@ For example, this code will upload remote file:&lt;/p&gt;
 
 &lt;p&gt;If you need more details on how to use it for practical gem, visit &lt;a href="https://github.com/shvets/selenium"&gt;selenium gem&lt;/a&gt;.
 This gem downloads and create launcher for standalone selenium server.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Two simple ruby DSL examples</title>
-    <link rel="alternate" href="/blog/2013/11/16/two_simple_ruby_dsl_examples.html"/>
-    <id>/blog/2013/11/16/two_simple_ruby_dsl_examples.html</id>
-    <published>2013-11-15T19:00:00-05:00</published>
-    <updated>2013-11-15T19:00:00-05:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h1&gt;Two simple ruby DSL examples&lt;/h1&gt;
-
-&lt;h1&gt;Introduction&lt;/h1&gt;
-
-&lt;p&gt;Domain Specific Languages (DSL) become quite popular in last decade. DSL could be &lt;strong&gt;external&lt;/strong&gt;
-(as a separate language) or &lt;strong&gt;internal&lt;/strong&gt; (as a specific way to write a program within existing
-programming language). In this article we are interested more in &lt;strong&gt;internal DSL&lt;/strong&gt; because of
-some advantages:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;it is a way to expose functionality in a simple, readable format.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;it is like a miniature specialized programming language within parent language.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;being written in host language, it still could use full power of parent language.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;it introduces notions that are close to the lexicon of target domain, allowing us easily express
-logic specific to a particular problem.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Programming languages provide different levels of convenience/abstraction in writing DSLs. Ruby
-is one of recognizable languages that lets writing DSL quite easy, because of built-in abilities
-for writing DSLs based on &lt;strong&gt;metaprogramming&lt;/strong&gt; and &lt;strong&gt;first-class functions&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Metaprogramming&lt;/strong&gt; (and especially class body evaluation) let us to create &lt;strong&gt;directives&lt;/strong&gt; that look
-like they are part of the language itself. &lt;strong&gt;First class functions&lt;/strong&gt; lets us treat methods
-as parameters.&lt;/p&gt;
-
-&lt;p&gt;You can see other articles about DSL &lt;a href="http://rubylearning.com/blog/2010/11/30/how-do-i-build-dsls-with-yield-and-instance_eval"&gt;here&lt;/a&gt; and &lt;a href="http://softwarebyjosh.com/2012/01/08/How-To-Write-Your-Own-DSL.html"&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h1&gt;Example&lt;/h1&gt;
-
-&lt;p&gt;Let&amp;rsquo;s have some simple class for building arrays:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Collector&lt;/span&gt;
-
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;initialize&lt;/span&gt;
-    &lt;span class="vi"&gt;@array&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;[]&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;add&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;
-    &lt;span class="vi"&gt;@array&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;remove&lt;/span&gt; &lt;span class="n"&gt;element&lt;/span&gt;
-    &lt;span class="vi"&gt;@array&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;element&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;to_a&lt;/span&gt;
-    &lt;span class="vi"&gt;@array&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;We can use this class now:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;collector&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Collector&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-
-&lt;span class="n"&gt;collector&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"1"&lt;/span&gt;
-&lt;span class="n"&gt;collector&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"2"&lt;/span&gt;
-&lt;span class="n"&gt;collector&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"3"&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;This is regular program and as any other program it&amp;rsquo;s verbose. We can remove noise by applying some
-metaprogramming tricks. We&amp;rsquo;ll try to remove method receiver: &lt;strong&gt;&amp;ldquo;collector.&amp;rdquo;&lt;/strong&gt; from the code by making it implicit.&lt;/p&gt;
-
-&lt;h1&gt;Implementation&lt;/h1&gt;
-
-&lt;p&gt;One way of doing DSL in Ruby is based on &lt;strong&gt;instance_eval&lt;/strong&gt; method. It takes &lt;strong&gt;block of code&lt;/strong&gt; as input parameter
-and evaluates it in the &lt;strong&gt;context of the calling object&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;DSL&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;build&lt;/span&gt; &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;instance_eval&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;dsl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;DSL&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;Now, let&amp;rsquo;s test our code with this example:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;collector&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Collector&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-
-&lt;span class="c1"&gt;# one way of doing DSL with direct code block&lt;/span&gt;
-
-&lt;span class="n"&gt;dsl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;build&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;collector&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"1"&lt;/span&gt;
-  &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"2"&lt;/span&gt;
-  &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"3"&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="c1"&gt;# another way of doing DSL with lambda&lt;/span&gt;
-
-&lt;span class="n"&gt;code&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;lambda&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-  &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"4"&lt;/span&gt;
-  &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"5"&lt;/span&gt;
-  &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="s2"&gt;"6"&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;dsl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;build&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;collector&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;collector&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;to_a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;' '&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# $ 1 2 3 4 5 6&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;You have to keep in mind two thing though:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;instance_eval&lt;/strong&gt; changes evaluation context, so code passed for evaluation is treated as original
-code of the object. As a result, all private methods and fields are available:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;dsl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;build&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;collector&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="vi"&gt;@array&lt;/span&gt; &lt;span class="c1"&gt;# this field is accessible,&lt;/span&gt;
-              &lt;span class="c1"&gt;# self is pointing to 'collector' object&lt;/span&gt;
-  &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;   &lt;span class="c1"&gt;# "collector" instance&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Because of context switch, you loose access to the calling context:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;DSL&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;dsl_method&lt;/span&gt;
-    &lt;span class="s2"&gt;"dsl_method"&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;dsl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;DSL&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-
-&lt;span class="n"&gt;collector&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Collector&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-
-&lt;span class="n"&gt;dsl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;build&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;collector&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="k"&gt;begin&lt;/span&gt;
-    &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;dsl_method&lt;/span&gt; &lt;span class="c1"&gt;# raises exception&lt;/span&gt;
-  &lt;span class="k"&gt;rescue&lt;/span&gt;
-    &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="s2"&gt;"'dsl_method' not available"&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;We cannot do anything with accessing private methods/fields, but we can make methods from calling context available.
-if you provide parent context as an additional parameter, you can redirect  calls to missing object directly to
-the parent (proxy object):&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;Proxy&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;subject&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;subject&lt;/span&gt;
-    &lt;span class="vi"&gt;@subject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;subject&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;method_missing&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="vi"&gt;@subject&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;send&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;respond_to?&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include_private&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kp"&gt;false&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="vi"&gt;@subject&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;respond_to?&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="k"&gt;super&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;Here is our modified DSL class:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;DSL&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;build&lt;/span&gt; &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;extend&lt;/span&gt; &lt;span class="no"&gt;Proxy&lt;/span&gt;
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;subject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;parent&lt;/span&gt;
-
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;instance_eval&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;If you know that code block is coming from the parent scope, you can calculate parent
-dynamically, this way you may reduce amount of input parameters:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;DSL&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;build&lt;/span&gt; &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-    &lt;span class="n"&gt;parent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;code&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;binding&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;eval&lt;/span&gt; &lt;span class="s1"&gt;'self'&lt;/span&gt;
-
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;extend&lt;/span&gt; &lt;span class="no"&gt;Proxy&lt;/span&gt;
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;subject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;parent&lt;/span&gt;
-
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;instance_eval&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;h1&gt;Building something useful&lt;/h1&gt;
-
-&lt;p&gt;Now, let&amp;rsquo;s apply our knowledge to build something useful. We will try to build DSL for
-building zip archive and regular directory in same fashion. The idea is to build API identical,
-so you can use similar code for building zip files and for copying files.&lt;/p&gt;
-
-&lt;p&gt;As a result, we have 2 gems: ZipDSL and DirDSL.&lt;/p&gt;
-
-&lt;h1&gt;ZipDSL gem&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/shvets/zip_dsl"&gt;ZipDSL&lt;/a&gt; is library for working with zip files in DSL way.&lt;/p&gt;
-
-&lt;p&gt;Install new gem:&lt;/p&gt;
-&lt;pre class="highlight plaintext"&gt;$ gem i zip_dsl
-&lt;/pre&gt;
-
-&lt;p&gt;Now you can create new archive:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'zip_dsl'&lt;/span&gt;
-
-&lt;span class="n"&gt;zip_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"test.zip"&lt;/span&gt;
-&lt;span class="n"&gt;from_dir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"."&lt;/span&gt;
-
-&lt;span class="n"&gt;zip_builder&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ZipDSL&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="n"&gt;zip_file&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;from_dir&lt;/span&gt;
-
-&lt;span class="n"&gt;zip_builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;build&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="c1"&gt;# files from 'from_dir'&lt;/span&gt;
-  &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"Gemfile"&lt;/span&gt;
-  &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"Rakefile"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:to_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"my_config"&lt;/span&gt;
-  &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"spec/spec_helper.rb"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-       &lt;span class="ss"&gt;:to_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"my_config"&lt;/span&gt;
-
-  &lt;span class="c1"&gt;# create empty directory&lt;/span&gt;
-  &lt;span class="n"&gt;directory&lt;/span&gt; &lt;span class="ss"&gt;:to_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"my_config"&lt;/span&gt;
-
-  &lt;span class="c1"&gt;# copy from one directory to another&lt;/span&gt;
-  &lt;span class="n"&gt;directory&lt;/span&gt; &lt;span class="ss"&gt;:from_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"spec"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:to_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"my_spec"&lt;/span&gt;
-
-  &lt;span class="c1"&gt;# create zip entry from arbitrary source:&lt;/span&gt;
-  &lt;span class="c1"&gt;# string or StringIO&lt;/span&gt;
-  &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"README"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-          &lt;span class="ss"&gt;:source&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"My README file content"&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;or update existing archive:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;zip_builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;update&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"README.md"&lt;/span&gt;
-  &lt;span class="n"&gt;directory&lt;/span&gt; &lt;span class="ss"&gt;:from_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"lib"&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;You can also display all entries from archive&amp;rsquo;s folder:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;zip_builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"lib/zip_dsl"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;or display entries:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;zip_builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;each_entry&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"lib/zip_dsl"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;entry&lt;/span&gt;
-  &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;entry&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;name&lt;/span&gt;
-
-  &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;entry&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;get_input_stream&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt;
-
-  &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;When you work with zip file, you have to decide how to allocate/release resources (zip files) in order to
-avoid memory leaks. One possibe solution could be using modified DSL class implementation:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;DSL&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;build&lt;/span&gt; &lt;span class="n"&gt;create_code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;destroy_code&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kp"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-    &lt;span class="n"&gt;parent_binding&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;code&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;binding&lt;/span&gt;
-    &lt;span class="n"&gt;parent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;parent_binding&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;eval&lt;/span&gt; &lt;span class="s1"&gt;'self'&lt;/span&gt;
-
-    &lt;span class="n"&gt;object&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;create_code&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;kind_of?&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;Proc&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;create_code&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;call&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;create_code&lt;/span&gt;
-
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;extend&lt;/span&gt; &lt;span class="no"&gt;Proxy&lt;/span&gt;
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;subject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;parent&lt;/span&gt;
-
-    &lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;instance_eval&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-  &lt;span class="k"&gt;ensure&lt;/span&gt;
-    &lt;span class="n"&gt;destroy_code&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;call&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;destroy_code&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;object&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;For example, we can wrap ZipInputStream in this way:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Reader&lt;/span&gt;
-  &lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="no"&gt;DSL&lt;/span&gt;
-
-   &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;each_entry&lt;/span&gt; &lt;span class="nb"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;code&lt;/span&gt;
-    &lt;span class="n"&gt;create_code&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;lambda&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-      &lt;span class="no"&gt;Zip&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;ZipInputStream&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="nb"&gt;name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="p"&gt;}&lt;/span&gt;
-    &lt;span class="n"&gt;destroy_code&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;lambda&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;zis&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="n"&gt;zis&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;close&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
-    &lt;span class="n"&gt;execute_code&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;lambda&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;zis&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-      &lt;span class="n"&gt;zis&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;rewind&lt;/span&gt;
-
-      &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;entry&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;zis&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;get_next_entry&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="k"&gt;next&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;entry&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=~&lt;/span&gt; &lt;span class="sr"&gt;%r{&lt;/span&gt;&lt;span class="se"&gt;\.\.&lt;/span&gt;&lt;span class="sr"&gt;}&lt;/span&gt;
-        &lt;span class="n"&gt;code&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;call&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;entry&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-      &lt;span class="k"&gt;end&lt;/span&gt;
-    &lt;span class="k"&gt;end&lt;/span&gt;
-
-    &lt;span class="n"&gt;build&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;create_code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;destroy_code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;execute_code&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-   &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;h1&gt;DirDSL gem&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href="dir_dsl%20home"&gt;DirDSL&lt;/a&gt; is library for working with files and directories (create, copy) in DSL way.&lt;/p&gt;
-
-&lt;p&gt;Install it with this command:&lt;/p&gt;
-&lt;pre class="highlight plaintext"&gt;$ gem install dir_dsl
-&lt;/pre&gt;
-
-&lt;p&gt;You can create new directory now:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'dir_dsl'&lt;/span&gt;
-
-&lt;span class="n"&gt;from_dir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"."&lt;/span&gt;
-&lt;span class="n"&gt;to_dir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"build"&lt;/span&gt;
-
-&lt;span class="n"&gt;dir_builder&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;DirDSL&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="n"&gt;from_dir&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;to_dir&lt;/span&gt;
-
-&lt;span class="n"&gt;dir_builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;build&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="c1"&gt;# files from 'from_dir'&lt;/span&gt;
-  &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"Gemfile"&lt;/span&gt;
-  &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"Rakefile"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:to_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"my_config"&lt;/span&gt;
-  &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"spec/spec_helper.rb"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-       &lt;span class="ss"&gt;:to_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"my_config"&lt;/span&gt;
-
-  &lt;span class="c1"&gt;# create empty directory&lt;/span&gt;
-  &lt;span class="n"&gt;directory&lt;/span&gt; &lt;span class="ss"&gt;:to_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"my_config"&lt;/span&gt;
-
-  &lt;span class="c1"&gt;# copy from one directory to another&lt;/span&gt;
-  &lt;span class="n"&gt;directory&lt;/span&gt; &lt;span class="ss"&gt;:from_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"spec"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-            &lt;span class="ss"&gt;:to_dir&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"my_spec"&lt;/span&gt;
-
-  &lt;span class="c1"&gt;# create zip entry from arbitrary source:&lt;/span&gt;
-  &lt;span class="c1"&gt;# string or StringIO&lt;/span&gt;
-  &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"README"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-          &lt;span class="ss"&gt;:source&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"My README file content"&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;And display all entries from the folder:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;dir_builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"lib/zip_dsl"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
-&lt;p&gt;Some other examples of DSL can be found &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/meta_tricks/simple_dsl.rb"&gt;here&lt;/a&gt;, &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl11.rb"&gt;here&lt;/a&gt;, &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl12.rb"&gt;here&lt;/a&gt;,
-&lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl13.rb"&gt;here&lt;/a&gt; and &lt;a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl2.rb"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>

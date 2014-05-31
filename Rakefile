@@ -1,6 +1,6 @@
 $:.unshift(File::join(File::dirname(__FILE__), "lib"))
 
-require "bookmarks_gen"
+require "chrome_bookmarks_gen"
 require 'projects_gen'
 
 desc "generates web site"
@@ -14,7 +14,8 @@ end
 desc "generates bookmarks layout from bookmark.json"
 task "gen-bm" do
   bookmarks = "#{ENV['HOME']}/Dropbox/Alex/bookmarks/bookmarks-2013-10-19.json"
-  generator = BookmarksGen.new
+  #bookmarks = "#{ENV['HOME']}/Dropbox/Alex/bookmarks/safari-bookmarks-2014-05-31.json"
+  generator = ChromeBookmarksGen.new
 
   generator.generate_haml(bookmarks, "source/bookmarks")
 end

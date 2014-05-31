@@ -10,7 +10,7 @@ Author: Alexander Shvets
 %!SLIDE title-and-content transition=cover incremental
 
 
-# Why do we need virualization in development?
+# Why do we need virtualiation in development?
 
 * We want to have **same environment for all developers**, no matter on what platform they are working now.
 
@@ -19,7 +19,7 @@ hard-to-discover inter-project dependencies or different versions of same librar
 
 * To overcome **It "works on my machine!"** syndrome - development environment is different from production environment.
 
-* Somtimes required software is **not available** on developer's platform. Example: 64-bit instant client for oracle
+* Sometimes required software is **not available** on developer's platform. Example: 64-bit instant client for oracle
 was broken for almost two years on OS/X >= 10.7.
 
 * **Development for PAAS**, such as Heroku, Engine Yard etc. You can find/build virtualization that is pretty close to
@@ -396,7 +396,7 @@ end
 
 # Use Cases
 
-* Provide **clean clone of production environment**. You can guarantee that that your staging server is a exact clone of
+* Provide **clean clone of production environment**. You can guarantee that your staging server is a exact clone of
 your production server.
 
 * **Team of developers working along the globe and on different platforms**. The idea is to do development against
@@ -408,7 +408,7 @@ unified, easy to replicate virtual platform with same characteristics for all de
 
 %!SLIDE title-and-content incremental transition=zoom
 
-# Avaliable options for provisioning
+# Available options for provisioning
 
 * Create simple shell script
 * Use chef gem
@@ -479,7 +479,7 @@ bash "ls -al" # run OS command
 
 %!SLIDE title-and-content transition=cover
 
-# Common conceps of Chef (continued)
+# Common concepts of Chef (continued)
 
 * **Cookbook** - a collection of recipes (e.g. db cookbook could handle common interface for
 installing/configuring mysql and postgresql).
@@ -502,7 +502,7 @@ installing/configuring mysql and postgresql).
 
 %!SLIDE title-and-content transition=cover
 
-# Common conceps of Chef (continued)
+# Common concepts of Chef (continued)
 
 * **Attribute** - default values to be used by cookbook in order to configure it (e.g. required
 version, service port or user name/password etc.). They can be redefined when you configure recipe.
@@ -515,7 +515,7 @@ version, service port or user name/password etc.). They can be redefined when yo
 
 %!SLIDE title-and-content transition=cover
 
-# Common conceps of Chef (continued)
+# Common concepts of Chef (continued)
 
 * **Resource** - it could be file, directory, package, service etc.
 
@@ -543,7 +543,7 @@ version, service port or user name/password etc.). They can be redefined when yo
 
 %!SLIDE title-and-content transition=cover
 
-# Common conceps of Chef (continued)
+# Common concepts of Chef (continued)
 
 * **Template** - powered by ERB and used for generation configuration files.
 
