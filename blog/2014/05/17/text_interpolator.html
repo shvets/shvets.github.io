@@ -45,22 +45,22 @@
 <ul>
 <li>interpolation inside the string:</li>
 </ul>
-<pre class="highlight ruby"><span class="n">var1</span> <span class="o">=</span> <span class="s1">'some value 1'</span>
+<pre><code class="highlight ruby"><span class="n">var1</span> <span class="o">=</span> <span class="s1">'some value 1'</span>
 <span class="n">var2</span> <span class="o">=</span> <span class="s1">'some value 2'</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="s2">"We have var1: </span><span class="si">#{</span><span class="n">var1</span><span class="si">}</span><span class="s2"> and var2: </span><span class="si">#{</span><span class="n">var2</span><span class="si">}</span><span class="s2">."</span>
 
 <span class="nb">puts</span> <span class="n">result</span> <span class="c1"># We have var1: some value 1 and var2: some value 2.</span>
-</pre>
+</code></pre>
 
 <ul>
 <li>interpolation inside file (with embedded ruby -  erb):</li>
 </ul>
-<pre class="highlight ruby"><span class="c1"># some_template.erb</span>
+<pre><code class="highlight ruby"><span class="c1"># some_template.erb</span>
 
 <span class="no">We</span> <span class="n">have</span> <span class="ss">var1: </span><span class="o">&lt;</span><span class="sx">%= var1 %&gt; and var2:  &lt;%=</span> <span class="n">var2</span><span class="sx">%&gt;.
-</span></pre>
-<pre class="highlight ruby"><span class="c1"># test.rb</span>
+</span></code></pre>
+<pre><code class="highlight ruby"><span class="c1"># test.rb</span>
 
 <span class="nb">require</span> <span class="s1">'erb'</span>
 
@@ -72,28 +72,28 @@
 <span class="n">result</span> <span class="o">=</span> <span class="n">template</span><span class="p">.</span><span class="nf">result</span><span class="p">(</span><span class="nb">binding</span><span class="p">)</span>
 
 <span class="nb">puts</span> <span class="n">result</span> <span class="c1"># We have var1: some value 1 and var2: some value 2.</span>
-</pre>
+</code></pre>
 
 <p>This library can be used for <strong>interpolation inside file with string syntax</strong>. In order to
 achieve it library uses one ruby trick:</p>
-<pre class="highlight ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span><span class="ss">var1: </span><span class="s1">'some value 1'</span><span class="p">,</span> <span class="ss">var2: </span><span class="s1">'some value 2'</span><span class="p">}</span>
+<pre><code class="highlight ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span><span class="ss">var1: </span><span class="s1">'some value 1'</span><span class="p">,</span> <span class="ss">var2: </span><span class="s1">'some value 2'</span><span class="p">}</span>
 
 <span class="n">template</span> <span class="o">=</span> <span class="s2">"We have var1: %{var1} and var2: %{var2}."</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">template</span> <span class="o">%</span> <span class="n">env</span>
 
 <span class="nb">puts</span> <span class="n">result</span> <span class="c1"># We have var1: some value 1 and var2: some value 2.</span>
-</pre>
+</code></pre>
 
 <h2>Usage</h2>
 
 <p>It&rsquo;s straightforward. Here is example of file interpolation:</p>
-<pre class="highlight ruby"><span class="c1"># some_template.txt</span>
+<pre><code class="highlight ruby"><span class="c1"># some_template.txt</span>
 
 <span class="no">We</span> <span class="n">have</span> <span class="ss">var1: </span><span class="c1">#{var1} and var2:  #{var2}.</span>
 <span class="no">We</span> <span class="n">have</span> <span class="ss">var3: </span><span class="c1">#{settings.var3} and var4:  #{settings.var4}.</span>
-</pre>
-<pre class="highlight ruby"><span class="c1"># test.rb</span>
+</code></pre>
+<pre><code class="highlight ruby"><span class="c1"># test.rb</span>
 
 <span class="nb">require</span> <span class="s1">'text_interpolator'</span>
 
@@ -115,10 +115,10 @@ achieve it library uses one ruby trick:</p>
 
 <span class="nb">puts</span> <span class="n">result</span> <span class="c1"># We have var1: some value 1 and var2: some value 2.</span>
             <span class="c1"># We have var3: some value 3 and var4: some value 4.</span>
-</pre>
+</code></pre>
 
 <p>You can also interpolate hash on multiple levels:</p>
-<pre class="highlight ruby"><span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span>
+<pre><code class="highlight ruby"><span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span>
   <span class="ss">host: </span><span class="s1">'localhost'</span><span class="p">,</span>
 
   <span class="ss">credentials: </span><span class="p">{</span>
@@ -155,7 +155,7 @@ achieve it library uses one ruby trick:</p>
 <span class="c1">#  :postgres=&gt;{:hostname=&gt;"localhost", :user=&gt;"some_user", :password=&gt;"postgres"}, </span>
 <span class="c1">#  :mysql=&gt;{:user=&gt;"some_user2"}}</span>
 
-</pre>
+</code></pre>
 
 <div id='footer'>
 <p id='legal'>

@@ -43,12 +43,12 @@ from <a href="https://github.com/redcar/redcar">redcar project</a> which in turn
 <a href="https://github.com/shvets/jar_wrapper">jar_wrapper gem</a>, so it can be easily used in any ruby project.</p>
 
 <p>Install jar_wrapper with this command:</p>
-<pre class="highlight plaintext">$ gem install jar_wrapper
-</pre>
+<pre><code class="highlight plaintext">$ gem install jar_wrapper
+</code></pre>
 
 <p>Now you can use it in your program directly or create gem for delivering java jar file(s).
 For example, this code will upload remote file:</p>
-<pre class="highlight ruby"><span class="nb">require</span> <span class="s1">'jar_wrapper'</span>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'jar_wrapper'</span>
 
 <span class="n">wrapper</span> <span class="o">=</span> <span class="no">JarWrapper</span><span class="o">::</span><span class="no">Runner</span><span class="p">.</span><span class="nf">new</span>
 <span class="n">wrapper</span><span class="p">.</span><span class="nf">java_opts</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"-Xmx1024m"</span><span class="p">,</span> <span class="s2">"-Xss1024k"</span> <span class="o">]</span>
@@ -59,20 +59,20 @@ For example, this code will upload remote file:</p>
 <span class="n">target</span> <span class="o">=</span> <span class="s2">"selenium-server.zip"</span>
 
 <span class="n">wrapper</span><span class="p">.</span><span class="nf">install</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span>
-</pre>
+</code></pre>
 
 <p>You can aldo execute jar file (a.k.a. &ldquo;java -jar jar_file.jar&rdquo;)</p>
-<pre class="highlight ruby"><span class="n">wrapper</span><span class="p">.</span><span class="nf">jar_file</span> <span class="o">=</span> <span class="s2">"jar_file.jar"</span>
+<pre><code class="highlight ruby"><span class="n">wrapper</span><span class="p">.</span><span class="nf">jar_file</span> <span class="o">=</span> <span class="s2">"jar_file.jar"</span>
 
 <span class="n">wrapper</span><span class="p">.</span><span class="nf">run</span>
-</pre>
+</code></pre>
 
 <p>Or you can execute java jar file by specifying <strong>main class</strong> (a.k.a. &ldquo;java -cp some<em>class</em>path main_class&rdquo;):</p>
-<pre class="highlight ruby"><span class="n">wrapper</span><span class="p">.</span><span class="nf">classpath</span> <span class="o">=</span> <span class="s2">"some_class_path"</span>
+<pre><code class="highlight ruby"><span class="n">wrapper</span><span class="p">.</span><span class="nf">classpath</span> <span class="o">=</span> <span class="s2">"some_class_path"</span>
 <span class="n">wrapper</span><span class="p">.</span><span class="nf">main_class</span> <span class="o">=</span> <span class="s2">"main_class"</span>
 
 <span class="n">wrapper</span><span class="p">.</span><span class="nf">run</span>
-</pre>
+</code></pre>
 
 <p>If you need more details on how to use it for practical gem, visit <a href="https://github.com/shvets/selenium">selenium gem</a>.
 This gem downloads and create launcher for standalone selenium server.</p>

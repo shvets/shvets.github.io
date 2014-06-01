@@ -34,3 +34,5 @@ module NokogiriUtils
   end
 
 end
+
+#hash_from_node(Nokogiri.HTML(content))

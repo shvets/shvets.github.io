@@ -37,11 +37,11 @@
 <h2>How to use CoffeeScript with nanoc</h2>
 
 <p><strong>Step 1</strong>: Add <strong>coffee-script</strong> to <strong>Gemflie</strong>:</p>
-<pre class="highlight ruby">  <span class="n">gem</span> <span class="s1">'coffee-script'</span>
-</pre>
+<pre><code class="highlight ruby">  <span class="n">gem</span> <span class="s1">'coffee-script'</span>
+</code></pre>
 
 <p><strong>Step 2</strong>: Add <strong>coffee_filter.rb</strong> file to <strong>lib</strong> folder:</p>
-<pre class="highlight ruby">  <span class="nb">require</span> <span class="s1">'coffee-script'</span>
+<pre><code class="highlight ruby">  <span class="nb">require</span> <span class="s1">'coffee-script'</span>
 
   <span class="k">class</span> <span class="nc">CoffeeFilter</span> <span class="o">&lt;</span> <span class="no">Nanoc3</span><span class="o">::</span><span class="no">Filter</span>
     <span class="n">identifier</span> <span class="ss">:coffee</span>
@@ -50,10 +50,10 @@
       <span class="no">CoffeeScript</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
     <span class="k">end</span>
   <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p><strong>Step 3</strong>: Add new rules to <strong>Rules</strong> file for compiling <strong>coffee-script</strong> files into <strong>javascript</strong> files:</p>
-<pre class="highlight ruby">  <span class="n">compile</span> <span class="s1">'/assets/coffee/*/'</span> <span class="k">do</span>
+<pre><code class="highlight ruby">  <span class="n">compile</span> <span class="s1">'/assets/coffee/*/'</span> <span class="k">do</span>
     <span class="n">filter</span> <span class="ss">:coffee</span>
   <span class="k">end</span>
 
@@ -61,30 +61,30 @@
   <span class="n">route</span> <span class="s1">'/assets/coffee/*/'</span> <span class="k">do</span>
     <span class="n">item</span><span class="p">.</span><span class="nf">identifier</span><span class="p">.</span><span class="nf">sub</span><span class="p">(</span><span class="sr">%r{^/assets/coffee}</span><span class="p">,</span> <span class="s1">'/javascripts'</span><span class="p">).</span><span class="nf">chop</span> <span class="o">+</span> <span class="s1">'.js'</span>
   <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p><strong>Step 4</strong>: Create your first coffescript file in <strong>source/assets/coffee</strong> directory:</p>
-<pre class="highlight coffeescript">  <span class="c1"># test.coffee
+<pre><code class="highlight coffeescript">  <span class="c1"># test.coffee
 </span>
   <span class="nx">notify</span> <span class="o">-&gt;</span> <span class="nx">alert</span> <span class="s">"Hello, user!"</span>
 
   <span class="nx">notify</span><span class="p">()</span>
-</pre>
+</code></pre>
 
 <p><strong>Step 5</strong>: Compile your web site.</p>
-<pre class="highlight ruby">  <span class="n">nanoc3</span> <span class="n">compile</span>
-</pre>
+<pre><code class="highlight ruby">  <span class="n">nanoc3</span> <span class="n">compile</span>
+</code></pre>
 
 <p>Compiled javascript files should be located in <strong>javascrips</strong> folder.</p>
 
 <p>If you want to use coffee-script inside your haml partials, include this gem into &lsquo;Gemfile&rsquo;:</p>
-<pre class="highlight ruby">  <span class="n">gem</span> <span class="s1">'coffee-filter'</span>
-</pre>
+<pre><code class="highlight ruby">  <span class="n">gem</span> <span class="s1">'coffee-filter'</span>
+</code></pre>
 
 <p>And include this fragment into partial:</p>
-<pre class="highlight coffeescript"><span class="o">:</span><span class="nx">coffeescript</span>
+<pre><code class="highlight coffeescript"><span class="o">:</span><span class="nx">coffeescript</span>
   <span class="nb">window</span><span class="p">.</span><span class="na">notify</span> <span class="o">=</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="nx">alert</span> <span class="s">'Hello, user!'</span>
-</pre>
+</code></pre>
 
 <div id='footer'>
 <p id='legal'>

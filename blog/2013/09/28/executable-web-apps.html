@@ -44,12 +44,12 @@
 and you can see all installed gems inside the browser.</p>
 
 <p>Another example is <strong>rubygems</strong> running in server mode:</p>
-<pre class="highlight shell">gem server
-</pre>
+<pre><code class="highlight shell">gem server
+</code></pre>
 
 <p>It starts server on port 8808 and lets you explore installed gems from inside the browser.</p>
-<pre class="highlight shell">open http://localhost:8808
-</pre>
+<pre><code class="highlight shell">open http://localhost:8808
+</code></pre>
 
 <p>For creating executable web applications you can use at least these 2 gems:</p>
 
@@ -64,7 +64,7 @@ and you can see all installed gems inside the browser.</p>
 
 <p>You use <strong>Vegas::Runner</strong> class for wrapping such application. For example, this
 is shell script for starting your favorite <strong>sinatra</strong> code:</p>
-<pre class="highlight ruby"><span class="c1">#!/usr/bin/env ruby</span>
+<pre><code class="highlight ruby"><span class="c1">#!/usr/bin/env ruby</span>
 <span class="c1"># bin/myapp</span>
 
 <span class="vg">$:</span><span class="p">.</span><span class="nf">unshift</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span>
@@ -74,10 +74,10 @@ is shell script for starting your favorite <strong>sinatra</strong> code:</p>
 <span class="nb">require</span> <span class="s1">'myapp.rb'</span>
 
 <span class="no">Vegas</span><span class="o">::</span><span class="no">Runner</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="no">MyApp</span><span class="p">,</span> <span class="s1">'my_app'</span><span class="p">)</span>
-</pre>
+</code></pre>
 
 <p>and this is your sinatra application:</p>
-<pre class="highlight ruby"><span class="c1"># my_app.rb</span>
+<pre><code class="highlight ruby"><span class="c1"># my_app.rb</span>
 
 <span class="nb">require</span> <span class="s1">'sinatra/base'</span>
 
@@ -86,13 +86,13 @@ is shell script for starting your favorite <strong>sinatra</strong> code:</p>
     <span class="s2">"Hello, world!"</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>Now you can run it:</p>
-<pre class="highlight shell">chmod +x bin/myapp
-</pre>
-<pre class="highlight shell">bin/myapp
-</pre>
+<pre><code class="highlight shell">chmod +x bin/myapp
+</code></pre>
+<pre><code class="highlight shell">bin/myapp
+</code></pre>
 
 <p>When you wrap sinatra application with Vegas, it does the following steps:</p>
 
@@ -107,22 +107,22 @@ is shell script for starting your favorite <strong>sinatra</strong> code:</p>
 </ul>
 
 <p>You can print a list of available command line options when running with -h or &ndash;help option:</p>
-<pre class="highlight shell"><span class="gp">&gt; </span>bin/myapp -h
+<pre><code class="highlight shell"><span class="gp">&gt; </span>bin/myapp -h
 Usage: bin/myapp <span class="o">[</span>options]
 ...
-</pre>
+</code></pre>
 
 <p>If you don&rsquo;t want to create a daemon and don&rsquo;t want to open it in the browser, use:</p>
-<pre class="highlight shell">bin/myapp -F -L
-</pre>
+<pre><code class="highlight shell">bin/myapp -F -L
+</code></pre>
 
 <p>If you still use daemon and now want to stop it, use <strong>-K</strong> flag</p>
-<pre class="highlight shell">bin/myapp -K
-</pre>
+<pre><code class="highlight shell">bin/myapp -K
+</code></pre>
 
 <p>If you want to check status of your daemon, run this:</p>
-<pre class="highlight shell">bin/myapp -S
-</pre>
+<pre><code class="highlight shell">bin/myapp -S
+</code></pre>
 
 <h2>Using Launchy gem</h2>
 
@@ -133,17 +133,17 @@ difference.</p>
 <p>You can use launchy on the command line, or via its API.</p>
 
 <p>From command line:</p>
-<pre class="highlight shell">launchy http://www.ruby-lang.org/
-</pre>
+<pre><code class="highlight shell">launchy http://www.ruby-lang.org/
+</code></pre>
 
 <p>via API:</p>
-<pre class="highlight ruby"><span class="nb">require</span> <span class="s1">'launchy'</span>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'launchy'</span>
 
 <span class="no">Launchy</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s2">"http://localhost:9292"</span><span class="p">)</span>
-</pre>
+</code></pre>
 
 <p>If you want to use launchy with your rack application, do it inside <strong>config.ru</strong>:</p>
-<pre class="highlight ruby"><span class="c1"># config.ru</span>
+<pre><code class="highlight ruby"><span class="c1"># config.ru</span>
 
 <span class="vg">$:</span><span class="p">.</span><span class="nf">unshift</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span>
              <span class="no">File</span><span class="o">::</span><span class="n">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)),</span> <span class="s2">"lib"</span><span class="p">))</span>
@@ -154,7 +154,7 @@ difference.</p>
 <span class="n">run</span> <span class="no">MyApp</span>
 <span class="no">Launchy</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s2">"http://localhost:9292"</span><span class="p">,</span> <span class="ss">:application</span> <span class="o">=&gt;</span> <span class="no">MyApp</span><span class="p">)</span>
 
-</pre>
+</code></pre>
 
 <h2>Bonus: lunchy gem</h2>
 
@@ -168,21 +168,21 @@ as it&rsquo;s identifier.</p>
 find correct entry.</p>
 
 <p>For example, to restart postgres server you have to run this command:</p>
-<pre class="highlight shell">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-</pre>
+<pre><code class="highlight shell">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+</code></pre>
 
 <p>With lunchy the tool you can shorten it:</p>
-<pre class="highlight shell">gem install lunchy
+<pre><code class="highlight shell">gem install lunchy
 
 lunchy start postgres
-</pre>
+</code></pre>
 
 <p>You can see the list of available agents:</p>
-<pre class="highlight shell">lunchy ls
-</pre>
+<pre><code class="highlight shell">lunchy ls
+</code></pre>
 
 <p>or manage particular agent:</p>
-<pre class="highlight shell">lunchy start <span class="o">[</span>agent]
+<pre><code class="highlight shell">lunchy start <span class="o">[</span>agent]
 lunchy stop <span class="o">[</span>agent]
 lunchy restart <span class="o">[</span>agent]
 
@@ -190,11 +190,11 @@ lunchy status <span class="o">[</span>agent]
 
 lunchy show <span class="o">[</span>agent]
 lunchy edit <span class="o">[</span>agent]
-</pre>
+</code></pre>
 
 <p>or install it:</p>
-<pre class="highlight shell">lunchy install <span class="o">[</span>file]
-</pre>
+<pre><code class="highlight shell">lunchy install <span class="o">[</span>file]
+</code></pre>
 
 <h2>Example: mvn-plugin-config gem</h2>
 
@@ -209,12 +209,12 @@ and some of maven plugin options were undocumented.</p>
 ruby gem was created to access this information in convenient way as local web server.</p>
 
 <p>In order to use it first install it (keep in mind - it uses Vegas gem):</p>
-<pre class="highlight shell">gem install mvn_plugin_config
-</pre>
+<pre><code class="highlight shell">gem install mvn_plugin_config
+</code></pre>
 
 <p>and then run it as daemon:</p>
-<pre class="highlight shell">mvn-plugin-config
-</pre>
+<pre><code class="highlight shell">mvn-plugin-config
+</code></pre>
 
 <p>All commands described in Vegas section are accessible here.</p>
 

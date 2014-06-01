@@ -44,26 +44,26 @@ They don&rsquo;t coexist well with each other and you have to do additional step
 
 <p>According to <a href="http://bundler.io/v1.3/rubygems.html">bundler gem help</a>, all you have to do is to create simple <strong>Gemfile</strong>
 with only one instruction (<strong>gemspec</strong>):</p>
-<pre class="highlight ruby"><span class="c1"># Gemfile</span>
+<pre><code class="highlight ruby"><span class="c1"># Gemfile</span>
 
 <span class="n">gemspec</span>
-</pre>
+</code></pre>
 
 <p>This instruction will look into corresponding <strong>.gemspec</strong> file (you should have it as part of your gem project).
 It will create <strong>default</strong> and <strong>development</strong> groups and fill them out according to usage of <strong>add_runtime_dependency</strong>
 and <strong>add_development_dependency</strong> calls.</p>
 
 <p>So, if you have the following <strong>my_gem.gemspec</strong> file:</p>
-<pre class="highlight ruby"><span class="c1"># my_gem.gemspec</span>
+<pre><code class="highlight ruby"><span class="c1"># my_gem.gemspec</span>
 
 <span class="n">spec</span><span class="p">.</span><span class="nf">add_runtime_dependency</span> <span class="s2">"haml"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
 <span class="n">spec</span><span class="p">.</span><span class="nf">add_runtime_dependency</span> <span class="s2">"sass"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
 
 <span class="n">spec</span><span class="p">.</span><span class="nf">add_development_dependency</span> <span class="s2">"gemcutter"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
-</pre>
+</code></pre>
 
 <p>it will dynamically build something like this:</p>
-<pre class="highlight ruby"><span class="c1"># Gemfile</span>
+<pre><code class="highlight ruby"><span class="c1"># Gemfile</span>
 
 <span class="n">group</span> <span class="ss">:default</span> <span class="k">do</span>
   <span class="n">gem</span> <span class="s2">"haml"</span>
@@ -73,7 +73,7 @@ and <strong>add_development_dependency</strong> calls.</p>
 <span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
   <span class="n">gem</span> <span class="s2">"gemcutter"</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>This approach has on drawback though - you have to think in terms of <strong>.gemspec</strong> file, which is counter-intuitive.</p>
 
@@ -84,17 +84,17 @@ the dependencies in <strong>Gemfile</strong> as we would do it for <strong>any o
 <h2>Installation</h2>
 
 <p>Add this line to to your Gemfile:</p>
-<pre class="highlight ruby"><span class="n">gem</span> <span class="s2">"gemspec_deps_gen"</span>
-</pre>
+<pre><code class="highlight ruby"><span class="n">gem</span> <span class="s2">"gemspec_deps_gen"</span>
+</code></pre>
 
 <p>And then execute it:</p>
-<pre class="highlight shell">bundle
-</pre>
+<pre><code class="highlight shell">bundle
+</code></pre>
 
 <h2>Usage</h2>
 
 <p>Create <strong>Gemfile</strong> file:</p>
-<pre class="highlight ruby"><span class="c1"># Gemfile</span>
+<pre><code class="highlight ruby"><span class="c1"># Gemfile</span>
 
 <span class="n">group</span> <span class="ss">:default</span> <span class="k">do</span>
   <span class="n">gem</span> <span class="s2">"haml"</span>
@@ -104,10 +104,10 @@ the dependencies in <strong>Gemfile</strong> as we would do it for <strong>any o
 <span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
   <span class="n">gem</span> <span class="s2">"gemcutter"</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>Create <strong>my_gem.gemspec.erb</strong> file:</p>
-<pre class="highlight ruby"><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
+<pre><code class="highlight ruby"><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
   <span class="n">spec</span><span class="p">.</span><span class="nf">name</span> <span class="o">=</span> <span class="s2">"sample"</span>
   <span class="n">spec</span><span class="p">.</span><span class="nf">summary</span> <span class="o">=</span> <span class="sx">%q{Summary.}</span>
   <span class="n">spec</span><span class="p">.</span><span class="nf">description</span> <span class="o">=</span> <span class="sx">%q{Description.}</span>
@@ -122,16 +122,16 @@ the dependencies in <strong>Gemfile</strong> as we would do it for <strong>any o
   <span class="n">spec</span><span class="p">.</span><span class="nf">version</span> <span class="o">=</span> <span class="s2">"1.0.0"</span>
   <span class="c1">#&lt;%= project_dependencies %&gt;</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>You can see ERB fragment (<strong>project_dependencies</strong>) included inside the body of the specification.</p>
 
 <p>Now, run this command:</p>
-<pre class="highlight shell"><span class="gp">$ </span>gemspec_deps_gen my_gem.gemspec.erb my_gem.gemspec
-</pre>
+<pre><code class="highlight shell"><span class="gp">$ </span>gemspec_deps_gen my_gem.gemspec.erb my_gem.gemspec
+</code></pre>
 
 <p>It will generate <strong>my_gem.gemspec</strong> and replace ERB fragment with dependencies from Gemfile:</p>
-<pre class="highlight ruby"><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
+<pre><code class="highlight ruby"><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="p">.</span><span class="nf">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">spec</span><span class="o">|</span>
   <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
 
   <span class="n">spec</span><span class="p">.</span><span class="nf">add_runtime_dependency</span> <span class="s2">"haml"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
@@ -139,12 +139,12 @@ the dependencies in <strong>Gemfile</strong> as we would do it for <strong>any o
   <span class="n">spec</span><span class="p">.</span><span class="nf">add_development_dependency</span> <span class="s2">"gemcutter"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"&gt;= 0"</span><span class="o">]</span>
 
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>If second parameter is missing, result will be outputted to console.</p>
 
 <p>As alternative, you can call it as <strong>rake command</strong>:</p>
-<pre class="highlight ruby"><span class="nb">require</span> <span class="s2">"gemspec_deps_gen"</span>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s2">"gemspec_deps_gen"</span>
 
 <span class="n">project_name</span> <span class="o">=</span> <span class="s1">'my_gem'</span>
 
@@ -153,11 +153,11 @@ the dependencies in <strong>Gemfile</strong> as we would do it for <strong>any o
 
   <span class="n">generator</span><span class="p">.</span><span class="nf">generate_dependencies</span> <span class="s2">"spec"</span><span class="p">,</span> <span class="s2">"</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec.erb"</span><span class="p">,</span> <span class="s2">"</span><span class="si">#{</span><span class="n">project_name</span><span class="si">}</span><span class="s2">.gemspec"</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>And run it:</p>
-<pre class="highlight shell">rake gen
-</pre>
+<pre><code class="highlight shell">rake gen
+</code></pre>
 
 <p>It will also generate <strong>my_gem.gemspec</strong> and replace ERB fragment with dependencies from Gemfile.</p>
 

@@ -160,7 +160,9 @@
       <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
       <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
       <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <RunnerSettings RunnerId="RubyDebugRunner" />
       <RunnerSettings RunnerId="RubyRunner" />
+      <ConfigurationWrapper RunnerId="RubyDebugRunner" />
       <ConfigurationWrapper RunnerId="RubyRunner" />
       <method />
     </configuration>
@@ -210,10 +212,10 @@
     <content url="file://$MODULE_DIR$/../../../../bin" />
     <orderEntry type="jdk" jdkName="RVM: ruby-1.9.3-p545 [shvets.github.io]" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="activesupport (v4.0.5, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="activesupport (v4.1.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="addressable (v2.3.6, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="builder (v3.2.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.6.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.6.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="chunky_png (v1.3.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coffee-script (v2.2.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coffee-script-source (v1.7.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
@@ -223,7 +225,7 @@
     <orderEntry type="library" scope="PROVIDED" name="em-websocket (v0.5.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erubis (v2.7.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="eventmachine (v1.0.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="execjs (v2.0.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="execjs (v2.1.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ffi (v1.9.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="fssm (v0.2.10, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="haml (v4.0.5, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
@@ -234,15 +236,15 @@
     <orderEntry type="library" scope="PROVIDED" name="json (v1.8.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="kramdown (v1.3.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="listen (v1.3.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="middleman (v3.3.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="middleman-blog (v3.5.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="middleman-core (v3.3.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="middleman (v3.3.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="middleman-blog (v3.5.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="middleman-core (v3.3.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="middleman-livereload (v3.3.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="middleman-sprockets (v3.3.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="middleman-syntax (v2.0.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mini_portile (v0.6.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="minitest (v4.7.5, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.10.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="minitest (v5.3.4, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.10.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.6.2.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="padrino-helpers (v0.12.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="padrino-support (v0.12.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
@@ -253,7 +255,7 @@
     <orderEntry type="library" scope="PROVIDED" name="rb-inotify (v0.9.4, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rb-kqueue (v0.2.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="redcarpet (v3.1.2, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rouge (v1.3.4, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rouge (v1.4.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec (v2.14.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-core (v2.14.8, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-expectations (v2.14.5, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
@@ -263,9 +265,9 @@
     <orderEntry type="library" scope="PROVIDED" name="sprockets-helpers (v1.1.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="sprockets-sass (v1.1.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v0.19.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="thread_safe (v0.3.3, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="thread_safe (v0.3.4, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tilt (v1.4.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="tzinfo (v0.3.39, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="tzinfo (v1.2.1, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="uber (v0.0.6, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="uglifier (v2.5.0, RVM: ruby-1.9.3-p545 [shvets.github.io]) [gem]" level="application" />
   </component>

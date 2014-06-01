@@ -74,13 +74,13 @@ internet-connected microcontroller progammable in Node.js.</p></li>
 <h2>Installation</h2>
 
 <p>If you are on Apple computer, you can use <strong>homebrew</strong> tool to install it:</p>
-<pre class="highlight shell">brew install node
-</pre>
+<pre><code class="highlight shell">brew install node
+</code></pre>
 
 <p>It will install <strong>node package manager</strong> (npm) as well:</p>
-<pre class="highlight shell">node -v
+<pre><code class="highlight shell">node -v
 npm -v
-</pre>
+</code></pre>
 
 <p>On Windows you can download node and npm as one installation from <a href="http://nodejs.org/download">here</a>.</p>
 
@@ -88,7 +88,7 @@ npm -v
 
 <p>Let&rsquo;s demonstrate &ldquo;hello world&rdquo; program for Node.js. This simple web server responds with &ldquo;Hello World&rdquo; string
 for every request.</p>
-<pre class="highlight javascript"><span class="c1">// hello_world.js
+<pre><code class="highlight javascript"><span class="c1">// hello_world.js
 </span>
 <span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
 
@@ -100,13 +100,13 @@ for every request.</p>
 <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">1337</span><span class="p">,</span> <span class="s1">'127.0.0.1'</span><span class="p">);</span>
 
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Server running at http://127.0.0.1:1337/'</span><span class="p">);</span>
-</pre>
+</code></pre>
 
 <p>To run this code, execute it from the command line:</p>
-<pre class="highlight shell"><span class="gp">% </span>node example.js
+<pre><code class="highlight shell"><span class="gp">% </span>node example.js
 
 Server running at http://127.0.0.1:1337/
-</pre>
+</code></pre>
 
 <h2>Installing node packages</h2>
 
@@ -118,12 +118,12 @@ Server running at http://127.0.0.1:1337/
 </ul>
 
 <p>This is the example of global installation:</p>
-<pre class="highlight shell">npm install -g grunt-cli
-</pre>
+<pre><code class="highlight shell">npm install -g grunt-cli
+</code></pre>
 
 <p>and local installation:</p>
-<pre class="highlight shell">npm install grunt-cli
-</pre>
+<pre><code class="highlight shell">npm install grunt-cli
+</code></pre>
 
 <p>In examples above we are installing <strong>grunt</strong> build tool.</p>
 
@@ -132,16 +132,16 @@ this way you will have the ability to quickly reproduce your production environm
 <a href="http://www.12factor.net/dev-prod-parity">dev/prod parity</a>.</p>
 
 <p>You can execute grunt command now:</p>
-<pre class="highlight shell"><span class="nb">cd </span>your_project_root
+<pre><code class="highlight shell"><span class="nb">cd </span>your_project_root
 
 node_modules/grunt-cli/bin/grunt -version
-</pre>
+</code></pre>
 
 <h2>Keep track of node packages used by project</h2>
 
 <p>You can create <strong>package.json</strong> file used by <strong>npm</strong> to keep track of project dependencies. This is
 sample file:</p>
-<pre class="highlight json"><span class="p">{</span><span class="w">
+<pre><code class="highlight json"><span class="p">{</span><span class="w">
   </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"your_project"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Npm package for your_project"</span><span class="p">,</span><span class="w">
@@ -155,16 +155,16 @@ sample file:</p>
     </span><span class="s2">"grunt-cli"</span><span class="p">:</span><span class="w"> </span><span class="s2">"~0.1.9"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></pre>
+</span></code></pre>
 
 <p>With this file in place you can install all required dependencies (grunt, grunt-cli) in one command:</p>
-<pre class="highlight shell">npm install
-</pre>
+<pre><code class="highlight shell">npm install
+</code></pre>
 
 <p>You can also install single package with automatic insert of package name/description into <strong>package.json</strong>
 as development dependency:</p>
-<pre class="highlight shell">npm install grunt-cli --save-dev
-</pre>
+<pre><code class="highlight shell">npm install grunt-cli --save-dev
+</code></pre>
 
 <h2>Look: identical tools for different languages</h2>
 
@@ -226,39 +226,39 @@ adapter for any framework you like.</p></li>
 <h2>Installation</h2>
 
 <p>You can install karma through <strong>npm</strong>:</p>
-<pre class="highlight shell">npm install karma --save-dev
-</pre>
+<pre><code class="highlight shell">npm install karma --save-dev
+</code></pre>
 
 <p>After <strong>karma</strong> installation you need to create <strong>karma configuration file</strong>.</p>
 
 <p>You can keep it in javascript:</p>
-<pre class="highlight shell">node_modules/karma/bin/karma init karma.conf.js
-</pre>
+<pre><code class="highlight shell">node_modules/karma/bin/karma init karma.conf.js
+</code></pre>
 
 <p>or coffeescript:</p>
-<pre class="highlight shell">node_modules/karma/bin/karma init karma.conf.coffee
-</pre>
+<pre><code class="highlight shell">node_modules/karma/bin/karma init karma.conf.coffee
+</code></pre>
 
 <p>Script will ask few questions and at the end <strong>karma.conf.js</strong> or <strong>karma.conf.coffee</strong> file will be created.</p>
 
 <p>Now, you need to install additional packages. First, install browser launchers and preprocessors:</p>
-<pre class="highlight shell">npm install karma-chrome-launcher --save-dev
+<pre><code class="highlight shell">npm install karma-chrome-launcher --save-dev
 npm install karma-firefox-launcher --save-dev
 npm install karma-safari-launcher --save-dev
 npm install karma-phantomjs-launcher --save-dev
 
 npm install karma-coffee-preprocessor --save-dev
 npm install karma-html2js-preprocessor --save-dev
-</pre>
+</code></pre>
 
 <p>Then, install support for jasmine (it&rsquo;s one of supported testing libraries):</p>
-<pre class="highlight shell">npm install karma-jasmine --save-dev
-</pre>
+<pre><code class="highlight shell">npm install karma-jasmine --save-dev
+</code></pre>
 
 <h2>Revisiting Content of Karma Configuration File</h2>
 
 <p>Below is the typical example of karma configuration file:</p>
-<pre class="highlight coffeescript"><span class="c1"># karma.conf.coffee
+<pre><code class="highlight coffeescript"><span class="c1"># karma.conf.coffee
 </span>
 <span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
   <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
@@ -306,7 +306,7 @@ npm install karma-html2js-preprocessor --save-dev
     <span class="na">singleRun</span><span class="o">:</span> <span class="no">true</span>
 
     <span class="na">reportSlowerThan</span><span class="o">:</span> <span class="mi">500</span>
-</pre>
+</code></pre>
 
 <p>Let&rsquo;s explain some of used properties.</p>
 
@@ -336,26 +336,26 @@ npm install karma-html2js-preprocessor --save-dev
 <h2>Using Karma</h2>
 
 <p>You can start karma with this command:</p>
-<pre class="highlight shell">node_modules/karma/bin/karma start
-</pre>
+<pre><code class="highlight shell">node_modules/karma/bin/karma start
+</code></pre>
 
 <p>This command will run all specs in <strong>spec/javascripts</strong> folder and output results to console.</p>
-<pre class="highlight shell">INFO <span class="o">[</span>karma]: Karma v0.10.2 server started at http://localhost:9876/
+<pre><code class="highlight shell">INFO <span class="o">[</span>karma]: Karma v0.10.2 server started at http://localhost:9876/
 INFO <span class="o">[</span>launcher]: Starting browser PhantomJS
 INFO <span class="o">[</span>PhantomJS 1.9.1 <span class="o">(</span>Mac OS X<span class="o">)]</span>: Connected on socket _juBSCUpZSBdU1wA-URx
 ...............................................
 PhantomJS 1.9.1 <span class="o">(</span>Mac OS X<span class="o">)</span>: Executed 47 of 47 SUCCESS <span class="o">(</span>0.167 secs / 0.027 secs<span class="o">)</span>
-</pre>
+</code></pre>
 
 <h2>Code Coverage with Karma</h2>
 
 <p>For generating code coverage report you have to install <strong>karma-coverage</strong> package:</p>
-<pre class="highlight shell">npm install karma-coverage --save-dev
-</pre>
+<pre><code class="highlight shell">npm install karma-coverage --save-dev
+</code></pre>
 
 <p>You also have to register your javascript or coffeescript files with <strong>coverage</strong> preprocessor,
 add <strong>coverage</strong> reporter to the list of reporters and create <strong>coverageReporter</strong> section:</p>
-<pre class="highlight coffeescript"><span class="c1"># karma.conf.coffee
+<pre><code class="highlight coffeescript"><span class="c1"># karma.conf.coffee
 </span><span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
   <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
     <span class="p">...</span>
@@ -370,17 +370,17 @@ add <strong>coverage</strong> reporter to the list of reporters and create <stro
       <span class="na">type</span><span class="o">:</span> <span class="s">'html'</span>
       <span class="na">dir</span><span class="o">:</span> <span class="s">'coverage'</span>
     <span class="p">...</span>
-</pre>
+</code></pre>
 
 <p><strong>coverageReporter</strong> section describes configuration of &ldquo;coverage&rdquo; reporter: type of report and location of it.</p>
 
 <p>Now, when you run karma again</p>
-<pre class="highlight shell">node_modules/karma/bin/karma start
-</pre>
+<pre><code class="highlight shell">node_modules/karma/bin/karma start
+</code></pre>
 
 <p>it will create coverage report inside <strong>coverage</strong> directory. Open it:</p>
-<pre class="highlight shell">open coverage/PhantomJS<span class="se">\ </span>1.9.1<span class="se">\ \(</span>Mac<span class="se">\ </span>OS<span class="se">\ </span>X<span class="se">\)</span>/
-</pre>
+<pre><code class="highlight shell">open coverage/PhantomJS<span class="se">\ </span>1.9.1<span class="se">\ \(</span>Mac<span class="se">\ </span>OS<span class="se">\ </span>X<span class="se">\)</span>/
+</code></pre>
 
 <h2>Using fixture for your specs</h2>
 
@@ -389,15 +389,15 @@ add <strong>coverage</strong> reporter to the list of reporters and create <stro
 <ul>
 <li>Create fixture file in <strong>fixtures</strong> folder:</li>
 </ul>
-<pre class="highlight html"><span class="c">&lt;!-- spec/javascripts/fixtures/template.html --&gt;</span>
+<pre><code class="highlight html"><span class="c">&lt;!-- spec/javascripts/fixtures/template.html --&gt;</span>
 <span class="nt">&lt;div&gt;</span>something<span class="nt">&lt;/div&gt;</span>
-</pre>
+</code></pre>
 
 <ul>
 <li>Add fixtures location to <strong>files</strong> sections and specify <strong>html2js</strong> preprocessor for
 html files inside <strong>fixtures</strong> directory:</li>
 </ul>
-<pre class="highlight coffeescript"><span class="c1"># karma.conf.coffee
+<pre><code class="highlight coffeescript"><span class="c1"># karma.conf.coffee
 </span><span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">-&gt;</span>
   <span class="nx">config</span><span class="p">.</span><span class="na">set</span>
     <span class="p">...</span>
@@ -411,12 +411,12 @@ html files inside <strong>fixtures</strong> directory:</li>
       <span class="s">'spec/javascripts/fixtures/**/*.html'</span><span class="o">:</span> <span class="p">[</span><span class="s">'html2js'</span><span class="p">]</span>
 
     <span class="p">...</span>
-</pre>
+</code></pre>
 
 <ul>
 <li>Access <strong>fixture</strong> from the spec through global <strong>window.__html__</strong> variable:</li>
 </ul>
-<pre class="highlight coffeescript"><span class="c1"># spec/javascripts/some_coffee_spec.coffee
+<pre><code class="highlight coffeescript"><span class="c1"># spec/javascripts/some_coffee_spec.coffee
 </span><span class="nx">describe</span> <span class="s">'some_coffee_code'</span><span class="p">,</span> <span class="o">-&gt;</span>
   <span class="nx">fixture</span> <span class="o">=</span> <span class="no">undefined</span>
 
@@ -427,7 +427,7 @@ html files inside <strong>fixtures</strong> directory:</li>
   <span class="nx">it</span> <span class="s">'access div element'</span><span class="p">,</span> <span class="o">-&gt;</span>
     <span class="nx">el</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">fixture</span><span class="p">).</span><span class="na">find</span><span class="p">(</span><span class="s">'#div'</span><span class="p">)</span>
     <span class="nx">expect</span><span class="p">(</span><span class="nx">el</span><span class="p">).</span><span class="na">toBeDefined</span><span class="p">()</span>
-</pre>
+</code></pre>
 
 <div id='footer'>
 <p id='legal'>

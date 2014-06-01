@@ -64,7 +64,7 @@ as parameters.</p>
 <h1>Example</h1>
 
 <p>Let&rsquo;s have some simple class for building arrays:</p>
-<pre class="highlight ruby"><span class="k">class</span> <span class="nc">Collector</span>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">Collector</span>
 
   <span class="k">def</span> <span class="nf">initialize</span>
     <span class="vi">@array</span> <span class="o">=</span> <span class="o">[]</span>
@@ -82,15 +82,15 @@ as parameters.</p>
     <span class="vi">@array</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>We can use this class now:</p>
-<pre class="highlight ruby"><span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="p">.</span><span class="nf">new</span>
+<pre><code class="highlight ruby"><span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="p">.</span><span class="nf">new</span>
 
 <span class="n">collector</span><span class="p">.</span><span class="nf">add</span> <span class="s2">"1"</span>
 <span class="n">collector</span><span class="p">.</span><span class="nf">add</span> <span class="s2">"2"</span>
 <span class="n">collector</span><span class="p">.</span><span class="nf">add</span> <span class="s2">"3"</span>
-</pre>
+</code></pre>
 
 <p>This is regular program and as any other program it&rsquo;s verbose. We can remove noise by applying some
 metaprogramming tricks. We&rsquo;ll try to remove method receiver: <strong>&ldquo;collector.&rdquo;</strong> from the code by making it implicit.</p>
@@ -99,17 +99,17 @@ metaprogramming tricks. We&rsquo;ll try to remove method receiver: <strong>&ldqu
 
 <p>One way of doing DSL in Ruby is based on <strong>instance_eval</strong> method. It takes <strong>block of code</strong> as input parameter
 and evaluates it in the <strong>context of the calling object</strong>:</p>
-<pre class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
   <span class="k">def</span> <span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
     <span class="n">object</span><span class="p">.</span><span class="nf">instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
   <span class="k">end</span>
 <span class="k">end</span>
 
 <span class="n">dsl</span> <span class="o">=</span> <span class="no">DSL</span><span class="p">.</span><span class="nf">new</span>
-</pre>
+</code></pre>
 
 <p>Now, let&rsquo;s test our code with this example:</p>
-<pre class="highlight ruby"><span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="p">.</span><span class="nf">new</span>
+<pre><code class="highlight ruby"><span class="n">collector</span> <span class="o">=</span> <span class="no">Collector</span><span class="p">.</span><span class="nf">new</span>
 
 <span class="c1"># one way of doing DSL with direct code block</span>
 
@@ -130,7 +130,7 @@ and evaluates it in the <strong>context of the calling object</strong>:</p>
 <span class="n">dsl</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="n">collector</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span><span class="p">)</span>
 
 <span class="nb">puts</span> <span class="n">collector</span><span class="p">.</span><span class="nf">to_a</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span> <span class="c1"># $ 1 2 3 4 5 6</span>
-</pre>
+</code></pre>
 
 <p>You have to keep in mind two thing though:</p>
 
@@ -138,17 +138,17 @@ and evaluates it in the <strong>context of the calling object</strong>:</p>
 <li><strong>instance_eval</strong> changes evaluation context, so code passed for evaluation is treated as original
 code of the object. As a result, all private methods and fields are available:</li>
 </ul>
-<pre class="highlight ruby"><span class="n">dsl</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span> <span class="k">do</span>
+<pre><code class="highlight ruby"><span class="n">dsl</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span> <span class="k">do</span>
   <span class="nb">puts</span> <span class="vi">@array</span> <span class="c1"># this field is accessible,</span>
               <span class="c1"># self is pointing to 'collector' object</span>
   <span class="nb">puts</span> <span class="nb">self</span>   <span class="c1"># "collector" instance</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <ul>
 <li>Because of context switch, you loose access to the calling context:</li>
 </ul>
-<pre class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
   <span class="k">def</span> <span class="nf">dsl_method</span>
     <span class="s2">"dsl_method"</span>
   <span class="k">end</span>
@@ -165,12 +165,12 @@ code of the object. As a result, all private methods and fields are available:</
     <span class="nb">puts</span> <span class="s2">"'dsl_method' not available"</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>We cannot do anything with accessing private methods/fields, but we can make methods from calling context available.
 if you provide parent context as an additional parameter, you can redirect  calls to missing object directly to
 the parent (proxy object):</p>
-<pre class="highlight ruby"><span class="k">module</span> <span class="nn">Proxy</span>
+<pre><code class="highlight ruby"><span class="k">module</span> <span class="nn">Proxy</span>
   <span class="k">def</span> <span class="nf">subject</span><span class="o">=</span> <span class="n">subject</span>
     <span class="vi">@subject</span> <span class="o">=</span> <span class="n">subject</span>
   <span class="k">end</span>
@@ -183,10 +183,10 @@ the parent (proxy object):</p>
     <span class="vi">@subject</span><span class="p">.</span><span class="nf">respond_to?</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="o">||</span> <span class="k">super</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>Here is our modified DSL class:</p>
-<pre class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
   <span class="k">def</span> <span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
     <span class="n">object</span><span class="p">.</span><span class="nf">extend</span> <span class="no">Proxy</span>
     <span class="n">object</span><span class="p">.</span><span class="nf">subject</span> <span class="o">=</span> <span class="n">parent</span>
@@ -194,11 +194,11 @@ the parent (proxy object):</p>
     <span class="n">object</span><span class="p">.</span><span class="nf">instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>If you know that code block is coming from the parent scope, you can calculate parent
 dynamically, this way you may reduce amount of input parameters:</p>
-<pre class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
   <span class="k">def</span> <span class="nf">build</span> <span class="n">object</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
     <span class="n">parent</span> <span class="o">=</span> <span class="n">code</span><span class="p">.</span><span class="nf">binding</span><span class="p">.</span><span class="nf">eval</span> <span class="s1">'self'</span>
 
@@ -208,7 +208,7 @@ dynamically, this way you may reduce amount of input parameters:</p>
     <span class="n">object</span><span class="p">.</span><span class="nf">instance_eval</span> <span class="o">&amp;</span><span class="n">code</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <h1>Building something useful</h1>
 
@@ -223,11 +223,11 @@ so you can use similar code for building zip files and for copying files.</p>
 <p><a href="https://github.com/shvets/zip_dsl">ZipDSL</a> is library for working with zip files in DSL way.</p>
 
 <p>Install new gem:</p>
-<pre class="highlight plaintext">$ gem i zip_dsl
-</pre>
+<pre><code class="highlight plaintext">$ gem i zip_dsl
+</code></pre>
 
 <p>Now you can create new archive:</p>
-<pre class="highlight ruby"><span class="nb">require</span> <span class="s1">'zip_dsl'</span>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'zip_dsl'</span>
 
 <span class="n">zip_file</span> <span class="o">=</span> <span class="s2">"test.zip"</span>
 <span class="n">from_dir</span> <span class="o">=</span> <span class="s2">"."</span>
@@ -252,32 +252,32 @@ so you can use similar code for building zip files and for copying files.</p>
   <span class="n">content</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"README"</span><span class="p">,</span>
           <span class="ss">:source</span> <span class="o">=&gt;</span> <span class="s2">"My README file content"</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>or update existing archive:</p>
-<pre class="highlight ruby"><span class="n">zip_builder</span><span class="p">.</span><span class="nf">update</span> <span class="k">do</span>
+<pre><code class="highlight ruby"><span class="n">zip_builder</span><span class="p">.</span><span class="nf">update</span> <span class="k">do</span>
   <span class="n">file</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"README.md"</span>
   <span class="n">directory</span> <span class="ss">:from_dir</span> <span class="o">=&gt;</span> <span class="s2">"lib"</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>You can also display all entries from archive&rsquo;s folder:</p>
-<pre class="highlight ruby"><span class="n">zip_builder</span><span class="p">.</span><span class="nf">list</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span>
-</pre>
+<pre><code class="highlight ruby"><span class="n">zip_builder</span><span class="p">.</span><span class="nf">list</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span>
+</code></pre>
 
 <p>or display entries:</p>
-<pre class="highlight ruby"><span class="n">zip_builder</span><span class="p">.</span><span class="nf">each_entry</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">entry</span>
+<pre><code class="highlight ruby"><span class="n">zip_builder</span><span class="p">.</span><span class="nf">each_entry</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">entry</span>
   <span class="nb">puts</span> <span class="n">entry</span><span class="p">.</span><span class="nf">name</span>
 
   <span class="n">content</span> <span class="o">=</span> <span class="n">entry</span><span class="p">.</span><span class="nf">get_input_stream</span><span class="p">.</span><span class="nf">read</span>
 
   <span class="nb">puts</span> <span class="n">content</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>When you work with zip file, you have to decide how to allocate/release resources (zip files) in order to
 avoid memory leaks. One possibe solution could be using modified DSL class implementation:</p>
-<pre class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">DSL</span>
   <span class="k">def</span> <span class="nf">build</span> <span class="n">create_code</span><span class="p">,</span> <span class="n">destroy_code</span><span class="o">=</span><span class="kp">nil</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
     <span class="n">parent_binding</span> <span class="o">=</span> <span class="n">code</span><span class="p">.</span><span class="nf">binding</span>
     <span class="n">parent</span> <span class="o">=</span> <span class="n">parent_binding</span><span class="p">.</span><span class="nf">eval</span> <span class="s1">'self'</span>
@@ -292,10 +292,10 @@ avoid memory leaks. One possibe solution could be using modified DSL class imple
     <span class="n">destroy_code</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">object</span><span class="p">)</span> <span class="k">if</span> <span class="n">destroy_code</span> <span class="o">&amp;&amp;</span> <span class="n">object</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>For example, we can wrap ZipInputStream in this way:</p>
-<pre class="highlight ruby"><span class="k">class</span> <span class="nc">Reader</span>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">Reader</span>
   <span class="kp">include</span> <span class="no">DSL</span>
 
    <span class="k">def</span> <span class="nf">each_entry</span> <span class="nb">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span>
@@ -315,18 +315,18 @@ avoid memory leaks. One possibe solution could be using modified DSL class imple
     <span class="n">build</span><span class="p">(</span><span class="n">create_code</span><span class="p">,</span> <span class="n">destroy_code</span><span class="p">,</span> <span class="n">execute_code</span><span class="p">)</span>
    <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <h1>DirDSL gem</h1>
 
 <p><a href="dir_dsl%20home">DirDSL</a> is library for working with files and directories (create, copy) in DSL way.</p>
 
 <p>Install it with this command:</p>
-<pre class="highlight plaintext">$ gem install dir_dsl
-</pre>
+<pre><code class="highlight plaintext">$ gem install dir_dsl
+</code></pre>
 
 <p>You can create new directory now:</p>
-<pre class="highlight ruby"><span class="nb">require</span> <span class="s1">'dir_dsl'</span>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'dir_dsl'</span>
 
 <span class="n">from_dir</span> <span class="o">=</span> <span class="s2">"."</span>
 <span class="n">to_dir</span> <span class="o">=</span> <span class="s2">"build"</span>
@@ -352,11 +352,11 @@ avoid memory leaks. One possibe solution could be using modified DSL class imple
   <span class="n">content</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">"README"</span><span class="p">,</span>
           <span class="ss">:source</span> <span class="o">=&gt;</span> <span class="s2">"My README file content"</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>And display all entries from the folder:</p>
-<pre class="highlight ruby"><span class="n">dir_builder</span><span class="p">.</span><span class="nf">list</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span>
-</pre>
+<pre><code class="highlight ruby"><span class="n">dir_builder</span><span class="p">.</span><span class="nf">list</span><span class="p">(</span><span class="s2">"lib/zip_dsl"</span><span class="p">)</span>
+</code></pre>
 
 <p>Some other examples of DSL can be found <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/meta_tricks/simple_dsl.rb">here</a>, <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl11.rb">here</a>, <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl12.rb">here</a>,
 <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl13.rb">here</a> and <a href="https://github.com/shvets/design_patterns_in_ruby/blob/master/enterprise/dsl2.rb">here</a>.</p>

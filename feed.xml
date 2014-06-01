@@ -32,24 +32,24 @@ you can install oracle database driver. Here we discuss how to do it for OSX 10 
 &lt;p&gt;Create separate group (e.g. &amp;ldquo;oracle&amp;rdquo;) in Gemfile for oracle ruby-oci8 client wrapper. You have to keep
 this gem in separate group because it requires special steps to be done before database driver
 can be installed.&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
 
 &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:oracle&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
   &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;"ruby-oci8"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"2.1.7"&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install gems for the project (except ruby-oci8 gem)&lt;/h2&gt;
 
 &lt;p&gt;Install ruby gems for your project with bundler tool. You have to bypass oracle client wrapper installation:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;without&lt;/strong&gt; parameter will exclude &lt;strong&gt;oracle&lt;/strong&gt; bundler group from the execution.&lt;/p&gt;
 
 &lt;p&gt;Check that you don&amp;rsquo;t have ruby-oci8 installed yet:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;gem list
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;gem list
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Download Oracle Instant Client&lt;/h2&gt;
 
@@ -60,7 +60,7 @@ installation packages on &lt;strong&gt;&lt;a href="http://www.oracle.com"&gt;www
 
 &lt;p&gt;Create configuration file for the installation (.oracle_client_installer.json) in the root of your project.
 It will define where you have downloaded files and some other parameters:&lt;/p&gt;
-&lt;pre class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['USER']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['HOME']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"ruby_home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['MY_RUBY_HOME']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
@@ -77,7 +77,7 @@ It will define where you have downloaded files and some other parameters:&lt;/p&
   &lt;/span&gt;&lt;span class="s2"&gt;"sdk_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{src_dir}/instantclient-sdk-macos.x64-#{oracle_version}.zip"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"sqlplus_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{src_dir}/instantclient-sqlplus-macos.x64-#{oracle_version}.zip"&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/pre&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We are going to run ruby from &lt;strong&gt;ruby_home&lt;/strong&gt; on behalf of the &lt;strong&gt;user&lt;/strong&gt; and we will use specific versions
 of &lt;strong&gt;oracle&lt;/strong&gt; client and &lt;strong&gt;ruby-oci8&lt;/strong&gt; gem. We also specify where to look for installation packages (src_dir)
@@ -88,7 +88,7 @@ and &lt;strong&gt;x64&lt;/strong&gt; as an architecture.&lt;/p&gt;
 
 &lt;p&gt;Library itself if written in ruby, but for launching it&amp;rsquo;s code you have to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt;. I provide
 thor script here as an example:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'thor'&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'thor'&lt;/span&gt;
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'oracle_client_installer'&lt;/span&gt;
 
 &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OracleClient&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
@@ -121,13 +121,13 @@ thor script here as an example:&lt;/p&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install Oracle Instant Client&lt;/h2&gt;
 
 &lt;p&gt;Run this &lt;strong&gt;thor&lt;/strong&gt; command:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;thor oracle_client:install
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor oracle_client:install
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;After execution all Instant Client packages (basic, sdk and sqlplus) will be installed at the right location
 (dest_dir) on your computer.&lt;/p&gt;
@@ -136,23 +136,23 @@ thor script here as an example:&lt;/p&gt;
 
 &lt;p&gt;Remove .bundle folder in order to include &amp;ldquo;oracle&amp;rdquo; group into bundle execution and
 then run bundler with &amp;ldquo;oracle&amp;rdquo; group:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;rm -rf .bundle
+&lt;pre&gt;&lt;code class="highlight shell"&gt;rm -rf .bundle
 
 bundle
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Verify the installation&lt;/h2&gt;
 
 &lt;p&gt;If you have Oracle installed locally with &lt;strong&gt;scott/tiger/ORCL&lt;/strong&gt;, you can test it now:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;thor oracle_client:verify
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor oracle_client:verify
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;If you have oracle installed somewhere on the network, you can add TNS names inside your
 &lt;strong&gt;tnsnames.ora&lt;/strong&gt; file located inside &lt;strong&gt;/usr/local/oracle/network/admin&lt;/strong&gt; folder. You can set up
 this location via &lt;strong&gt;tns_admin_dir&lt;/strong&gt; property inside your configuration file.&lt;/p&gt;
 
 &lt;p&gt;tnsnames.ora file will have this section:&lt;/p&gt;
-&lt;pre class="highlight plaintext"&gt;MY_ORCL=
+&lt;pre&gt;&lt;code class="highlight plaintext"&gt;MY_ORCL=
     (DESCRIPTION=
         (ADDRESS=
             (PROTOCOL=TCP)
@@ -163,21 +163,21 @@ this location via &lt;strong&gt;tns_admin_dir&lt;/strong&gt; property inside you
             (SID=MY_ORCL)
         )
     )
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;where you define &lt;strong&gt;MY_ORCL&lt;/strong&gt; schema on &lt;strong&gt;db.your_host.com&lt;/strong&gt; running on port &lt;strong&gt;1521&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;In order to use oracle driver inside rails application, you have to include it into your Gemfile:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
 
 &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:oracle&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
   &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
   &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'activerecord-oracle_enhanced-adapter'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'1.5.3'&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;Summary: all steps all together&lt;/h1&gt;
-&lt;pre class="highlight shell"&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
+&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
 
 thor oracle_client:install
 
@@ -186,7 +186,7 @@ rm -rf .bundle
 bundle
 
 thor oracle_client:verify
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>
   <entry>
@@ -209,22 +209,22 @@ thor oracle_client:verify
 &lt;ul&gt;
 &lt;li&gt;interpolation inside the string:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;var1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'some value 1'&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;var1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'some value 1'&lt;/span&gt;
 &lt;span class="n"&gt;var2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'some value 2'&lt;/span&gt;
 
 &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"We have var1: &lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;var1&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; and var2: &lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;."&lt;/span&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# We have var1: some value 1 and var2: some value 2.&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;interpolation inside file (with embedded ruby -  erb):&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# some_template.erb&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# some_template.erb&lt;/span&gt;
 
 &lt;span class="no"&gt;We&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="sx"&gt;%= var1 %&amp;gt; and var2:  &amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="sx"&gt;%&amp;gt;.
-&lt;/span&gt;&lt;/pre&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# test.rb&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# test.rb&lt;/span&gt;
 
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'erb'&lt;/span&gt;
 
@@ -236,28 +236,28 @@ thor oracle_client:verify
 &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;result&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;binding&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# We have var1: some value 1 and var2: some value 2.&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This library can be used for &lt;strong&gt;interpolation inside file with string syntax&lt;/strong&gt;. In order to
 achieve it library uses one ruby trick:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;env&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="s1"&gt;'some value 1'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;var2: &lt;/span&gt;&lt;span class="s1"&gt;'some value 2'&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;env&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="s1"&gt;'some value 1'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;var2: &lt;/span&gt;&lt;span class="s1"&gt;'some value 2'&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 
 &lt;span class="n"&gt;template&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"We have var1: %{var1} and var2: %{var2}."&lt;/span&gt;
 
 &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;template&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;env&lt;/span&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# We have var1: some value 1 and var2: some value 2.&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Usage&lt;/h2&gt;
 
 &lt;p&gt;It&amp;rsquo;s straightforward. Here is example of file interpolation:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# some_template.txt&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# some_template.txt&lt;/span&gt;
 
 &lt;span class="no"&gt;We&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="c1"&gt;#{var1} and var2:  #{var2}.&lt;/span&gt;
 &lt;span class="no"&gt;We&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="ss"&gt;var3: &lt;/span&gt;&lt;span class="c1"&gt;#{settings.var3} and var4:  #{settings.var4}.&lt;/span&gt;
-&lt;/pre&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# test.rb&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# test.rb&lt;/span&gt;
 
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'text_interpolator'&lt;/span&gt;
 
@@ -279,10 +279,10 @@ achieve it library uses one ruby trick:&lt;/p&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# We have var1: some value 1 and var2: some value 2.&lt;/span&gt;
             &lt;span class="c1"&gt;# We have var3: some value 3 and var4: some value 4.&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can also interpolate hash on multiple levels:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;hash&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;hash&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
   &lt;span class="ss"&gt;host: &lt;/span&gt;&lt;span class="s1"&gt;'localhost'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
 
   &lt;span class="ss"&gt;credentials: &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
@@ -319,7 +319,7 @@ achieve it library uses one ruby trick:&lt;/p&gt;
 &lt;span class="c1"&gt;#  :postgres=&amp;gt;{:hostname=&amp;gt;"localhost", :user=&amp;gt;"some_user", :password=&amp;gt;"postgres"}, &lt;/span&gt;
 &lt;span class="c1"&gt;#  :mysql=&amp;gt;{:user=&amp;gt;"some_user2"}}&lt;/span&gt;
 
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>
   <entry>
@@ -353,77 +353,77 @@ achieve it library uses one ruby trick:&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;Install XCode Command Line Tools from inside XCode.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Read and agree to Xcode license from command line:&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight shell"&gt;sudo xcodebuild -license
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;sudo xcodebuild -license
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install Homebrew&lt;/h2&gt;
 
 &lt;p&gt;It is package manager for MacOS written in ruby:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;ruby -e &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;curl -fsSkL raw.github.com/mxcl/homebrew/go&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;ruby -e &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;curl -fsSkL raw.github.com/mxcl/homebrew/go&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
 
 brew update
 brew tap homebrew/dupes
 brew tap homebrew/versions
 
 brew doctor
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install command line tools&lt;/h2&gt;
 
 &lt;p&gt;Install base tools:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;brew install wget
+&lt;pre&gt;&lt;code class="highlight shell"&gt;brew install wget
 brew install mc
 brew install git
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Qt&lt;/strong&gt; package is required by Capybara acceptance tests.&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;brew install qt
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;brew install qt
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;Node&lt;/strong&gt; is used for jasmine javascript unit test and for various javascript tasks.
 It will install &lt;strong&gt;node package manager&lt;/strong&gt; (&lt;strong&gt;npm&lt;/strong&gt;) as well:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;brew install node
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;brew install node
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Test it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;node -v
+&lt;pre&gt;&lt;code class="highlight shell"&gt;node -v
 npm -v
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install Sublime 3 Text Editor&lt;/h2&gt;
 
 &lt;p&gt;Download it from &lt;a href="http://www.sublimetext.com"&gt;http://www.sublimetext.com&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Create convenient link:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;ln -s /Applications/Sublime&lt;span class="se"&gt;\ &lt;/span&gt;Text.app/Contents/SharedSupport/bin/subl &lt;span class="nv"&gt;$HOME&lt;/span&gt;/bin/subl
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;ln -s /Applications/Sublime&lt;span class="se"&gt;\ &lt;/span&gt;Text.app/Contents/SharedSupport/bin/subl &lt;span class="nv"&gt;$HOME&lt;/span&gt;/bin/subl
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install RVM:&lt;/h2&gt;
-&lt;pre class="highlight shell"&gt;&lt;span class="se"&gt;\c&lt;/span&gt;url -sSL https://get.rvm.io | bash
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="se"&gt;\c&lt;/span&gt;url -sSL https://get.rvm.io | bash
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Then run this command:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; ~/.rvm/scripts/rvm
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; ~/.rvm/scripts/rvm
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or reopen in another terminal window.&lt;/p&gt;
 
 &lt;p&gt;Install required packages:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;rvm requirements
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;rvm requirements
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install various ruby versions:&lt;/h2&gt;
-&lt;pre class="highlight shell"&gt;rvm install 1.9.3
+&lt;pre&gt;&lt;code class="highlight shell"&gt;rvm install 1.9.3
 
 rvm install 2.1.1
 
 rvm install jruby
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Update .bash_profile&lt;/h2&gt;
 
 &lt;p&gt;Add to &lt;strong&gt;~/.bash_profile&lt;/strong&gt; the following lines:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/opt/local/bin:&lt;span class="nv"&gt;$PATH&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/opt/local/bin:&lt;span class="nv"&gt;$PATH&lt;/span&gt;
 
 &lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;EDITOR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'subl -w'&lt;/span&gt;
 &lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;PS1&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'${LOGNAME}@$(hostname): [$(~/.rvm/bin/rvm-prompt)] (\w):\n&amp;gt; '&lt;/span&gt;
@@ -432,68 +432,68 @@ rvm install jruby
 
 rvm use 1.9.3
 ruby -v
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install postgres server:&lt;/h2&gt;
 
 &lt;p&gt;Install it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;brew install postgres
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;brew install postgres
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Start it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;mkdir -p ~/Library/LaunchAgents
+&lt;pre&gt;&lt;code class="highlight shell"&gt;mkdir -p ~/Library/LaunchAgents
 sudo chown &lt;span class="nv"&gt;$USER&lt;/span&gt; ~/Library/LaunchAgents
 
 cp /usr/local/Cellar/postgresql/9.3.3/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
 
 launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Initialize database:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;initdb /usr/local/var/postgres -E utf8
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;initdb /usr/local/var/postgres -E utf8
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Create users and databases from command line:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;createuser -s -d -r rails_app_tmpl
+&lt;pre&gt;&lt;code class="highlight shell"&gt;createuser -s -d -r rails_app_tmpl
 
 createdb -U rails_app_tmpl rails_app_tmpl_dev
 createdb -U rails_app_tmpl rails_app_tmpl_test
 createdb -U rails_app_tmpl rails_app_tmpl_prod
 
 rake db:migrate
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or with psql tool:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;psql -c &lt;span class="s1"&gt;'create user rails_app_tmp;'&lt;/span&gt; -s -d -r
+&lt;pre&gt;&lt;code class="highlight shell"&gt;psql -c &lt;span class="s1"&gt;'create user rails_app_tmp;'&lt;/span&gt; -s -d -r
 
 psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_dev;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
 psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_test;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
 psql -c &lt;span class="s1"&gt;'create database rails_app_tmpl_prod;'&lt;/span&gt; -U rails_app_tmpl -h 127.0.0.1
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install mysql server:&lt;/h2&gt;
 
 &lt;p&gt;Install it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;brew install mysql
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;brew install mysql
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Start it:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;mkdir -p ~/Library/LaunchAgents
+&lt;pre&gt;&lt;code class="highlight shell"&gt;mkdir -p ~/Library/LaunchAgents
 sudo chown &lt;span class="nv"&gt;$USER&lt;/span&gt; ~/Library/LaunchAgents
 
 ln -sfv /usr/local/opt/mysql/&lt;span class="k"&gt;*&lt;/span&gt;.plist ~/Library/LaunchAgents
 
 launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Set up mysql root password:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;mysqladmin -u root password &lt;span class="s1"&gt;'root'&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;mysqladmin -u root password &lt;span class="s1"&gt;'root'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Create users and databases from command line:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;--mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;span class="s2"&gt;"flush  priveleges;"&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;--mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;span class="s2"&gt;"flush  priveleges;"&lt;/span&gt;
 --mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;span class="s2"&gt;"drop user 'rails_app_tmpl'@'localhost';"&lt;/span&gt;
 
 mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;span class="s2"&gt;"CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';"&lt;/span&gt;
@@ -504,10 +504,10 @@ mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;s
 mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;span class="s2"&gt;"create database rails_app_tmpl_dev;"&lt;/span&gt;
 mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;span class="s2"&gt;"create database rails_app_tmpl_test;"&lt;/span&gt;
 mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;span class="s2"&gt;"create database rails_app_tmpl_prod;"&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or with mysql tool interactively:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;mysql -u root -p&lt;span class="s1"&gt;'root'&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;mysql -u root -p&lt;span class="s1"&gt;'root'&lt;/span&gt;
 
   CREATE USER &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;@&lt;span class="s1"&gt;'localhost'&lt;/span&gt; IDENTIFIED BY &lt;span class="s1"&gt;'rails_app_tmpl'&lt;/span&gt;;
 
@@ -525,23 +525,23 @@ mysql -h localhost -u root -p&lt;span class="s2"&gt;"root"&lt;/span&gt; -e &lt;s
 
 &lt;span class="sb"&gt;```&lt;/span&gt;bash
 brew install selenium-server-standalone
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Standalone selenium server is implemented as launchd agent.&lt;/p&gt;
 
 &lt;p&gt;To have launchd start selenium-server-standalone at login, create soft link:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;ln -sfv /usr/local/opt/selenium-server-standalone/&lt;span class="k"&gt;*&lt;/span&gt;.plist ~/Library/LaunchAgents
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;ln -sfv /usr/local/opt/selenium-server-standalone/&lt;span class="k"&gt;*&lt;/span&gt;.plist ~/Library/LaunchAgents
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Then load selenium-server-standalone agent:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;It will run selenium server on port 4444.&lt;/p&gt;
 
 &lt;p&gt;If you don&amp;rsquo;t want to use agent, use java directly:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Create or load your project&lt;/h2&gt;
 
@@ -552,10 +552,10 @@ brew install selenium-server-standalone
 &lt;/ul&gt;
 
 &lt;p&gt;*Install ruby gems and js nodes:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;bundle install
+&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle install
 
 npm install
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Other instructions on Mac configuration are available here &lt;a href="link1"&gt;here&lt;/a&gt; and &lt;a href="link2"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>
@@ -602,49 +602,49 @@ as implementation - it&amp;rsquo;s pure Ruby implementation of a SSH (protocol 2
 &lt;ol&gt;
 &lt;li&gt;&lt;strong&gt;%x&lt;/strong&gt; expression:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="sx"&gt;%x{ pwd }&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="sx"&gt;%x{ pwd }&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
 &lt;li&gt;backticks:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="sb"&gt;`pwd`&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="sb"&gt;`pwd`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;strong&gt;system&lt;/strong&gt; command:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre class="highlight ruby"&gt; &lt;span class="nb"&gt;system&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt; &lt;span class="nb"&gt;system&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;strong&gt;exec&lt;/strong&gt; command:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;strong&gt;spawn&lt;/strong&gt; command:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;spawn&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;spawn&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;strong&gt;popen&lt;/strong&gt; command:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="no"&gt;IO&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;popen&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;IO&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;popen&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
 &lt;li&gt;using &lt;strong&gt;open3&lt;/strong&gt; library:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;"open3"&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;"open3"&lt;/span&gt;
 
 &lt;span class="no"&gt;Open3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;popen3&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'pwd'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;stdin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;stdout&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;stderr&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
 
 &lt;span class="n"&gt;stdout&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;stderr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Open3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;capture3&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'pwd'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
   &lt;span class="ss"&gt;:stdin_data&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;stdin&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# another example&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;With &lt;a href="script_executor"&gt;script_executor&lt;/a&gt; gem we are trying to build common interface for executing
 both local and remote code in unified way.&lt;/p&gt;
@@ -652,35 +652,35 @@ both local and remote code in unified way.&lt;/p&gt;
 &lt;h2&gt;Installation&lt;/h2&gt;
 
 &lt;p&gt;Add this line to your application&amp;rsquo;s Gemfile:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;gem &lt;span class="s1"&gt;'script_executor'&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;gem &lt;span class="s1"&gt;'script_executor'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;And then execute:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;bundle
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Or install it yourself:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;gem install script_executor
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;gem install script_executor
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Usage&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Create executor&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ScriptExecutor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ScriptExecutor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Execute local command:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="s2"&gt;"ls"&lt;/span&gt;
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="s2"&gt;"ls"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Execute remote command:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
   &lt;span class="ss"&gt;:remote&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
   &lt;span class="ss"&gt;:domain&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"some_host"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
   &lt;span class="ss"&gt;:user&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"some_user"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
@@ -688,45 +688,45 @@ both local and remote code in unified way.&lt;/p&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 
 &lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"ls -al"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Execute remote command as &amp;lsquo;sudo&amp;rsquo;:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="ss"&gt;:sudo&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="ss"&gt;:sudo&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
   &lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"/etc/init.d/tomcat stop"&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Execute remote command with code block:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:sudo&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:sudo&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
   &lt;span class="sx"&gt;%Q(
     /etc/init.d/tomcat stop
     /etc/init.d/tomcat start
   )&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Execute remote command while capturing and suppressing output (default is &amp;lsquo;false&amp;rsquo; for both parameters):&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:capture_output&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:capture_output&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
                   &lt;span class="ss"&gt;:suppress_output&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
   &lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"whoami"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# ENV['USER'] on remote server&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Simulate remote execution:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:simulate&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:simulate&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"whoami"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# generate commands without actual execution&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Using ScriptLocator&lt;/h2&gt;
 
@@ -737,7 +737,7 @@ access to the code, making maintenance easier.&lt;/p&gt;
 
 &lt;p&gt;For example, if you want to create script with 2 commands (command1, command2), you can use
 &lt;strong&gt;scripts&lt;/strong&gt; and &lt;strong&gt;evaluate_script_body&lt;/strong&gt; methods:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'script_locator'&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'script_locator'&lt;/span&gt;
 
 &lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="no"&gt;ScriptLocator&lt;/span&gt;
 
@@ -757,12 +757,12 @@ echo "&amp;lt;%= name %&amp;gt;"
 [command2]
 
 echo "test2"
-&lt;/span&gt;&lt;/pre&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build more sophisticated example. We want to automate generating public/private
 keys for ssh access and copying public key to remote server for password-less access
 to the server.&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'script_executor/executable'&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'script_executor/executable'&lt;/span&gt;
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'script_executor/script_locator'&lt;/span&gt;
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'file_utils/file_utils'&lt;/span&gt;
 
@@ -810,22 +810,22 @@ chmod 700 .ssh
 cat pubkey.txt &amp;gt;&amp;gt; ~/.ssh/authorized_keys
 rm ~/pubkey.txt
 chmod 600 ~/.ssh/*
-&lt;/span&gt;&lt;/pre&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This example has 3 scripts: &lt;strong&gt;gen_key&lt;/strong&gt;, &lt;strong&gt;scp_public_key&lt;/strong&gt; and &lt;strong&gt;install_key&lt;/strong&gt;. They are self-explanatory.
 Also, pay attention at using &lt;strong&gt;Executable&lt;/strong&gt; module. It is used when we want to add ScriptExecutor functionality
 as part of class.&lt;/p&gt;
 
 &lt;p&gt;In order to execute new commands you have to use &lt;strong&gt;thor&lt;/strong&gt; tool:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;thor ssh:gen_key
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor ssh:gen_key
 thor ssh:cp_key your.remote.server.com
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can achieve same goal with homebrew tool:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;brew install ssh-copy-id
+&lt;pre&gt;&lt;code class="highlight shell"&gt;brew install ssh-copy-id
 
 ssh-copy-id &lt;span class="nv"&gt;$USER&lt;/span&gt;@your.remote.server.com
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>
   <entry>
@@ -845,16 +845,16 @@ as classes, it is possible to &lt;strong&gt;reuse&lt;/strong&gt; them in &lt;str
 
 &lt;p&gt;We want to keep different thor tasks in separate files and even in separate &lt;strong&gt;thor&lt;/strong&gt; folder. To do
 it we need to put this code into &lt;strong&gt;Thorfile&lt;/strong&gt; within your project:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# Thorfile&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# Thorfile&lt;/span&gt;
 
 &lt;span class="c1"&gt;# load thor files&lt;/span&gt;
 &lt;span class="no"&gt;Dir&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;glob&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"thor/**/*.thor"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nb"&gt;name&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
   &lt;span class="no"&gt;Thor&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Util&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;load_thorfile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;If you want to debug thor script, add this code to the beginning of &lt;em&gt;Thorfile&lt;/em&gt;:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="c1"&gt;# Thorfile&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# Thorfile&lt;/span&gt;
 
 &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="n"&gt;defined?&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Runner&lt;/span&gt;
   &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'bundler'&lt;/span&gt;
@@ -868,21 +868,21 @@ it we need to put this code into &lt;strong&gt;Thorfile&lt;/strong&gt; within yo
 
 &lt;span class="c1"&gt;# load thor files&lt;/span&gt;
 &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This code will try to load thor command as if it was started from command line. This lets us
 to run &lt;strong&gt;Thorfile&lt;/strong&gt; as a regular ruby file:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;ruby Thorfile
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;ruby Thorfile
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;As a result, all debugging abilities are available:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;rdebug-ide --host 0.0.0.0 --port 1234 -- Thorfile
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;rdebug-ide --host 0.0.0.0 --port 1234 -- Thorfile
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now let&amp;rsquo;s build something useful for your current project. We want to automate some
 routine day-to-day tasks, like restarting postgres, initialize database, check status
 of jenkins CI server etc.:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Utils&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Utils&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
   &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"pg_restart"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Restarts Postgres server"&lt;/span&gt;
   &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;pg_restart&lt;/span&gt;
 
@@ -952,16 +952,16 @@ of jenkins CI server etc.:&lt;/p&gt;
     &lt;span class="no"&gt;Net&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;HTTP&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Get&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;uri&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;request_uri&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now you can run these commands:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;thor -T
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor -T
 
 thor utils:pg_restart
 thor utils:create_tables
 thor utils:drop_tables
 thor utils:show_jenkins jenkins_server.your_domain.com
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>
   <entry>
@@ -982,12 +982,12 @@ from &lt;a href="https://github.com/redcar/redcar"&gt;redcar project&lt;/a&gt; w
 &lt;a href="https://github.com/shvets/jar_wrapper"&gt;jar_wrapper gem&lt;/a&gt;, so it can be easily used in any ruby project.&lt;/p&gt;
 
 &lt;p&gt;Install jar_wrapper with this command:&lt;/p&gt;
-&lt;pre class="highlight plaintext"&gt;$ gem install jar_wrapper
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="highlight plaintext"&gt;$ gem install jar_wrapper
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now you can use it in your program directly or create gem for delivering java jar file(s).
 For example, this code will upload remote file:&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'jar_wrapper'&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'jar_wrapper'&lt;/span&gt;
 
 &lt;span class="n"&gt;wrapper&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;JarWrapper&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Runner&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
 &lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;java_opts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"-Xmx1024m"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"-Xss1024k"&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;
@@ -998,20 +998,20 @@ For example, this code will upload remote file:&lt;/p&gt;
 &lt;span class="n"&gt;target&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"selenium-server.zip"&lt;/span&gt;
 
 &lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;install&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can aldo execute jar file (a.k.a. &amp;ldquo;java -jar jar_file.jar&amp;rdquo;)&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;jar_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"jar_file.jar"&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;jar_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"jar_file.jar"&lt;/span&gt;
 
 &lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Or you can execute java jar file by specifying &lt;strong&gt;main class&lt;/strong&gt; (a.k.a. &amp;ldquo;java -cp some&lt;em&gt;class&lt;/em&gt;path main_class&amp;rdquo;):&lt;/p&gt;
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;classpath&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"some_class_path"&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;classpath&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"some_class_path"&lt;/span&gt;
 &lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;main_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"main_class"&lt;/span&gt;
 
 &lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;If you need more details on how to use it for practical gem, visit &lt;a href="https://github.com/shvets/selenium"&gt;selenium gem&lt;/a&gt;.
 This gem downloads and create launcher for standalone selenium server.&lt;/p&gt;

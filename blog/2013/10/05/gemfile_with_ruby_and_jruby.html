@@ -38,7 +38,7 @@
 
 <p>If your Ruby/Rails project has to work with Ruby and JRuby at the same time,
 sooner or later you&rsquo;ll end up with <strong>Gemfile</strong> that has a lot of <strong>if logic</strong>:</p>
-<pre class="highlight ruby"><span class="c1"># Gemfile</span>
+<pre><code class="highlight ruby"><span class="c1"># Gemfile</span>
 
 <span class="k">if</span> <span class="no">RUBY_PLATFORM</span> <span class="o">==</span> <span class="s2">"java"</span> <span class="c1"># jruby</span>
   <span class="n">gem</span> <span class="s2">"jdbc-postgres"</span>
@@ -46,7 +46,7 @@ sooner or later you&rsquo;ll end up with <strong>Gemfile</strong> that has a lot
 <span class="k">else</span>
   <span class="n">gem</span> <span class="s2">"pg"</span><span class="p">,</span> <span class="s1">'0.13.2'</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>If you have a lot of dependencies this <strong>if logic</strong> complicates and pollutes your code.</p>
 
@@ -56,8 +56,8 @@ Ruby (Gemfile) and another for JRuby (Gemfile-jruby).</p>
 <p>You need to tell your bundler though which <strong>Gemfile</strong> needs to be used.</p>
 
 <p>If you want to run bundler with different Gemfile, run it this way:</p>
-<pre class="highlight shell"><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span>Gemfile-jruby bundle
-</pre>
+<pre><code class="highlight shell"><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span>Gemfile-jruby bundle
+</code></pre>
 
 <p>This is fine, but you have to remember to provide additional environment variable every time you run the command.</p>
 
@@ -65,11 +65,11 @@ Ruby (Gemfile) and another for JRuby (Gemfile-jruby).</p>
 you can use <strong>rvm hook</strong>. All hooks for rvm are located in <strong>~/.rvm/hooks</strong>  folder.</p>
 
 <p>Create or edit this file:</p>
-<pre class="highlight shell">vi ~/.rvm/hooks/after_use_jruby
-</pre>
+<pre><code class="highlight shell">vi ~/.rvm/hooks/after_use_jruby
+</code></pre>
 
 <p>Locate line with <strong>if [[ &ldquo;${rvm<em>ruby</em>string}&rdquo; =~ &ldquo;jruby&rdquo; ]]</strong> and add your code:</p>
-<pre class="highlight shell"><span class="c">#!/usr/bin/env bash</span>
+<pre><code class="highlight shell"><span class="c">#!/usr/bin/env bash</span>
 <span class="se">\.</span> <span class="s2">"</span><span class="k">${</span><span class="nv">rvm_path</span><span class="k">}</span><span class="s2">/scripts/functions/hooks/jruby"</span>
 
 <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">rvm_ruby_string</span><span class="k">}</span><span class="s2">"</span> <span class="o">=</span>~ <span class="s2">"jruby"</span> <span class="o">]]</span>
@@ -78,11 +78,11 @@ you can use <strong>rvm hook</strong>. All hooks for rvm are located in <strong>
 <span class="k">else
   </span><span class="nb">export </span><span class="nv">BUNDLE_GEMFILE</span><span class="o">=</span><span class="s2">"Gemfile"</span>
 <span class="k">fi</span>
-</pre>
+</code></pre>
 
 <p>Change rights for this file to make it executable:</p>
-<pre class="highlight shell">chmod +x ~/.rvm/hooks/after_use_jruby
-</pre>
+<pre><code class="highlight shell">chmod +x ~/.rvm/hooks/after_use_jruby
+</code></pre>
 
 <p>Now, every time you change directory to your project, rvm will setup all environment
 variables as before plus your <strong>BUNDLE_GEMFILE</strong> variable.</p>

@@ -1,17 +1,4 @@
 class BookmarksGen
-  # def generate_data input_name, output_name
-  #   content = load_file input_name
-  #
-  #   document = build_document(content)
-  #
-  #   new_document = cut_unrelated_info(document)
-  #
-  #   save_file new_document, output_name
-  # end
-
-  def build_hash content
-    {}
-  end
 
   def generate_haml file_name, dir
     FileUtils.mkdir_p dir
@@ -22,7 +9,7 @@ class BookmarksGen
 
     bookmarks = find_my_bookmarks(hash)
 
-    generate_folder dir, bookmarks
+    generate_tree dir, bookmarks
   end
 
   def load_file file_name
@@ -35,50 +22,49 @@ class BookmarksGen
     content
   end
 
-  def cut_unrelated_info document
-    document
-  end
-
   def save_file document, file_name
     File.open(file_name, "w") do |file|
       file.write document
     end
   end
 
-  def generate_folder dir, items
+  def generate_tree dir, items
     Dir.mkdir "#{dir}" unless File.exists?("#{dir}")
 
+    generate_index_file dir, items
+
+    generate_dependent_trees dir, items
+  end
+
+  def generate_index_file dir, items
     File.open("#{dir}/index.haml", "w") do |file|
       items.each do |item|
-        title = item['title']
+        name = item['name']
 
         if item['children'].nil?
           file.write <<-CONTENT
 %li
-%a{:href => "#{item['uri']}"}="#{process_title(item['title'])}"
+%a{:href => "#{item['url']}"}="#{process_name(item['name'])}"
           CONTENT
 
         else
           file.write <<-CONTENT
-%ul{:class => "#{title}"}
+%ul{:class => "#{name}"}
   %li
-    %a{:href => "#{title}/index.html"}="#{title}"
+    %a{:href => "#{name}/index.html"}="#{name}"
           CONTENT
         end
-
-
-      end
-    end
-
-    items.each do |item|
-      title = item['title']
-
-      if item['children'].nil?
-        # generate_file name
-      else
-        generate_folder "#{dir}/#{title}", item['children']
       end
     end
   end
 
+  def generate_dependent_trees dir, items
+    items.each do |item|
+      name = item['name']
+
+      unless item['children'].nil?
+        generate_tree "#{dir}/#{name}", item['children']
+      end
+    end
+  end
 end
