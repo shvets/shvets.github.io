@@ -11,6 +11,7 @@ group "default" do
   gem "haml"
   gem "nokogiri"
   gem "json"
+  # gem "activesupport"
 end
 
 group "test" do

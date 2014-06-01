@@ -2,91 +2,52 @@ require 'json'
 require 'bookmarks_gen'
 
 class ChromeBookmarksGen < BookmarksGen
-  def generate_data input_name, output_name
-    content = load_file input_name
+  # def generate_data input_name, output_name
+  #   content = load_file input_name
+  #
+  #   document = build_document(content)
+  #
+  #   new_document = cut_unrelated_info(document)
+  #
+  #   save_file new_document, output_name
+  # end
 
-    document = build_document(content)
+  # def generate_haml file_name, dir
+  #   FileUtils.mkdir_p dir
+  #
+  #   content = load_file file_name
+  #
+  #   document = build_document(content)
+  #
+  #   bookmarks = find_my_bookmarks(document.to_hash)
+  #
+  #   generate_folder dir, bookmarks
+  # end
 
-    new_document = cut_unrelated_info(document)
+  # def read_data file_name
+  #   build_document(file_name)
+  # end
 
-    save_file new_document, output_name
-  end
-
-  def generate_haml file_name, dir
-    FileUtils.mkdir_p dir
-
-    content = load_file file_name
-
-    document = build_document(content)
-
-    bookmarks = find_my_bookmarks(document.to_hash)
-
-    generate_folder dir, bookmarks
-  end
-
-  def generate_folder dir, items
-    Dir.mkdir "#{dir}" unless File.exists?("#{dir}")
-
-    File.open("#{dir}/index.haml", "w") do |file|
-      items.each do |item|
-        title = item['title']
-
-        if item['children'].nil?
-          file.write <<-CONTENT
-%li
-%a{:href => "#{item['uri']}"}="#{process_title(item['title'])}"
-          CONTENT
-
-        else
-          file.write <<-CONTENT
-%ul{:class => "#{title}"}
-  %li
-    %a{:href => "#{title}/index.html"}="#{title}"
-          CONTENT
-        end
-
-
-      end
-    end
-
-    items.each do |item|
-      title = item['title']
-
-      if item['children'].nil?
-        # generate_file name
-      else
-        generate_folder "#{dir}/#{title}", item['children']
-      end
-    end
-  end
-
-
-  def read_data file_name
-    build_document(file_name)
-  end
-
-  private
-
-  def build_document content
+  def build_hash content
     if content[content.length-3..content.length-3] == ","
       content = content[0..content.length-4] + content[content.length-2..-1]
     end
 
-    JSON.parse(content)
+    JSON.parse(content).to_hash
   end
 
   private
 
-  def cut_unrelated_info document
-    my_bookmarks = find_my_bookmarks(document.to_hash) # part of the document
+  # def cut_unrelated_info document
+  #   my_bookmarks = find_my_bookmarks(document.to_hash) # part of the document
+  #
+  #   convert(my_bookmarks).to_json
+  # end
 
-    convert(my_bookmarks).to_json
-  end
-
-  def find_my_bookmarks document
+  def find_my_bookmarks hash
     bookmarks = nil
 
-    document['children'].each do |item1|
+    hash['children'].each do |item1|
       if item1['title'] == 'Bookmarks Menu'
         item1['children'].each do |item2|
           if item2['title'] == 'Bookmarks Bar'

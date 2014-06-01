@@ -11,6 +11,14 @@ task "site" do
   sh "cp -r build/** ."
 end
 
+desc"Copies recent chrome bookmarks"
+task "cp-chrome-bm" do
+  from = "~/Library/Application\\ Support/Google/Chrome/Default/Bookmarks"
+  to = "~/Dropbox/Alex/bookmarks/bookmarks-2014-05-31.json"
+
+  system "cp #{from} #{to}"
+end
+
 desc "generates bookmarks layout from bookmark.json"
 task "gen-bm" do
   bookmarks = "#{ENV['HOME']}/Dropbox/Alex/bookmarks/bookmarks-2013-10-19.json"
