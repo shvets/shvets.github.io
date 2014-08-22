@@ -1,17 +1,22 @@
 ---
-title: Oracle Instant Client Installer
+title: Oracle Instant Client Provision
 date: 2014-05-31
 tags: ruby, thor, oracle, script_executor
 ---
  
-# Oracle Instant Client Installer - thor-based tasks for facilitating oracle client installation
+# Oracle Instant Client Provision - thor-based tasks for facilitating Oracle Instant Client installation
  
 ## Introduction
 
 Installing database driver for Oracle (activerecord-oracle_enhanced-adapter) is not a simple process.
-First, you need to install Oracle Instant Client. Second, you have to install ruby wrapper around Instant Client
-(ruby-oci8 gem). On some platforms second step requires compiling source code. Only after that
-you can install oracle database driver. Here we discuss how to do it for OSX 10 operating system.
+
+- First, you need to install Oracle Instant Client.
+- Second, you have to install ruby wrapper around Instant Client (ruby-oci8 gem). On some platforms it
+requires compiling source code.
+
+Only after that you can install oracle database driver.
+
+Here we discuss how to do it for OSX 10 operating system.
 
 ## Create new gem group
 
@@ -50,58 +55,73 @@ installation packages on **www.oracle.com** web site (you have to be registered 
 
 ## Configuration file
 
-Create configuration file for the installation (.oracle\_client\_installer.json) in the root of your project.
+Create configuration file for the installation (.oracle\_client\_provision.json) in the root of your project.
 It will define where you have downloaded files and some other parameters:
 
 ```json
 {
+
+  "node": {
+    "domain": "127.0.0.1",
   "user": "ENV['USER']",
   "home": "ENV['HOME']",
-  "ruby_home": "ENV['MY_RUBY_HOME']",
+    "port": "",
+    "remote": false
+  }
 
+  "project": {
+    "home": "#{node.home}/my_project_with_oracle_driver",
+    "ruby_home": "ENV['MY_RUBY_HOME']"
+  },
+
+  "instant_client": {
+    "src_dir": "#{project.home}/downloads",
+    "dest_dir": "#{oracle.oracle_base}/instantclient_11_2",
+
+    "basic_zip": "#{instant_client.src_dir}/instantclient-basic-macos.x64-#{oracle.oracle_version}.zip",
+    "sdk_zip": "#{instant_client.src_dir}/instantclient-sdk-macos.x64-#{oracle.oracle_version}.zip",
+    "sqlplus_zip": "#{instant_client.src_dir}/instantclient-sqlplus-macos.x64-#{oracle.oracle_version}.zip"
+  },
+
+  "oracle": {
   "oracle_base": "/usr/local/oracle",
   "oracle_version": "11.2.0.4.0",
   "ruby_oci_version": "2.1.7",
-  "tns_admin_dir": "#{oracle_base}/network/admin",
+    "tns_admin_dir": "#{oracle.oracle_base}/network/admin"
+  }
 
-  "src_dir": "downloads",
-  "dest_dir": "#{oracle_base}/instantclient_11_2",
-
-  "basic_zip": "#{src_dir}/instantclient-basic-macos.x64-#{oracle_version}.zip",
-  "sdk_zip": "#{src_dir}/instantclient-sdk-macos.x64-#{oracle_version}.zip",
-  "sqlplus_zip": "#{src_dir}/instantclient-sqlplus-macos.x64-#{oracle_version}.zip"
 }
 ```
 
-We are going to run ruby from **ruby_home** on behalf of the **user** and we will use specific versions
-of **oracle** client and **ruby-oci8** gem. We also specify where to look for installation packages (src\_dir)
-and where to install Instant Client (dest\_dir). Also, as you can see, we are using **macos** as a platform
+We are going to run ruby from **project.ruby_home** on behalf of the **node.user** and we will use specific versions
+of **oracle** client and **ruby-oci8** gem. We also specify where to look for installation packages (instant_client.src\_dir)
+and where to install Instant Client (instant_client.dest\_dir). Also, as you can see, we are using **macos** as a platform
 and **x64** as an architecture.
 
 ## Provide execution script
 
-Library itself if written in ruby, but for launching it's code you have to use **rake** or **thor**. I provide
-thor script here as an example:
+Library itself if written in ruby, but for launching its code you have to use **rake** or **thor**. Here I provide
+thor script as an example:
 
 ```ruby
 require 'thor'
-require 'oracle_client_installer'
+require 'oracle_client_provision'
 
 class OracleClient < Thor
-  def initialize *params
-    @installer = OracleClientInstaller.new ".oracle_client_installer.json"
+  @installer = OracleClientProvision.new self, ".oracle_client_provision.json"
 
-    super *params
+  class << self
+    attr_reader :installer
   end
 
   desc "install", "Installs Oracle Instant Client"
   def install
-    @installer.install
+    OracleClient.installer.install
   end
 
   desc "uninstall", "Uninstalls Oracle Instant Client"
   def uninstall
-    @installer.uninstall
+    OracleClient.installer.uninstall
   end
 
   desc "verify", "Verifies Oracle Instant Client connection"
@@ -111,7 +131,7 @@ class OracleClient < Thor
     schema   = "ORCL"
     sql      = "SELECT * FROM emp where rownum <= 10"
 
-    @installer.verify do
+    OracleClient.installer.verify do
       "require 'oci8'; OCI8.new('#{username}','#{password}','#{schema}').exec('#{sql}') do |r| puts r.join(','); end"
     end
   end
@@ -128,9 +148,9 @@ thor oracle_client:install
 ```
 
 After execution all Instant Client packages (basic, sdk and sqlplus) will be installed at the right location
-(dest\_dir) on your computer.
+(instant_client.dest\_dir) on your computer.
 
-## Again: install gems for the project (now with ruby-oci8 gem)
+## Again: install gems for the project, now with ruby-oci8 gem
 
 Remove .bundle folder in order to include "oracle" group into bundle execution and
 then run bundler with "oracle" group:
@@ -178,7 +198,7 @@ In order to use oracle driver inside rails application, you have to include it i
 
 group :oracle do
   ...
-  gem 'activerecord-oracle_enhanced-adapter', '1.5.3'
+  gem 'activerecord-oracle_enhanced-adapter', '1.5.5'
 end
 ```
 
@@ -195,3 +215,5 @@ bundle
 
 thor oracle_client:verify
 ```
+
+
