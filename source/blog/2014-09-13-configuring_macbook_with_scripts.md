@@ -1,6 +1,6 @@
 ---
 title: Configure Macbook for Ruby/Rails Development
-date: 2014-08-23
+date: 2014-09-13
 tags: ruby, osx, mavericks, provisioning, macbook
 ---
 

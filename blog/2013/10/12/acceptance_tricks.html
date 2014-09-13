@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Configuring Acceptance Tests with Capybara, Webkit and Selenium</h1>
+
+<h2>Introduction</h2>
+
+<p>We all know about importance of being armed with tests for your project. Usually project could have <strong>unit</strong>,
+<strong>integration</strong> and <strong>acceptance</strong> tests.</p>
+
+<p>Unit tests help us to test <strong>small piece of functionality in isolation</strong> (within single class) and try
+to answer this question:</p>
+
+<p><span style="color:green">Do our objects do the right thing, are they convenient to work with?</span></p>
+
+<p>Unit tests don&rsquo;t necessary work as expected when you <strong>combine units together</strong>, even if units
+work perfectly in isolation. In this case we use integration tests that try to answer another question:</p>
+
+<p><span style="color:green">Does our code work against code we can&rsquo;t change?</span></p>
+
+<p>Integration tests don&rsquo;t prove that a <strong>complete feature works</strong> as intended. In this case we introduce
+higher test level with acceptance tests. They help us with the next question:</p>
+
+<p><span style="color:green">Does the whole system work as expected?</span></p>
+
+<p>Acceptance tests simulate human interactions with <strong>interactive applications</strong>. Acceptance tests written
+in ruby can be used for <strong>supporting projects in other languages</strong>, such as Java, Python, PHP or C#.</p>
+
+<h2>Automated Acceptance Tests: Why?</h2>
+
+<p>We can do acceptance tests manually by hiring human being to click on buttons, select combo-boxes etc.
+in our web application or create separate program that will do the same for us in automated way.</p>
+
+<p>What benefits can we expect here?</p>
+
+<ul>
+<li><p>It&rsquo;s <strong>not possible or extremely expensive</strong> to manually test each feature of your application.</p></li>
+<li><p>Making testing automated will <strong>save a lot of time/money</strong> for the company.</p></li>
+<li><p>In case of <strong>adding new functionality</strong> you want to know whether it breaks existing flow or not.
+Unit or integration tests do not know about new functionality and cannot fail on it yet.</p></li>
+</ul>
+
+<h2>Capybara: What is it?</h2>
+
+<p><a href="https://github.com/jnicklas/capybara">Capybara</a> is the ruby gem that:</p>
+
+<blockquote>
+<p>&ldquo;helps you test web applications by simulating how a real user would interact with your app.&rdquo;</p>
+</blockquote>
+
+<p>In other words, capybara represents domain specific language (DSL) for describing <strong>acceptance tests</strong>
+written in Ruby.</p>
+
+<p>It <strong>simulates real user interactions</strong> with web application, provides <strong>higher level API</strong>
+to user interaction. You can use existing or write your own drivers that fit into this API.</p>
+
+<p><strong>selenium</strong>, <strong>webkit</strong> and <strong>poltergeist</strong> are examples of such drivers.</p>
+
+<p>Because of neutral capybara API, it could be used with both <strong>rspec</strong> and <strong>cucumber</strong>.</p>
+
+<p>In order to start using capybara, add it to your Gemfile:</p>
+<pre><code class="highlight shell">  gem <span class="s2">"capybara"</span>
+</code></pre>
+
+<p>and require it inside your code:</p>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'capybara'</span>
+</code></pre>
+
+<p>If you plan to use selenium driver, install it:</p>
+<pre><code class="highlight ruby">  <span class="n">gem</span> <span class="s2">"selenium-webdriver"</span>
+</code></pre>
+
+<p>Below is the typical example of capybara script:</p>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s2">"capybara/dsl"</span>
+
+<span class="no">Capybara</span><span class="p">.</span><span class="nf">app_host</span> <span class="o">=</span> <span class="s1">'http://www.google.com'</span>
+<span class="no">Capybara</span><span class="p">.</span><span class="nf">default_wait_time</span> <span class="o">=</span> <span class="mi">15</span>
+
+<span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+
+<span class="kp">include</span> <span class="no">Capybara</span><span class="o">::</span><span class="no">DSL</span>
+
+<span class="n">visit</span> <span class="s2">"/"</span>
+
+<span class="n">fill_in</span> <span class="s2">"q"</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s2">"Capybara"</span>
+<span class="n">find</span><span class="p">(</span><span class="s2">"#gbqfbw button"</span><span class="p">).</span><span class="nf">click</span>
+
+<span class="n">page</span><span class="p">.</span><span class="nf">should</span> <span class="n">have_content</span> <span class="s1">'Capybara'</span>
+</code></pre>
+
+<h2>Capybara: auto-waiting</h2>
+
+<p>Capybara provides <strong>auto-waiting</strong> feature - powerful synchronization for asynchronous processes, like AJAX calls.</p>
+
+<p>Capybara 1 uses <strong>wait_until</strong> API for waiting on asynchronous events. This way you can build scripts of arbitrary
+complexity. For example:</p>
+<pre><code class="highlight ruby"><span class="n">visit</span> <span class="s2">"/"</span>
+<span class="n">click_button</span> <span class="s2">"Submit"</span>
+
+<span class="n">wait_until</span> <span class="p">{</span> <span class="n">page</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="s2">"some_element_id"</span><span class="p">).</span><span class="nf">visible?</span> <span class="p">}</span>
+
+<span class="n">wait_until</span> <span class="k">do</span>
+  <span class="n">execute_script</span><span class="p">(</span><span class="s1">'return jQuery(".response .success").is(":visible")'</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>This approach has one drawback though: <strong>wait_until</strong> makes scripts bulky, hard to read and maintain.</p>
+
+<p>In Capybara 2 wait_until <a href="http://www.elabs.se/blog/53-why-wait_until-was-removed-from-capybara">was removed completely</a>. Why?</p>
+
+<ul>
+<li><p>wait_until is simply not necessary for most cases.</p></li>
+<li><p>it was added in older versions of Capybara when auto-waiting feature was much more primitive.</p></li>
+</ul>
+
+<p>Capybara 2 provides smarter implementation of <strong>auto-waiting</strong> feature. Now you have to remember these rules:</p>
+
+<ul>
+<li><p>Methods like <strong>find(&ldquo;#foo&rdquo;)</strong> have blocking code that perform waiting for requested element
+to become available.</p></li>
+<li><p>Instead of calling regular methods like <strong>contain</strong>, you should use <strong>have_content</strong> or <strong>have_selector</strong>,
+<strong>has_selector?</strong>.</p></li>
+</ul>
+
+<p>Below is an example of incorrect usage of new API:</p>
+<pre><code class="highlight ruby">  <span class="n">page</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">).</span><span class="nf">text</span><span class="p">.</span><span class="nf">should</span> <span class="n">contain</span><span class="p">(</span><span class="s2">"login failed"</span><span class="p">)</span>
+</code></pre>
+
+<p>This is correct usage:</p>
+<pre><code class="highlight ruby">  <span class="n">page</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="s2">"#foo"</span><span class="p">).</span><span class="nf">should</span> <span class="n">have_content</span><span class="p">(</span><span class="s2">"login failed"</span><span class="p">)</span>
+
+  <span class="n">page</span><span class="p">.</span><span class="nf">should</span> <span class="n">have_selector</span><span class="p">(</span><span class="s2">"#foo"</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"login failed"</span><span class="p">)</span>
+</code></pre>
+
+<p>What&rsquo;s wrong in first example?</p>
+
+<ul>
+<li><p>Method <strong>text</strong>, being just a regular method that returns a regular string, isn’t going to do auto-waiting.
+It will immediately return the text.</p></li>
+<li><p>When you use <strong>have_content</strong> or <strong>have_selector</strong>, they will do <strong>auto-waiting</strong> for you.</p></li>
+</ul>
+
+<p>Code becomes simple and much easier to read/maintain. As long as you stick with Capybara API, you should
+never have to use wait_until explicitly.</p>
+
+<h2>Selenium server</h2>
+
+<p>When you run selenium test, it communicates to selenium server, which in turn connects to
+web site to be tested.</p>
+
+<p>Don&rsquo;t forget to install it. On OSX you can do it with one homebrew command:</p>
+<pre><code class="highlight shell">brew install selenium-server-standalone
+</code></pre>
+
+<p>Standalone selenium server is implemented as launchd agent.</p>
+
+<p>To have launchd start selenium-server-standalone at login, create soft link:</p>
+<pre><code class="highlight shell">ln -sfv /usr/local/opt/selenium-server-standalone/<span class="k">*</span>.plist ~/Library/LaunchAgents
+</code></pre>
+
+<p>Then load selenium-server-standalone agent:</p>
+<pre><code class="highlight shell">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
+</code></pre>
+
+<p>It will run selenium server on port 4444.</p>
+
+<p>If you don&rsquo;t want to use agent, use java directly:</p>
+<pre><code class="highlight shell">java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
+</code></pre>
+
+<h2>Tips</h2>
+
+<p>You can get plenty of information about how to configure capybara on <a href="https://github.com/jnicklas/capybara">capybara home page</a>.</p>
+
+<p>All details related to Selenium you can find on <a href="http://docs.seleniumhq.org/">selenium home page</a>.</p>
+
+<p>Below I cover some of my tricks that I have discovered while tailoring capybara for my needs.</p>
+
+<h2>Tip 1: Executing Selenium server on remote machine</h2>
+
+<p>In order to run Selenium on another machine you have to register <strong>selenium remote driver</strong>:</p>
+<pre><code class="highlight ruby">
+  <span class="k">def</span> <span class="nf">register_remote_selenium_driver</span>
+      <span class="n">selenium_host</span><span class="p">,</span> <span class="n">selenium_port</span>
+    <span class="n">selenium_url</span> <span class="o">=</span>
+      <span class="s2">"http://</span><span class="si">#{</span><span class="n">selenium_host</span><span class="si">}</span><span class="s2">:</span><span class="si">#{</span><span class="n">selenium_port</span><span class="si">}</span><span class="s2">/wd/hub"</span>
+
+    <span class="no">Capybara</span><span class="p">.</span><span class="nf">register_driver</span> <span class="ss">:selenium_remote</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="o">|</span>
+      <span class="no">Capybara</span><span class="o">::</span><span class="no">Selenium</span><span class="o">::</span><span class="no">Driver</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">app</span><span class="p">,</span>
+        <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">selenium_url</span><span class="p">,</span> <span class="ss">:browser</span> <span class="o">=&gt;</span> <span class="ss">:remote</span><span class="p">})</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="n">selenium_host</span> <span class="o">=</span> <span class="s2">"some-selenium-host"</span>
+  <span class="n">selenium_port</span> <span class="o">=</span> <span class="s2">"some-selenium-port"</span>
+
+  <span class="n">register_remote_selenium_driver</span> <span class="n">selenium_host</span><span class="p">,</span> <span class="n">selenium_port</span>
+
+  <span class="c1"># Use registered driver</span>
+  <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="ss">:selenium_remote</span>
+</code></pre>
+
+<h2>Tip 2: Using RSpec metadata for easy switching between drivers</h2>
+
+<p>You can use <strong>rspec metadata</strong> if you need to  use or change driver whether for single test
+or for the whole test suite.</p>
+
+<p>First, create <a href="https://www.relishapp.com/rspec/rspec-core/v/2-11/docs/example-groups/shared-context">shared context</a> named <strong>CapybaraTest</strong>:</p>
+<pre><code class="highlight ruby"><span class="n">shared_context</span> <span class="s2">"CapybaraTest"</span> <span class="k">do</span>
+
+  <span class="n">before</span> <span class="k">do</span>
+    <span class="k">if</span> <span class="n">example</span><span class="p">.</span><span class="nf">metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
+      <span class="n">new_driver</span> <span class="o">=</span> <span class="n">example</span><span class="p">.</span><span class="nf">metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
+
+      <span class="k">if</span> <span class="o">[</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:webkit</span><span class="p">,</span> <span class="ss">:selenium</span><span class="o">]</span><span class="p">.</span><span class="nf">include?</span> <span class="n">new_driver</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
+      <span class="k">else</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="p">.</span><span class="nf">default_driver</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="n">after</span> <span class="k">do</span>
+    <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="p">.</span><span class="nf">default_driver</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Now, you can specify driver for single test:</p>
+<pre><code class="highlight ruby"><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"CapybaraTest"</span>
+
+  <span class="n">it</span> <span class="s1">'does something'</span><span class="p">,</span> <span class="ss">driver: :webkit</span> <span class="k">do</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="n">it</span> <span class="s1">'does something else'</span><span class="p">,</span> <span class="ss">driver: :selenium</span> <span class="k">do</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>or for the whole test suite:</p>
+<pre><code class="highlight ruby"><span class="n">describe</span> <span class="no">SomeClass</span><span class="p">,</span> <span class="ss">driver: :webkit</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"CapybaraTest"</span>
+  <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+<span class="k">end</span>
+</code></pre>
+
+<h2>Tip 3: Using remote selenium with RSpec metadata</h2>
+
+<p>If you want to integrate remote selenium with rspec metadata, you need to register new driver type
+for it, e.g. <strong>selenium_remote</strong>:</p>
+<pre><code class="highlight ruby"><span class="n">shared_context</span> <span class="s2">"CapybaraTest"</span> <span class="k">do</span>
+
+  <span class="n">before</span> <span class="k">do</span>
+    <span class="k">if</span> <span class="n">example</span><span class="p">.</span><span class="nf">metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
+      <span class="n">new_driver</span> <span class="o">=</span> <span class="n">example</span><span class="p">.</span><span class="nf">metadata</span><span class="o">[</span><span class="ss">:driver</span><span class="o">]</span>
+
+      <span class="k">if</span> <span class="o">[</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:webkit</span><span class="p">,</span> <span class="ss">:selenium</span><span class="o">]</span><span class="p">.</span><span class="nf">include?</span> <span class="n">new_driver</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
+      <span class="k">elsif</span> <span class="o">[</span><span class="ss">:selenium_remote</span><span class="o">]</span><span class="p">.</span><span class="nf">include?</span> <span class="n">new_driver</span>
+        <span class="n">setup_remote_selenium</span> <span class="no">SELENIUM_CONFIG_FILE_NAME</span><span class="p">,</span> <span class="n">config_name</span><span class="p">()</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="n">new_driver</span>
+      <span class="k">else</span>
+        <span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="no">Capybara</span><span class="p">.</span><span class="nf">default_driver</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">setup_remote_selenium</span> <span class="n">config_file_name</span><span class="p">,</span> <span class="n">config_name</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span> <span class="c1"># load selenium configuration from file</span>
+
+    <span class="c1"># see implementation in Tip 1</span>
+    <span class="n">register_remote_selenium_driver</span> <span class="n">config</span><span class="o">[</span><span class="ss">:selenium_host</span><span class="o">]</span><span class="p">,</span>
+      <span class="n">config</span><span class="o">[</span><span class="ss">:selenium_port</span><span class="o">]</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Now you can specify new driver name per single test or test suite:</p>
+<pre><code class="highlight ruby"><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"CapybaraTest"</span>
+
+  <span class="n">it</span> <span class="s1">'does something else'</span><span class="p">,</span> <span class="ss">driver: :selenium_remote</span> <span class="k">do</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<h2>Tip 4: Ignoring specs</h2>
+
+<p>First, configure your rspec:</p>
+<pre><code class="highlight ruby"><span class="no">RSpec</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">filter_run_excluding</span> <span class="ss">:exclude</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Now, if you want to exclude particular test from the execution, use <strong>exclude</strong> meta-attribute:</p>
+<pre><code class="highlight ruby"><span class="n">describe</span> <span class="no">SomeClass</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"CapybaraTest"</span>
+
+  <span class="n">it</span> <span class="s1">'does something else'</span><span class="p">,</span> <span class="ss">driver: :selenium</span><span class="p">,</span> <span class="ss">exclude: </span><span class="kp">true</span> <span class="k">do</span>
+    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<h2>Tip 5: Headless mode</h2>
+
+<p>You can run capybara in headless mode with the help of  <strong>webkit</strong> driver.</p>
+
+<p>Add gem for webkit driver to your Gemfile:</p>
+<pre><code class="highlight ruby">  <span class="n">gem</span> <span class="s2">"capybara-webkit"</span><span class="p">,</span> <span class="s2">"1.0.0"</span>
+</code></pre>
+
+<p>If you are on OSX, you also need to install <strong>QT library</strong> with homebrew help. It&rsquo;s used for rendering:</p>
+<pre><code class="highlight shell">brew install qt
+</code></pre>
+
+<p>Even though it&rsquo;s headless driver, it still can execute javascript code and it&rsquo;s faster than selenium driver.</p>
+
+<p>Also, comparing to selenium driver, you don&rsquo;t have to run separate selenium server and you don&rsquo;t have to open
+browser window for executing tests.</p>
+
+<p>In order to use it, change current capybara driver:</p>
+<pre><code class="highlight ruby"><span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="ss">:webkit</span>
+</code></pre>
+
+<p>Another example of headless driver is <strong>phantomjs driver</strong>. First, install phantomjs:</p>
+<pre><code class="highlight shell">brew install phantomjs
+</code></pre>
+
+<p>And then, include poltergeist gem into your Gemfile:</p>
+<pre><code class="highlight ruby">  <span class="n">gem</span> <span class="s2">"poltergeist"</span>
+</code></pre>
+
+<p>In order to use it, change current capybara driver:</p>
+<pre><code class="highlight ruby"><span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span> <span class="o">=</span> <span class="ss">:poltergeist</span>
+</code></pre>
+
+<p>In my experience, webkit and poltergeist work in 95% of cases. If you have some problems, you can switch to selenium
+driver - it&rsquo;s the most reliable one.</p>
+
+<h2>Tip 6: Chrome Driver</h2>
+
+<p>If you want to use chrome driver, you need to follow these steps:</p>
+
+<p>Register chrome driver:</p>
+<pre><code class="highlight ruby"><span class="no">Capybara</span><span class="p">.</span><span class="nf">register_driver</span> <span class="ss">:chrome</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="o">|</span>
+  <span class="no">Capybara</span><span class="o">::</span><span class="no">Selenium</span><span class="o">::</span><span class="no">Driver</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="ss">:browser</span> <span class="o">=&gt;</span> <span class="ss">:selenium_chrome</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="no">Capybara</span><span class="p">.</span><span class="nf">javascript_driver</span> <span class="o">=</span> <span class="ss">:chrome</span>
+<span class="k">end</span>
+
+<span class="no">On</span> <span class="no">OSX</span> <span class="n">install</span> <span class="n">chromedriver</span> <span class="n">utility</span> <span class="n">with</span> <span class="n">homebrew</span> <span class="ss">help:
+
+</span><span class="sb">```bash
+brew install chromedriver
+</span></code></pre>
+
+<p>Now you can run your acceptance test with Chrome browser.</p>
+
+<h2>Acceptance Test gem</h2>
+
+<p>All ideas, described in mentioned above tips, were implemented and now available as one ruby gem:
+<a href="https://github.com/shvets/acceptance_test">acceptance test gem</a>.</p>
+
+<p>All you have to do is to include it into yor Gemfile:</p>
+<pre><code class="highlight ruby">  <span class="n">gem</span> <span class="s2">"acceptance_test"</span>
+</code></pre>
+
+<p>It&rsquo;s implemented as rspec&rsquo;s shared context, so you need to do the following in your acceptance test:</p>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'acceptance_test'</span>
+
+<span class="n">describe</span> <span class="s1">'Google Search'</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"AcceptanceTest"</span>
+
+  <span class="n">before</span> <span class="ss">:all</span> <span class="k">do</span>
+    <span class="n">acceptance_test</span><span class="p">.</span><span class="nf">app_host</span> <span class="o">=</span> <span class="s2">"http://www.google.com"</span>
+  <span class="k">end</span>
+
+  <span class="n">before</span> <span class="k">do</span>
+    <span class="nb">puts</span> <span class="s2">"Using driver: </span><span class="si">#{</span><span class="no">Capybara</span><span class="p">.</span><span class="nf">current_driver</span><span class="si">}</span><span class="s2">."</span>
+  <span class="k">end</span>
+
+  <span class="n">it</span> <span class="s2">"uses selenium driver"</span><span class="p">,</span> <span class="ss">driver: :selenium</span><span class="p">,</span> <span class="ss">exclude: </span><span class="kp">false</span> <span class="k">do</span>
+    <span class="n">visit</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
+
+    <span class="n">fill_in</span> <span class="s2">"q"</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s2">"Capybara"</span>
+
+    <span class="n">find</span><span class="p">(</span><span class="s2">"#gbqfbw button"</span><span class="p">).</span><span class="nf">click</span>
+
+    <span class="n">all</span><span class="p">(</span><span class="ss">:xpath</span><span class="p">,</span> <span class="s2">"//li[@class='g']/h3/a"</span><span class="p">).</span><span class="nf">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">a</span><span class="o">[</span><span class="ss">:href</span><span class="o">]</span> <span class="p">}</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>You can specify which tests to exclude and which drivers to use.</p>
+
+<p>As you can see, withing your test you have access to <strong>acceptance_test</strong> variable.</p>
+
+<p>If you want to use external configuration for selenium, use <strong>load_selenium_config</strong> method:</p>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'acceptance_test'</span>
+
+<span class="n">describe</span> <span class="s1">'Google Search'</span> <span class="k">do</span>
+  <span class="n">include_context</span> <span class="s2">"AcceptanceTest"</span>
+
+  <span class="n">before</span> <span class="ss">:all</span> <span class="k">do</span>
+    <span class="n">acceptance_test</span><span class="p">.</span><span class="nf">app_host</span> <span class="o">=</span> <span class="s2">"http://www.google.com"</span>
+
+    <span class="n">selenium_config_file</span> <span class="o">=</span> <span class="s2">"spec/features/selenium.yml"</span>
+    <span class="n">selenium_config_name</span> <span class="o">=</span> <span class="s2">"test"</span>
+
+    <span class="n">acceptance_test</span><span class="p">.</span><span class="nf">load_selenium_config</span>
+      <span class="n">selenium_config_file</span><span class="p">,</span> <span class="n">selenium_config_name</span>
+  <span class="k">end</span>
+
+  <span class="n">it</span> <span class="s2">"do something"</span> <span class="k">do</span>
+    <span class="c1"># ...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p><strong>acceptance_test</strong> gem understand few external variables.</p>
+
+<p><strong>DRIVER</strong> - if you want to overrides drivers for all tests and use only one driver type:</p>
+<pre><code class="highlight shell"><span class="nv">DRIVER</span><span class="o">=</span>selenium rspec your_acceptance_spec.rb
+</code></pre>
+
+<p><strong>APP_HOST</strong> - overrides host to be tested;</p>
+
+<p><strong>WAIT_TIME</strong> - overrides used wait time for long operations;</p>
+
+<p><strong>RUN_SERVER</strong> - default is false; use it if you want to run internal server with capybara:</p>
+<pre><code class="highlight shell"><span class="nv">RUN_SERVER</span><span class="o">=</span><span class="nb">true </span>rspec your_acceptance_spec.rb
+</code></pre>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2014.html">2014</a>
+(4)
+</li>
+<li>
+<a href="../../../2013.html">2013</a>
+(15)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(16)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/lunchy.html">lunchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rvm.html">rvm</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capybara.html">capybara</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/selenium.html">selenium</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webkit.html">webkit</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/phantomjs.html">phantomjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/qt.html">qt</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/acceptance-tests.html">acceptance tests</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/simplecov.html">simplecov</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/ci.html">CI</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jar.html">jar</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rake.html">rake</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/thor.html">thor</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/capistrano.html">capistrano</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/chef.html">chef</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/osx.html">osx</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/mavericks.html">mavericks</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/oracle.html">oracle</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/script_executor.html">script_executor</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/provisioning.html">provisioning</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/macbook.html">macbook</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Configuring Macbook for Ruby/Rails Development with automated scripts</h1>
+
+<h2>Introduction</h2>
+
+<p>There are numerous instructions around the Internet about how to configure your MacBook to work
+with Ruby and Rails. I have my own <a href="configure_macbook_article">blog entry</a> on the same topic.
+The problem with all of them is that they ought to be executed <strong>manually</strong>. But we want to do
+it <strong>automatically</strong> with the help of scripts.</p>
+
+<p>When you try to solve this type of task, you have <strong>&ldquo;the chicken and egg&rdquo; problem</strong> - in order to
+do automatic provision, you have to have pre-installed languages/libraries. You don&rsquo;t want
+to do everything in form of <strong>low-level shell script</strong>, but rather in <strong>high-level language</strong>, like ruby,
+python or node. Unfortunately such high-level scripts use external libraries that need to be downloaded
+and installed first before you can run scripts.</p>
+
+<p>To make it simple and straightforward, we are going to do it <strong>remotely</strong>, e.g. you have one computer
+<strong>with pre-installed language and libraries</strong> and we will install all required programs over <strong>ssh</strong>
+on clean computer. It means that you have to enable ssh access on this computer. This idea is somewhat
+similar to what <a href="capistrano">capistrano</a> or <a href="chef">chef</a> does. Why don&rsquo;t we use them here? Look at
+this <a href="script_executor_article">article</a> for the explanation.</p>
+
+<p>I have built new ruby gem called <a href="osx_provision">osx_provision</a>, that provides automated scripts
+for configuring Macbook. This article is about how to install, configure and use it with your project.</p>
+
+<h2>Install</h2>
+
+<p>Add this line to your application&rsquo;s Gemfile:</p>
+<pre><code class="highlight shell">gem <span class="s1">'osx_provision'</span>
+</code></pre>
+
+<p>And then execute it:</p>
+<pre><code class="highlight shell">bundle
+</code></pre>
+
+<p>Or install it yourself as:</p>
+<pre><code class="highlight shell">gem install osx_provision
+</code></pre>
+
+<h2>Configure</h2>
+
+<p>Before you can start using <strong>osx_provision</strong> gem within your project, you need to do the following:</p>
+
+<ol>
+<li>Create configuration file (e.g. .osx_provision.json) in json format at the root of your project.
+It will define your environment:</li>
+</ol>
+<pre><code class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"node"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ENV['USER']"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"home"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ENV['HOME']"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"port"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"remote"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+
+  </span><span class="s2">"project"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"home"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#{node.home}/work/my_project"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"ruby_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.9.3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gemset"</span><span class="p">:</span><span class="w"> </span><span class="s2">"new_gem"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+
+  </span><span class="s2">"postgres"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"hostname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"localhost"</span><span class="p">,</span><span class="w"> </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"postgres"</span><span class="p">,</span><span class="w"> </span><span class="s2">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"postgres"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"app_user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pg_user"</span><span class="p">,</span><span class="w"> </span><span class="s2">"app_password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pg_password"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"app_schemas"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"my_project_test"</span><span class="p">,</span><span class="w"> </span><span class="s2">"my_project_dev"</span><span class="p">,</span><span class="w"> </span><span class="s2">"my_project_prod"</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Variables defined in this file are used by underlying shell scripts provided by this gem.
+You can also add your own shell script (see details later) - in this case .osx_provision.json
+will have your variables as well.</p>
+
+<p>Next <strong>node</strong> section describes your destination computer where you want to install this provision.
+In this example we do provisioning locally, but it&rsquo;s possible to do it on remote machine, e.g.:</p>
+<pre><code class="highlight json"><span class="w">  </span><span class="err">...</span><span class="w">
+  </span><span class="s2">"node"</span><span class="err">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.1.2"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some_remote_user"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"home"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some_remote_password"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"port"</span><span class="p">:</span><span class="w"> </span><span class="s2">"22"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"remote"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="err">...</span><span class="w">
+</span></code></pre>
+
+<p>In <strong>project</strong> section you keep project-related info, like project <strong>home</strong>, project <strong>gemset name</strong>
+and <strong>ruby version</strong>.</p>
+
+<p>If you need to refer variable form another section, use &ldquo;dot&rdquo; notation, like <strong>#{node.home}</strong>. It is
+possible thanks to another gem called <a href="text-interpolator">text-interpolator</a>.</p>
+
+<p>Last <strong>postgres</strong> section contains information about your postgres server and what database user and
+schemas need to be created. In our example we describe that we want to create <strong>pg_user</strong> with <strong>password</strong>
+and 3 schemas: <strong>my_project_test</strong>, <strong>my_project_dev</strong>, <strong>my_project_prod</strong>. Postgres server
+itself is located at <strong>localhost</strong> address.</p>
+
+<p>You can also add <strong>mysql</strong> section - it&rsquo;s also supported.</p>
+
+<ol>
+<li>Provide execution script</li>
+</ol>
+
+<p>Library itself if written in ruby, but for launching its code you have to use <strong>rake</strong> or <strong>thor</strong> tool.
+Here I provide thor script as an example:</p>
+<pre><code class="highlight ruby"><span class="c1"># thor/osx_install.thor</span>
+
+<span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'/../lib'</span><span class="p">)</span>
+
+<span class="nb">require</span> <span class="s1">'osx_provision'</span>
+
+<span class="k">class</span> <span class="nc">OsxInstall</span> <span class="o">&lt;</span> <span class="no">Thor</span>
+  <span class="vi">@installer</span> <span class="o">=</span> <span class="no">OsxProvision</span><span class="p">.</span><span class="nf">new</span> <span class="nb">self</span><span class="p">,</span> <span class="s2">".osx_provision.json"</span>
+
+  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+    <span class="kp">attr_reader</span> <span class="ss">:installer</span>
+  <span class="k">end</span>
+
+  <span class="n">desc</span> <span class="s2">"all"</span><span class="p">,</span> <span class="s2">"Installs all required packages"</span>
+  <span class="k">def</span> <span class="nf">all</span>
+    <span class="n">invoke</span> <span class="ss">:brew</span> <span class="c1"># execute command defined in shell script</span>
+    <span class="n">invoke</span> <span class="ss">:rvm</span>
+    <span class="n">invoke</span> <span class="ss">:qt</span>
+
+    <span class="n">invoke</span> <span class="ss">:init_launch_agent</span>
+
+    <span class="n">invoke</span> <span class="ss">:postgres</span>
+    <span class="n">invoke</span> <span class="ss">:postgres_restart</span>
+
+    <span class="n">invoke</span> <span class="ss">:jenkins</span>
+    <span class="n">invoke</span> <span class="ss">:jenkins_restart</span>
+
+    <span class="n">invoke</span> <span class="ss">:selenium</span>
+
+    <span class="n">invoke</span> <span class="ss">:ruby</span>
+
+    <span class="n">invoke</span> <span class="ss">:postgres_create_user</span>
+    <span class="n">invoke</span> <span class="ss">:postgres_create_schemas</span>
+  <span class="k">end</span>
+
+  <span class="n">desc</span> <span class="s2">"postgres_create_schemas"</span><span class="p">,</span> <span class="s2">"Initializes postgres schemas"</span>
+  <span class="k">def</span> <span class="nf">postgres_create_schemas</span>
+    <span class="c1"># execute method from  OsxProvision class - we need to read</span>
+    <span class="c1"># schema names from configuration file and create them in the loop</span>
+    <span class="no">OsxInstall</span><span class="p">.</span><span class="nf">installer</span><span class="p">.</span><span class="nf">postgres_create_schemas</span>
+  <span class="k">end</span>
+
+  <span class="n">desc</span> <span class="s2">"postgres_drop_schemas"</span><span class="p">,</span> <span class="s2">"Drops postgres schemas"</span>
+  <span class="k">def</span> <span class="nf">postgres_drop_schemas</span>
+    <span class="no">OsxInstall</span><span class="p">.</span><span class="nf">installer</span><span class="p">.</span><span class="nf">postgres_drop_schemas</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>You can execute separate commands from script directly with <strong>invoke</strong> thor command. Below is fragment
+of such script:</p>
+<pre><code class="highlight shell"><span class="c">#!/bin/sh</span>
+
+<span class="o">[</span>prepare]
+
+mkdir <span class="c">#{home}/Library/LaunchAgents/</span>
+
+<span class="o">[</span>brew]
+
+ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install<span class="k">)</span><span class="s2">"</span>
+
+brew update
+brew doctor
+
+brew tap homebrew/dupes
+brew tap homebrew/versions
+
+<span class="o">[</span>rvm]
+
+<span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/local/bin
+<span class="nv">USER_HOME</span><span class="o">=</span><span class="s2">"#{node.home}"</span>
+
+curl -L https://get.rvm.io | bash
+
+<span class="nb">source</span> <span class="nv">$USER_HOME</span>/.rvm/scripts/rvm
+
+</code></pre>
+
+<p>All available scripts are located <a href="osx_provision_scripts">here</a>. If you need more scripts, you can
+create them locally (e.g. in (thor/osx_provision_scripts_my_project.sh)) and then initialize
+thor script accordingly:</p>
+<pre><code class="highlight ruby"><span class="c1"># thor/my_project_osx_provision_scripts.thor</span>
+<span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+
+<span class="k">class</span> <span class="nc">OsxInstall</span> <span class="o">&lt;</span> <span class="no">Thor</span>
+  <span class="vi">@installer</span> <span class="o">=</span> <span class="no">OsxProvision</span><span class="p">.</span><span class="nf">new</span> <span class="nb">self</span><span class="p">,</span> <span class="s2">".osx_provision.json"</span><span class="p">,</span>
+                 <span class="o">[</span><span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="s2">"my_project_osx_provision_scripts.sh"</span><span class="p">,</span> <span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">))</span><span class="o">]</span>
+  <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Below is the example of such script for running rails server in standard and debug mode:</p>
+<pre><code class="highlight shell"><span class="c">#!/bin/sh</span>
+
+<span class="c">##############################</span>
+<span class="o">[</span>rails]
+
+<span class="nv">USER_HOME</span><span class="o">=</span><span class="s2">"#{node.home}"</span>
+<span class="nv">APP_HOME</span><span class="o">=</span><span class="s2">"#{project.home}"</span>
+
+<span class="nb">cd</span> <span class="nv">$APP_HOME</span>
+
+<span class="nb">source</span> <span class="nv">$USER_HOME</span>/.rvm/scripts/rvm
+
+rvm use <span class="c">#{project.ruby_version}@#{project.gemset} --create</span>
+
+bundle <span class="nb">exec </span>rails s
+
+<span class="c">##############################</span>
+<span class="o">[</span>rails_debug]
+
+<span class="nv">USER_HOME</span><span class="o">=</span><span class="s2">"#{node.home}"</span>
+<span class="nv">APP_HOME</span><span class="o">=</span><span class="s2">"#{project.home}"</span>
+
+<span class="nb">cd</span> <span class="nv">$APP_HOME</span>
+
+<span class="nb">source</span> <span class="nv">$USER_HOME</span>/.rvm/scripts/rvm
+
+rvm use <span class="c">#{project.ruby_version}@#{project.gemset} --create</span>
+
+<span class="nv">RAILS</span><span class="o">=</span><span class="sb">`</span>which rails<span class="sb">`</span>
+
+bundle <span class="nb">exec </span>rdebug-ide --port 1234 --dispatcher-port 26162 -- <span class="nv">$RAILS</span> s
+</code></pre>
+
+<h2>Executing automated scripts</h2>
+
+<p>First, take a look at the list of available thor command:</p>
+<pre><code class="highlight shell">thor -T
+</code></pre>
+
+<p>You can see something like this:</p>
+<pre><code class="highlight shell">osx_install
+-----------
+thor osx_install:all                      <span class="c"># Installs all required packages</span>
+thor osx_install:app                      <span class="c"># Installs app</span>
+thor osx_install:brew                     <span class="c"># brew</span>
+thor osx_install:general                  <span class="c"># Installs general packages</span>
+thor osx_install:git                      <span class="c"># git</span>
+thor osx_install:jenkins                  <span class="c"># jenkins</span>
+thor osx_install:jenkins_restart          <span class="c"># jenkins_restart</span>
+thor osx_install:mysql                    <span class="c"># mysql</span>
+thor osx_install:mysql_create_schema      <span class="c"># mysql_create_schema</span>
+thor osx_install:mysql_create_schemas     <span class="c"># Initializes mysql schemas</span>
+thor osx_install:mysql_create_user        <span class="c"># mysql_create_user</span>
+thor osx_install:mysql_drop_schema        <span class="c"># mysql_drop_schema</span>
+thor osx_install:mysql_drop_schemas       <span class="c"># Drops mysql schemas</span>
+thor osx_install:mysql_drop_user          <span class="c"># mysql_drop_user</span>
+thor osx_install:mysql_restart            <span class="c"># mysql_restart</span>
+thor osx_install:npm                      <span class="c"># npm</span>
+thor osx_install:package_installed        <span class="c"># package_installed</span>
+thor osx_install:postgres                 <span class="c"># postgres</span>
+thor osx_install:postgres_create_schema   <span class="c"># postgres_create_schema</span>
+thor osx_install:postgres_create_schemas  <span class="c"># Initializes postgres schemas</span>
+thor osx_install:postgres_create_user     <span class="c"># postgres_create_user</span>
+thor osx_install:postgres_drop_schema     <span class="c"># postgres_drop_schema</span>
+thor osx_install:postgres_drop_schemas    <span class="c"># Drops postgres schemas</span>
+thor osx_install:postgres_drop_user       <span class="c"># postgres_drop_user</span>
+thor osx_install:postgres_restart         <span class="c"># postgres_restart</span>
+thor osx_install:postgres_start           <span class="c"># postgres_start</span>
+thor osx_install:postgres_stop            <span class="c"># postgres_stop</span>
+thor osx_install:prepare                  <span class="c"># prepare</span>
+thor osx_install:qt                       <span class="c"># qt</span>
+thor osx_install:ruby                     <span class="c"># ruby</span>
+thor osx_install:rvm                      <span class="c"># rvm</span>
+thor osx_install:selenium                 <span class="c"># selenium</span>
+thor osx_install:selenium_restart         <span class="c"># selenium_restart</span>
+thor osx_install:service_started          <span class="c"># service_started</span>
+thor osx_install:svn                      <span class="c"># svn</span>
+</code></pre>
+
+<p>With this scripts you can execute them separately and all together:</p>
+<pre><code class="highlight shell">thor osx_install:brew
+thor osx_install:rvm
+thor osx_install:postgres
+thor osx_install:brew
+
+thor osx_install:all
+</code></pre>
+
+<p>To configure postgres only run this sequence:</p>
+<pre><code class="highlight shell">thor osx_install:postgres
+thor osx_install:postgres_create_user
+thor osx_install:postgres_create_schemas
+thor osx_install:postgres_start
+</code></pre>
+
+<p>Enjoy the gem and let me know if other useful command can be added to it.</p>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2014.html">2014</a>
+(4)
+</li>
+<li>
+<a href="../../../2013.html">2013</a>
+(15)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(16)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/lunchy.html">lunchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rvm.html">rvm</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capybara.html">capybara</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/selenium.html">selenium</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webkit.html">webkit</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/phantomjs.html">phantomjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/qt.html">qt</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/acceptance-tests.html">acceptance tests</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/simplecov.html">simplecov</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/ci.html">CI</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jar.html">jar</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rake.html">rake</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/thor.html">thor</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/capistrano.html">capistrano</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/chef.html">chef</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/osx.html">osx</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/mavericks.html">mavericks</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/oracle.html">oracle</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/script_executor.html">script_executor</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/provisioning.html">provisioning</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/macbook.html">macbook</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>

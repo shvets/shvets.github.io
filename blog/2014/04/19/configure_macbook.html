@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Configure Macbook for Ruby/Rails Development</h1>
+
+<h2>Install UI applications:</h2>
+
+<ul>
+<li>Iterm2</li>
+<li>Firefox</li>
+<li>DropBox</li>
+<li>Skype</li>
+<li>RubyMine</li>
+<li>Moroshka File Manager</li>
+<li>MU Commander</li>
+<li>VLC</li>
+</ul>
+
+<h2>Install XCode and XCode Tools</h2>
+
+<ul>
+<li><p>Install XCode from AppStore.</p></li>
+<li><p>Install XCode Command Line Tools from inside XCode.</p></li>
+<li><p>Read and agree to Xcode license from command line:</p></li>
+</ul>
+<pre><code class="highlight shell">sudo xcodebuild -license
+</code></pre>
+
+<h2>Install Homebrew</h2>
+
+<p>It is package manager for MacOS written in ruby:</p>
+<pre><code class="highlight shell">ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSkL raw.github.com/mxcl/homebrew/go<span class="k">)</span><span class="s2">"</span>
+
+brew update
+brew tap homebrew/dupes
+brew tap homebrew/versions
+
+brew doctor
+</code></pre>
+
+<h2>Install command line tools</h2>
+
+<p>Install base tools:</p>
+<pre><code class="highlight shell">brew install wget
+brew install mc
+brew install git
+</code></pre>
+
+<p><strong>Qt</strong> package is required by Capybara acceptance tests.</p>
+<pre><code class="highlight shell">brew install qt
+</code></pre>
+
+<p><strong>Node</strong> is used for jasmine javascript unit test and for various javascript tasks.
+It will install <strong>node package manager</strong> (<strong>npm</strong>) as well:</p>
+<pre><code class="highlight shell">brew install node
+</code></pre>
+
+<p>Test it:</p>
+<pre><code class="highlight shell">node -v
+npm -v
+</code></pre>
+
+<h2>Install Sublime 3 Text Editor</h2>
+
+<p>Download it from <a href="http://www.sublimetext.com">http://www.sublimetext.com</a>.</p>
+
+<p>Create convenient link:</p>
+<pre><code class="highlight shell">ln -s /Applications/Sublime<span class="se">\ </span>Text.app/Contents/SharedSupport/bin/subl <span class="nv">$HOME</span>/bin/subl
+</code></pre>
+
+<h2>Install RVM:</h2>
+<pre><code class="highlight shell"><span class="se">\c</span>url -sSL https://get.rvm.io | bash
+</code></pre>
+
+<p>Then run this command:</p>
+<pre><code class="highlight shell"><span class="nb">source</span> ~/.rvm/scripts/rvm
+</code></pre>
+
+<p>or reopen in another terminal window.</p>
+
+<p>Install required packages:</p>
+<pre><code class="highlight shell">rvm requirements
+</code></pre>
+
+<h2>Install various ruby versions:</h2>
+<pre><code class="highlight shell">rvm install 1.9.3
+
+rvm install 2.1.1
+
+rvm install jruby
+</code></pre>
+
+<h2>Update .bash_profile</h2>
+
+<p>Add to <strong>~/.bash_profile</strong> the following lines:</p>
+<pre><code class="highlight shell"><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/opt/local/bin:<span class="nv">$PATH</span>
+
+<span class="nb">export </span><span class="nv">EDITOR</span><span class="o">=</span><span class="s1">'subl -w'</span>
+<span class="nb">export </span><span class="nv">PS1</span><span class="o">=</span><span class="s1">'${LOGNAME}@$(hostname): [$(~/.rvm/bin/rvm-prompt)] (\w):\n&gt; '</span>
+
+<span class="o">[[</span> -r <span class="nv">$rvm_path</span>/scripts/completion <span class="o">]]</span> <span class="o">&amp;&amp;</span> . <span class="nv">$rvm_path</span>/scripts/completion
+
+rvm use 1.9.3
+ruby -v
+</code></pre>
+
+<h2>Install postgres server:</h2>
+
+<p>Install it:</p>
+<pre><code class="highlight shell">brew install postgres
+</code></pre>
+
+<p>Start it:</p>
+<pre><code class="highlight shell">mkdir -p ~/Library/LaunchAgents
+sudo chown <span class="nv">$USER</span> ~/Library/LaunchAgents
+
+cp /usr/local/Cellar/postgresql/9.3.3/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
+
+launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+</code></pre>
+
+<p>Initialize database:</p>
+<pre><code class="highlight shell">initdb /usr/local/var/postgres -E utf8
+</code></pre>
+
+<p>Create users and databases from command line:</p>
+<pre><code class="highlight shell">createuser -s -d -r rails_app_tmpl
+
+createdb -U rails_app_tmpl rails_app_tmpl_dev
+createdb -U rails_app_tmpl rails_app_tmpl_test
+createdb -U rails_app_tmpl rails_app_tmpl_prod
+
+rake db:migrate
+</code></pre>
+
+<p>or with psql tool:</p>
+<pre><code class="highlight shell">psql -c <span class="s1">'create user rails_app_tmp;'</span> -s -d -r
+
+psql -c <span class="s1">'create database rails_app_tmpl_dev;'</span> -U rails_app_tmpl -h 127.0.0.1
+psql -c <span class="s1">'create database rails_app_tmpl_test;'</span> -U rails_app_tmpl -h 127.0.0.1
+psql -c <span class="s1">'create database rails_app_tmpl_prod;'</span> -U rails_app_tmpl -h 127.0.0.1
+</code></pre>
+
+<h2>Install mysql server:</h2>
+
+<p>Install it:</p>
+<pre><code class="highlight shell">brew install mysql
+</code></pre>
+
+<p>Start it:</p>
+<pre><code class="highlight shell">mkdir -p ~/Library/LaunchAgents
+sudo chown <span class="nv">$USER</span> ~/Library/LaunchAgents
+
+ln -sfv /usr/local/opt/mysql/<span class="k">*</span>.plist ~/Library/LaunchAgents
+
+launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
+</code></pre>
+
+<p>Set up mysql root password:</p>
+<pre><code class="highlight shell">mysqladmin -u root password <span class="s1">'root'</span>
+</code></pre>
+
+<p>Create users and databases from command line:</p>
+<pre><code class="highlight shell">--mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"flush  priveleges;"</span>
+--mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"drop user 'rails_app_tmpl'@'localhost';"</span>
+
+mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';"</span>
+
+mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"grant all privileges on *.* to 'rails_app_tmpl'@'localhost' identified by 'rails_app_tmpl' with grant option;"</span>
+mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"grant all privileges on *.* to 'rails_app_tmpl'@'%' identified by 'rails_app_tmpl' with grant option;"</span>
+
+mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"create database rails_app_tmpl_dev;"</span>
+mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"create database rails_app_tmpl_test;"</span>
+mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"create database rails_app_tmpl_prod;"</span>
+</code></pre>
+
+<p>or with mysql tool interactively:</p>
+<pre><code class="highlight shell">mysql -u root -p<span class="s1">'root'</span>
+
+  CREATE USER <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> IDENTIFIED BY <span class="s1">'rails_app_tmpl'</span>;
+
+  grant all privileges on <span class="k">*</span>.<span class="k">*</span> to <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> identified by <span class="s1">'rails_app_tmpl'</span> with grant option;
+  grant all privileges on <span class="k">*</span>.<span class="k">*</span> to <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'%'</span> identified by <span class="s1">'rails_app_tmpl'</span> with grant option;
+
+  create database rails_app_tmpl_dev;
+  create database rails_app_tmpl_test;
+  create database rails_app_tmpl_prod;
+
+  <span class="nb">exit</span>;
+<span class="sb">```</span>bash
+
+<span class="c">## Install selenium standalone server</span>
+
+<span class="sb">```</span>bash
+brew install selenium-server-standalone
+</code></pre>
+
+<p>Standalone selenium server is implemented as launchd agent.</p>
+
+<p>To have launchd start selenium-server-standalone at login, create soft link:</p>
+<pre><code class="highlight shell">ln -sfv /usr/local/opt/selenium-server-standalone/<span class="k">*</span>.plist ~/Library/LaunchAgents
+</code></pre>
+
+<p>Then load selenium-server-standalone agent:</p>
+<pre><code class="highlight shell">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
+</code></pre>
+
+<p>It will run selenium server on port 4444.</p>
+
+<p>If you don&rsquo;t want to use agent, use java directly:</p>
+<pre><code class="highlight shell">java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
+</code></pre>
+
+<h2>Create or load your project</h2>
+
+<ul>
+<li><p>Create folder with ruby and/or rails.</p></li>
+<li><p>Create <strong>Gemfile</strong> with all dependent ruby gems.</p></li>
+<li><p>Create <strong>package.json</strong> with all dependent javascript nodes.</p></li>
+</ul>
+
+<p>*Install ruby gems and js nodes:</p>
+<pre><code class="highlight shell">bundle install
+
+npm install
+</code></pre>
+
+<p>Other instructions on Mac configuration are available here <a href="link1">here</a> and <a href="link2">here</a>.</p>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2014.html">2014</a>
+(4)
+</li>
+<li>
+<a href="../../../2013.html">2013</a>
+(15)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(16)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/lunchy.html">lunchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rvm.html">rvm</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capybara.html">capybara</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/selenium.html">selenium</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webkit.html">webkit</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/phantomjs.html">phantomjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/qt.html">qt</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/acceptance-tests.html">acceptance tests</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/simplecov.html">simplecov</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/ci.html">CI</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jar.html">jar</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rake.html">rake</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/thor.html">thor</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/capistrano.html">capistrano</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/chef.html">chef</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/osx.html">osx</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/mavericks.html">mavericks</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/oracle.html">oracle</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/script_executor.html">script_executor</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/provisioning.html">provisioning</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/macbook.html">macbook</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>

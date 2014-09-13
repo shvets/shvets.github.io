@@ -5,16 +5,16 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2014-08-22T20:00:00-04:00</updated>
+  <updated>2014-09-12T20:00:00-04:00</updated>
   <author>
     <name>Blog Author</name>
   </author>
   <entry>
     <title>Configure Macbook for Ruby/Rails Development</title>
-    <link rel="alternate" href="/blog/2014/08/23/configuring_macbook_with_scripts.html"/>
-    <id>/blog/2014/08/23/configuring_macbook_with_scripts.html</id>
-    <published>2014-08-22T20:00:00-04:00</published>
-    <updated>2014-08-22T20:00:00-04:00</updated>
+    <link rel="alternate" href="/blog/2014/09/13/configuring_macbook_with_scripts.html"/>
+    <id>/blog/2014/09/13/configuring_macbook_with_scripts.html</id>
+    <published>2014-09-12T20:00:00-04:00</published>
+    <updated>2014-09-12T20:00:00-04:00</updated>
     <author>
       <name>Article Author</name>
     </author>

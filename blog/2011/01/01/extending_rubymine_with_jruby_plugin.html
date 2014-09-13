@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h2>Extending RubyMine with JRuby script - How to use HAML/SASS converter from inside IDE (JRuby script-plugin)</h2>
+
+<h1>How it works</h1>
+
+<p>RubyMine already has JRuby library as part of IDE (see <strong>${RUBYMINE_INSTALLATION/lib/jruby-complete.jar}</strong> file).</p>
+
+<p>It also has few scripts that extend standard functionality of IDE, you can see them under
+<strong>&lsquo;File|Settings|Extension&rsquo;</strong> path or here: <strong>${RUBYMINE_INSTALLATION/rb/*.rb}</strong>. It could be considered as convenient
+platform with easy extensions as ruby-plugins.</p>
+
+<p>Unfortunately, if your script depends on other gems and list of dependencies is big, it becomes very difficult to
+install new plugins. You have to detect and install all dependent gems into RubyMine installation.</p>
+
+<p>In this article I will introduce another way of how to extend RubyMine functionality. We&rsquo;ll have separate
+installation of JRuby that will provide us with gems repository.</p>
+
+<p>First of all, you have to install <a title="RVM Home" href="https://rvm.io">rvm</a>. This is a tool for installing different ruby versions under Mac/Unix
+platforms. Once you have <strong>rvm</strong> installed, install jruby and then use it:</p>
+<pre><code class="highlight shell">rvm install jruby-1.5.6
+rvm use jruby
+</code></pre>
+
+<p>Check, if you have correct ruby version:</p>
+<pre><code class="highlight shell">ruby -v
+</code></pre>
+
+<p>It should be <strong>jruby 1.5.6</strong>.</p>
+
+<p>Once we have <strong>jruby</strong> installed, we can develop new RubyMine plugin. We&rsquo;ll discuss step-by-step what needs to be done.</p>
+
+<h3>Step 1: Defining dependencies</h3>
+
+<p>We need to document dependencies for our plugin in <strong>Gemfile</strong>:</p>
+<pre><code class="highlight ruby"><span class="n">source</span> <span class="s2">"http://rubygems.org"</span>
+
+<span class="n">gem</span> <span class="s2">"haml"</span><span class="p">,</span> <span class="s2">"3.0.24"</span>
+<span class="n">gem</span> <span class="s2">"hpricot"</span><span class="p">,</span> <span class="s2">"0.8.3"</span>
+<span class="n">gem</span> <span class="s2">"abstract"</span><span class="p">,</span> <span class="s2">"1.0.0"</span>
+<span class="n">gem</span> <span class="s2">"erubis"</span><span class="p">,</span> <span class="s2">"2.6.6"</span>
+<span class="n">gem</span> <span class="s2">"sexp_processor"</span><span class="p">,</span> <span class="s2">"3.0.5"</span>
+<span class="n">gem</span> <span class="s2">"ruby_parser"</span><span class="p">,</span> <span class="s2">"2.0.5"</span>
+</code></pre>
+
+<p>Now you can install dependencies with one command:</p>
+<pre><code class="highlight ruby"><span class="n">bundle</span> <span class="n">install</span>
+</code></pre>
+
+<h3>Step 2: Loading dependencies</h3>
+
+<p>The following method loads all required gems into memory:</p>
+<pre><code class="highlight ruby"><span class="kp">include</span> <span class="no">Java</span>
+
+<span class="k">def</span> <span class="nf">load_required_gems</span>
+  <span class="n">jruby_home</span> <span class="o">=</span> <span class="s2">"</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">'HOME'</span><span class="o">]</span><span class="si">}</span><span class="s2">/.rvm/gems/jruby-1.5.6@haml-sass-converters"</span>
+
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems"</span>
+
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/haml-3.0.24/lib"</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/hpricot-0.8.3-java/lib"</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/abstract-1.0.0/lib"</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/erubis-2.6.6/lib"</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/sexp_processor-3.0.5/lib"</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">jruby_home</span><span class="si">}</span><span class="s2">/gems/ruby_parser-2.0.5/lib"</span>
+<span class="k">end</span>
+
+<span class="n">load_required_gems</span>
+</code></pre>
+
+<h3>Step 3: &ldquo;Requiring&rdquo; libraries</h3>
+
+<p>Now we need to <strong>require</strong> libraries for working with <strong>HAML/SASS</strong> and <strong>RubyMine</strong>:</p>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s2">"haml"</span>
+<span class="nb">require</span> <span class="s2">"haml/html"</span>
+<span class="nb">require</span> <span class="s2">"sass/css"</span>
+
+<span class="nb">require</span> <span class="s1">'default_scripts_groups'</span>
+<span class="nb">require</span> <span class="s1">'editor_action_helper'</span>
+<span class="nb">require</span> <span class="s1">'action_group_helper'</span>
+</code></pre>
+
+<h3>Step 4: Building conversion logic</h3>
+
+<p>We encapsulate all conversion logic into <strong>Converter</strong> class. We need to integrate logic from HAML/SASS library
+with RubyMine API. Because this class will be executed in RubyMine environment, we have access to <strong>editor</strong> object:</p>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">Converter</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">convert_selection</span> <span class="n">editor</span>
+    <span class="k">if</span> <span class="n">editor</span><span class="p">.</span><span class="nf">has_selection?</span>
+      <span class="n">text</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="nf">selection</span>
+      <span class="n">s_start</span> <span class="o">=</span> <span class="n">editor</span><span class="p">.</span><span class="nf">selection_start</span>
+
+      <span class="n">changed_text</span> <span class="o">=</span> <span class="k">yield</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+      <span class="n">editor</span><span class="p">.</span><span class="nf">replace_selection_text</span><span class="p">(</span><span class="n">changed_text</span><span class="p">)</span>
+
+      <span class="c1"># restore selection</span>
+      <span class="n">editor</span><span class="p">.</span><span class="nf">select</span><span class="p">(</span><span class="n">s_start</span><span class="p">,</span> <span class="n">s_start</span> <span class="o">+</span> <span class="n">changed_text</span><span class="p">.</span><span class="nf">length</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">convert_to_haml</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="no">Haml</span><span class="o">::</span><span class="no">HTML</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="ss">:erb</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">:xhtml</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">).</span><span class="nf">render</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">convert_to_sass</span><span class="p">(</span><span class="n">css</span><span class="p">)</span>
+    <span class="no">Sass</span><span class="o">::</span><span class="no">CSS</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">css</span><span class="p">).</span><span class="nf">render</span><span class="p">(</span><span class="ss">:sass</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">convert_to_scss</span><span class="p">(</span><span class="n">css</span><span class="p">)</span>
+    <span class="no">Sass</span><span class="o">::</span><span class="no">CSS</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">css</span><span class="p">).</span><span class="nf">render</span><span class="p">(</span><span class="ss">:scss</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<h3>Step 5: Registering editor actions</h3>
+
+<p>Now we need to register conversion methods of <strong>Converter</strong> class as editor actions for HTML/HAML conversions:</p>
+<pre><code class="highlight ruby"><span class="n">register_editor_action</span> <span class="s2">"html_to_haml"</span><span class="p">,</span>
+                       <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Convert Html to Haml"</span><span class="p">,</span>
+                       <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">"Converts Html content to Haml content."</span><span class="p">,</span>
+                       <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">"EditorPopupMenu"</span><span class="p">,</span>
+                       <span class="ss">:enable_in_modal_context</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">editor</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+  <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_selection</span> <span class="n">editor</span> <span class="k">do</span> <span class="o">|</span><span class="n">text</span><span class="o">|</span>
+    <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_to_haml</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">register_editor_action</span> <span class="s2">"html_to_haml_erb"</span><span class="p">,</span>
+                       <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Convert Html to Haml"</span><span class="p">,</span>
+                       <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">"Converts Html content to Haml content."</span><span class="p">,</span>
+                       <span class="c1">#:shortcut =&gt; "control shift PERIOD",</span>
+                       <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">"ScriptsErb"</span><span class="p">,</span>
+                       <span class="ss">:file_type</span> <span class="o">=&gt;</span> <span class="s2">"RHTML"</span> <span class="k">do</span> <span class="o">|</span><span class="n">editor</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+  <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_selection</span> <span class="n">editor</span> <span class="k">do</span> <span class="o">|</span><span class="n">text</span><span class="o">|</span>
+    <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_to_haml</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>For executing CSS/SASS conversions we will create new &ldquo;Css&rdquo; group under &lsquo;Tools|Extensions&rsquo; menu item.
+We also need to register <strong>Converter</strong> class methods as editor actions for CSS/SASS conversions:</p>
+<pre><code class="highlight ruby"><span class="n">register_action_group</span> <span class="s2">"ScriptsCss"</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Css"</span>
+
+<span class="n">register_editor_action</span> <span class="s2">"css_to_sass"</span><span class="p">,</span>
+                       <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Convert CSS to SASS"</span><span class="p">,</span>
+                       <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">"Converts CSS content to SASS content."</span><span class="p">,</span>
+                       <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">"EditorPopupMenu"</span><span class="p">,</span>
+                       <span class="ss">:enable_in_modal_context</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">editor</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+  <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_selection</span> <span class="n">editor</span> <span class="k">do</span> <span class="o">|</span><span class="n">text</span><span class="o">|</span>
+    <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_to_sass</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">register_editor_action</span> <span class="s2">"css_to_sass_css"</span><span class="p">,</span>
+                       <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s2">"Convert CSS to SASS"</span><span class="p">,</span>
+                       <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s2">"Converts CSS content to SASS content."</span><span class="p">,</span>
+                       <span class="c1">#:shortcut =&gt; "control shift PERIOD",</span>
+                       <span class="ss">:group</span> <span class="o">=&gt;</span> <span class="s2">"ScriptsCss"</span><span class="p">,</span>
+                       <span class="ss">:file_type</span> <span class="o">=&gt;</span> <span class="s2">"CSS"</span> <span class="k">do</span> <span class="o">|</span><span class="n">editor</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+  <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_selection</span> <span class="n">editor</span> <span class="k">do</span> <span class="o">|</span><span class="n">text</span><span class="o">|</span>
+    <span class="no">Converter</span><span class="p">.</span><span class="nf">convert_to_sass</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<h1>Install plugin</h1>
+
+<p>Above is th explanation of how plugin works. If you just want to use plugin, install
+<a title="Haml/SASS Converters" href="http://github.com/shvets/haml-sass-converters">haml-sass-converters</a> gem into <strong>haml-sass-converters</strong> gemset:</p>
+<pre><code class="highlight shell">rvm use jruby@haml-sass-converters --create
+gem i haml-sass-converters
+</code></pre>
+
+<p>Run install script in your project&rsquo;s root (or some other location) in order to copy the script:</p>
+<pre><code class="highlight shell"><span class="nb">cd</span> &lt;your-project-root&gt;
+haml-sass-converters-install
+</code></pre>
+
+<p>New <strong>&ldquo;scripts&rdquo;</strong> folder will be created with <strong>&ldquo;converters.rb&rdquo;</strong> as a plugin.</p>
+
+<p>Go to <strong>&ldquo;File|Setting|Extensions&rdquo;</strong> and add &ldquo;scripts&rdquo; folder as new <strong>&ldquo;Script Folder&rdquo;</strong>.</p>
+
+<p>Restart <strong>RubyMine</strong>. After restarting IDE will have new <strong>&ldquo;Css&rdquo;</strong> group under <strong>&ldquo;Tools|Extensions&rdquo;</strong> and new actions:</p>
+
+<ul>
+<li>convert Html to Haml;</li>
+<li>convert CSS to SASS;</li>
+</ul>
+
+<p>You can reach them from <strong>&ldquo;Tools|Extensions&rdquo;</strong> in main menu or from context popup menu inside the editor.</p>
+
+<h1>How to use plugin</h1>
+
+<p>Select some content inside erb or css file. Right click inside the editor and select appropriate action.</p>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2013), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2014.html">2014</a>
+(4)
+</li>
+<li>
+<a href="../../../2013.html">2013</a>
+(15)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(16)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/lunchy.html">lunchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rvm.html">rvm</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capybara.html">capybara</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/selenium.html">selenium</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webkit.html">webkit</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/phantomjs.html">phantomjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/qt.html">qt</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/acceptance-tests.html">acceptance tests</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/simplecov.html">simplecov</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/ci.html">CI</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jar.html">jar</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rake.html">rake</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/thor.html">thor</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/capistrano.html">capistrano</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/chef.html">chef</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/osx.html">osx</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/mavericks.html">mavericks</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/oracle.html">oracle</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/script_executor.html">script_executor</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/provisioning.html">provisioning</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/macbook.html">macbook</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>
