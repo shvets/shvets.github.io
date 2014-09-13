@@ -27,7 +27,7 @@ with Ruby and Rails. I have my own &lt;a href="http://shvets.github.io/blog/2014
 The problem with all of them is that they ought to be executed &lt;strong&gt;manually&lt;/strong&gt;. But we want to do
 it &lt;strong&gt;automatically&lt;/strong&gt; with the help of scripts.&lt;/p&gt;
 
-&lt;p&gt;When you try to solve this type of task, you have &lt;strong&gt;&amp;ldquo;the chicken and egg&amp;rdquo; problem&lt;/strong&gt; - in order to
+&lt;p&gt;When you try to solve this type of problem, you have &lt;strong&gt;&amp;ldquo;the chicken and the egg&amp;rdquo; problem&lt;/strong&gt; - in order to
 do automatic provision, you have to have pre-installed languages/libraries. You don&amp;rsquo;t want
 to do everything in form of &lt;strong&gt;low-level shell script&lt;/strong&gt;, but rather in &lt;strong&gt;high-level language&lt;/strong&gt;, like ruby,
 python or node. Unfortunately such high-level scripts use external libraries that need to be downloaded
@@ -35,12 +35,13 @@ and installed first before you can run scripts.&lt;/p&gt;
 
 &lt;p&gt;To make it simple and straightforward, we are going to do it &lt;strong&gt;remotely&lt;/strong&gt;, e.g. you have one computer
 &lt;strong&gt;with pre-installed language and libraries&lt;/strong&gt; and we will install all required programs over &lt;strong&gt;ssh&lt;/strong&gt;
-on clean computer. It means that you have to enable ssh access on this computer. This idea is somewhat
+on clean computer. It means that &lt;strong&gt;you have to enable ssh access&lt;/strong&gt; on this computer. This idea is somewhat
 similar to what &lt;a href="http://capistranorb.com"&gt;capistrano&lt;/a&gt; or &lt;a href="https://github.com/opscode/chef"&gt;chef&lt;/a&gt; does. Why don&amp;rsquo;t we use them here? Look at
 this &lt;a href="http://shvets.github.io/blog/2013/12/21/script_executor.html"&gt;article&lt;/a&gt; for the explanation.&lt;/p&gt;
 
 &lt;p&gt;I have built new ruby gem called &lt;a href="https://github.com/shvets/osx_provision"&gt;osx_provision&lt;/a&gt;, that provides automated scripts
-for configuring Macbook. This article is about how to install, configure and use it with your project.&lt;/p&gt;
+for configuring Macbook. This article is about how to install, configure and use it with your project.
+Look at my previous article if you need to understand how to do it manually.&lt;/p&gt;
 
 &lt;h2&gt;Install&lt;/h2&gt;
 
@@ -60,10 +61,10 @@ for configuring Macbook. This article is about how to install, configure and use
 
 &lt;p&gt;Before you can start using &lt;strong&gt;osx_provision&lt;/strong&gt; gem within your project, you need to do the following:&lt;/p&gt;
 
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;Create configuration file (e.g. .osx_provision.json) in json format at the root of your project.
 It will define your environment:&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"127.0.0.1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
@@ -108,7 +109,7 @@ In this example we do provisioning locally, but it&amp;rsquo;s possible to do it
 and &lt;strong&gt;ruby version&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;If you need to refer variable form another section, use &amp;ldquo;dot&amp;rdquo; notation, like &lt;strong&gt;#{node.home}&lt;/strong&gt;. It is
-possible thanks to another gem called &lt;a href="https://github.com/shvets/text-interpolator"&gt;text-interpolator&lt;/a&gt;t[ext-interpolator].&lt;/p&gt;
+possible thanks to another gem called &lt;a href="https://github.com/shvets/text-interpolator"&gt;text-interpolator&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Last &lt;strong&gt;postgres&lt;/strong&gt; section contains information about your postgres server and what database user and
 schemas need to be created. In our example we describe that we want to create &lt;strong&gt;pg_user&lt;/strong&gt; with &lt;strong&gt;password&lt;/strong&gt;
@@ -117,9 +118,9 @@ itself is located at &lt;strong&gt;localhost&lt;/strong&gt; address.&lt;/p&gt;
 
 &lt;p&gt;You can also add &lt;strong&gt;mysql&lt;/strong&gt; section - it&amp;rsquo;s also supported.&lt;/p&gt;
 
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;Provide execution script&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Library itself if written in ruby, but for launching its code you have to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt; tool.
 Here I provide thor script as an example:&lt;/p&gt;

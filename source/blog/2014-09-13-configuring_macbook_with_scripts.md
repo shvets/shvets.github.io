@@ -13,7 +13,7 @@ with Ruby and Rails. I have my own [blog entry][configure_macbook_article] on th
 The problem with all of them is that they ought to be executed **manually**. But we want to do
 it **automatically** with the help of scripts.
 
-When you try to solve this type of task, you have **"the chicken and egg" problem** - in order to
+When you try to solve this type of problem, you have **"the chicken and the egg" problem** - in order to
 do automatic provision, you have to have pre-installed languages/libraries. You don't want
 to do everything in form of **low-level shell script**, but rather in **high-level language**, like ruby,
 python or node. Unfortunately such high-level scripts use external libraries that need to be downloaded
@@ -21,12 +21,13 @@ and installed first before you can run scripts.
 
 To make it simple and straightforward, we are going to do it **remotely**, e.g. you have one computer
 **with pre-installed language and libraries** and we will install all required programs over **ssh**
-on clean computer. It means that you have to enable ssh access on this computer. This idea is somewhat
+on clean computer. It means that **you have to enable ssh access** on this computer. This idea is somewhat
 similar to what [capistrano][capistrano] or [chef][chef] does. Why don't we use them here? Look at
 this [article][script_executor_article] for the explanation.
 
 I have built new ruby gem called [osx_provision][osx_provision], that provides automated scripts
 for configuring Macbook. This article is about how to install, configure and use it with your project.
+Look at my previous article if you need to understand how to do it manually.
 
 ## Install
 
@@ -52,7 +53,7 @@ gem install osx_provision
 
 Before you can start using **osx_provision** gem within your project, you need to do the following:
 
-1. Create configuration file (e.g. .osx\_provision.json) in json format at the root of your project.
+* Create configuration file (e.g. .osx\_provision.json) in json format at the root of your project.
 It will define your environment:
 
 ```json
@@ -102,7 +103,7 @@ In **project** section you keep project-related info, like project **home**, pro
 and **ruby version**.
 
 If you need to refer variable form another section, use "dot" notation, like **#{node.home}**. It is
-possible thanks to another gem called [text-interpolator]t[ext-interpolator].
+possible thanks to another gem called [text-interpolator][text-interpolator].
 
 Last **postgres** section contains information about your postgres server and what database user and
 schemas need to be created. In our example we describe that we want to create **pg_user** with **password**
@@ -111,8 +112,7 @@ itself is located at **localhost** address.
 
 You can also add **mysql** section - it's also supported.
 
-
-2. Provide execution script
+* Provide execution script
 
 Library itself if written in ruby, but for launching its code you have to use **rake** or **thor** tool.
 Here I provide thor script as an example:

@@ -43,7 +43,7 @@ with Ruby and Rails. I have my own <a href="http://shvets.github.io/blog/2014/04
 The problem with all of them is that they ought to be executed <strong>manually</strong>. But we want to do
 it <strong>automatically</strong> with the help of scripts.</p>
 
-<p>When you try to solve this type of task, you have <strong>&ldquo;the chicken and egg&rdquo; problem</strong> - in order to
+<p>When you try to solve this type of problem, you have <strong>&ldquo;the chicken and the egg&rdquo; problem</strong> - in order to
 do automatic provision, you have to have pre-installed languages/libraries. You don&rsquo;t want
 to do everything in form of <strong>low-level shell script</strong>, but rather in <strong>high-level language</strong>, like ruby,
 python or node. Unfortunately such high-level scripts use external libraries that need to be downloaded
@@ -51,12 +51,13 @@ and installed first before you can run scripts.</p>
 
 <p>To make it simple and straightforward, we are going to do it <strong>remotely</strong>, e.g. you have one computer
 <strong>with pre-installed language and libraries</strong> and we will install all required programs over <strong>ssh</strong>
-on clean computer. It means that you have to enable ssh access on this computer. This idea is somewhat
+on clean computer. It means that <strong>you have to enable ssh access</strong> on this computer. This idea is somewhat
 similar to what <a href="http://capistranorb.com">capistrano</a> or <a href="https://github.com/opscode/chef">chef</a> does. Why don&rsquo;t we use them here? Look at
 this <a href="http://shvets.github.io/blog/2013/12/21/script_executor.html">article</a> for the explanation.</p>
 
 <p>I have built new ruby gem called <a href="https://github.com/shvets/osx_provision">osx_provision</a>, that provides automated scripts
-for configuring Macbook. This article is about how to install, configure and use it with your project.</p>
+for configuring Macbook. This article is about how to install, configure and use it with your project.
+Look at my previous article if you need to understand how to do it manually.</p>
 
 <h2>Install</h2>
 
@@ -76,10 +77,10 @@ for configuring Macbook. This article is about how to install, configure and use
 
 <p>Before you can start using <strong>osx_provision</strong> gem within your project, you need to do the following:</p>
 
-<ol>
+<ul>
 <li>Create configuration file (e.g. .osx_provision.json) in json format at the root of your project.
 It will define your environment:</li>
-</ol>
+</ul>
 <pre><code class="highlight json"><span class="p">{</span><span class="w">
   </span><span class="s2">"node"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
@@ -124,7 +125,7 @@ In this example we do provisioning locally, but it&rsquo;s possible to do it on 
 and <strong>ruby version</strong>.</p>
 
 <p>If you need to refer variable form another section, use &ldquo;dot&rdquo; notation, like <strong>#{node.home}</strong>. It is
-possible thanks to another gem called <a href="https://github.com/shvets/text-interpolator">text-interpolator</a>t[ext-interpolator].</p>
+possible thanks to another gem called <a href="https://github.com/shvets/text-interpolator">text-interpolator</a>.</p>
 
 <p>Last <strong>postgres</strong> section contains information about your postgres server and what database user and
 schemas need to be created. In our example we describe that we want to create <strong>pg_user</strong> with <strong>password</strong>
@@ -133,9 +134,9 @@ itself is located at <strong>localhost</strong> address.</p>
 
 <p>You can also add <strong>mysql</strong> section - it&rsquo;s also supported.</p>
 
-<ol>
+<ul>
 <li>Provide execution script</li>
-</ol>
+</ul>
 
 <p>Library itself if written in ruby, but for launching its code you have to use <strong>rake</strong> or <strong>thor</strong> tool.
 Here I provide thor script as an example:</p>
