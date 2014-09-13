@@ -5,5 +5,8 @@
   <component name="SvnBranchConfigurationManager">
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
+  <component name="UnicodeBrowser">
+    <option name="fontName" value="Menlo" />
+  </component>
 </project>
 

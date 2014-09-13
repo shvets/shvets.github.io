@@ -5,12 +5,316 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2014-05-30T20:00:00-04:00</updated>
+  <updated>2014-08-22T20:00:00-04:00</updated>
   <author>
     <name>Blog Author</name>
   </author>
   <entry>
-    <title>Oracle Instant Client Installer</title>
+    <title>Configure Macbook for Ruby/Rails Development</title>
+    <link rel="alternate" href="/blog/2014/08/23/configuring_macbook_with_scripts.html"/>
+    <id>/blog/2014/08/23/configuring_macbook_with_scripts.html</id>
+    <published>2014-08-22T20:00:00-04:00</published>
+    <updated>2014-08-22T20:00:00-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Configuring Macbook for Ruby/Rails Development with automated scripts&lt;/h1&gt;
+
+&lt;h2&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;There are numerous instructions around the Internet about how to configure your MacBook to work
+with Ruby and Rails. I have my own &lt;a href="configure_macbook_article"&gt;blog entry&lt;/a&gt; on the same topic.
+The problem with all of them is that they ought to be executed &lt;strong&gt;manually&lt;/strong&gt;. But we want to do
+it &lt;strong&gt;automatically&lt;/strong&gt; with the help of scripts.&lt;/p&gt;
+
+&lt;p&gt;When you try to solve this type of task, you have &lt;strong&gt;&amp;ldquo;the chicken and egg&amp;rdquo; problem&lt;/strong&gt; - in order to
+do automatic provision, you have to have pre-installed languages/libraries. You don&amp;rsquo;t want
+to do everything in form of &lt;strong&gt;low-level shell script&lt;/strong&gt;, but rather in &lt;strong&gt;high-level language&lt;/strong&gt;, like ruby,
+python or node. Unfortunately such high-level scripts use external libraries that need to be downloaded
+and installed first before you can run scripts.&lt;/p&gt;
+
+&lt;p&gt;To make it simple and straightforward, we are going to do it &lt;strong&gt;remotely&lt;/strong&gt;, e.g. you have one computer
+&lt;strong&gt;with pre-installed language and libraries&lt;/strong&gt; and we will install all required programs over &lt;strong&gt;ssh&lt;/strong&gt;
+on clean computer. It means that you have to enable ssh access on this computer. This idea is somewhat
+similar to what &lt;a href="capistrano"&gt;capistrano&lt;/a&gt; or &lt;a href="chef"&gt;chef&lt;/a&gt; does. Why don&amp;rsquo;t we use them here? Look at
+this &lt;a href="script_executor_article"&gt;article&lt;/a&gt; for the explanation.&lt;/p&gt;
+
+&lt;p&gt;I have built new ruby gem called &lt;a href="osx_provision"&gt;osx_provision&lt;/a&gt;, that provides automated scripts
+for configuring Macbook. This article is about how to install, configure and use it with your project.&lt;/p&gt;
+
+&lt;h2&gt;Install&lt;/h2&gt;
+
+&lt;p&gt;Add this line to your application&amp;rsquo;s Gemfile:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;gem &lt;span class="s1"&gt;'osx_provision'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then execute it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Or install it yourself as:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;gem install osx_provision
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Configure&lt;/h2&gt;
+
+&lt;p&gt;Before you can start using &lt;strong&gt;osx_provision&lt;/strong&gt; gem within your project, you need to do the following:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create configuration file (e.g. .osx_provision.json) in json format at the root of your project.
+It will define your environment:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"127.0.0.1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['USER']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['HOME']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;""&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"remote"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"project"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}/work/my_project"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"ruby_version"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"1.9.3"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"gemset"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"new_gem"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"postgres"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"hostname"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"localhost"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"postgres"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"password"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"postgres"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"app_user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"pg_user"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"app_password"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"pg_password"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"app_schemas"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"my_project_test"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"my_project_dev"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"my_project_prod"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Variables defined in this file are used by underlying shell scripts provided by this gem.
+You can also add your own shell script (see details later) - in this case .osx_provision.json
+will have your variables as well.&lt;/p&gt;
+
+&lt;p&gt;Next &lt;strong&gt;node&lt;/strong&gt; section describes your destination computer where you want to install this provision.
+In this example we do provisioning locally, but it&amp;rsquo;s possible to do it on remote machine, e.g.:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="err"&gt;...&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"192.168.1.2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"some_remote_user"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"some_remote_password"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"22"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"remote"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="err"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="err"&gt;...&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In &lt;strong&gt;project&lt;/strong&gt; section you keep project-related info, like project &lt;strong&gt;home&lt;/strong&gt;, project &lt;strong&gt;gemset name&lt;/strong&gt;
+and &lt;strong&gt;ruby version&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you need to refer variable form another section, use &amp;ldquo;dot&amp;rdquo; notation, like &lt;strong&gt;#{node.home}&lt;/strong&gt;. It is
+possible thanks to another gem called &lt;a href="text-interpolator"&gt;text-interpolator&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Last &lt;strong&gt;postgres&lt;/strong&gt; section contains information about your postgres server and what database user and
+schemas need to be created. In our example we describe that we want to create &lt;strong&gt;pg_user&lt;/strong&gt; with &lt;strong&gt;password&lt;/strong&gt;
+and 3 schemas: &lt;strong&gt;my_project_test&lt;/strong&gt;, &lt;strong&gt;my_project_dev&lt;/strong&gt;, &lt;strong&gt;my_project_prod&lt;/strong&gt;. Postgres server
+itself is located at &lt;strong&gt;localhost&lt;/strong&gt; address.&lt;/p&gt;
+
+&lt;p&gt;You can also add &lt;strong&gt;mysql&lt;/strong&gt; section - it&amp;rsquo;s also supported.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Provide execution script&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Library itself if written in ruby, but for launching its code you have to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt; tool.
+Here I provide thor script as an example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# thor/osx_install.thor&lt;/span&gt;
+
+&lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;'/../lib'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'osx_provision'&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OsxInstall&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
+  &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;OsxProvision&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".osx_provision.json"&lt;/span&gt;
+
+  &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;
+    &lt;span class="kp"&gt;attr_reader&lt;/span&gt; &lt;span class="ss"&gt;:installer&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"all"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Installs all required packages"&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;all&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:brew&lt;/span&gt; &lt;span class="c1"&gt;# execute command defined in shell script&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:rvm&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:qt&lt;/span&gt;
+
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:init_launch_agent&lt;/span&gt;
+
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:postgres&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:postgres_restart&lt;/span&gt;
+
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:jenkins&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:jenkins_restart&lt;/span&gt;
+
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:selenium&lt;/span&gt;
+
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:ruby&lt;/span&gt;
+
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:postgres_create_user&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:postgres_create_schemas&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"postgres_create_schemas"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Initializes postgres schemas"&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;postgres_create_schemas&lt;/span&gt;
+    &lt;span class="c1"&gt;# execute method from  OsxProvision class - we need to read&lt;/span&gt;
+    &lt;span class="c1"&gt;# schema names from configuration file and create them in the loop&lt;/span&gt;
+    &lt;span class="no"&gt;OsxInstall&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;postgres_create_schemas&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"postgres_drop_schemas"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Drops postgres schemas"&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;postgres_drop_schemas&lt;/span&gt;
+    &lt;span class="no"&gt;OsxInstall&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;postgres_drop_schemas&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can execute separate commands from script directly with &lt;strong&gt;invoke&lt;/strong&gt; thor command. Below is fragment
+of such script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class="o"&gt;[&lt;/span&gt;prepare]
+
+mkdir &lt;span class="c"&gt;#{home}/Library/LaunchAgents/&lt;/span&gt;
+
+&lt;span class="o"&gt;[&lt;/span&gt;brew]
+
+ruby -e &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
+
+brew update
+brew doctor
+
+brew tap homebrew/dupes
+brew tap homebrew/versions
+
+&lt;span class="o"&gt;[&lt;/span&gt;rvm]
+
+&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;:/usr/local/bin
+&lt;span class="nv"&gt;USER_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}"&lt;/span&gt;
+
+curl -L https://get.rvm.io | bash
+
+&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="nv"&gt;$USER_HOME&lt;/span&gt;/.rvm/scripts/rvm
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;All available scripts are located &lt;a href="osx_provision_scripts"&gt;here&lt;/a&gt;. If you need more scripts, you can
+create them locally (e.g. in (thor/osx_provision_scripts_my_project.sh)) and then initialize
+thor script accordingly:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# thor/my_project_osx_provision_scripts.thor&lt;/span&gt;
+&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OsxInstall&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
+  &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;OsxProvision&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".osx_provision.json"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                 &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"my_project_osx_provision_scripts.sh"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Below is the example of such script for running rails server in standard and debug mode:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class="c"&gt;##############################&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;rails]
+
+&lt;span class="nv"&gt;USER_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}"&lt;/span&gt;
+&lt;span class="nv"&gt;APP_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{project.home}"&lt;/span&gt;
+
+&lt;span class="nb"&gt;cd&lt;/span&gt; &lt;span class="nv"&gt;$APP_HOME&lt;/span&gt;
+
+&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="nv"&gt;$USER_HOME&lt;/span&gt;/.rvm/scripts/rvm
+
+rvm use &lt;span class="c"&gt;#{project.ruby_version}@#{project.gemset} --create&lt;/span&gt;
+
+bundle &lt;span class="nb"&gt;exec &lt;/span&gt;rails s
+
+&lt;span class="c"&gt;##############################&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;rails_debug]
+
+&lt;span class="nv"&gt;USER_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}"&lt;/span&gt;
+&lt;span class="nv"&gt;APP_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{project.home}"&lt;/span&gt;
+
+&lt;span class="nb"&gt;cd&lt;/span&gt; &lt;span class="nv"&gt;$APP_HOME&lt;/span&gt;
+
+&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="nv"&gt;$USER_HOME&lt;/span&gt;/.rvm/scripts/rvm
+
+rvm use &lt;span class="c"&gt;#{project.ruby_version}@#{project.gemset} --create&lt;/span&gt;
+
+&lt;span class="nv"&gt;RAILS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="sb"&gt;`&lt;/span&gt;which rails&lt;span class="sb"&gt;`&lt;/span&gt;
+
+bundle &lt;span class="nb"&gt;exec &lt;/span&gt;rdebug-ide --port 1234 --dispatcher-port 26162 -- &lt;span class="nv"&gt;$RAILS&lt;/span&gt; s
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Executing automated scripts&lt;/h2&gt;
+
+&lt;p&gt;First, take a look at the list of available thor command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor -T
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see something like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;osx_install
+-----------
+thor osx_install:all                      &lt;span class="c"&gt;# Installs all required packages&lt;/span&gt;
+thor osx_install:app                      &lt;span class="c"&gt;# Installs app&lt;/span&gt;
+thor osx_install:brew                     &lt;span class="c"&gt;# brew&lt;/span&gt;
+thor osx_install:general                  &lt;span class="c"&gt;# Installs general packages&lt;/span&gt;
+thor osx_install:git                      &lt;span class="c"&gt;# git&lt;/span&gt;
+thor osx_install:jenkins                  &lt;span class="c"&gt;# jenkins&lt;/span&gt;
+thor osx_install:jenkins_restart          &lt;span class="c"&gt;# jenkins_restart&lt;/span&gt;
+thor osx_install:mysql                    &lt;span class="c"&gt;# mysql&lt;/span&gt;
+thor osx_install:mysql_create_schema      &lt;span class="c"&gt;# mysql_create_schema&lt;/span&gt;
+thor osx_install:mysql_create_schemas     &lt;span class="c"&gt;# Initializes mysql schemas&lt;/span&gt;
+thor osx_install:mysql_create_user        &lt;span class="c"&gt;# mysql_create_user&lt;/span&gt;
+thor osx_install:mysql_drop_schema        &lt;span class="c"&gt;# mysql_drop_schema&lt;/span&gt;
+thor osx_install:mysql_drop_schemas       &lt;span class="c"&gt;# Drops mysql schemas&lt;/span&gt;
+thor osx_install:mysql_drop_user          &lt;span class="c"&gt;# mysql_drop_user&lt;/span&gt;
+thor osx_install:mysql_restart            &lt;span class="c"&gt;# mysql_restart&lt;/span&gt;
+thor osx_install:npm                      &lt;span class="c"&gt;# npm&lt;/span&gt;
+thor osx_install:package_installed        &lt;span class="c"&gt;# package_installed&lt;/span&gt;
+thor osx_install:postgres                 &lt;span class="c"&gt;# postgres&lt;/span&gt;
+thor osx_install:postgres_create_schema   &lt;span class="c"&gt;# postgres_create_schema&lt;/span&gt;
+thor osx_install:postgres_create_schemas  &lt;span class="c"&gt;# Initializes postgres schemas&lt;/span&gt;
+thor osx_install:postgres_create_user     &lt;span class="c"&gt;# postgres_create_user&lt;/span&gt;
+thor osx_install:postgres_drop_schema     &lt;span class="c"&gt;# postgres_drop_schema&lt;/span&gt;
+thor osx_install:postgres_drop_schemas    &lt;span class="c"&gt;# Drops postgres schemas&lt;/span&gt;
+thor osx_install:postgres_drop_user       &lt;span class="c"&gt;# postgres_drop_user&lt;/span&gt;
+thor osx_install:postgres_restart         &lt;span class="c"&gt;# postgres_restart&lt;/span&gt;
+thor osx_install:postgres_start           &lt;span class="c"&gt;# postgres_start&lt;/span&gt;
+thor osx_install:postgres_stop            &lt;span class="c"&gt;# postgres_stop&lt;/span&gt;
+thor osx_install:prepare                  &lt;span class="c"&gt;# prepare&lt;/span&gt;
+thor osx_install:qt                       &lt;span class="c"&gt;# qt&lt;/span&gt;
+thor osx_install:ruby                     &lt;span class="c"&gt;# ruby&lt;/span&gt;
+thor osx_install:rvm                      &lt;span class="c"&gt;# rvm&lt;/span&gt;
+thor osx_install:selenium                 &lt;span class="c"&gt;# selenium&lt;/span&gt;
+thor osx_install:selenium_restart         &lt;span class="c"&gt;# selenium_restart&lt;/span&gt;
+thor osx_install:service_started          &lt;span class="c"&gt;# service_started&lt;/span&gt;
+thor osx_install:svn                      &lt;span class="c"&gt;# svn&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;With this scripts you can execute them separately and all together:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor osx_install:brew
+thor osx_install:rvm
+thor osx_install:postgres
+thor osx_install:brew
+
+thor osx_install:all
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To configure postgres only run this sequence:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor osx_install:postgres
+thor osx_install:postgres_create_user
+thor osx_install:postgres_create_schemas
+thor osx_install:postgres_start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Enjoy the gem and let me know if other useful command can be added to it.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Oracle Instant Client Provision</title>
     <link rel="alternate" href="/blog/2014/05/31/install_oracle_client.html"/>
     <id>/blog/2014/05/31/install_oracle_client.html</id>
     <published>2014-05-30T20:00:00-04:00</published>
@@ -18,14 +322,21 @@
     <author>
       <name>Article Author</name>
     </author>
-    <content type="html">&lt;h1&gt;Oracle Instant Client Installer - thor-based tasks for facilitating oracle client installation&lt;/h1&gt;
+    <content type="html">&lt;h1&gt;Oracle Instant Client Provision - thor-based tasks for facilitating Oracle Instant Client installation&lt;/h1&gt;
 
 &lt;h2&gt;Introduction&lt;/h2&gt;
 
-&lt;p&gt;Installing database driver for Oracle (activerecord-oracle_enhanced-adapter) is not a simple process.
-First, you need to install Oracle Instant Client. Second, you have to install ruby wrapper around Instant Client
-(ruby-oci8 gem). On some platforms second step requires compiling source code. Only after that
-you can install oracle database driver. Here we discuss how to do it for OSX 10 operating system.&lt;/p&gt;
+&lt;p&gt;Installing database driver for Oracle (activerecord-oracle_enhanced-adapter) is not a simple process.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, you need to install Oracle Instant Client.&lt;/li&gt;
+&lt;li&gt;Second, you have to install ruby wrapper around Instant Client (ruby-oci8 gem). On some platforms it
+requires compiling source code.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Only after that you can install oracle database driver.&lt;/p&gt;
+
+&lt;p&gt;Here we discuss how to do it for OSX 10 operating system.&lt;/p&gt;
 
 &lt;h2&gt;Create new gem group&lt;/h2&gt;
 
@@ -58,54 +369,69 @@ installation packages on &lt;strong&gt;&lt;a href="http://www.oracle.com"&gt;www
 
 &lt;h2&gt;Configuration file&lt;/h2&gt;
 
-&lt;p&gt;Create configuration file for the installation (.oracle_client_installer.json) in the root of your project.
+&lt;p&gt;Create configuration file for the installation (.oracle_client_provision.json) in the root of your project.
 It will define where you have downloaded files and some other parameters:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"127.0.0.1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['USER']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['HOME']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;"ruby_home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['MY_RUBY_HOME']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;""&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"remote"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
 
+  &lt;/span&gt;&lt;span class="s2"&gt;"project"&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}/my_project_with_oracle_driver"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"ruby_home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['MY_RUBY_HOME']"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"instant_client"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"src_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{project.home}/downloads"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"dest_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{oracle.oracle_base}/instantclient_11_2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+
+    &lt;/span&gt;&lt;span class="s2"&gt;"basic_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{instant_client.src_dir}/instantclient-basic-macos.x64-#{oracle.oracle_version}.zip"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"sdk_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{instant_client.src_dir}/instantclient-sdk-macos.x64-#{oracle.oracle_version}.zip"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"sqlplus_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{instant_client.src_dir}/instantclient-sqlplus-macos.x64-#{oracle.oracle_version}.zip"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"oracle"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"oracle_base"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"/usr/local/oracle"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"oracle_version"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"11.2.0.4.0"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"ruby_oci_version"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"2.1.7"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;"tns_admin_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{oracle_base}/network/admin"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"tns_admin_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{oracle.oracle_base}/network/admin"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
 
-  &lt;/span&gt;&lt;span class="s2"&gt;"src_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"downloads"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;"dest_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{oracle_base}/instantclient_11_2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-
-  &lt;/span&gt;&lt;span class="s2"&gt;"basic_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{src_dir}/instantclient-basic-macos.x64-#{oracle_version}.zip"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;"sdk_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{src_dir}/instantclient-sdk-macos.x64-#{oracle_version}.zip"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;"sqlplus_zip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{src_dir}/instantclient-sqlplus-macos.x64-#{oracle_version}.zip"&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;We are going to run ruby from &lt;strong&gt;ruby_home&lt;/strong&gt; on behalf of the &lt;strong&gt;user&lt;/strong&gt; and we will use specific versions
-of &lt;strong&gt;oracle&lt;/strong&gt; client and &lt;strong&gt;ruby-oci8&lt;/strong&gt; gem. We also specify where to look for installation packages (src_dir)
-and where to install Instant Client (dest_dir). Also, as you can see, we are using &lt;strong&gt;macos&lt;/strong&gt; as a platform
+&lt;p&gt;We are going to run ruby from &lt;strong&gt;project.ruby_home&lt;/strong&gt; on behalf of the &lt;strong&gt;node.user&lt;/strong&gt; and we will use specific versions
+of &lt;strong&gt;oracle&lt;/strong&gt; client and &lt;strong&gt;ruby-oci8&lt;/strong&gt; gem. We also specify where to look for installation packages (instant&lt;em&gt;client.src\&lt;/em&gt;dir)
+and where to install Instant Client (instant&lt;em&gt;client.dest\&lt;/em&gt;dir). Also, as you can see, we are using &lt;strong&gt;macos&lt;/strong&gt; as a platform
 and &lt;strong&gt;x64&lt;/strong&gt; as an architecture.&lt;/p&gt;
 
 &lt;h2&gt;Provide execution script&lt;/h2&gt;
 
-&lt;p&gt;Library itself if written in ruby, but for launching it&amp;rsquo;s code you have to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt;. I provide
-thor script here as an example:&lt;/p&gt;
+&lt;p&gt;Library itself if written in ruby, but for launching its code you have to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt;. Here I provide
+thor script as an example:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'thor'&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'oracle_client_installer'&lt;/span&gt;
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'oracle_client_provision'&lt;/span&gt;
 
 &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OracleClient&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;initialize&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;params&lt;/span&gt;
-    &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;OracleClientInstaller&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="s2"&gt;".oracle_client_installer.json"&lt;/span&gt;
+  &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;OracleClientProvision&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".oracle_client_provision.json"&lt;/span&gt;
 
-    &lt;span class="k"&gt;super&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;params&lt;/span&gt;
+  &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;
+    &lt;span class="kp"&gt;attr_reader&lt;/span&gt; &lt;span class="ss"&gt;:installer&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 
   &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"install"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Installs Oracle Instant Client"&lt;/span&gt;
   &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;install&lt;/span&gt;
-    &lt;span class="vi"&gt;@installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;install&lt;/span&gt;
+    &lt;span class="no"&gt;OracleClient&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;install&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 
   &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"uninstall"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Uninstalls Oracle Instant Client"&lt;/span&gt;
   &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;uninstall&lt;/span&gt;
-    &lt;span class="vi"&gt;@installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uninstall&lt;/span&gt;
+    &lt;span class="no"&gt;OracleClient&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uninstall&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 
   &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"verify"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Verifies Oracle Instant Client connection"&lt;/span&gt;
@@ -115,7 +441,7 @@ thor script here as an example:&lt;/p&gt;
     &lt;span class="n"&gt;schema&lt;/span&gt;   &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"ORCL"&lt;/span&gt;
     &lt;span class="n"&gt;sql&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"SELECT * FROM emp where rownum &amp;lt;= 10"&lt;/span&gt;
 
-    &lt;span class="vi"&gt;@installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;verify&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="no"&gt;OracleClient&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;installer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;verify&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
       &lt;span class="s2"&gt;"require 'oci8'; OCI8.new('&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;','&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;','&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;schema&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;').exec('&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;sql&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;') do |r| puts r.join(','); end"&lt;/span&gt;
     &lt;span class="k"&gt;end&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
@@ -130,9 +456,9 @@ thor script here as an example:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;After execution all Instant Client packages (basic, sdk and sqlplus) will be installed at the right location
-(dest_dir) on your computer.&lt;/p&gt;
+(instant&lt;em&gt;client.dest\&lt;/em&gt;dir) on your computer.&lt;/p&gt;
 
-&lt;h2&gt;Again: install gems for the project (now with ruby-oci8 gem)&lt;/h2&gt;
+&lt;h2&gt;Again: install gems for the project, now with ruby-oci8 gem&lt;/h2&gt;
 
 &lt;p&gt;Remove .bundle folder in order to include &amp;ldquo;oracle&amp;rdquo; group into bundle execution and
 then run bundler with &amp;ldquo;oracle&amp;rdquo; group:&lt;/p&gt;
@@ -172,7 +498,7 @@ this location via &lt;strong&gt;tns_admin_dir&lt;/strong&gt; property inside you
 
 &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:oracle&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
   &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'activerecord-oracle_enhanced-adapter'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'1.5.3'&lt;/span&gt;
+  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'activerecord-oracle_enhanced-adapter'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'1.5.5'&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -962,59 +1288,6 @@ thor utils:create_tables
 thor utils:drop_tables
 thor utils:show_jenkins jenkins_server.your_domain.com
 &lt;/code&gt;&lt;/pre&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Creating gems-wrappers for executable java jars</title>
-    <link rel="alternate" href="/blog/2013/11/23/creating_gems_wrappers_for_executable_java_jars.html"/>
-    <id>/blog/2013/11/23/creating_gems_wrappers_for_executable_java_jars.html</id>
-    <published>2013-11-22T19:00:00-05:00</published>
-    <updated>2013-11-22T19:00:00-05:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h1&gt;Creating gems-wrappers for executable java jars&lt;/h1&gt;
-
-&lt;p&gt;Today I want to share little trick that lets us to use ruby distribution system (&lt;strong&gt;rubygems&lt;/strong&gt;)
-as delivery mechanism for java libraries/executables. The idea was borrowed
-from &lt;a href="https://github.com/redcar/redcar"&gt;redcar project&lt;/a&gt; which in turn was borrowed/extracted from
-&lt;a href="https://github.com/jashkenas/ruby-processing"&gt;ruby-processing gem&lt;/a&gt;. I am trying to extract important logic into separate
-&lt;a href="https://github.com/shvets/jar_wrapper"&gt;jar_wrapper gem&lt;/a&gt;, so it can be easily used in any ruby project.&lt;/p&gt;
-
-&lt;p&gt;Install jar_wrapper with this command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight plaintext"&gt;$ gem install jar_wrapper
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now you can use it in your program directly or create gem for delivering java jar file(s).
-For example, this code will upload remote file:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'jar_wrapper'&lt;/span&gt;
-
-&lt;span class="n"&gt;wrapper&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;JarWrapper&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Runner&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;java_opts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"-Xmx1024m"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"-Xss1024k"&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;
-
-&lt;span class="c1"&gt;# install jar file from source URL into target file:&lt;/span&gt;
-
-&lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"http://selenium.googlecode.com/files/selenium-server-2.37.0.zip"&lt;/span&gt;
-&lt;span class="n"&gt;target&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"selenium-server.zip"&lt;/span&gt;
-
-&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;install&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can aldo execute jar file (a.k.a. &amp;ldquo;java -jar jar_file.jar&amp;rdquo;)&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;jar_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"jar_file.jar"&lt;/span&gt;
-
-&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Or you can execute java jar file by specifying &lt;strong&gt;main class&lt;/strong&gt; (a.k.a. &amp;ldquo;java -cp some&lt;em&gt;class&lt;/em&gt;path main_class&amp;rdquo;):&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;classpath&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"some_class_path"&lt;/span&gt;
-&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;main_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"main_class"&lt;/span&gt;
-
-&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If you need more details on how to use it for practical gem, visit &lt;a href="https://github.com/shvets/selenium"&gt;selenium gem&lt;/a&gt;.
-This gem downloads and create launcher for standalone selenium server.&lt;/p&gt;
 </content>
   </entry>
 </feed>
