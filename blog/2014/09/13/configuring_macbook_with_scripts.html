@@ -39,7 +39,7 @@
 <h2>Introduction</h2>
 
 <p>There are numerous instructions around the Internet about how to configure your MacBook to work
-with Ruby and Rails. I have my own <a href="configure_macbook_article">blog entry</a> on the same topic.
+with Ruby and Rails. I have my own <a href="http://shvets.github.io/blog/2014/04/19/configure_macbook.html">blog entry</a> on the same topic.
 The problem with all of them is that they ought to be executed <strong>manually</strong>. But we want to do
 it <strong>automatically</strong> with the help of scripts.</p>
 
@@ -52,10 +52,10 @@ and installed first before you can run scripts.</p>
 <p>To make it simple and straightforward, we are going to do it <strong>remotely</strong>, e.g. you have one computer
 <strong>with pre-installed language and libraries</strong> and we will install all required programs over <strong>ssh</strong>
 on clean computer. It means that you have to enable ssh access on this computer. This idea is somewhat
-similar to what <a href="capistrano">capistrano</a> or <a href="chef">chef</a> does. Why don&rsquo;t we use them here? Look at
-this <a href="script_executor_article">article</a> for the explanation.</p>
+similar to what <a href="http://capistranorb.com">capistrano</a> or <a href="https://github.com/opscode/chef">chef</a> does. Why don&rsquo;t we use them here? Look at
+this <a href="http://shvets.github.io/blog/2013/12/21/script_executor.html">article</a> for the explanation.</p>
 
-<p>I have built new ruby gem called <a href="osx_provision">osx_provision</a>, that provides automated scripts
+<p>I have built new ruby gem called <a href="https://github.com/shvets/osx_provision">osx_provision</a>, that provides automated scripts
 for configuring Macbook. This article is about how to install, configure and use it with your project.</p>
 
 <h2>Install</h2>
@@ -124,7 +124,7 @@ In this example we do provisioning locally, but it&rsquo;s possible to do it on 
 and <strong>ruby version</strong>.</p>
 
 <p>If you need to refer variable form another section, use &ldquo;dot&rdquo; notation, like <strong>#{node.home}</strong>. It is
-possible thanks to another gem called <a href="text-interpolator">text-interpolator</a>.</p>
+possible thanks to another gem called <a href="https://github.com/shvets/text-interpolator">text-interpolator</a>t[ext-interpolator].</p>
 
 <p>Last <strong>postgres</strong> section contains information about your postgres server and what database user and
 schemas need to be created. In our example we describe that we want to create <strong>pg_user</strong> with <strong>password</strong>
@@ -217,7 +217,7 @@ curl -L https://get.rvm.io | bash
 
 </code></pre>
 
-<p>All available scripts are located <a href="osx_provision_scripts">here</a>. If you need more scripts, you can
+<p>All available scripts are located <a href="https://github.com/shvets/osx_provision/blob/master/lib/osx_provision/osx_provision_scripts.sh">here</a>. If you need more scripts, you can
 create them locally (e.g. in (thor/osx_provision_scripts_my_project.sh)) and then initialize
 thor script accordingly:</p>
 <pre><code class="highlight ruby"><span class="c1"># thor/my_project_osx_provision_scripts.thor</span>

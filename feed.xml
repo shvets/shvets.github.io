@@ -23,7 +23,7 @@
 &lt;h2&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;There are numerous instructions around the Internet about how to configure your MacBook to work
-with Ruby and Rails. I have my own &lt;a href="configure_macbook_article"&gt;blog entry&lt;/a&gt; on the same topic.
+with Ruby and Rails. I have my own &lt;a href="http://shvets.github.io/blog/2014/04/19/configure_macbook.html"&gt;blog entry&lt;/a&gt; on the same topic.
 The problem with all of them is that they ought to be executed &lt;strong&gt;manually&lt;/strong&gt;. But we want to do
 it &lt;strong&gt;automatically&lt;/strong&gt; with the help of scripts.&lt;/p&gt;
 
@@ -36,10 +36,10 @@ and installed first before you can run scripts.&lt;/p&gt;
 &lt;p&gt;To make it simple and straightforward, we are going to do it &lt;strong&gt;remotely&lt;/strong&gt;, e.g. you have one computer
 &lt;strong&gt;with pre-installed language and libraries&lt;/strong&gt; and we will install all required programs over &lt;strong&gt;ssh&lt;/strong&gt;
 on clean computer. It means that you have to enable ssh access on this computer. This idea is somewhat
-similar to what &lt;a href="capistrano"&gt;capistrano&lt;/a&gt; or &lt;a href="chef"&gt;chef&lt;/a&gt; does. Why don&amp;rsquo;t we use them here? Look at
-this &lt;a href="script_executor_article"&gt;article&lt;/a&gt; for the explanation.&lt;/p&gt;
+similar to what &lt;a href="http://capistranorb.com"&gt;capistrano&lt;/a&gt; or &lt;a href="https://github.com/opscode/chef"&gt;chef&lt;/a&gt; does. Why don&amp;rsquo;t we use them here? Look at
+this &lt;a href="http://shvets.github.io/blog/2013/12/21/script_executor.html"&gt;article&lt;/a&gt; for the explanation.&lt;/p&gt;
 
-&lt;p&gt;I have built new ruby gem called &lt;a href="osx_provision"&gt;osx_provision&lt;/a&gt;, that provides automated scripts
+&lt;p&gt;I have built new ruby gem called &lt;a href="https://github.com/shvets/osx_provision"&gt;osx_provision&lt;/a&gt;, that provides automated scripts
 for configuring Macbook. This article is about how to install, configure and use it with your project.&lt;/p&gt;
 
 &lt;h2&gt;Install&lt;/h2&gt;
@@ -108,7 +108,7 @@ In this example we do provisioning locally, but it&amp;rsquo;s possible to do it
 and &lt;strong&gt;ruby version&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;If you need to refer variable form another section, use &amp;ldquo;dot&amp;rdquo; notation, like &lt;strong&gt;#{node.home}&lt;/strong&gt;. It is
-possible thanks to another gem called &lt;a href="text-interpolator"&gt;text-interpolator&lt;/a&gt;.&lt;/p&gt;
+possible thanks to another gem called &lt;a href="https://github.com/shvets/text-interpolator"&gt;text-interpolator&lt;/a&gt;t[ext-interpolator].&lt;/p&gt;
 
 &lt;p&gt;Last &lt;strong&gt;postgres&lt;/strong&gt; section contains information about your postgres server and what database user and
 schemas need to be created. In our example we describe that we want to create &lt;strong&gt;pg_user&lt;/strong&gt; with &lt;strong&gt;password&lt;/strong&gt;
@@ -201,7 +201,7 @@ curl -L https://get.rvm.io | bash
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;All available scripts are located &lt;a href="osx_provision_scripts"&gt;here&lt;/a&gt;. If you need more scripts, you can
+&lt;p&gt;All available scripts are located &lt;a href="https://github.com/shvets/osx_provision/blob/master/lib/osx_provision/osx_provision_scripts.sh"&gt;here&lt;/a&gt;. If you need more scripts, you can
 create them locally (e.g. in (thor/osx_provision_scripts_my_project.sh)) and then initialize
 thor script accordingly:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# thor/my_project_osx_provision_scripts.thor&lt;/span&gt;

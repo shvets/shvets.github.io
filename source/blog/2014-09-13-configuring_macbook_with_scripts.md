@@ -9,7 +9,7 @@ tags: ruby, osx, mavericks, provisioning, macbook
 ## Introduction
 
 There are numerous instructions around the Internet about how to configure your MacBook to work
-with Ruby and Rails. I have my own [blog entry](configure_macbook_article) on the same topic.
+with Ruby and Rails. I have my own [blog entry][configure_macbook_article] on the same topic.
 The problem with all of them is that they ought to be executed **manually**. But we want to do
 it **automatically** with the help of scripts.
 
@@ -22,10 +22,10 @@ and installed first before you can run scripts.
 To make it simple and straightforward, we are going to do it **remotely**, e.g. you have one computer
 **with pre-installed language and libraries** and we will install all required programs over **ssh**
 on clean computer. It means that you have to enable ssh access on this computer. This idea is somewhat
-similar to what [capistrano](capistrano) or [chef](chef) does. Why don't we use them here? Look at
-this [article](script_executor_article) for the explanation.
+similar to what [capistrano][capistrano] or [chef][chef] does. Why don't we use them here? Look at
+this [article][script_executor_article] for the explanation.
 
-I have built new ruby gem called [osx_provision](osx_provision), that provides automated scripts
+I have built new ruby gem called [osx_provision][osx_provision], that provides automated scripts
 for configuring Macbook. This article is about how to install, configure and use it with your project.
 
 ## Install
@@ -102,7 +102,7 @@ In **project** section you keep project-related info, like project **home**, pro
 and **ruby version**.
 
 If you need to refer variable form another section, use "dot" notation, like **#{node.home}**. It is
-possible thanks to another gem called [text-interpolator](text-interpolator).
+possible thanks to another gem called [text-interpolator]t[ext-interpolator].
 
 Last **postgres** section contains information about your postgres server and what database user and
 schemas need to be created. In our example we describe that we want to create **pg_user** with **password**
@@ -198,7 +198,7 @@ source $USER_HOME/.rvm/scripts/rvm
 
 ```
 
-All available scripts are located [here](osx_provision_scripts). If you need more scripts, you can
+All available scripts are located [here][osx_provision_scripts]. If you need more scripts, you can
 create them locally (e.g. in (thor/osx\_provision\_scripts\_my\_project.sh)) and then initialize
 thor script accordingly:
 
