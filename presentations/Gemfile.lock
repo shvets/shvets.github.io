@@ -7,7 +7,6 @@ GEM
       multi_json (~> 1.3)
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
-    asciidoc (0.0.2)
     atomic (1.1.14)
     fetcher (0.4.2)
       logutils (>= 0.6)
@@ -43,5 +42,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  asciidoc
   slideshow

@@ -1,5 +1,5 @@
 ---
-title: Configure Macbook for Ruby/Rails Development
+title: Configuring Macbook for Ruby/Rails Development with automated scripts
 date: 2014-09-13
 tags: ruby, osx, mavericks, provisioning, macbook
 ---
@@ -7,6 +7,23 @@ tags: ruby, osx, mavericks, provisioning, macbook
 # Configuring Macbook for Ruby/Rails Development with automated scripts
 
 ## Introduction
+
+When you plan to do web development, you need to do few steps, like:
+
+* installing installers (homebrew, rvm)
+* installing support for various languages (ruby, java, nodejs, python, c, c++);
+* installing databases (mysql, postgres, oracle etc);
+* configuring databases (creating users, schemas, populating initial data);
+* installing additional servers (apache, passenger, jenkins, selenium);
+* starting/stopping services.
+
+Usually all those steps are made manually. If it needs to be done only once, it's OK.
+But next time when you try to reproduce all steps on new computer or explain
+new developer in the team, you can forget some details of it or forget completely
+what needs to be done.
+
+As a common rule, it's nice to have this information documented, or even better -
+automated in form of scripts.
 
 There are numerous instructions around the Internet about how to configure your MacBook to work
 with Ruby and Rails. I have my own [blog entry][configure_macbook_article] on the same topic.
