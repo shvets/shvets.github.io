@@ -1,11 +1,13 @@
-Title: Boosting QA productivity: Automating acceptance tests
+title: Boosting QA productivity: Automating acceptance tests
+author: Alexander Shvets
+copyright: Vonage &copy; All Rights Reserved
+
 
 # Boosting QA productivity: Automating acceptance tests
 
->
-
 * Author: **Alexander Shvets**
-* Role: Developer
+* Team: **Proteus Subscribe**
+* Role: **Developer**
 * Year: **2014**
 
 
@@ -20,7 +22,7 @@ eliminate manual testing completely.
 
 # Brown rice salad with pickled turnip, baby cucumber and smoked labneh (Mccrackles, Feb 2014)
 
-![red_green_refactor](02/images/turnip_salad.jpg)
+![red_green_refactor](images/turnip_salad.jpg)
 
 
 # Why do we need tests?
@@ -140,25 +142,44 @@ adapted for a given language.
 * Speed boost when running unit tests and integration tests together.
 
 
-# Example: Cucumber/Turnip/Gherkin/Acceptance script for Proteus Subscribe
+# Example: Cucumber/Turnip/Gherkin/Acceptance script for Neptune Desktop Subscribe
 
 ```
-todo
-Feature: Subscribe to Vonage phone service through Triton UI
+Feature: Subscribe to Vonage phone service through Neptune Desktop Application
   In order to subscribe to Vonage phone service
   As a user
   I want to fill in an order and submit
 
+  Background: within Selected Environment context
+    Given I am within Selected Environment
+
   @selenium
   Scenario: Typical Direct Flow
-    When I go to Triton default landing page
-    Then I should be on Plan Setup page
-    When I select Plan
-    And I select Phone Adapter
-    Then I should see phone adapter message
-    And I pick a new phone number
-    And I click "Continue"
-    Then I should be on Contact Information Page
+    When I visit "Neptune Desktop Application"
+    Then I should be on "Account" page
+    And I should see summary popup page
+
+    When I enter Contact Info
+    And I enter Service Address
+    And I click "Proceed to Next Step" button
+    Then I should be on "Payment" page
+
+    When I enter Credit Card Info
+    And I click "Proceed to Next Step" button
+    Then I should be on "Summary" page
+
+    When I accept Terms of Service
+    And I click "Proceed to Next Step" button
+    Then I should be on "Confirmation" page
+
+    When I setup account
+    And I want to save intermediate results
+    And I click "Submit" button
+    Then I should be on Online Account page
+
+    When I visit "Neptune Desktop Application" on "Confirmation" page
+    Then I should be on "Confirmation" page
+    And "Confirmation" page is hiding account form
 ```
 
 
@@ -168,27 +189,69 @@ Feature: Subscribe to Vonage phone service through Triton UI
 todo
 require 'steps/common_steps'
 
-steps_for :search_with_drivers do
+steps_for :neptune_desktop_direct do
   include CommonSteps
 
-  step "I am within wikipedia.com" do
-    puts Capybara.current_driver
+  attr_reader :flow
 
-    AcceptanceTest.instance.set_app_host
+  step "I am within Selected Environment" do
+    @flow = Neptune::Desktop::DirectFlow.new(page)
   end
 
-  step "I am on wikipedia.com" do
-    visit('/')
+  step "I visit :name" do |name|
+    flow.visit_page "/gulp-index-desktop.html"
+    FlowHelper.instance.wait_for_spinner page
   end
 
-  step "I enter word :word" do |word|
-    fill_in "searchInput", :with => word
+  step "I visit :name on :suffix page" do |_, suffix|
+    flow.visit_page "/gulp-index-desktop.html#/#{suffix.downcase}"
+    FlowHelper.instance.wait_for_spinner page
   end
 
-  step "I click submit button" do
-    find(".formBtn", match: :first).click
+  step "I should be on :name page" do |name|
+    expect(page.current_url).to match %r{/#{name.downcase}}
   end
 
+  step "I should see summary popup page" do
+    expect(page).to have_content 'An Order Confirmation email will be sent to your email address'
+  end
+
+  step "I enter Contact Info" do
+    flow.enter_contact_info
+  end
+
+  step "I enter Service Address" do
+    flow.enter_emergency_address
+  end
+
+  step "I click :name button" do |name|
+    if name == 'Submit'
+      flow.submit_ola_form
+      FlowHelper.instance.wait_for_spinner page
+    else
+      flow.click_button '.next'
+    end
+  end
+
+  step "I enter Credit Card Info" do
+    flow.enter_credit_card_info
+  end
+
+  step "I accept Terms of Service" do
+    flow.accept_terms_of_service
+  end
+
+  step "I setup account" do
+    flow.setup_account
+  end
+
+  step "I should be on Online Account page" do
+    expect(page).to have_content 'Sign in to your Vonage Account'
+  end
+
+  step ":page page is hiding account form" do |_|
+    expect(page).to have_content 'You will receive an order confirmation email within 2 days'
+  end
 end
 ```
 
@@ -263,7 +326,8 @@ browser: 'chrome'
 timeout_in_seconds: 40
 ```
 
-We can override environment and driver with **ACCEPTANCE_ENV** and **DRIVER** environment variables.
+We can override environment, wait time and driver with **ACCEPTANCE_ENV**, **WAIT_TIME** and **DRIVER** 
+environment variables.
 
 
 # Implementation Requirements and Details (2)
@@ -271,7 +335,7 @@ We can override environment and driver with **ACCEPTANCE_ENV** and **DRIVER** en
 * Tester should be able to do screen shots at any time:
 
 ```cucumber
-  And then I want to make screenshot
+  And I generate screenshot
 ```
 
 File will be created in **screenshot_dir** folder.
@@ -291,13 +355,17 @@ Result is saved inside **acceptance_results** folder.
 
 # Implementation Requirements and Details (4)
 
-* Framework should be able to run scripts for different input parameters:
+* Framework should be able to run scripts for different input parameters. For example,
+retail flow could be initiated with different mac address.
 
 
 # Implementation Requirements and Details (5)
 
 * Framework should be able to read input data from external file (xls or csv)
 
+```cucumber
+    And I pick a "test1" test
+```
 
 # Example: Acceptance Report
 

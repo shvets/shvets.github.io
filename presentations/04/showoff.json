@@ -1,0 +1,13 @@
+{
+  "name": "Boosting QA productivity: Automating acceptance tests",
+  "description": "Boosting QA productivity: Automating acceptance tests",
+  "author": "Alexander Shvets",
+
+  "templates" : {
+    "special" : "default.tpl"
+  },
+
+  "sections": [
+    {"section":"acceptance_tests"}
+  ]
+}

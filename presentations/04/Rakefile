@@ -1,0 +1,28 @@
+#!/usr/bin/env rake
+
+include Rake::DSL
+
+# load "lib/tasks/rspec.rake"
+
+task :md2pdf do
+  ARGV.shift
+
+
+  source = "acceptance_tests/acceptance_tests.md"
+  target = "acceptance_tests/acceptance_tests-tmp.md"
+
+  File.open(source, 'r') do |infile|
+    File.open(target, 'w') do |outfile|
+      infile.each_line do |line|
+        if line !~ /!SLIDE/
+          outfile.write line
+        end
+      end
+    end
+  end
+
+  system "gimli -f acceptance_tests/acceptance_tests-tmp.md -outputfilename automated_acceptance_tests -s default.css"
+
+  system "rm acceptance_tests/acceptance_tests-tmp.md"
+end
+

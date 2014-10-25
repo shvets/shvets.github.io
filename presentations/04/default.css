@@ -1,0 +1,86 @@
+/* custom css and js files included at the top level of your presentation will
+ * will be included in your presentation */
+
+.content {
+    color: black;
+    font-family: helvetica, arial;
+}
+h1, h2 {
+    color: rgb(79, 180, 226);
+    font-family: Georgia;
+}
+
+#preso .slide {
+  background-color: #DDD;
+  margin-top: 0;
+}
+
+#preso .slide .content pre {
+    font-size: 150%;
+}
+
+.slide .content p {
+  text-align: left;
+}
+
+/*img {*/
+  /*text-align: center;*/
+/*}*/
+
+#preso .slide .title-slide h1 {
+  color: blue;
+  font-size: 50px;
+}
+
+#preso .slide .title-and-content h1 {
+  color: blue;
+  font-size: 50px;
+}
+
+#preso .slide .content ul li {
+  text-align: left;
+  padding: 5px;
+  font-size: 30px;
+  list-style: inherit;
+}
+
+#preso .slide .title-and-image h1 {
+    color: blue;
+    font-size: 50px;
+}
+
+#preso .slide .title-and-image p {
+  text-align: center;
+}
+
+/*#preso, .slide {*/
+    /*background-color: #DDD;*/
+    /*width: 1500px;*/
+    /*height: 1024px;*/
+/*}*/
+
+/*#footer {*/
+    /*width: 1500px;*/
+/*}*/
+
+/*.slide .content h1 {*/
+    /*align: left;*/
+    /*font-size: 40px;*/
+    /*font-weight: bold;*/
+/*}*/
+
+/*#intro .content > ul {*/
+    /*padding-top: 150px;*/
+    /*list-style: none outside none;*/
+/*}*/
+
+/*.slide .content ul li {*/
+    /*text-align: left;*/
+    /*padding: 5px;*/
+    /*font-size: 30px;*/
+    /*list-style: inherit;*/
+/*}*/
+
+/*.slide .content p {*/
+    /*margin: 0;*/
+/*}*/
