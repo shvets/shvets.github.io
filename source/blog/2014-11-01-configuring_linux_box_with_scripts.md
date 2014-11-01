@@ -1,6 +1,6 @@
 ---
 title: Configuring Linux Box for Ruby/Rails Development with scripts
-date: 2014-10-31
+date: 2014-11-01
 tags: ruby, linux, provisioning
 ---
 

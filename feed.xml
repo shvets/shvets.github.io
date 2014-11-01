@@ -5,16 +5,16 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2014-10-30T20:00:00-04:00</updated>
+  <updated>2014-10-31T20:00:00-04:00</updated>
   <author>
     <name>Blog Author</name>
   </author>
   <entry>
     <title>Configuring Linux Box for Ruby/Rails Development with scripts</title>
-    <link rel="alternate" href="/blog/2014/10/31/configuring_linux_box_with_scripts.html"/>
-    <id>/blog/2014/10/31/configuring_linux_box_with_scripts.html</id>
-    <published>2014-10-30T20:00:00-04:00</published>
-    <updated>2014-10-30T20:00:00-04:00</updated>
+    <link rel="alternate" href="/blog/2014/11/01/configuring_linux_box_with_scripts.html"/>
+    <id>/blog/2014/11/01/configuring_linux_box_with_scripts.html</id>
+    <published>2014-10-31T20:00:00-04:00</published>
+    <updated>2014-10-31T20:00:00-04:00</updated>
     <author>
       <name>Article Author</name>
     </author>
