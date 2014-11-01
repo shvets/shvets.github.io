@@ -5,10 +5,521 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2014-10-18T20:00:00-04:00</updated>
+  <updated>2014-10-30T20:00:00-04:00</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Configuring Linux Box for Ruby/Rails Development with scripts</title>
+    <link rel="alternate" href="/blog/2014/10/31/configuring_linux_box_with_scripts.html"/>
+    <id>/blog/2014/10/31/configuring_linux_box_with_scripts.html</id>
+    <published>2014-10-30T20:00:00-04:00</published>
+    <updated>2014-10-30T20:00:00-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Configuring Linux Box for Ruby/Rails Development with scripts&lt;/h1&gt;
+
+&lt;h2&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Why do we need virtualization in development?&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;We want to have &lt;strong&gt;same environment for all developers&lt;/strong&gt;, no matter on what platform they are working now.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;We are &lt;strong&gt;working on multiple projects&lt;/strong&gt; on same &lt;strong&gt;computer unit&lt;/strong&gt;. As a result, suddenly your computer has &amp;ldquo;hidden&amp;rdquo;,
+hard-to-discover inter-project dependencies or different versions of the same library.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;We want to run Continuous Integration Server jobs that start services on &lt;strong&gt;same ports&lt;/strong&gt; for different set
+of acceptance tests (isolated jobs).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;To overcome &lt;strong&gt;&amp;ldquo;It works on my machine!&amp;rdquo;&lt;/strong&gt; syndrome - when development environment is different from production
+environment.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Sometimes required software is &lt;strong&gt;not available&lt;/strong&gt; on developer&amp;rsquo;s platform. Example: 64-bit instant client for oracle
+was broken for almost two years on OSX  &amp;gt;= 10.7.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Development for PAAS&lt;/strong&gt;, such as Heroku, Engine Yard etc. You can find and build virtualization that is pretty
+close to your platform.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We will take a look at how we can do provisioning for &lt;strong&gt;Vagrant&lt;/strong&gt; and &lt;strong&gt;Docker&lt;/strong&gt;. Both tools are built on top
+of &lt;strong&gt;VirtualBox&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Installing and configuring Vagrant&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Vagrant&lt;/strong&gt; is the wrapper around VirtualBox. It is a tool for managing virtual machines via simple to use
+&lt;strong&gt;command line&lt;/strong&gt; interface. With this tool you can work in a clean environment based on a standard
+template - &lt;strong&gt;base box&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;In order to use Vagrant you have to install these programs:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://www.virtualbox.org/wiki/Downloads"&gt;VirtualBox&lt;/a&gt;. Download it from dedicated web site and install as native program. You can use it
+in UI mode, but it&amp;rsquo;s not required.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://www.vagrantup.com"&gt;Vagrant&lt;/a&gt;. Before it was distributed as ruby gem, now it&amp;rsquo;s packaged as &lt;strong&gt;native application&lt;/strong&gt;.
+Once installed, it will be accessible from command line as &lt;strong&gt;vagrant&lt;/strong&gt; command.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You have to decide what linux image fits your needs. In our case we use &lt;strong&gt;Ubuntu 14.04 LTS 64-bit&lt;/strong&gt; image -
+it is identified with &lt;strong&gt;&amp;ldquo;ubuntu/trusty64&amp;rdquo;&lt;/strong&gt; key. You can see other images &lt;a href="https://vagrantcloud.com/discover"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Download and install it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant box add ubuntu/trusty64 https://vagrantcloud.com/ubuntu/boxes/trusty64
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Initialize it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight plaintext"&gt;vagrant init ubuntu/trusty64
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This command creates &lt;strong&gt;Vagrantfile&lt;/strong&gt; file in the root of your project. Below is an example of such a file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# -*- mode: ruby -*-&lt;/span&gt;
+&lt;span class="c1"&gt;# vi: set ft=ruby :&lt;/span&gt;
+
+&lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"2"&lt;/span&gt;
+
+&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;configure&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+  &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;box&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"ubuntu/trusty64"&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can do various commands with &lt;strong&gt;vagrant&lt;/strong&gt; tool. For example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant up        &lt;span class="c"&gt;# starts up: creates and configures guest machine&lt;/span&gt;
+vagrant &lt;span class="nb"&gt;suspend&lt;/span&gt;   &lt;span class="c"&gt;# suspends the guest machine&lt;/span&gt;
+vagrant halt      &lt;span class="c"&gt;# shuts down the running machine&lt;/span&gt;
+vagrant reload    &lt;span class="c"&gt;# vagrant halt; vagrant up&lt;/span&gt;
+vagrant destroy   &lt;span class="c"&gt;# stops machine and destroys all related resources&lt;/span&gt;
+vagrant provision &lt;span class="c"&gt;# perform provisioning for machine&lt;/span&gt;
+vagrant box remove ubuntu/trusty64 &lt;span class="c"&gt;# removes a box from vagrant&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You also can package currently running VirtualBox environment into reusable box:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant package --vagrantfile Vagrantfile --output linux_provision.box
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After &lt;strong&gt;Vagrantfile&lt;/strong&gt; is generated, you can start your base box:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant up
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you have a &lt;strong&gt;fully running virtual machine&lt;/strong&gt; in VirtualBox. You can access it through &lt;strong&gt;vagrant ssh&lt;/strong&gt; command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant ssh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or &lt;strong&gt;directly via ssh&lt;/strong&gt; (use &lt;strong&gt;vagrant&lt;/strong&gt; password for &lt;strong&gt;vagrant&lt;/strong&gt; user and port &lt;strong&gt;2222&lt;/strong&gt;, this port is used as default
+by vagrant for ssh connections):&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;ssh vagrant@127.0.0.1 -p 2222
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can assign IP address for your linux box, e.g.:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;configure&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+  &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;network&lt;/span&gt; &lt;span class="s2"&gt;"private_network"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;ip: &lt;/span&gt;&lt;span class="s2"&gt;"22.22.22.22"&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;With this configuration you can access ssh on default port:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;ssh vagrant@22.22.22.22
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Your initial setup of linux box is completed now and ready to use.&lt;/p&gt;
+
+&lt;h2&gt;Installing and configuring Docker&lt;/h2&gt;
+
+&lt;p&gt;Docker helps you create and manage &lt;strong&gt;Linux containers&lt;/strong&gt; - extremely lightweight VMs. Containers
+allow code to run in isolation from other containers. They safely share the machine&amp;rsquo;s resources,
+all without the overhead of a hypervisor.&lt;/p&gt;
+
+&lt;p&gt;In order to use Docker you have to install these programs:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://www.virtualbox.org/wiki/Downloads"&gt;VirtualBox&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://boot2docker.io"&gt;boot2docker&lt;/a&gt;. You need to install it only for non-Linux environment.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;boot2docker is a lightweight Linux image made specifically to run Docker containers. It runs completely from
+RAM, weighs  approximately 27 MB and boots in about 5 seconds.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll run the Docker client natively on OSX, but the Docker server will run inside our boot2docker VM. This also
+means that boot2docker, not OSX, is the Docker host.&lt;/p&gt;
+
+&lt;p&gt;This command will create &lt;strong&gt;boot2docker-vm&lt;/strong&gt; virtual machine:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker init
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Go to VirtualBox UI - new VM will be added.&lt;/p&gt;
+
+&lt;p&gt;Start it up:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker up
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or shut it down:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker down
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Upgrade Boot2docker VM image:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker stop
+boot2docker download
+boot2docker up
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When docker daemon first started, it gives you recommendation about how to run docker client.
+It needs to know where docker is running, e.g.:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;DOCKER_HOST&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;tcp://192.168.59.103:2375
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You have to setup it globally in &lt;strong&gt;.bash_profile&lt;/strong&gt; file or specify it each time when docker client gets started.&lt;/p&gt;
+
+&lt;p&gt;You can access boot2docker over ssh (user: &lt;strong&gt;docker&lt;/strong&gt;, password: &lt;strong&gt;tcuser&lt;/strong&gt;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker ssh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Download the small base image named &lt;strong&gt;busybox&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;docker pull busybox
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run and test docker as separate command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;docker run busybox &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;"hello, linus!"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or interactively:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;docker run -t -i busybox /bin/sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Install and confige linux_provision gem&lt;/h2&gt;
+
+&lt;p&gt;Both programs - Vagrant and Docker - have their own ways to serve provisioning. Vagrant is doing it with the help of
+&lt;strong&gt;provision&lt;/strong&gt; attribute. Example with simple shell script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+  &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;provision&lt;/span&gt; &lt;span class="ss"&gt;:shell&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:path&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"bootstrap.sh"&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or with chef solo:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+  &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;provision&lt;/span&gt; &lt;span class="ss"&gt;:chef_solo&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;chef&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Docker also lets you do provisioning in form of &lt;strong&gt;RUN&lt;/strong&gt; command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight plaintext"&gt;# Dockerfile
+
+RUN apt-get -y -q install postgresql-9.3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After multiple experiments with provisions both from Vagrant and Docker it was discovered that it is not convenient
+to use. It does not let you to easy install or uninstall separate packages. It&amp;rsquo;s better to do it as
+&lt;strong&gt;set of independent scripts&lt;/strong&gt;, separated completely from Docker or Vagrant.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;linux_provision&lt;/strong&gt; gem is the set of such shell scripts - they install various components like postgres server, rvm,
+ruby etc. with the help of thor or rake script. You can see other gems that use similar approach :
+for &lt;a href="https://github.com/shvets/oracle_client_provision"&gt;Oracle Instant Client&lt;/a&gt; installation and for &lt;a href="https://github.com/shvets/osx_provision"&gt;OSX&lt;/a&gt; provision.&lt;/p&gt;
+
+&lt;p&gt;In order to use this gem add this line to your application&amp;rsquo;s Gemfile:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;gem &lt;span class="s1"&gt;'linux_provision'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then execute:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Before you can start using &lt;strong&gt;linux_provision&lt;/strong&gt; gem within your project, you need to configure it. Do the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Create configuration file (e.g. &lt;strong&gt;.linux_provision.json&lt;/strong&gt;) in json format at the root of your project. It will
+define your environment:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+   &lt;/span&gt;&lt;span class="err"&gt;...&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="err"&gt;}&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"project"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}/demo"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"ruby_version"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"1.9.3"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"gemset"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"linux_provision_demo"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;},&lt;/span&gt;&lt;span class="w"&gt;
+
+  &lt;/span&gt;&lt;span class="s2"&gt;"postgres"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"hostname"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"localhost"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"postgres"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"password"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"postgres"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"app_user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"pg_user"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"app_password"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"pg_password"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"app_schemas"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"my_project_test"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"my_project_dev"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"my_project_prod"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Variables defined in this file are used by underlying shell scripts provided by the gem.&lt;/p&gt;
+
+&lt;p&gt;In &lt;strong&gt;node&lt;/strong&gt; section you describe destination computer where you want to install this provision.&lt;/p&gt;
+
+&lt;p&gt;In &lt;strong&gt;project&lt;/strong&gt; section you keep project-related info, like project &lt;strong&gt;home&lt;/strong&gt;, project &lt;strong&gt;gemset name&lt;/strong&gt; and &lt;strong&gt;ruby version&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Last &lt;strong&gt;postgres&lt;/strong&gt; section contains information about your postgres server.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Provide execution script&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Library itself if written in ruby, but for launching its code it&amp;rsquo;s more convenient to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt; tool.
+Here I provide thor script as an example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# thor/linux_install.thor&lt;/span&gt;
+
+&lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;'/../lib'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'linux_provision'&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LinuxInstall&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
+  &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;LinuxProvision&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".linux_provision.json"&lt;/span&gt;
+
+  &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;
+    &lt;span class="kp"&gt;attr_reader&lt;/span&gt; &lt;span class="ss"&gt;:installer&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"general"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Installs general packages"&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;general&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:prepare&lt;/span&gt;
+
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:rvm&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:ruby&lt;/span&gt;
+
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:postgres&lt;/span&gt;
+    &lt;span class="n"&gt;invoke&lt;/span&gt; &lt;span class="ss"&gt;:mysql&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can execute separate commands from script directly with &lt;strong&gt;invoke&lt;/strong&gt; thor command. Below is fragment of such script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class="c"&gt;#######################################&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;prepare]
+&lt;span class="c"&gt;# Updates linux core packages&lt;/span&gt;
+
+sudo apt-get update
+
+sudo apt-get install -y curl
+sudo apt-get install -y g++
+sudo apt-get install -y subversion
+sudo apt-get install -y git
+
+&lt;span class="c"&gt;#######################################&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;rvm]
+&lt;span class="c"&gt;# Installs rvm&lt;/span&gt;
+
+curl -L https://get.rvm.io | bash
+
+&lt;span class="c"&gt;#sudo chown -R vagrant /opt/vagrant_ruby&lt;/span&gt;
+
+&lt;span class="c"&gt;#######################################&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;ruby]
+&lt;span class="c"&gt;# Installs ruby&lt;/span&gt;
+
+&lt;span class="nv"&gt;USER_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}"&lt;/span&gt;
+
+&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="nv"&gt;$USER_HOME&lt;/span&gt;/.rvm/scripts/rvm
+
+rvm install ruby-1.9.3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can add your own scripts (e.g. demo_scripts.sh):&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LinuxInstall&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
+  &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;LinuxProvision&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s2"&gt;".linux_provision.json"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"demo_scripts.sh"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We defined 2 new commands in demo_script.sh:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class="c"&gt;##############################&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;project]
+&lt;span class="c"&gt;# Installs demo sinatra project&lt;/span&gt;
+
+&lt;span class="nv"&gt;USER_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}"&lt;/span&gt;
+
+&lt;span class="nv"&gt;APP_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{project.home}"&lt;/span&gt;
+
+&lt;span class="nb"&gt;cd&lt;/span&gt; &lt;span class="nv"&gt;$APP_HOME&lt;/span&gt;
+
+&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="nv"&gt;$USER_HOME&lt;/span&gt;/.rvm/scripts/rvm
+
+rvm use &lt;span class="c"&gt;#{project.ruby_version}@#{project.gemset} --create&lt;/span&gt;
+
+bundle
+
+rake db:migrate
+
+
+&lt;span class="c"&gt;##############################&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;rackup]
+&lt;span class="c"&gt;# Starts sinatra demo application&lt;/span&gt;
+
+&lt;span class="nv"&gt;USER_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{node.home}"&lt;/span&gt;
+
+&lt;span class="nv"&gt;APP_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"#{project.home}"&lt;/span&gt;
+
+&lt;span class="nb"&gt;cd&lt;/span&gt; &lt;span class="nv"&gt;$APP_HOME&lt;/span&gt;
+
+&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="nv"&gt;$USER_HOME&lt;/span&gt;/.rvm/scripts/rvm
+
+rvm use &lt;span class="c"&gt;#{project.ruby_version}@#{project.gemset}&lt;/span&gt;
+
+rackup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Demo application with Vagrant&lt;/h2&gt;
+
+&lt;p&gt;For testing purposes we have created demo web application (in &lt;strong&gt;demo&lt;/strong&gt; folder) based on &lt;a href="http://www.sinatrarb.com"&gt;sinatra&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;p&gt;First, we need to inform Vagrant about the location of this application within virtual machine:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;configure&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+  &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;synced_folder&lt;/span&gt; &lt;span class="s2"&gt;"./demo"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"/home/vagrant/demo"&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Second, we need to configure linux_provision gem to point to right domain/port and use correct user name/password:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"22.22.22.22"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;remote&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;host,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;see&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"config.vm.synced_folder"&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"22"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;default&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;ssh&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;port&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"vagrant"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;       &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;vagrant&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;user&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;name&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"password"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"vagrant"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;vagrant&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;user&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;password&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"/home/vagrant"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"remote"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Start your base box:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant up
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Access linux box and find out this demo application&amp;rsquo;s home:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;ssh vagrant@22.22.22.22
+
+&lt;span class="nb"&gt;pwd&lt;/span&gt; &lt;span class="c"&gt;# /home/vagrant&lt;/span&gt;
+
+ls &lt;span class="c"&gt;# demo&lt;/span&gt;
+
+&lt;span class="nb"&gt;cd &lt;/span&gt;demo
+
+ls &lt;span class="c"&gt;# content of demo folder&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;These commands from &lt;strong&gt;linux_provision&lt;/strong&gt; gem will build your environment for the demo project (install rvm, ruby,
+postgres, postgres user and posters tables):&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor linux_install:prepare
+thor linux_install:rvm
+thor linux_install:ruby
+
+thor linux_install:postgres
+
+thor linux_install:postgres_create_user
+thor linux_install:postgres_create_schemas
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Initialize demo project and run sinatra application:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor linux_install:project
+
+thor linux_install:rackup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you can access application from your favorite browser:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;open http://22.22.22.22:9292
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Demo application with Docker&lt;/h2&gt;
+
+&lt;p&gt;You need to do very similar steps as with Vagrant. The only difference is in &lt;strong&gt;linux_provision.json&lt;/strong&gt; file
+you have to point to different host, port and user:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"192.168.59.103"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;remote&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;host,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;see&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;boot2docker&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;ip&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"42222"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;ssh&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;port&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;docker&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"vagrant"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;vagrant&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;user&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;name&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"password"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"vagrant"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;vagrant&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;user&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;password&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"/home/vagrant"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"remote"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Our Dockerfile is responsible for the following base steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Install Ubuntu 14.4.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install sshd (for enabling ssh).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Create vagrant user (just to be in-synch with Vagrant example).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Reveal project home as /home/vagrant/demo.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Expose port 9292 (our sinatra application).&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight plaintext"&gt;FROM ubuntu:14.04
+
+MAINTAINER Alexander Shvets "alexander.shvets@gmail.com"
+
+# 1. Update system
+RUN sudo apt-get update
+RUN sudo locale-gen en_US.UTF-8
+
+# 2. Install sshd
+
+RUN sudo apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+RUN echo 'root:root' |chpasswd
+RUN sed --in-place=.bak 's/without-password/yes/' /etc/ssh/sshd_config
+
+EXPOSE 22
+
+CMD /usr/sbin/sshd -D
+
+# 3. Create vagrant user
+RUN groupadd vagrant
+RUN useradd -d /home/vagrant -g vagrant -m -s /bin/bash vagrant
+RUN sudo sed -i '$a vagrant    ALL=(ALL) NOPASSWD: ALL' /etc/sudoers
+RUN echo vagrant:vagrant | chpasswd
+RUN sudo chown -R vagrant /home/vagrant
+
+# 4. Prepare directories for the project
+
+# Add project dir to docker
+
+ADD . /home/vagrant/demo
+WORKDIR /home/vagrant/demo
+
+EXPOSE 9292
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Build docker image and run it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;docker build -t demo demo
+docker run -d -p 42222:22 -p 9292:9292 --name demo demo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, we map port 22 inside docker to port 42222 outside. It means that when we hit port 42222 with
+regular telnet or ssh tool, we&amp;rsquo;ll hit service inside the docker.&lt;/p&gt;
+
+&lt;p&gt;You can access virtual machine via ssh:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;ssh vagrant@192.168.59.103 -p 42222
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you can do your provision - it&amp;rsquo;s exactly the same as with Vagrant example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;thor linux_install:prepare
+thor linux_install:rvm
+thor linux_install:ruby
+
+thor linux_install:postgres
+
+thor linux_install:postgres_create_user
+thor linux_install:postgres_create_schemas
+
+thor linux_install:project
+
+thor linux_install:rackup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After provisioning and starting server try to access your application from the browser:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="highlight shell"&gt;open http://192.168.59.103:9292
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+  </entry>
   <entry>
     <title>Reading from external source in gherkin scripts</title>
     <link rel="alternate" href="/blog/2014/10/19/adding_source_to_gherkin_script.html"/>
@@ -1010,274 +1521,6 @@ npm install
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Other instructions on Mac configuration are available here &lt;a href="link1"&gt;here&lt;/a&gt; and &lt;a href="link2"&gt;here&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>ScriptExecutor: Ruby library for executing shell scripts, locally or on remote server</title>
-    <link rel="alternate" href="/blog/2013/12/21/script_executor.html"/>
-    <id>/blog/2013/12/21/script_executor.html</id>
-    <published>2013-12-20T19:00:00-05:00</published>
-    <updated>2013-12-20T19:00:00-05:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h1&gt;ScriptExecutor: Ruby library for executing shell scripts, locally or on remote server&lt;/h1&gt;
-
-&lt;h2&gt;Introduction&lt;/h2&gt;
-
-&lt;p&gt;There are few libraries for automating deployment tasks in &lt;strong&gt;remote&lt;/strong&gt; environment:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="capistrano"&gt;Capistrano&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="chef"&gt;Chef&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="mina"&gt;Mina&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="vlad"&gt;Vlad&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;All of them tend to be too complicated, especially for relatively simple tasks. For example:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;capistrano is tailored for same set of commands executed over group of servers. If you want
-to create small script for executing code on unique server, you have to &amp;ldquo;respect&amp;rdquo;
-capistrano restrictions, e.g. create &lt;strong&gt;Capfile&lt;/strong&gt;, &lt;strong&gt;config/deploy.rb&lt;/strong&gt; etc.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Chef is implemented as huge framework with servers and clients and only &amp;ldquo;chef-solo&amp;rdquo; is
-relevant to our conversation.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Most of these libraries are rake-centric, so it&amp;rsquo;s difficult to reuse developed code in other
-applications.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;In most cases, deployment task can be done over &lt;strong&gt;ssh protocol&lt;/strong&gt;. You can use &lt;a href="net-ssh"&gt;net-ssh&lt;/a&gt; gem
-as implementation - it&amp;rsquo;s pure Ruby implementation of a SSH (protocol 2) client.&lt;/p&gt;
-
-&lt;p&gt;When you execute shell script &lt;strong&gt;locally&lt;/strong&gt;, you have plenty of ways to do it with ruby:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;%x&lt;/strong&gt; expression:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="sx"&gt;%x{ pwd }&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ol&gt;
-&lt;li&gt;backticks:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="sb"&gt;`pwd`&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;system&lt;/strong&gt; command:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt; &lt;span class="nb"&gt;system&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;exec&lt;/strong&gt; command:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;spawn&lt;/strong&gt; command:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;spawn&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;popen&lt;/strong&gt; command:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;IO&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;popen&lt;/span&gt; &lt;span class="s2"&gt;"pwd"&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ol&gt;
-&lt;li&gt;using &lt;strong&gt;open3&lt;/strong&gt; library:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s2"&gt;"open3"&lt;/span&gt;
-
-&lt;span class="no"&gt;Open3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;popen3&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'pwd'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;stdin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;stdout&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;stderr&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
-
-&lt;span class="n"&gt;stdout&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;stderr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Open3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;capture3&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'pwd'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-  &lt;span class="ss"&gt;:stdin_data&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;stdin&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# another example&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With &lt;a href="script_executor"&gt;script_executor&lt;/a&gt; gem we are trying to build common interface for executing
-both local and remote code in unified way.&lt;/p&gt;
-
-&lt;h2&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;Add this line to your application&amp;rsquo;s Gemfile:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;gem &lt;span class="s1"&gt;'script_executor'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And then execute:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Or install it yourself:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;gem install script_executor
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;Usage&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Create executor&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ScriptExecutor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Execute local command:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="s2"&gt;"ls"&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Execute remote command:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-  &lt;span class="ss"&gt;:remote&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-  &lt;span class="ss"&gt;:domain&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"some_host"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-  &lt;span class="ss"&gt;:user&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"some_user"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-  &lt;span class="ss"&gt;:password&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"some_password"&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
-
-&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"ls -al"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Execute remote command as &amp;lsquo;sudo&amp;rsquo;:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="ss"&gt;:sudo&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-  &lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"/etc/init.d/tomcat stop"&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Execute remote command with code block:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:sudo&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="sx"&gt;%Q(
-    /etc/init.d/tomcat stop
-    /etc/init.d/tomcat start
-  )&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Execute remote command while capturing and suppressing output (default is &amp;lsquo;false&amp;rsquo; for both parameters):&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:capture_output&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                  &lt;span class="ss"&gt;:suppress_output&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
-  &lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"whoami"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# ENV['USER'] on remote server&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Simulate remote execution:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:simulate&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;executor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;execute&lt;/span&gt; &lt;span class="n"&gt;server_info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:script&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"whoami"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# generate commands without actual execution&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;Using ScriptLocator&lt;/h2&gt;
-
-&lt;p&gt;You can keep scripts that need to be executed, embedded into your code (as in examples above),
-move them into separate file or keep them in same file behind &lt;strong&gt;__END__&lt;/strong&gt; Ruby directive.
-The latter gives you the ability to keep commands and code together thus simplifying
-access to the code, making maintenance easier.&lt;/p&gt;
-
-&lt;p&gt;For example, if you want to create script with 2 commands (command1, command2), you can use
-&lt;strong&gt;scripts&lt;/strong&gt; and &lt;strong&gt;evaluate_script_body&lt;/strong&gt; methods:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'script_locator'&lt;/span&gt;
-
-&lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="no"&gt;ScriptLocator&lt;/span&gt;
-
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# [command1, command2]&lt;/span&gt;
-
-&lt;span class="nb"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"john"&lt;/span&gt;
-
-&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;evaluate_script_body&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'command1'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;binding&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# john&lt;/span&gt;
-&lt;span class="cp"&gt;__END__
-
-[command1]
-
-echo "&amp;lt;%= name %&amp;gt;"
-
-[command2]
-
-echo "test2"
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s build more sophisticated example. We want to automate generating public/private
-keys for ssh access and copying public key to remote server for password-less access
-to the server.&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'script_executor/executable'&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'script_executor/script_locator'&lt;/span&gt;
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'file_utils/file_utils'&lt;/span&gt;
-
-&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Ssh&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
-  &lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="no"&gt;Executable&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;ScriptLocator&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;FileUtils&lt;/span&gt;
-
-  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"gen_key"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"gen_key"&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;gen_key&lt;/span&gt;
-    &lt;span class="n"&gt;scripts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="n"&gt;execute&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;evaluate_script_body&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'gen_key'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;binding&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="s2"&gt;"cp_key"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"cp_key"&lt;/span&gt;
-  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;cp_key&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;host&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;scripts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="n"&gt;execute&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;evaluate_script_body&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'scp_public_key'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;binding&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
-
-    &lt;span class="n"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:remote&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:domain&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;host&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:user&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'USER'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-      &lt;span class="n"&gt;evaluate_script_body&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'install_key'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;binding&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="k"&gt;end&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="cp"&gt;__END__
-
-[gen_key]
-
-echo "Generating ssh key..."
-
-cd ~/.ssh
-ssh-keygen
-
-[scp_public_key]
-
-echo "Copying public key to remote server..."
-
-scp ~/.ssh/id_rsa.pub &amp;lt;%= ENV['USER'] %&amp;gt;@&amp;lt;%= host %&amp;gt;:~/pubkey.txt
-
-[install_key]
-
-mkdir -p ~/.ssh
-chmod 700 .ssh
-cat pubkey.txt &amp;gt;&amp;gt; ~/.ssh/authorized_keys
-rm ~/pubkey.txt
-chmod 600 ~/.ssh/*
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This example has 3 scripts: &lt;strong&gt;gen_key&lt;/strong&gt;, &lt;strong&gt;scp_public_key&lt;/strong&gt; and &lt;strong&gt;install_key&lt;/strong&gt;. They are self-explanatory.
-Also, pay attention at using &lt;strong&gt;Executable&lt;/strong&gt; module. It is used when we want to add ScriptExecutor functionality
-as part of class.&lt;/p&gt;
-
-&lt;p&gt;In order to execute new commands you have to use &lt;strong&gt;thor&lt;/strong&gt; tool:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor ssh:gen_key
-thor ssh:cp_key your.remote.server.com
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can achieve same goal with homebrew tool:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;brew install ssh-copy-id
-
-ssh-copy-id &lt;span class="nv"&gt;$USER&lt;/span&gt;@your.remote.server.com
-&lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>
 </feed>

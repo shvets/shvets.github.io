@@ -2,11 +2,8 @@
 
 include Rake::DSL
 
-# load "lib/tasks/rspec.rake"
-
 task :md2pdf do
   ARGV.shift
-
 
   source = "acceptance_tests/acceptance_tests.md"
   target = "acceptance_tests/acceptance_tests-tmp.md"

@@ -1,6 +1,6 @@
 !SLIDE title-slide
 
-# Boosting QA productivity: 
+# Boosting QA productivity:
 # <span style="color:green">Automating acceptance tests</span>
 
 * Author: **Alexander Shvets**
@@ -12,7 +12,7 @@
 
 # Goals for presentation
 
-* Explain the value of acceptance scripts for setting up common language between all party members: 
+* Explain the value of acceptance scripts for setting up common language between all party members:
 **Developers**, **Testers**, **Business Analysts** and **Business Owners**.
 * Build acceptance framework for **reducing cost** of manual acceptance testing and eventually
 **eliminate manual testing** completely.
@@ -21,7 +21,7 @@
 
 !SLIDE title-and-image transition=cover
 
-# Brown rice salad with pickled turnip, baby cucumber and smoked labneh 
+# Brown rice salad with pickled turnip, baby cucumber and smoked labneh
 
 ![turnip_salad](images/turnip_salad.jpg)
 
@@ -33,7 +33,7 @@
 * to have an automated way to check if code is doing what it supposed to do (verify it's correctness).
 * to have an example of how to use code.
 
-* Note: You have to follow formatting rules 
+* Note: You have to follow formatting rules
 [best practices](http://blog.plataformatec.com.br/2014/04/improve-your-test-readability-using-the-xunit-structure) for tests.
 
 
@@ -136,7 +136,7 @@ All of them are ruby gems.
 
 !SLIDE title-and-content transition=cover incremental
 
-# Capybara 
+# Capybara
 
 * Domain Specific Language for describing **acceptance tests**.
 
@@ -203,99 +203,98 @@ adapted for a given language.
 
 # Example: Acceptance script for Neptune Desktop Subscribe
 
-      @@@ cucumber
-      Feature: Subscribe to Vonage phone service through Neptune Desktop Application
-        In order to subscribe to Vonage phone service
-        As a user
-        I want to fill in an order and submit
-      
-        Background: within Selected Environment context
-          Given I am within Selected Environment
-      
-        @selenium
-        Scenario: Typical Direct Flow
-          When I visit "Neptune Desktop Application"
-          Then I should be on "Account" page
-          And I should see summary popup page
-      
-          When I enter Contact Info
-          And I enter Service Address
-          And I click "Proceed to Next Step" button
-          Then I should be on "Payment" page
-      
-          When I enter Credit Card Info
-          And I click "Proceed to Next Step" button
-          Then I should be on "Summary" page
-      
+    ``` cucumber
+    Feature: Subscribe to Vonage phone service through Neptune Desktop Application
+    In order to subscribe to Vonage phone service
+    As a user
+    I want to fill in an order and submit
+
+    Background: within Selected Environment context
+      Given I am within Selected Environment
+
+    @selenium
+    Scenario: Typical Direct Flow
+      When I visit "Neptune Desktop Application"
+      Then I should be on "Account" page
+      And I should see summary popup page
+
+      When I enter Contact Info
+      And I enter Service Address
+      And I click "Proceed to Next Step" button
+      Then I should be on "Payment" page
+
+      When I enter Credit Card Info
+      And I click "Proceed to Next Step" button
+      Then I should be on "Summary" page
+    ```
 
 
 !SLIDE title-and-content transition=cover
 
 # Example: Acceptance script for Neptune Desktop Subscribe (continued)
-      
-          @@@ cucumber
-          When I accept Terms of Service
-          And I click "Proceed to Next Step" button
-          Then I should be on "Confirmation" page
-      
-          When I setup account
-          And I want to save intermediate results
-          And I click "Submit" button
-          Then I should be on Online Account page
-      
-          When I visit "Neptune Desktop Application" on "Confirmation" page
-          Then I should be on "Confirmation" page
-          And "Confirmation" page is hiding account form
 
+    ``` cucumber
+    When I accept Terms of Service
+    And I click "Proceed to Next Step" button
+    Then I should be on "Confirmation" page
+
+    When I setup account
+    And I want to save intermediate results
+    And I click "Submit" button
+    Then I should be on Online Account page
+
+    When I visit "Neptune Desktop Application" on "Confirmation" page
+    Then I should be on "Confirmation" page
+    And "Confirmation" page is hiding account form
+    ```
 
 !SLIDE title-and-content transition=cover
 
 # Steps example
 
-      @@@ ruby
-          
-      steps_for :neptune_desktop_direct do
+    ``` ruby
+    steps_for :neptune_desktop_direct do
         include CommonSteps
-      
+
         attr_reader :flow
-      
+
         step "I am within Selected Environment" do
           @flow = Neptune::Desktop::DirectFlow.new(page)
         end
-      
+
         step "I visit :name" do |name|
           flow.visit_page "/gulp-index-desktop.html"
           FlowHelper.instance.wait_for_spinner page
         end
-      
+
         step "I visit :name on :suffix page" do |_, suffix|
           flow.visit_page "/gulp-index-desktop.html#/#{suffix.downcase}"
           FlowHelper.instance.wait_for_spinner page
         end
-      
+
         step "I should be on :name page" do |name|
           expect(page.current_url).to match %r{/#{name.downcase}}
         end
-      
+
         step "I should see summary popup page" do
-          expect(page).to have_content 
+          expect(page).to have_content
            'An Order Confirmation email will be sent to your email address'
         end
-      
+
         step "I enter Contact Info" do
           flow.enter_contact_info
         end
-
+    ```
 
 !SLIDE title-and-content transition=cover
 
 # Steps example (continued)
 
-      @@@ ruby
+    ``` ruby
         step "I enter Service Address" do
           flow.enter_emergency_address
         end
-      
+
         step "I click :name button" do |name|
           if name == 'Submit'
             flow.submit_ola_form
@@ -304,28 +303,28 @@ adapted for a given language.
             flow.click_button '.next'
           end
         end
-      
+
         step "I enter Credit Card Info" do
           flow.enter_credit_card_info
         end
-      
+
         step "I accept Terms of Service" do
           flow.accept_terms_of_service
         end
-      
+
         step "I setup account" do
           flow.setup_account
         end
-      
+
         step "I should be on Online Account page" do
           expect(page).to have_content 'Sign in to your Vonage Account'
         end
-      
+
         step ":page page is hiding account form" do |_|
           expect(page).to have_content 'You will receive an order confirmation email within 2 days'
         end
       end
-
+    ```
 
 !SLIDE title-and-content transition=cover
 
@@ -333,9 +332,10 @@ adapted for a given language.
 
 You can run existing test with command:
 
-      @@@ sh
-        rspec -r turnip/rspec spec/features/direct_flow.feature
+    ``` sh
+    rspec -r turnip/rspec spec/features/direct_flow.feature
 
+    ```
 
 !SLIDE title-and-content transition=cover incremental
 
@@ -358,21 +358,22 @@ related to this page calls to core acceptance framework like selenium, webkit or
 
 # Implementation Requirements and Details (1)
 
-Framework should be able to run against different **environments** and **drivers**. 
+Framework should be able to run against different **environments** and **drivers**.
 
 It can read external configuration file (e.g. acceptance_config/neptune-development.yml):
 
-      @@@ ruby
-        webapp_url: 'http://www.wikipedia.org'
-        selenium_url: 'http://localhost:4444'
-        screenshot_dir: 'tmp'
-        browser: 'chrome'
-        timeout_in_seconds: 40
+    ``` ruby
+    webapp_url: 'http://www.wikipedia.org'
+    selenium_url: 'http://localhost:4444'
+    screenshot_dir: 'tmp'
+    browser: 'chrome'
+    timeout_in_seconds: 40
+    ```
 
 Name of configuration file consists of 2 parts: application name and then environment name. For example:
 **neptune-ci.yml** for Neptune application running in CI environment.
 
-We can override environment, wait time and driver with **ACCEPTANCE_ENV**, **WAIT_TIME** and **DRIVER** 
+We can override environment, wait time and driver with **ACCEPTANCE_ENV**, **WAIT_TIME** and **DRIVER**
 env variables.
 
 We run selenium server in standalone mode - that lets us build infrastructure when we have remote selenium
@@ -386,15 +387,17 @@ server under different OS: MacOS, Windows, Unix.
 
 Tester should be able to do screen shots at any time:
 
-      @@@ cucumber
-        And I generate screenshot
+    ``` cucumber
+    And I generate screenshot
+    ```
 
 File will be saved into **screenshot_dir** folder.
 
 Framework should maintain saving intermediate results, like user name, passwords etc:
 
-      @@@ cucumber
-        And then I want to save intermediate results
+    ``` cucumber
+    And then I want to save intermediate results
+    ```
 
 Result is saved inside **acceptance_results** folder.
 
@@ -407,64 +410,67 @@ Framework should be able to read input data from external file (xls or csv).
 
 Say, we have data in acceptance_data/neptune.yml
 
-      @@@ ruby
-      test1:
-        name1: "value11"
-        name2: "value12"
-        name3: "value13"
-      test2:
-        name1: "value21"
-        name2: "value22"
-        name3: "value23"
+  ```ruby
+  test1:
+    name1: "value11"
+    name2: "value12"
+    name3: "value13"
+  test2:
+    name1: "value21"
+    name2: "value22"
+    name3: "value23"
+    ```
 
 Now we can read data for **test1** in acceptance test:
 
-      @@@ cucumber
-        And I pick a "test1" test
+    ``` cucumber
+    And I pick a "test1" test
+    ````
 
 and use it inside step implementations:
-      
-      @@@ruby
-      step "I pick a :arg test" do |arg|
+
+    ```ruby
+    step "I pick a :arg test" do |arg|
         result = flow.data[arg]
-      
+
         puts result
-      end
-    
+    end
+    ```
+
 !SLIDE title-and-content transition=cover
 
 # Implementation Requirements and Details (4)
 
-Framework should be able to run scripts for different input parameters. For example, retail flow in Subscribe could 
+Framework should be able to run scripts for different input parameters. For example, retail flow in Subscribe could
 be initiated with different mac address.
 
-Unfortunately, Cucumber as language does not support loops. 
+Unfortunately, Cucumber as language does not support loops.
 
-You can only use Scenario Outline with embedded data. 
+You can only use Scenario Outline with embedded data.
 
-      @@@ cucumber
-      
-        Scenario Outline: Typical Retail Flow
-          When I visit Triton retail landing page
-      
-          When I select Mac Address <mac_address>
-          Then I should see "Congratulations, your MAC address has been verified!"
-          And I should see "Select one of our most popular plans"
-      
-          When I select Retail Plan
-          And I pick a new phone number
-          And I click "Continue"
-          Then I should see "Enter your contact information"
-      
-          When I enter Contact Info
-          Then I should see "Set up your 911 address"
-      
-        Examples:
-          | mac_address  |
-          | AAAAAAAAAAAA |
-          | BBBBBBBBBBBB |      
-      
+    ``` cucumber
 
+    Scenario Outline: Typical Retail Flow
+      When I visit Triton retail landing page
+
+      When I select Mac Address <mac_address>
+      Then I should see "Congratulations, your MAC address has been verified!"
+      And I should see "Select one of our most popular plans"
+
+      When I select Retail Plan
+      And I pick a new phone number
+      And I click "Continue"
+      Then I should see "Enter your contact information"
+
+      When I enter Contact Info
+      Then I should see "Set up your 911 address"
+
+    Examples:
+      | mac_address  |
+      | AAAAAAAAAAAA |
+      | BBBBBBBBBBBB |
+
+    ````
 
 !SLIDE title-and-content transition=cover
 
@@ -472,18 +478,19 @@ You can only use Scenario Outline with embedded data.
 
 Framework handles this problem with programming trick, letting us to define data in the following way:
 
-      @@@ cucumber
-      
-        Scenario Outline: Typical Retail Flow
-          When I visit Triton retail landing page
-      
-        ...
-      
-        Examples:
-          | mac_address  |
-          | file:spec/support/acceptance_data/proteus.xlsx |  
-          
-          
+    ``` cucumber
+
+    Scenario Outline: Typical Retail Flow
+      When I visit Triton retail landing page
+
+    ...
+
+    Examples:
+      | mac_address  |
+      | file:spec/support/acceptance_data/proteus.xlsx |
+
+    ```
+
 !SLIDE title-and-content transition=cover
 
 # Example: Acceptance Report
