@@ -6,7 +6,6 @@ tags: ruby, linux, provisioning
 
 # Configuring Linux Box for Ruby/Rails Development with scripts
 
-
 ## Introduction
 
 Why do we need virtualization in development?
