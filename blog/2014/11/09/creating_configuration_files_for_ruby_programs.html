@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Creating configuration files for Ruby programs</h1>
+
+<h2>Introduction</h2>
+
+<p>There are different ways to keep configuration information outside of ruby program. You can use .ini, .xml, .properties, .json, .yml formats to achieve it. </p>
+
+<p>There are some issues with this approach though. In case when you need to evaluate one property based on value of another property, it could be very difficult or almost impossible.</p>
+
+<p>Let&rsquo;s show some examples of external configuration. In <strong>xml format</strong> it could look this way:</p>
+<pre><code class="highlight xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+
+<span class="nt">&lt;properties&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"property1"</span> <span class="na">value=</span><span class="s">"value1"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>property2<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>value2<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"property3"</span> <span class="na">value=</span><span class="s">"#{property1}123"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
+</code></pre>
+
+<p>Question: how to implement reference to another property, e.g. <strong>properties.property1</strong> for <strong>properties.property3</strong>?</p>
+
+<p>Another example in <strong>json format</strong>:</p>
+<pre><code class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"property1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value1"</span><span class="p">,</span><span class="w">
+
+  </span><span class="s2">"property2"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"property21"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value21"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+
+  </span><span class="s2">"property3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#{property1}/123"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>We can same question here.</p>
+
+<p>Let&rsquo;s take a look at possible solutions.</p>
+
+<h2>Using text interpolation</h2>
+
+<p>You can use some form of text interpolation to substitute such values based on the knowledge of the context. Look at <a href="https://github.com/shvets/text-interpolator">text_interpolator gem</a> and <a href="http://shvets.github.io/blog/2014/05/17/text_interpolator.html">article</a> about how to use this gem  for further details. In short, it uses simple ruby trick:</p>
+<pre><code class="highlight ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span><span class="ss">var1: </span><span class="s1">'some value 1'</span><span class="p">,</span> <span class="ss">var2: </span><span class="s1">'some value 2'</span><span class="p">}</span>
+
+<span class="n">template</span> <span class="o">=</span> <span class="s2">"We have var1: %{var1} and var2: %{var2}."</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">template</span> <span class="o">%</span> <span class="n">env</span>
+
+<span class="nb">puts</span> <span class="n">result</span> <span class="c1"># We have var1: some value 1 and var2: some value 2.</span>
+</code></pre>
+
+<p>With this technick you can use multi-level properties, e.g.:</p>
+<pre><code class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"tomcat"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"home"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/usr/local/Cellar/tomcat7/7.0.56/libexec"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deploy_dir"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#{tomcat.home}/webapps"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+
+  </span><span class="s2">"jboss"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"home"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/usr/local/Cellar/jboss-as5/5.1.0GA/libexec"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"deploy_dir"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#{jboss.home}/server/default/deploy"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2>Using ruby language for describing configuration</h2>
+
+<p>Another idea is to use Ruby fragment (piece of code) to represent the configuration. In such a way you don&rsquo;t have to <strong>a)</strong> invent yet another language to represent configuration and <strong>b)</strong> you can use language&rsquo;s expressiveness to have text interpolation at the moment  when you really need it. For example:</p>
+<pre><code class="highlight ruby"><span class="c1"># .test_config</span>
+
+<span class="n">rails_env</span> <span class="o">=</span> <span class="s2">"production"</span>
+
+<span class="n">ant_home</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'ANT_HOME'</span><span class="o">]</span> <span class="o">||</span> <span class="s2">"</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">'HOME'</span><span class="o">]</span><span class="si">}</span><span class="s2">/apache-ant-1.8.3"</span>
+<span class="n">project_name</span> <span class="o">=</span> <span class="s2">"web_app_builder_test"</span>
+<span class="n">gems_to_reject</span> <span class="o">=</span> <span class="sx">%w(bundler)</span>
+
+<span class="n">groups_to_reject</span> <span class="o">=</span> <span class="sx">%w(test)</span>
+<span class="n">groups_to_reject</span> <span class="o">&lt;&lt;</span> <span class="s1">'development'</span> <span class="k">unless</span> <span class="sx">%w(development staging)</span><span class="p">.</span><span class="nf">include?</span> <span class="n">rails_env</span><span class="p">.</span><span class="nf">to_sym</span>
+
+<span class="n">author</span> <span class="o">=</span> <span class="s2">"Alexander Shvets"</span>
+
+<span class="n">templates_dir</span> <span class="o">=</span> <span class="s2">"config/templates"</span>
+</code></pre>
+
+<p>You can read this file and then convert it to hash with the help of ruby <strong>eval</strong> method. Complete
+code is implemented as part of <a href="https://github.com/shvets/meta_methods">meta_methods</a> gem:</p>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'meta_methods'</span>
+
+<span class="n">content</span> <span class="o">=</span> <span class="no">File</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="s2">".test_config"</span><span class="p">)</span>
+
+<span class="nb">hash</span> <span class="o">=</span> <span class="no">MetaMethods</span><span class="o">::</span><span class="no">Core</span><span class="p">.</span><span class="nf">instance</span><span class="p">.</span><span class="nf">block_to_hash</span> <span class="n">content</span>
+</code></pre>
+
+<h2>Conclusion</h2>
+
+<p>All technics described above are implemented as separate <a href="https://github.com/shvets/config-file">config-file</a> gem. You can use it to read from 3 most popular formats.</p>
+
+<ul>
+<li>from yaml:</li>
+</ul>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'config_file'</span>
+
+<span class="n">config_file</span> <span class="o">=</span> <span class="no">ConfigFile</span><span class="p">.</span><span class="nf">new</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">load</span> <span class="s2">"spec/config/test_config.yaml"</span>
+<span class="nb">puts</span> <span class="n">config</span>
+</code></pre>
+
+<ul>
+<li>from json:</li>
+</ul>
+<pre><code class="highlight ruby"><span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">load</span> <span class="s2">"spec/config/test_config.json"</span>
+
+<span class="nb">puts</span> <span class="n">config</span>
+</code></pre>
+
+<ul>
+<li>from ruby:</li>
+</ul>
+<pre><code class="highlight ruby"><span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">load</span> <span class="s2">"spec/config/.test_config"</span><span class="p">,</span> <span class="s2">".rb"</span>
+
+<span class="nb">puts</span> <span class="n">config</span>
+</code></pre>
+
+<p>or register your own configuration format:</p>
+<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'nokogiri'</span>
+<span class="nb">require</span> <span class="s1">'active_support/core_ext/hash'</span>
+
+<span class="nb">require</span> <span class="s1">'config_file/config_file'</span>
+
+<span class="k">class</span> <span class="nc">ConfigType</span>
+  <span class="k">class</span> <span class="nc">Xml</span>
+    <span class="nc">ConfigFile</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">extensions</span>
+      <span class="o">[</span><span class="s2">".xml"</span><span class="o">]</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">read</span> <span class="n">file_name</span>
+      <span class="n">doc</span> <span class="o">=</span> <span class="no">Nokogiri</span><span class="o">::</span><span class="no">XML</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="n">file_name</span><span class="p">))</span>
+
+      <span class="no">HashWithIndifferentAccess</span><span class="p">.</span><span class="nf">new</span> <span class="no">Hash</span><span class="p">.</span><span class="nf">from_xml</span><span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="nf">to_s</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>and then use it:</p>
+<pre><code class="highlight ruby"><span class="n">config_file</span> <span class="o">=</span> <span class="no">ConfigFile</span><span class="p">.</span><span class="nf">new</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">load</span> <span class="s2">"spec/config/test_config.xml"</span>
+<span class="nb">puts</span> <span class="n">config</span>
+</code></pre>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2014), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2014.html">2014</a>
+(7)
+</li>
+<li>
+<a href="../../../2013.html">2013</a>
+(15)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(19)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/lunchy.html">lunchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rvm.html">rvm</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capybara.html">capybara</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/selenium.html">selenium</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webkit.html">webkit</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/phantomjs.html">phantomjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/qt.html">qt</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/acceptance-tests.html">acceptance tests</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/simplecov.html">simplecov</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/ci.html">CI</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jar.html">jar</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rake.html">rake</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/thor.html">thor</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/capistrano.html">capistrano</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/chef.html">chef</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/osx.html">osx</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/mavericks.html">mavericks</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/oracle.html">oracle</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/script_executor.html">script_executor</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/provisioning.html">provisioning</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/macbook.html">macbook</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/cucumber.html">cucumber</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/gherkin.html">gherkin</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/turnip.html">turnip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/linux.html">linux</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/config.html">config</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/json.html">json</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/yaml.html">yaml</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>
