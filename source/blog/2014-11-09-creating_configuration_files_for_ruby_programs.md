@@ -8,9 +8,11 @@ tags: ruby, config, json, yaml, nokogiri
 
 ## Introduction
 
-There are different ways to keep configuration information outside of ruby program. You can use .ini, .xml, .properties, .json, .yml formats to achieve it. 
+There are different ways to keep configuration information outside of ruby program. You can use
+.ini, .xml, .properties, .json, .yml formats to achieve it.
 
-There are some issues with this approach though. In case when you need to evaluate one property based on value of another property, it could be very difficult or almost impossible.
+You can find some issues with this approach though. In case when you need to evaluate one property
+based on value of another property, it could be very difficult or almost impossible.
 
 Let's show some examples of external configuration. In **xml format** it could look this way:
 
@@ -44,7 +46,7 @@ Another example in **json format**:
 }
 ```
 
-We can same question here.
+We can ask same question here.
 
 Let's take a look at possible solutions.
 
@@ -98,7 +100,7 @@ author = "Alexander Shvets"
 templates_dir = "config/templates"
 ```
 
-You can read this file and then convert it to hash with the help of ruby **eval** method. Complete
+You can read this file and then convert it to a hash with the help of ruby **eval** method. Complete
 code is implemented as part of [meta_methods][meta_methods] gem:
 
 ```ruby
@@ -120,14 +122,14 @@ require 'config_file'
 
 config_file = ConfigFile.new
 
-config = config_file.load "spec/config/test_config.yaml"
+config = config_file.read "spec/config/test_config.yaml"
 puts config
 ```
 
 - from json:
 
 ```ruby
-config = config_file.load "spec/config/test_config.json"
+config = config_file.read "spec/config/test_config.json"
 
 puts config
 ```
@@ -135,11 +137,11 @@ puts config
 - from ruby:
 
 ```ruby
-config = config_file.load "spec/config/.test_config", ".rb"
+config = config_file.read "spec/config/.test_config", ".rb"
 
 puts config
 ```
-or register your own configuration format:
+or register your own configuration format. Below is support for xml format:
 
 ```ruby
 require 'nokogiri'
@@ -168,7 +170,7 @@ and then use it:
 ```ruby
 config_file = ConfigFile.new
 
-config = config_file.load "spec/config/test_config.xml"
+config = config_file.read "spec/config/test_config.xml"
 puts config
 ```
 

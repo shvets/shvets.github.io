@@ -38,9 +38,11 @@
 
 <h2>Introduction</h2>
 
-<p>There are different ways to keep configuration information outside of ruby program. You can use .ini, .xml, .properties, .json, .yml formats to achieve it. </p>
+<p>There are different ways to keep configuration information outside of ruby program. You can use
+.ini, .xml, .properties, .json, .yml formats to achieve it.</p>
 
-<p>There are some issues with this approach though. In case when you need to evaluate one property based on value of another property, it could be very difficult or almost impossible.</p>
+<p>You can find some issues with this approach though. In case when you need to evaluate one property
+based on value of another property, it could be very difficult or almost impossible.</p>
 
 <p>Let&rsquo;s show some examples of external configuration. In <strong>xml format</strong> it could look this way:</p>
 <pre><code class="highlight xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
@@ -70,7 +72,7 @@
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<p>We can same question here.</p>
+<p>We can ask same question here.</p>
 
 <p>Let&rsquo;s take a look at possible solutions.</p>
 
@@ -118,7 +120,7 @@
 <span class="n">templates_dir</span> <span class="o">=</span> <span class="s2">"config/templates"</span>
 </code></pre>
 
-<p>You can read this file and then convert it to hash with the help of ruby <strong>eval</strong> method. Complete
+<p>You can read this file and then convert it to a hash with the help of ruby <strong>eval</strong> method. Complete
 code is implemented as part of <a href="https://github.com/shvets/meta_methods">meta_methods</a> gem:</p>
 <pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'meta_methods'</span>
 
@@ -138,14 +140,14 @@ code is implemented as part of <a href="https://github.com/shvets/meta_methods">
 
 <span class="n">config_file</span> <span class="o">=</span> <span class="no">ConfigFile</span><span class="p">.</span><span class="nf">new</span>
 
-<span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">load</span> <span class="s2">"spec/config/test_config.yaml"</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">read</span> <span class="s2">"spec/config/test_config.yaml"</span>
 <span class="nb">puts</span> <span class="n">config</span>
 </code></pre>
 
 <ul>
 <li>from json:</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">load</span> <span class="s2">"spec/config/test_config.json"</span>
+<pre><code class="highlight ruby"><span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">read</span> <span class="s2">"spec/config/test_config.json"</span>
 
 <span class="nb">puts</span> <span class="n">config</span>
 </code></pre>
@@ -153,12 +155,12 @@ code is implemented as part of <a href="https://github.com/shvets/meta_methods">
 <ul>
 <li>from ruby:</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">load</span> <span class="s2">"spec/config/.test_config"</span><span class="p">,</span> <span class="s2">".rb"</span>
+<pre><code class="highlight ruby"><span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">read</span> <span class="s2">"spec/config/.test_config"</span><span class="p">,</span> <span class="s2">".rb"</span>
 
 <span class="nb">puts</span> <span class="n">config</span>
 </code></pre>
 
-<p>or register your own configuration format:</p>
+<p>or register your own configuration format. Below is support for xml format:</p>
 <pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'nokogiri'</span>
 <span class="nb">require</span> <span class="s1">'active_support/core_ext/hash'</span>
 
@@ -184,7 +186,7 @@ code is implemented as part of <a href="https://github.com/shvets/meta_methods">
 <p>and then use it:</p>
 <pre><code class="highlight ruby"><span class="n">config_file</span> <span class="o">=</span> <span class="no">ConfigFile</span><span class="p">.</span><span class="nf">new</span>
 
-<span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">load</span> <span class="s2">"spec/config/test_config.xml"</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">.</span><span class="nf">read</span> <span class="s2">"spec/config/test_config.xml"</span>
 <span class="nb">puts</span> <span class="n">config</span>
 </code></pre>
 

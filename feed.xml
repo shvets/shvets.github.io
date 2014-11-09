@@ -22,9 +22,11 @@
 
 &lt;h2&gt;Introduction&lt;/h2&gt;
 
-&lt;p&gt;There are different ways to keep configuration information outside of ruby program. You can use .ini, .xml, .properties, .json, .yml formats to achieve it. &lt;/p&gt;
+&lt;p&gt;There are different ways to keep configuration information outside of ruby program. You can use
+.ini, .xml, .properties, .json, .yml formats to achieve it.&lt;/p&gt;
 
-&lt;p&gt;There are some issues with this approach though. In case when you need to evaluate one property based on value of another property, it could be very difficult or almost impossible.&lt;/p&gt;
+&lt;p&gt;You can find some issues with this approach though. In case when you need to evaluate one property
+based on value of another property, it could be very difficult or almost impossible.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s show some examples of external configuration. In &lt;strong&gt;xml format&lt;/strong&gt; it could look this way:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="highlight xml"&gt;&lt;span class="cp"&gt;&amp;lt;?xml version="1.0" encoding="UTF-8"?&amp;gt;&lt;/span&gt;
@@ -54,7 +56,7 @@
 &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;We can same question here.&lt;/p&gt;
+&lt;p&gt;We can ask same question here.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s take a look at possible solutions.&lt;/p&gt;
 
@@ -102,7 +104,7 @@
 &lt;span class="n"&gt;templates_dir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"config/templates"&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;You can read this file and then convert it to hash with the help of ruby &lt;strong&gt;eval&lt;/strong&gt; method. Complete
+&lt;p&gt;You can read this file and then convert it to a hash with the help of ruby &lt;strong&gt;eval&lt;/strong&gt; method. Complete
 code is implemented as part of &lt;a href="https://github.com/shvets/meta_methods"&gt;meta_methods&lt;/a&gt; gem:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'meta_methods'&lt;/span&gt;
 
@@ -122,14 +124,14 @@ code is implemented as part of &lt;a href="https://github.com/shvets/meta_method
 
 &lt;span class="n"&gt;config_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ConfigFile&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
 
-&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;load&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.yaml"&lt;/span&gt;
+&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.yaml"&lt;/span&gt;
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;from json:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;load&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.json"&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.json"&lt;/span&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -137,12 +139,12 @@ code is implemented as part of &lt;a href="https://github.com/shvets/meta_method
 &lt;ul&gt;
 &lt;li&gt;from ruby:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;load&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/.test_config"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".rb"&lt;/span&gt;
+&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/.test_config"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".rb"&lt;/span&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;or register your own configuration format:&lt;/p&gt;
+&lt;p&gt;or register your own configuration format. Below is support for xml format:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'nokogiri'&lt;/span&gt;
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'active_support/core_ext/hash'&lt;/span&gt;
 
@@ -168,7 +170,7 @@ code is implemented as part of &lt;a href="https://github.com/shvets/meta_method
 &lt;p&gt;and then use it:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;config_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ConfigFile&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
 
-&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;load&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.xml"&lt;/span&gt;
+&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.xml"&lt;/span&gt;
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 </content>
