@@ -53,27 +53,27 @@ around <strong>http/https</strong> ruby standard classes. You can get such imple
 <h2>Installation</h2>
 
 <p>Add this line to to your Gemfile:</p>
-<pre><code class="highlight plaintext">gem "resource_accessor"
+<pre class="highlight plaintext"><code>gem "resource_accessor"
 </code></pre>
 
 <p>And then execute:</p>
-<pre><code class="highlight plaintext">$ bundle
+<pre class="highlight plaintext"><code>$ bundle
 </code></pre>
 
 <h2>Usage</h2>
 
 <p>Create accessor object:</p>
-<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'resource_accessor'</span>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'resource_accessor'</span>
 
 <span class="n">accessor</span> <span class="o">=</span> <span class="no">ResourceAccessor</span><span class="p">.</span><span class="nf">new</span>
 </code></pre>
 
 <p>If you want to access unprotected resource, located at <strong>some_url</strong>, execute this line:</p>
-<pre><code class="highlight ruby"><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
+<pre class="highlight ruby"><code><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
 </code></pre>
 
 <p>If you want to get protected resource, first get the cookie and then access protected resource:</p>
-<pre><code class="highlight ruby"><span class="c1"># 1. Get cookie</span>
+<pre class="highlight ruby"><code><span class="c1"># 1. Get cookie</span>
 
 <span class="n">cookie</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_cookie</span> <span class="n">login_url</span><span class="p">,</span> <span class="n">user_name</span><span class="p">,</span> <span class="n">password</span>
 
@@ -100,7 +100,7 @@ around <strong>http/https</strong> ruby standard classes. You can get such imple
 
 <p>If you want to get AJAX resource, add special header to the request or
 use dedicated method:</p>
-<pre><code class="highlight ruby"><span class="n">response1</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
+<pre class="highlight ruby"><code><span class="n">response1</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
   <span class="p">{</span><span class="s1">'X-Requested-With'</span> <span class="o">=&gt;</span> <span class="s1">'XMLHttpRequest'</span><span class="p">}</span>
 
 <span class="n">response2</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_ajax_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
@@ -108,7 +108,7 @@ use dedicated method:</p>
 
 <p>If you want to get SOAP resource, same as before, add special header to the request
 or use dedicated method:</p>
-<pre><code class="highlight ruby"><span class="n">response1</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
+<pre class="highlight ruby"><code><span class="n">response1</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
   <span class="p">{</span><span class="s1">'SOAPAction'</span> <span class="o">=&gt;</span> <span class="s1">'someSoapOperation'</span><span class="p">,</span>
   <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'text/xml;charset=UTF-8'</span><span class="p">}</span>
 
@@ -117,27 +117,27 @@ or use dedicated method:</p>
 
 <p>If you want to get JSON resource, same as before, add special header to the request
 or use dedicated method:</p>
-<pre><code class="highlight ruby"><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
+<pre class="highlight ruby"><code><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="p">{</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">},</span>
   <span class="p">{</span><span class="s1">'Content-Type" =&gt; "application/json;charset=UTF-8'</span><span class="p">}</span>
 
 <span class="n">response2</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_json_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span>
 </code></pre>
 
 <p>If you want to provide additional parameters in GET call, use <strong>query</strong> parameter:</p>
-<pre><code class="highlight ruby"><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">,</span> <span class="ss">:query</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:param1</span> <span class="o">=&gt;</span> <span class="s1">'p1'</span><span class="p">,</span> <span class="ss">:param2</span> <span class="o">=&gt;</span> <span class="s1">'p2'</span><span class="p">}</span>
+<pre class="highlight ruby"><code><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="n">some_url</span><span class="p">,</span> <span class="ss">:query</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:param1</span> <span class="o">=&gt;</span> <span class="s1">'p1'</span><span class="p">,</span> <span class="ss">:param2</span> <span class="o">=&gt;</span> <span class="s1">'p2'</span><span class="p">}</span>
 </code></pre>
 
 <p>or</p>
-<pre><code class="highlight ruby"><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">some_url?param1</span><span class="o">=</span><span class="n">p1</span><span class="o">&amp;</span><span class="n">param2</span><span class="o">=</span><span class="n">p2</span><span class="si">}</span><span class="s2">"</span>
+<pre class="highlight ruby"><code><span class="n">response</span> <span class="o">=</span> <span class="n">accessor</span><span class="p">.</span><span class="nf">get_response</span> <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s2">"</span><span class="si">#{</span><span class="n">some_url?param1</span><span class="o">=</span><span class="n">p1</span><span class="o">&amp;</span><span class="n">param2</span><span class="o">=</span><span class="n">p2</span><span class="si">}</span><span class="s2">"</span>
 </code></pre>
 
 <p>You can setup timeout for your accessor object in milliseconds:</p>
-<pre><code class="highlight ruby"><span class="n">accessor</span><span class="p">.</span><span class="nf">timeout</span> <span class="o">=</span> <span class="mi">10000</span>
+<pre class="highlight ruby"><code><span class="n">accessor</span><span class="p">.</span><span class="nf">timeout</span> <span class="o">=</span> <span class="mi">10000</span>
 </code></pre>
 
 <p>If you need to work over ssl, enable certificate validation and certificate file location
  before the call:</p>
-<pre><code class="highlight ruby"><span class="n">accessor</span><span class="p">.</span><span class="nf">validate_ssl_cert</span> <span class="o">=</span> <span class="kp">true</span>
+<pre class="highlight ruby"><code><span class="n">accessor</span><span class="p">.</span><span class="nf">validate_ssl_cert</span> <span class="o">=</span> <span class="kp">true</span>
 <span class="n">accessor</span><span class="p">.</span><span class="nf">ca_file</span> <span class="o">=</span> <span class="s1">'your cert file location'</span>
 </code></pre>
 
@@ -158,6 +158,10 @@ Get feed
 <div class='section'>
 <h2>By Year</h2>
 <ol>
+<li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
 <li>
 <a href="../../../2014.html">2014</a>
 (7)
@@ -209,7 +213,7 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/javascript.html">javascript</a>
-(2)
+(3)
 </li>
 <li>
 <a href="../../../tags/karma.html">karma</a>
@@ -377,6 +381,18 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
 (1)
 </li>
 </ol>

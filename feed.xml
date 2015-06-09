@@ -5,10 +5,115 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2014-11-08T19:00:00-05:00</updated>
+  <updated>2015-06-08T20:00:00-04:00</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Hitting real angular http service from jasmine test</title>
+    <link rel="alternate" href="/blog/2015/06/09/hitting-real-angular-http-service-from-jasmine-test.html"/>
+    <id>/blog/2015/06/09/hitting-real-angular-http-service-from-jasmine-test.html</id>
+    <published>2015-06-08T20:00:00-04:00</published>
+    <updated>2015-06-08T20:00:00-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h1&gt;Hitting real angular http service from jasmine test&lt;/h1&gt;
+
+&lt;p&gt;Sometimes you want to use jasmine as a tool for playing with existing web services,
+grab some responses and then convert them into the stubs. Unfortunately, from jasmine test
+you have access only to mocked version of &lt;strong&gt;$httpBackend&lt;/strong&gt; service.&lt;/p&gt;
+
+&lt;p&gt;You can use this helper code for accessing real &lt;strong&gt;$httpBackend&lt;/strong&gt; service:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;angular&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'httpReal'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'ng'&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;'$provide'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;$provide&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;$provide&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;decorator&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'$httpBackend'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;angular&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;injector&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;'ng'&lt;/span&gt;&lt;span class="p"&gt;]).&lt;/span&gt;&lt;span class="nx"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'$httpBackend'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="p"&gt;}])&lt;/span&gt;
+  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;service&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'HttpReal'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;$rootScope&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;submit&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;$rootScope&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;$digest&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="p"&gt;};&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This code creates &lt;strong&gt;httpReal&lt;/strong&gt; service in which you restore access to original &lt;strong&gt;$httpBackend&lt;/strong&gt;.
+It also provides a function to flush the request. Otherwise promises from http service call will 
+never be executed.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s create demo service:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;namespace&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;angular&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'myModule'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[]);&lt;/span&gt;
+
+&lt;span class="nx"&gt;namespace&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;service&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'MyService'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;$http&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;remoteCall&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;$http&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="na"&gt;method&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;'GET'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="na"&gt;url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; 
+      &lt;span class="s1"&gt;'http://api.openweathermap.org/data/2.5/weather?q=Princeton'&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and test it:&lt;/p&gt;
+&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;describe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'MyService'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;myService&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;httpReal&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="nx"&gt;beforeEach&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'myModule'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'httpReal'&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+
+  &lt;span class="nx"&gt;beforeEach&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;inject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;MyService&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;HttpReal&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;myService&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;MyService&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nx"&gt;httpReal&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;HttpReal&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;}));&lt;/span&gt;
+
+  &lt;span class="nx"&gt;it&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'calls success callback and returns valid data'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+    &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;done&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;myService&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;remoteCall&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;then&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;response&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;response&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;sys&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;country&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;toEqual&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'US'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;done&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+      &lt;span class="p"&gt;});&lt;/span&gt;
+
+      &lt;span class="nx"&gt;httpReal&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;submit&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;);&lt;/span&gt;
+
+  &lt;span class="nx"&gt;it&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'calls error callback'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;done&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;myServiceResults&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;createPromise&lt;/span&gt;&lt;span class="p"&gt;({},&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+    &lt;span class="nx"&gt;spyOn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;myService&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'remoteCall'&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;and&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;returnValue&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;myServiceResults&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+    &lt;span class="nx"&gt;myService&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;remoteCall&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="nx"&gt;then&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;angular&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;noop&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;done&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+
+    &lt;span class="nx"&gt;httpReal&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;submit&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+
+&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;createPromise&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;success&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;q&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="nx"&gt;inject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;$q&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;q&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;$q&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;deferred&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;q&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;defer&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+  &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;success&lt;/span&gt; &lt;span class="o"&gt;===&lt;/span&gt; &lt;span class="kc"&gt;undefined&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nx"&gt;success&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;deferred&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;value&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;deferred&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;reject&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;deferred&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;promise&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Take a look on how to properly use promises in tests. It uses &lt;a href="http://www.htmlgoodies.com/beyond/javascript/stips/using-jasmine-2.0s-new-done-function-to-test-asynchronous-processes.html"&gt;&lt;strong&gt;done&lt;/strong&gt;&lt;/a&gt; 
+function. In jasmine 2.x they have dropped &lt;strong&gt;runs/waitsFor&lt;/strong&gt; functions in favor of the Mocha &lt;strong&gt;done&lt;/strong&gt; 
+callback. You can use it in &lt;strong&gt;beforeEach&lt;/strong&gt;, &lt;strong&gt;afterEach&lt;/strong&gt; and &lt;strong&gt;it&lt;/strong&gt; calls. &lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Creating configuration files for Ruby programs</title>
     <link rel="alternate" href="/blog/2014/11/09/creating_configuration_files_for_ruby_programs.html"/>
@@ -29,7 +134,7 @@
 based on value of another property, it could be very difficult or almost impossible.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s show some examples of external configuration. In &lt;strong&gt;xml format&lt;/strong&gt; it could look this way:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight xml"&gt;&lt;span class="cp"&gt;&amp;lt;?xml version="1.0" encoding="UTF-8"?&amp;gt;&lt;/span&gt;
+&lt;pre class="highlight xml"&gt;&lt;code&gt;&lt;span class="cp"&gt;&amp;lt;?xml version="1.0" encoding="UTF-8"?&amp;gt;&lt;/span&gt;
 
 &lt;span class="nt"&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
   &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;"property1"&lt;/span&gt; &lt;span class="na"&gt;value=&lt;/span&gt;&lt;span class="s"&gt;"value1"&lt;/span&gt;&lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
@@ -45,7 +150,7 @@ based on value of another property, it could be very difficult or almost impossi
 &lt;p&gt;Question: how to implement reference to another property, e.g. &lt;strong&gt;properties.property1&lt;/strong&gt; for &lt;strong&gt;properties.property3&lt;/strong&gt;?&lt;/p&gt;
 
 &lt;p&gt;Another example in &lt;strong&gt;json format&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"property1"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"value1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
 
   &lt;/span&gt;&lt;span class="s2"&gt;"property2"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
@@ -63,7 +168,7 @@ based on value of another property, it could be very difficult or almost impossi
 &lt;h2&gt;Using text interpolation&lt;/h2&gt;
 
 &lt;p&gt;You can use some form of text interpolation to substitute such values based on the knowledge of the context. Look at &lt;a href="https://github.com/shvets/text-interpolator"&gt;text_interpolator gem&lt;/a&gt; and &lt;a href="http://shvets.github.io/blog/2014/05/17/text_interpolator.html"&gt;article&lt;/a&gt; about how to use this gem  for further details. In short, it uses simple ruby trick:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;env&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="s1"&gt;'some value 1'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;var2: &lt;/span&gt;&lt;span class="s1"&gt;'some value 2'&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="n"&gt;env&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="s1"&gt;'some value 1'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;var2: &lt;/span&gt;&lt;span class="s1"&gt;'some value 2'&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 
 &lt;span class="n"&gt;template&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"We have var1: %{var1} and var2: %{var2}."&lt;/span&gt;
 
@@ -73,7 +178,7 @@ based on value of another property, it could be very difficult or almost impossi
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;With this technick you can use multi-level properties, e.g.:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"tomcat"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"home"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"/usr/local/Cellar/tomcat7/7.0.56/libexec"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"deploy_dir"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"#{tomcat.home}/webapps"&lt;/span&gt;&lt;span class="w"&gt;
@@ -88,11 +193,11 @@ based on value of another property, it could be very difficult or almost impossi
 &lt;h2&gt;Using ruby language for describing configuration&lt;/h2&gt;
 
 &lt;p&gt;Another idea is to use Ruby fragment (piece of code) to represent the configuration. In such a way you don&amp;rsquo;t have to &lt;strong&gt;a)&lt;/strong&gt; invent yet another language to represent configuration and &lt;strong&gt;b)&lt;/strong&gt; you can use language&amp;rsquo;s expressiveness to have text interpolation at the moment  when you really need it. For example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# .test_config&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="c1"&gt;# .test_config&lt;/span&gt;
 
 &lt;span class="n"&gt;rails_env&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"production"&lt;/span&gt;
 
-&lt;span class="n"&gt;ant_home&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'ANT_HOME'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'HOME'&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/apache-ant-1.8.3"&lt;/span&gt;
+&lt;span class="n"&gt;ant_home&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'ANT_HOME'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="no"&gt;ENV&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'HOME'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/apache-ant-1.8.3"&lt;/span&gt;
 &lt;span class="n"&gt;project_name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"web_app_builder_test"&lt;/span&gt;
 &lt;span class="n"&gt;gems_to_reject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sx"&gt;%w(bundler)&lt;/span&gt;
 
@@ -106,7 +211,7 @@ based on value of another property, it could be very difficult or almost impossi
 
 &lt;p&gt;You can read this file and then convert it to a hash with the help of ruby &lt;strong&gt;eval&lt;/strong&gt; method. Complete
 code is implemented as part of &lt;a href="https://github.com/shvets/meta_methods"&gt;meta_methods&lt;/a&gt; gem:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'meta_methods'&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'meta_methods'&lt;/span&gt;
 
 &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;".test_config"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
@@ -120,7 +225,7 @@ code is implemented as part of &lt;a href="https://github.com/shvets/meta_method
 &lt;ul&gt;
 &lt;li&gt;from yaml:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'config_file'&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'config_file'&lt;/span&gt;
 
 &lt;span class="n"&gt;config_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ConfigFile&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
 
@@ -131,7 +236,7 @@ code is implemented as part of &lt;a href="https://github.com/shvets/meta_method
 &lt;ul&gt;
 &lt;li&gt;from json:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.json"&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.json"&lt;/span&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -139,13 +244,13 @@ code is implemented as part of &lt;a href="https://github.com/shvets/meta_method
 &lt;ul&gt;
 &lt;li&gt;from ruby:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/.test_config"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".rb"&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/.test_config"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".rb"&lt;/span&gt;
 
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or register your own configuration format. Below is support for xml format:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'nokogiri'&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'nokogiri'&lt;/span&gt;
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'active_support/core_ext/hash'&lt;/span&gt;
 
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'config_file/config_file'&lt;/span&gt;
@@ -155,7 +260,7 @@ code is implemented as part of &lt;a href="https://github.com/shvets/meta_method
     &lt;span class="nc"&gt;ConfigFile&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nc"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;extensions&lt;/span&gt;
-      &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;".xml"&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+      &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;".xml"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
     &lt;span class="k"&gt;end&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="n"&gt;file_name&lt;/span&gt;
@@ -168,7 +273,7 @@ code is implemented as part of &lt;a href="https://github.com/shvets/meta_method
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;and then use it:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;config_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ConfigFile&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="n"&gt;config_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ConfigFile&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
 
 &lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;config_file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt; &lt;span class="s2"&gt;"spec/config/test_config.xml"&lt;/span&gt;
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt;
@@ -222,19 +327,26 @@ in UI mode, but it&amp;rsquo;s not required.&lt;/p&gt;&lt;/li&gt;
 Once installed, it will be accessible from command line as &lt;strong&gt;vagrant&lt;/strong&gt; command.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p&gt;or&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;brew install caskroom/cask/brew-cask
+
+brew cask install virtualbox
+brew cask install vagrant
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;You have to decide what linux image fits your needs. In our case we use &lt;strong&gt;Ubuntu 14.04 LTS 64-bit&lt;/strong&gt; image -
 it is identified with &lt;strong&gt;&amp;ldquo;ubuntu/trusty64&amp;rdquo;&lt;/strong&gt; key. You can see other images &lt;a href="https://vagrantcloud.com/discover"&gt;here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Download and install it:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant box add ubuntu/trusty64 https://vagrantcloud.com/ubuntu/boxes/trusty64
+&lt;pre class="highlight shell"&gt;&lt;code&gt;  vagrant box add ubuntu/trusty64 https://vagrantcloud.com/ubuntu/boxes/trusty64
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Initialize it:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight plaintext"&gt;vagrant init ubuntu/trusty64
+&lt;pre class="highlight shell"&gt;&lt;code&gt;vagrant init ubuntu/trusty64
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This command creates &lt;strong&gt;Vagrantfile&lt;/strong&gt; file in the root of your project. Below is an example of such a file:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# -*- mode: ruby -*-&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="c1"&gt;# -*- mode: ruby -*-&lt;/span&gt;
 &lt;span class="c1"&gt;# vi: set ft=ruby :&lt;/span&gt;
 
 &lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"2"&lt;/span&gt;
@@ -245,7 +357,7 @@ it is identified with &lt;strong&gt;&amp;ldquo;ubuntu/trusty64&amp;rdquo;&lt;/st
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can do various commands with &lt;strong&gt;vagrant&lt;/strong&gt; tool. For example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant up        &lt;span class="c"&gt;# starts up: creates and configures guest machine&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;vagrant up        &lt;span class="c"&gt;# starts up: creates and configures guest machine&lt;/span&gt;
 vagrant &lt;span class="nb"&gt;suspend&lt;/span&gt;   &lt;span class="c"&gt;# suspends the guest machine&lt;/span&gt;
 vagrant halt      &lt;span class="c"&gt;# shuts down the running machine&lt;/span&gt;
 vagrant reload    &lt;span class="c"&gt;# vagrant halt; vagrant up&lt;/span&gt;
@@ -255,30 +367,30 @@ vagrant box remove ubuntu/trusty64 &lt;span class="c"&gt;# removes a box from va
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You also can package currently running VirtualBox environment into reusable box:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant package --vagrantfile Vagrantfile --output linux_provision.box
+&lt;pre class="highlight shell"&gt;&lt;code&gt;vagrant package --vagrantfile Vagrantfile --output linux_provision.box
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;After &lt;strong&gt;Vagrantfile&lt;/strong&gt; is generated, you can start your base box:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant up
+&lt;pre class="highlight shell"&gt;&lt;code&gt;vagrant up
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now you have a &lt;strong&gt;fully running virtual machine&lt;/strong&gt; in VirtualBox. You can access it through &lt;strong&gt;vagrant ssh&lt;/strong&gt; command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant ssh
+&lt;pre class="highlight shell"&gt;&lt;code&gt;vagrant ssh
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or &lt;strong&gt;directly via ssh&lt;/strong&gt; (use &lt;strong&gt;vagrant&lt;/strong&gt; password for &lt;strong&gt;vagrant&lt;/strong&gt; user and port &lt;strong&gt;2222&lt;/strong&gt;, this port is used as default
 by vagrant for ssh connections):&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;ssh vagrant@127.0.0.1 -p 2222
+&lt;pre class="highlight shell"&gt;&lt;code&gt;ssh vagrant@127.0.0.1 -p 2222
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can assign IP address for your linux box, e.g.:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;configure&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;configure&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
   &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;network&lt;/span&gt; &lt;span class="s2"&gt;"private_network"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;ip: &lt;/span&gt;&lt;span class="s2"&gt;"22.22.22.22"&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;With this configuration you can access ssh on default port:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;ssh vagrant@22.22.22.22
+&lt;pre class="highlight shell"&gt;&lt;code&gt;ssh vagrant@22.22.22.22
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Your initial setup of linux box is completed now and ready to use.&lt;/p&gt;
@@ -296,6 +408,13 @@ all without the overhead of a hypervisor.&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;&lt;a href="http://boot2docker.io"&gt;boot2docker&lt;/a&gt;. You need to install it only for non-Linux environment.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p&gt;or &lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;  brew install caskroom/cask/brew-cask
+
+  brew cask install virtualbox
+  brew cask install docker
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;boot2docker is a lightweight Linux image made specifically to run Docker containers. It runs completely from
 RAM, weighs  approximately 27 MB and boots in about 5 seconds.&lt;/p&gt;
 
@@ -303,67 +422,72 @@ RAM, weighs  approximately 27 MB and boots in about 5 seconds.&lt;/p&gt;
 means that boot2docker, not OSX, is the Docker host.&lt;/p&gt;
 
 &lt;p&gt;This command will create &lt;strong&gt;boot2docker-vm&lt;/strong&gt; virtual machine:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker init
+&lt;pre class="highlight shell"&gt;&lt;code&gt;boot2docker init
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Go to VirtualBox UI - new VM will be added.&lt;/p&gt;
 
 &lt;p&gt;Start it up:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker up
+&lt;pre class="highlight shell"&gt;&lt;code&gt;boot2docker up
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or shut it down:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker down
+&lt;pre class="highlight shell"&gt;&lt;code&gt;boot2docker down
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Upgrade Boot2docker VM image:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker stop
+&lt;pre class="highlight shell"&gt;&lt;code&gt;boot2docker stop
 boot2docker download
 boot2docker up
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;When docker daemon first started, it gives you recommendation about how to run docker client.
 It needs to know where docker is running, e.g.:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;DOCKER_HOST&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;tcp://192.168.59.103:2375
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;DOCKER_HOST&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;tcp://192.168.59.103:2375
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;You have to setup it globally in &lt;strong&gt;.bash_profile&lt;/strong&gt; file or specify it each time when docker client gets started.&lt;/p&gt;
+&lt;p&gt;You have to setup it globally in &lt;strong&gt;.bash_profile&lt;/strong&gt; file or specify it each time when docker client gets started.
+Or, you can run this command each time:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="k"&gt;$(&lt;/span&gt;boot2docker shellinit&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will set the required environment variables. &lt;/p&gt;
 
 &lt;p&gt;You can access boot2docker over ssh (user: &lt;strong&gt;docker&lt;/strong&gt;, password: &lt;strong&gt;tcuser&lt;/strong&gt;):&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;boot2docker ssh
+&lt;pre class="highlight shell"&gt;&lt;code&gt;boot2docker ssh
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Download the small base image named &lt;strong&gt;busybox&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;docker pull busybox
+&lt;pre class="highlight shell"&gt;&lt;code&gt;docker pull busybox
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Run and test docker as separate command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;docker run busybox &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;"hello, linus!"&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;docker run busybox &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;"hello, linus!"&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or interactively:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;docker run -t -i busybox /bin/sh
+&lt;pre class="highlight shell"&gt;&lt;code&gt;docker run -t -i busybox /bin/sh
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Install and confige linux_provision gem&lt;/h2&gt;
 
 &lt;p&gt;Both programs - Vagrant and Docker - have their own ways to serve provisioning. Vagrant is doing it with the help of
 &lt;strong&gt;provision&lt;/strong&gt; attribute. Example with simple shell script:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
   &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;provision&lt;/span&gt; &lt;span class="ss"&gt;:shell&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:path&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"bootstrap.sh"&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or with chef solo:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;run&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
   &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;provision&lt;/span&gt; &lt;span class="ss"&gt;:chef_solo&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;chef&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-  &lt;span class="k"&gt;end&lt;/span&gt;
+    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+  &lt;span class="nf"&gt;end&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Docker also lets you do provisioning in form of &lt;strong&gt;RUN&lt;/strong&gt; command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight plaintext"&gt;# Dockerfile
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;# Dockerfile
 
 RUN apt-get -y -q install postgresql-9.3
 &lt;/code&gt;&lt;/pre&gt;
@@ -377,11 +501,11 @@ ruby etc. with the help of thor or rake script. You can see other gems that use 
 for &lt;a href="https://github.com/shvets/oracle_client_provision"&gt;Oracle Instant Client&lt;/a&gt; installation and for &lt;a href="https://github.com/shvets/osx_provision"&gt;OSX&lt;/a&gt; provision.&lt;/p&gt;
 
 &lt;p&gt;In order to use this gem add this line to your application&amp;rsquo;s Gemfile:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;gem &lt;span class="s1"&gt;'linux_provision'&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;gem &lt;span class="s1"&gt;'linux_provision'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;And then execute:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle
+&lt;pre class="highlight shell"&gt;&lt;code&gt;bundle
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Before you can start using &lt;strong&gt;linux_provision&lt;/strong&gt; gem within your project, you need to configure it. Do the following:&lt;/p&gt;
@@ -390,7 +514,7 @@ for &lt;a href="https://github.com/shvets/oracle_client_provision"&gt;Oracle Ins
 &lt;li&gt;Create configuration file (e.g. &lt;strong&gt;.linux_provision.json&lt;/strong&gt;) in json format at the root of your project. It will
 define your environment:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
    &lt;/span&gt;&lt;span class="err"&gt;...&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="err"&gt;}&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
@@ -423,7 +547,7 @@ define your environment:&lt;/li&gt;
 
 &lt;p&gt;Library itself if written in ruby, but for launching its code it&amp;rsquo;s more convenient to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt; tool.
 Here I provide thor script as an example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# thor/linux_install.thor&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="c1"&gt;# thor/linux_install.thor&lt;/span&gt;
 
 &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;'/../lib'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
@@ -450,7 +574,7 @@ Here I provide thor script as an example:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can execute separate commands from script directly with &lt;strong&gt;invoke&lt;/strong&gt; thor command. Below is fragment of such script:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
 
 &lt;span class="c"&gt;#######################################&lt;/span&gt;
 &lt;span class="o"&gt;[&lt;/span&gt;prepare]
@@ -483,16 +607,16 @@ rvm install ruby-1.9.3
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can add your own scripts (e.g. demo_scripts.sh):&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LinuxInstall&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LinuxInstall&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
   &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;LinuxProvision&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
     &lt;span class="s2"&gt;".linux_provision.json"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"demo_scripts.sh"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"demo_scripts.sh"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;))]&lt;/span&gt;
+  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="nf"&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We defined 2 new commands in demo_script.sh:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
 
 &lt;span class="c"&gt;##############################&lt;/span&gt;
 &lt;span class="o"&gt;[&lt;/span&gt;project]
@@ -535,13 +659,13 @@ rackup
 &lt;p&gt;For testing purposes we have created demo web application (in &lt;strong&gt;demo&lt;/strong&gt; folder) based on &lt;a href="http://www.sinatrarb.com"&gt;sinatra&lt;/a&gt; framework.&lt;/p&gt;
 
 &lt;p&gt;First, we need to inform Vagrant about the location of this application within virtual machine:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;configure&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;Vagrant&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;configure&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;VAGRANTFILE_API_VERSION&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
   &lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;vm&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;synced_folder&lt;/span&gt; &lt;span class="s2"&gt;"./demo"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"/home/vagrant/demo"&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Second, we need to configure linux_provision gem to point to right domain/port and use correct user name/password:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"22.22.22.22"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;remote&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;host,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;see&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"config.vm.synced_folder"&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"22"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;default&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;ssh&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;port&lt;/span&gt;&lt;span class="w"&gt;
@@ -554,11 +678,11 @@ rackup
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Start your base box:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;vagrant up
+&lt;pre class="highlight shell"&gt;&lt;code&gt;vagrant up
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Access linux box and find out this demo application&amp;rsquo;s home:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;ssh vagrant@22.22.22.22
+&lt;pre class="highlight shell"&gt;&lt;code&gt;ssh vagrant@22.22.22.22
 
 &lt;span class="nb"&gt;pwd&lt;/span&gt; &lt;span class="c"&gt;# /home/vagrant&lt;/span&gt;
 
@@ -571,7 +695,7 @@ ls &lt;span class="c"&gt;# content of demo folder&lt;/span&gt;
 
 &lt;p&gt;These commands from &lt;strong&gt;linux_provision&lt;/strong&gt; gem will build your environment for the demo project (install rvm, ruby,
 postgres, postgres user and posters tables):&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor linux_install:prepare
+&lt;pre class="highlight shell"&gt;&lt;code&gt;thor linux_install:prepare
 thor linux_install:rvm
 thor linux_install:ruby
 
@@ -582,20 +706,20 @@ thor linux_install:postgres_create_schemas
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Initialize demo project and run sinatra application:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor linux_install:project
+&lt;pre class="highlight shell"&gt;&lt;code&gt;thor linux_install:project
 
 thor linux_install:rackup
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now you can access application from your favorite browser:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;open http://22.22.22.22:9292
+&lt;pre class="highlight shell"&gt;&lt;code&gt;open http://22.22.22.22:9292
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Demo application with Docker&lt;/h2&gt;
 
 &lt;p&gt;You need to do very similar steps as with Vagrant. The only difference is in &lt;strong&gt;linux_provision.json&lt;/strong&gt; file
 you have to point to different host, port and user:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"192.168.59.103"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;remote&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;host,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;see&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;boot2docker&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;ip&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"42222"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;ssh&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;port&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;docker&lt;/span&gt;&lt;span class="w"&gt;
@@ -618,7 +742,7 @@ you have to point to different host, port and user:&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Here is example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight plaintext"&gt;FROM ubuntu:14.04
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;FROM ubuntu:14.04
 
 MAINTAINER Alexander Shvets "alexander.shvets@gmail.com"
 
@@ -655,7 +779,7 @@ EXPOSE 9292
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Build docker image and run it:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;docker build -t demo demo
+&lt;pre class="highlight shell"&gt;&lt;code&gt;docker build -t demo demo
 docker run -d -p 42222:22 -p 9292:9292 --name demo demo
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -663,11 +787,11 @@ docker run -d -p 42222:22 -p 9292:9292 --name demo demo
 regular telnet or ssh tool, we&amp;rsquo;ll hit service inside the docker.&lt;/p&gt;
 
 &lt;p&gt;You can access virtual machine via ssh:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;ssh vagrant@192.168.59.103 -p 42222
+&lt;pre class="highlight shell"&gt;&lt;code&gt;ssh vagrant@192.168.59.103 -p 42222
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now you can do your provision - it&amp;rsquo;s exactly the same as with Vagrant example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor linux_install:prepare
+&lt;pre class="highlight shell"&gt;&lt;code&gt;thor linux_install:prepare
 thor linux_install:rvm
 thor linux_install:ruby
 
@@ -682,7 +806,7 @@ thor linux_install:rackup
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;After provisioning and starting server try to access your application from the browser:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;open http://192.168.59.103:9292
+&lt;pre class="highlight shell"&gt;&lt;code&gt;open http://192.168.59.103:9292
 &lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>
@@ -727,7 +851,7 @@ not have the ability to get data from external source like file or database conn
 &lt;h2&gt;Solution&lt;/h2&gt;
 
 &lt;p&gt;Below is an example of Gherkin (Cucumber) feature script with Scenario Outline:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight gherkin"&gt;&lt;span class="kd"&gt;Feature&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; Using Wikipedia
+&lt;pre class="highlight gherkin"&gt;&lt;code&gt;&lt;span class="kd"&gt;Feature&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; Using Wikipedia
 
   &lt;span class="kn"&gt;Background&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; within wikipedia.com context
     &lt;span class="nf"&gt;Given&lt;/span&gt; I am within wikipedia.com
@@ -750,13 +874,13 @@ not have the ability to get data from external source like file or database conn
 &lt;p&gt;It reads from &lt;strong&gt;Examples&lt;/strong&gt; section and execute script 3 times for different &lt;strong&gt;&amp;lt;keyword&amp;gt;&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;We want to be able to externalize keywords, say in &lt;strong&gt;data.csv&lt;/strong&gt; file:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight plaintext"&gt;Capybara
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Capybara
 Wombat
 Echidna
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;and then replace section with data with the path to external file.&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight gherkin"&gt;&lt;span class="kd"&gt;Feature&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; Using Wikipedia
+&lt;pre class="highlight gherkin"&gt;&lt;code&gt;&lt;span class="kd"&gt;Feature&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; Using Wikipedia
 
   &lt;span class="kn"&gt;Background&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; within wikipedia.com context
     &lt;span class="nf"&gt;Given&lt;/span&gt; I am within wikipedia.com
@@ -782,7 +906,7 @@ dynamically in memory.&lt;/p&gt;
 &lt;p&gt;The code introduces hook on gherkin level, so it will work for all tools.&lt;/p&gt;
 
 &lt;p&gt;Below it an example how to use it:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'acceptance_test/gherkin_ext'&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'acceptance_test/gherkin_ext'&lt;/span&gt;
 
 &lt;span class="n"&gt;data_reader&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;lambda&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;source_path&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
   &lt;span class="no"&gt;CSV&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;source_path&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
@@ -848,15 +972,15 @@ Look at my previous article if you need to understand how to do it manually.&lt;
 &lt;h2&gt;Install&lt;/h2&gt;
 
 &lt;p&gt;Add this line to your application&amp;rsquo;s Gemfile:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;gem &lt;span class="s1"&gt;'osx_provision'&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;gem &lt;span class="s1"&gt;'osx_provision'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;And then execute it:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle
+&lt;pre class="highlight shell"&gt;&lt;code&gt;bundle
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Or install it yourself as:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;gem install osx_provision
+&lt;pre class="highlight shell"&gt;&lt;code&gt;gem install osx_provision
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Configure&lt;/h2&gt;
@@ -867,7 +991,7 @@ Look at my previous article if you need to understand how to do it manually.&lt;
 &lt;li&gt;Create configuration file (e.g. .osx_provision.json) in json format at the root of your project.
 It will define your environment:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"127.0.0.1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"ENV['USER']"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
@@ -896,7 +1020,7 @@ will have your variables as well.&lt;/p&gt;
 
 &lt;p&gt;Next &lt;strong&gt;node&lt;/strong&gt; section describes your destination computer where you want to install this provision.
 In this example we do provisioning locally, but it&amp;rsquo;s possible to do it on remote machine, e.g.:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="err"&gt;...&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="err"&gt;...&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"192.168.1.2"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"user"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"some_remote_user"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
@@ -926,7 +1050,7 @@ itself is located at &lt;strong&gt;localhost&lt;/strong&gt; address.&lt;/p&gt;
 
 &lt;p&gt;Library itself if written in ruby, but for launching its code you have to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt; tool.
 Here I provide thor script as an example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# thor/osx_install.thor&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="c1"&gt;# thor/osx_install.thor&lt;/span&gt;
 
 &lt;span class="vg"&gt;$:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;'/../lib'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
@@ -977,7 +1101,7 @@ Here I provide thor script as an example:&lt;/p&gt;
 
 &lt;p&gt;You can execute separate commands from script directly with &lt;strong&gt;invoke&lt;/strong&gt; thor command. Below is fragment
 of such script:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
 
 &lt;span class="o"&gt;[&lt;/span&gt;prepare]
 
@@ -1007,18 +1131,18 @@ curl -L https://get.rvm.io | bash
 &lt;p&gt;All available scripts are located &lt;a href="https://github.com/shvets/osx_provision/blob/master/lib/osx_provision/osx_provision_scripts.sh"&gt;here&lt;/a&gt;. If you need more scripts, you can
 create them locally (e.g. in (thor/osx_provision_scripts_my_project.sh)) and then initialize
 thor script accordingly:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# thor/my_project_osx_provision_scripts.thor&lt;/span&gt;
-&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="c1"&gt;# thor/my_project_osx_provision_scripts.thor&lt;/span&gt;
+&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
 
-&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OsxInstall&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
+&lt;span class="nf"&gt;class&lt;/span&gt; &lt;span class="no"&gt;OsxInstall&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
   &lt;span class="vi"&gt;@installer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;OsxProvision&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;".osx_provision.json"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                 &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"my_project_osx_provision_scripts.sh"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
-  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
+                 &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;expand_path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"my_project_osx_provision_scripts.sh"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;__FILE__&lt;/span&gt;&lt;span class="p"&gt;))]&lt;/span&gt;
+  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="nf"&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Below is the example of such script for running rails server in standard and debug mode:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
 
 &lt;span class="c"&gt;##############################&lt;/span&gt;
 &lt;span class="o"&gt;[&lt;/span&gt;rails]
@@ -1054,11 +1178,11 @@ bundle &lt;span class="nb"&gt;exec &lt;/span&gt;rdebug-ide --port 1234 --dispatc
 &lt;h2&gt;Executing automated scripts&lt;/h2&gt;
 
 &lt;p&gt;First, take a look at the list of available thor command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor -T
+&lt;pre class="highlight shell"&gt;&lt;code&gt;thor -T
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can see something like this:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;osx_install
+&lt;pre class="highlight shell"&gt;&lt;code&gt;osx_install
 -----------
 thor osx_install:all                      &lt;span class="c"&gt;# Installs all required packages&lt;/span&gt;
 thor osx_install:app                      &lt;span class="c"&gt;# Installs app&lt;/span&gt;
@@ -1098,7 +1222,7 @@ thor osx_install:svn                      &lt;span class="c"&gt;# svn&lt;/span&g
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;With this scripts you can execute them separately and all together:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor osx_install:brew
+&lt;pre class="highlight shell"&gt;&lt;code&gt;thor osx_install:brew
 thor osx_install:rvm
 thor osx_install:postgres
 thor osx_install:brew
@@ -1107,7 +1231,7 @@ thor osx_install:all
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To configure postgres only run this sequence:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor osx_install:postgres
+&lt;pre class="highlight shell"&gt;&lt;code&gt;thor osx_install:postgres
 thor osx_install:postgres_create_user
 thor osx_install:postgres_create_schemas
 thor osx_install:postgres_start
@@ -1146,7 +1270,7 @@ requires compiling source code.&lt;/li&gt;
 &lt;p&gt;Create separate group (e.g. &amp;ldquo;oracle&amp;rdquo;) in Gemfile for oracle ruby-oci8 client wrapper. You have to keep
 this gem in separate group because it requires special steps to be done before database driver
 can be installed.&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
 
 &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:oracle&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
   &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s2"&gt;"ruby-oci8"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"2.1.7"&lt;/span&gt;
@@ -1156,13 +1280,13 @@ can be installed.&lt;/p&gt;
 &lt;h2&gt;Install gems for the project (except ruby-oci8 gem)&lt;/h2&gt;
 
 &lt;p&gt;Install ruby gems for your project with bundler tool. You have to bypass oracle client wrapper installation:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
+&lt;pre class="highlight shell"&gt;&lt;code&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;without&lt;/strong&gt; parameter will exclude &lt;strong&gt;oracle&lt;/strong&gt; bundler group from the execution.&lt;/p&gt;
 
 &lt;p&gt;Check that you don&amp;rsquo;t have ruby-oci8 installed yet:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;gem list
+&lt;pre class="highlight shell"&gt;&lt;code&gt;gem list
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Download Oracle Instant Client&lt;/h2&gt;
@@ -1174,7 +1298,7 @@ installation packages on &lt;strong&gt;&lt;a href="http://www.oracle.com"&gt;www
 
 &lt;p&gt;Create configuration file for the installation (.oracle_client_provision.json) in the root of your project.
 It will define where you have downloaded files and some other parameters:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
 
   &lt;/span&gt;&lt;span class="s2"&gt;"node"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
     &lt;/span&gt;&lt;span class="s2"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"127.0.0.1"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
@@ -1209,15 +1333,15 @@ It will define where you have downloaded files and some other parameters:&lt;/p&
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We are going to run ruby from &lt;strong&gt;project.ruby_home&lt;/strong&gt; on behalf of the &lt;strong&gt;node.user&lt;/strong&gt; and we will use specific versions
-of &lt;strong&gt;oracle&lt;/strong&gt; client and &lt;strong&gt;ruby-oci8&lt;/strong&gt; gem. We also specify where to look for installation packages (instant&lt;em&gt;client.src\&lt;/em&gt;dir)
-and where to install Instant Client (instant&lt;em&gt;client.dest\&lt;/em&gt;dir). Also, as you can see, we are using &lt;strong&gt;macos&lt;/strong&gt; as a platform
+of &lt;strong&gt;oracle&lt;/strong&gt; client and &lt;strong&gt;ruby-oci8&lt;/strong&gt; gem. We also specify where to look for installation packages (instant&lt;em&gt;client.src_dir)
+and where to install Instant Client (instant&lt;/em&gt;client.dest_dir). Also, as you can see, we are using &lt;strong&gt;macos&lt;/strong&gt; as a platform
 and &lt;strong&gt;x64&lt;/strong&gt; as an architecture.&lt;/p&gt;
 
 &lt;h2&gt;Provide execution script&lt;/h2&gt;
 
 &lt;p&gt;Library itself if written in ruby, but for launching its code you have to use &lt;strong&gt;rake&lt;/strong&gt; or &lt;strong&gt;thor&lt;/strong&gt;. Here I provide
 thor script as an example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'thor'&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'thor'&lt;/span&gt;
 &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'oracle_client_provision'&lt;/span&gt;
 
 &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;OracleClient&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Thor&lt;/span&gt;
@@ -1255,17 +1379,17 @@ thor script as an example:&lt;/p&gt;
 &lt;h2&gt;Install Oracle Instant Client&lt;/h2&gt;
 
 &lt;p&gt;Run this &lt;strong&gt;thor&lt;/strong&gt; command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor oracle_client:install
+&lt;pre class="highlight shell"&gt;&lt;code&gt;thor oracle_client:install
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;After execution all Instant Client packages (basic, sdk and sqlplus) will be installed at the right location
-(instant&lt;em&gt;client.dest\&lt;/em&gt;dir) on your computer.&lt;/p&gt;
+(instant_client.dest_dir) on your computer.&lt;/p&gt;
 
 &lt;h2&gt;Again: install gems for the project, now with ruby-oci8 gem&lt;/h2&gt;
 
 &lt;p&gt;Remove .bundle folder in order to include &amp;ldquo;oracle&amp;rdquo; group into bundle execution and
 then run bundler with &amp;ldquo;oracle&amp;rdquo; group:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;rm -rf .bundle
+&lt;pre class="highlight shell"&gt;&lt;code&gt;rm -rf .bundle
 
 bundle
 &lt;/code&gt;&lt;/pre&gt;
@@ -1273,7 +1397,7 @@ bundle
 &lt;h2&gt;Verify the installation&lt;/h2&gt;
 
 &lt;p&gt;If you have Oracle installed locally with &lt;strong&gt;scott/tiger/ORCL&lt;/strong&gt;, you can test it now:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;thor oracle_client:verify
+&lt;pre class="highlight shell"&gt;&lt;code&gt;thor oracle_client:verify
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;If you have oracle installed somewhere on the network, you can add TNS names inside your
@@ -1281,7 +1405,7 @@ bundle
 this location via &lt;strong&gt;tns_admin_dir&lt;/strong&gt; property inside your configuration file.&lt;/p&gt;
 
 &lt;p&gt;tnsnames.ora file will have this section:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight plaintext"&gt;MY_ORCL=
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;MY_ORCL=
     (DESCRIPTION=
         (ADDRESS=
             (PROTOCOL=TCP)
@@ -1297,16 +1421,16 @@ this location via &lt;strong&gt;tns_admin_dir&lt;/strong&gt; property inside you
 &lt;p&gt;where you define &lt;strong&gt;MY_ORCL&lt;/strong&gt; schema on &lt;strong&gt;db.your_host.com&lt;/strong&gt; running on port &lt;strong&gt;1521&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;In order to use oracle driver inside rails application, you have to include it into your Gemfile:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="c1"&gt;# Gemfile&lt;/span&gt;
 
 &lt;span class="n"&gt;group&lt;/span&gt; &lt;span class="ss"&gt;:oracle&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
-  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
-  &lt;span class="n"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'activerecord-oracle_enhanced-adapter'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'1.5.5'&lt;/span&gt;
+  &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;.&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+  &lt;span class="nf"&gt;gem&lt;/span&gt; &lt;span class="s1"&gt;'activerecord-oracle_enhanced-adapter'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'1.5.5'&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;Summary: all steps all together&lt;/h1&gt;
-&lt;pre&gt;&lt;code class="highlight shell"&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
+&lt;pre class="highlight shell"&gt;&lt;code&gt;bundle install --without&lt;span class="o"&gt;=&lt;/span&gt;oracle
 
 thor oracle_client:install
 
@@ -1315,139 +1439,6 @@ rm -rf .bundle
 bundle
 
 thor oracle_client:verify
-&lt;/code&gt;&lt;/pre&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Text Interpolator gem</title>
-    <link rel="alternate" href="/blog/2014/05/17/text_interpolator.html"/>
-    <id>/blog/2014/05/17/text_interpolator.html</id>
-    <published>2014-05-16T20:00:00-04:00</published>
-    <updated>2014-05-16T20:00:00-04:00</updated>
-    <author>
-      <name>Article Author</name>
-    </author>
-    <content type="html">&lt;h1&gt;Text Interpolator gem&lt;/h1&gt;
-
-&lt;p&gt;It is a simple library for interpolation of variables inside the text.&lt;/p&gt;
-
-&lt;h2&gt;Introduction&lt;/h2&gt;
-
-&lt;p&gt;In ruby you have few options for variables interpolation:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;interpolation inside the string:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;var1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'some value 1'&lt;/span&gt;
-&lt;span class="n"&gt;var2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'some value 2'&lt;/span&gt;
-
-&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"We have var1: &lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;var1&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; and var2: &lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;."&lt;/span&gt;
-
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# We have var1: some value 1 and var2: some value 2.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;interpolation inside file (with embedded ruby -  erb):&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# some_template.erb&lt;/span&gt;
-
-&lt;span class="no"&gt;We&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="sx"&gt;%= var1 %&amp;gt; and var2:  &amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="sx"&gt;%&amp;gt;.
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# test.rb&lt;/span&gt;
-
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'erb'&lt;/span&gt;
-
-&lt;span class="n"&gt;var1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'some value 1'&lt;/span&gt;
-&lt;span class="n"&gt;var2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'some value 2'&lt;/span&gt;
-
-&lt;span class="n"&gt;template&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ERB&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"some_template.erb"&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-
-&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;result&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;binding&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# We have var1: some value 1 and var2: some value 2.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This library can be used for &lt;strong&gt;interpolation inside file with string syntax&lt;/strong&gt;. In order to
-achieve it library uses one ruby trick:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="n"&gt;env&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="s1"&gt;'some value 1'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;var2: &lt;/span&gt;&lt;span class="s1"&gt;'some value 2'&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
-
-&lt;span class="n"&gt;template&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"We have var1: %{var1} and var2: %{var2}."&lt;/span&gt;
-
-&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;template&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;env&lt;/span&gt;
-
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# We have var1: some value 1 and var2: some value 2.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;It&amp;rsquo;s straightforward. Here is example of file interpolation:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# some_template.txt&lt;/span&gt;
-
-&lt;span class="no"&gt;We&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="c1"&gt;#{var1} and var2:  #{var2}.&lt;/span&gt;
-&lt;span class="no"&gt;We&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="ss"&gt;var3: &lt;/span&gt;&lt;span class="c1"&gt;#{settings.var3} and var4:  #{settings.var4}.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="c1"&gt;# test.rb&lt;/span&gt;
-
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'text_interpolator'&lt;/span&gt;
-
-&lt;span class="n"&gt;env&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-  &lt;span class="ss"&gt;var1: &lt;/span&gt;&lt;span class="s1"&gt;'some value 1'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-  &lt;span class="ss"&gt;var2: &lt;/span&gt;&lt;span class="s1"&gt;'some value 2'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-
-  &lt;span class="ss"&gt;settings: &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="ss"&gt;var3: &lt;/span&gt;&lt;span class="s1"&gt;'some value 3'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="ss"&gt;var4: &lt;/span&gt;&lt;span class="s1"&gt;'some value 4'&lt;/span&gt;
-  &lt;span class="p"&gt;}&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
-
-&lt;span class="n"&gt;template&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;read&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"some_template.txt"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;text_interpolator&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;TextInterpolator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-
-&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;text_interpolator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;interpolate&lt;/span&gt; &lt;span class="n"&gt;template&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;env&lt;/span&gt;
-
-&lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="c1"&gt;# We have var1: some value 1 and var2: some value 2.&lt;/span&gt;
-            &lt;span class="c1"&gt;# We have var3: some value 3 and var4: some value 4.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can also interpolate hash on multiple levels:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="highlight ruby"&gt;&lt;span class="nb"&gt;hash&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-  &lt;span class="ss"&gt;host: &lt;/span&gt;&lt;span class="s1"&gt;'localhost'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-
-  &lt;span class="ss"&gt;credentials: &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="ss"&gt;user: &lt;/span&gt;&lt;span class="s2"&gt;"some_user"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="ss"&gt;password: &lt;/span&gt;&lt;span class="s2"&gt;"some_password"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-
-    &lt;span class="ss"&gt;settings: &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
-      &lt;span class="ss"&gt;user: &lt;/span&gt;&lt;span class="s2"&gt;"some_user2"&lt;/span&gt;
-    &lt;span class="p"&gt;}&lt;/span&gt;
-  &lt;span class="p"&gt;},&lt;/span&gt;
-
-  &lt;span class="ss"&gt;postgres: &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="ss"&gt;hostname: &lt;/span&gt;&lt;span class="s1"&gt;'#{host}'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="ss"&gt;user: &lt;/span&gt;&lt;span class="s1"&gt;'#{credentials.user}'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="ss"&gt;password: &lt;/span&gt;&lt;span class="s1"&gt;'postgres'&lt;/span&gt;
-  &lt;span class="p"&gt;},&lt;/span&gt;
-
-  &lt;span class="ss"&gt;mysql: &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="ss"&gt;user: &lt;/span&gt;&lt;span class="s1"&gt;'#{credentials.settings.user}'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-  &lt;span class="p"&gt;}&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
-
-&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'text_interpolator'&lt;/span&gt;
-
-&lt;span class="n"&gt;text_interpolator&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;TextInterpolator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
-
-&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;text_interpolator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;interpolate&lt;/span&gt; &lt;span class="nb"&gt;hash&lt;/span&gt;
-
-&lt;span class="nb"&gt;p&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;
-
-&lt;span class="c1"&gt;# {:host=&amp;gt;"localhost", &lt;/span&gt;
-&lt;span class="c1"&gt;#  :credentials=&amp;gt;{:user=&amp;gt;"some_user", :password=&amp;gt;"some_password", &lt;/span&gt;
-&lt;span class="c1"&gt;#  :settings=&amp;gt;{:user=&amp;gt;"some_user2"}}, &lt;/span&gt;
-&lt;span class="c1"&gt;#  :postgres=&amp;gt;{:hostname=&amp;gt;"localhost", :user=&amp;gt;"some_user", :password=&amp;gt;"postgres"}, &lt;/span&gt;
-&lt;span class="c1"&gt;#  :mysql=&amp;gt;{:user=&amp;gt;"some_user2"}}&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>

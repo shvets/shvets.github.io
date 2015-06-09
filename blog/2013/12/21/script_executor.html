@@ -67,43 +67,43 @@ as implementation - it&rsquo;s pure Ruby implementation of a SSH (protocol 2) cl
 <ol>
 <li><strong>%x</strong> expression:</li>
 </ol>
-<pre><code class="highlight ruby"><span class="sx">%x{ pwd }</span>
+<pre class="highlight ruby"><code><span class="sx">%x{ pwd }</span>
 </code></pre>
 
 <ol>
 <li>backticks:</li>
 </ol>
-<pre><code class="highlight ruby"><span class="sb">`pwd`</span>
+<pre class="highlight ruby"><code><span class="sb">`pwd`</span>
 </code></pre>
 
 <ol>
 <li><strong>system</strong> command:</li>
 </ol>
-<pre><code class="highlight ruby"> <span class="nb">system</span> <span class="s2">"pwd"</span>
+<pre class="highlight ruby"><code> <span class="nb">system</span> <span class="s2">"pwd"</span>
 </code></pre>
 
 <ol>
 <li><strong>exec</strong> command:</li>
 </ol>
-<pre><code class="highlight ruby"><span class="nb">exec</span> <span class="s2">"pwd"</span>
+<pre class="highlight ruby"><code><span class="nb">exec</span> <span class="s2">"pwd"</span>
 </code></pre>
 
 <ol>
 <li><strong>spawn</strong> command:</li>
 </ol>
-<pre><code class="highlight ruby"><span class="n">spawn</span> <span class="s2">"pwd"</span>
+<pre class="highlight ruby"><code><span class="n">spawn</span> <span class="s2">"pwd"</span>
 </code></pre>
 
 <ol>
 <li><strong>popen</strong> command:</li>
 </ol>
-<pre><code class="highlight ruby"><span class="no">IO</span><span class="p">.</span><span class="nf">popen</span> <span class="s2">"pwd"</span>
+<pre class="highlight ruby"><code><span class="no">IO</span><span class="p">.</span><span class="nf">popen</span> <span class="s2">"pwd"</span>
 </code></pre>
 
 <ol>
 <li>using <strong>open3</strong> library:</li>
 </ol>
-<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s2">"open3"</span>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s2">"open3"</span>
 
 <span class="no">Open3</span><span class="p">.</span><span class="nf">popen3</span><span class="p">(</span><span class="s1">'pwd'</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">stdin</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="o">|</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span> <span class="p">}</span>
 
@@ -117,15 +117,15 @@ both local and remote code in unified way.</p>
 <h2>Installation</h2>
 
 <p>Add this line to your application&rsquo;s Gemfile:</p>
-<pre><code class="highlight shell">gem <span class="s1">'script_executor'</span>
+<pre class="highlight shell"><code>gem <span class="s1">'script_executor'</span>
 </code></pre>
 
 <p>And then execute:</p>
-<pre><code class="highlight shell">bundle
+<pre class="highlight shell"><code>bundle
 </code></pre>
 
 <p>Or install it yourself:</p>
-<pre><code class="highlight shell">gem install script_executor
+<pre class="highlight shell"><code>gem install script_executor
 </code></pre>
 
 <h2>Usage</h2>
@@ -133,19 +133,19 @@ both local and remote code in unified way.</p>
 <ul>
 <li>Create executor</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">executor</span> <span class="o">=</span> <span class="no">ScriptExecutor</span><span class="p">.</span><span class="nf">new</span>
+<pre class="highlight ruby"><code><span class="n">executor</span> <span class="o">=</span> <span class="no">ScriptExecutor</span><span class="p">.</span><span class="nf">new</span>
 </code></pre>
 
 <ul>
 <li>Execute local command:</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="s2">"ls"</span>
+<pre class="highlight ruby"><code><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="s2">"ls"</span>
 </code></pre>
 
 <ul>
 <li>Execute remote command:</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">server_info</span> <span class="o">=</span> <span class="p">{</span>
+<pre class="highlight ruby"><code><span class="n">server_info</span> <span class="o">=</span> <span class="p">{</span>
   <span class="ss">:remote</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
   <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s2">"some_host"</span><span class="p">,</span>
   <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="s2">"some_user"</span><span class="p">,</span>
@@ -158,14 +158,14 @@ both local and remote code in unified way.</p>
 <ul>
 <li>Execute remote command as &lsquo;sudo&rsquo;:</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">({</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+<pre class="highlight ruby"><code><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">({</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
   <span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">"/etc/init.d/tomcat stop"</span><span class="p">})</span>
 </code></pre>
 
 <ul>
 <li>Execute remote command with code block:</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+<pre class="highlight ruby"><code><span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:sudo</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
   <span class="sx">%Q(
     /etc/init.d/tomcat stop
     /etc/init.d/tomcat start
@@ -174,9 +174,9 @@ both local and remote code in unified way.</p>
 </code></pre>
 
 <ul>
-<li>Execute remote command while capturing and suppressing output (default is &lsquo;false&rsquo; for both parameters):</li>
+<li>Execute remote command while capturing and suppressing output (default is &#39;false&rsquo; for both parameters):</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:capture_output</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+<pre class="highlight ruby"><code><span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:capture_output</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
                   <span class="ss">:suppress_output</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span>
@@ -188,7 +188,7 @@ both local and remote code in unified way.</p>
 <ul>
 <li>Simulate remote execution:</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:simulate</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+<pre class="highlight ruby"><code><span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:simulate</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
 
 <span class="n">executor</span><span class="p">.</span><span class="nf">execute</span> <span class="n">server_info</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="ss">:script</span> <span class="o">=&gt;</span> <span class="s2">"whoami"</span><span class="p">)</span> <span class="c1"># generate commands without actual execution</span>
 </code></pre>
@@ -202,7 +202,7 @@ access to the code, making maintenance easier.</p>
 
 <p>For example, if you want to create script with 2 commands (command1, command2), you can use
 <strong>scripts</strong> and <strong>evaluate_script_body</strong> methods:</p>
-<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'script_locator'</span>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'script_locator'</span>
 
 <span class="kp">include</span> <span class="no">ScriptLocator</span>
 
@@ -210,7 +210,7 @@ access to the code, making maintenance easier.</p>
 
 <span class="nb">name</span> <span class="o">=</span> <span class="s2">"john"</span>
 
-<span class="n">result</span> <span class="o">=</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">result</span><span class="o">[</span><span class="s1">'command1'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">'command1'</span><span class="p">],</span> <span class="nb">binding</span><span class="p">)</span>
 
 <span class="nb">puts</span> <span class="n">result</span> <span class="c1"># john</span>
 <span class="cp">__END__
@@ -227,7 +227,7 @@ echo "test2"
 <p>Let&rsquo;s build more sophisticated example. We want to automate generating public/private
 keys for ssh access and copying public key to remote server for password-less access
 to the server.</p>
-<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'script_executor/executable'</span>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'script_executor/executable'</span>
 <span class="nb">require</span> <span class="s1">'script_executor/script_locator'</span>
 <span class="nb">require</span> <span class="s1">'file_utils/file_utils'</span>
 
@@ -238,17 +238,17 @@ to the server.</p>
   <span class="k">def</span> <span class="nf">gen_key</span>
     <span class="n">scripts</span> <span class="o">=</span> <span class="n">scripts</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span>
 
-    <span class="n">execute</span> <span class="p">{</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="o">[</span><span class="s1">'gen_key'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span> <span class="p">}</span>
+    <span class="n">execute</span> <span class="p">{</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="p">[</span><span class="s1">'gen_key'</span><span class="p">],</span> <span class="nb">binding</span><span class="p">)</span> <span class="p">}</span>
   <span class="k">end</span>
 
   <span class="n">desc</span> <span class="s2">"cp_key"</span><span class="p">,</span> <span class="s2">"cp_key"</span>
   <span class="k">def</span> <span class="nf">cp_key</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
     <span class="n">scripts</span> <span class="o">=</span> <span class="n">scripts</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span>
 
-    <span class="n">execute</span> <span class="p">{</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="o">[</span><span class="s1">'scp_public_key'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span> <span class="p">}</span>
+    <span class="n">execute</span> <span class="p">{</span> <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="p">[</span><span class="s1">'scp_public_key'</span><span class="p">],</span> <span class="nb">binding</span><span class="p">)</span> <span class="p">}</span>
 
-    <span class="n">execute</span><span class="p">(</span><span class="ss">:remote</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="n">host</span><span class="p">,</span> <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'USER'</span><span class="o">]</span><span class="p">)</span> <span class="k">do</span>
-      <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="o">[</span><span class="s1">'install_key'</span><span class="o">]</span><span class="p">,</span> <span class="nb">binding</span><span class="p">)</span>
+    <span class="n">execute</span><span class="p">(</span><span class="ss">:remote</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="n">host</span><span class="p">,</span> <span class="ss">:user</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'USER'</span><span class="p">])</span> <span class="k">do</span>
+      <span class="n">evaluate_script_body</span><span class="p">(</span><span class="n">scripts</span><span class="p">[</span><span class="s1">'install_key'</span><span class="p">],</span> <span class="nb">binding</span><span class="p">)</span>
     <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
@@ -282,12 +282,12 @@ Also, pay attention at using <strong>Executable</strong> module. It is used when
 as part of class.</p>
 
 <p>In order to execute new commands you have to use <strong>thor</strong> tool:</p>
-<pre><code class="highlight shell">thor ssh:gen_key
+<pre class="highlight shell"><code>thor ssh:gen_key
 thor ssh:cp_key your.remote.server.com
 </code></pre>
 
 <p>You can achieve same goal with homebrew tool:</p>
-<pre><code class="highlight shell">brew install ssh-copy-id
+<pre class="highlight shell"><code>brew install ssh-copy-id
 
 ssh-copy-id <span class="nv">$USER</span>@your.remote.server.com
 </code></pre>
@@ -309,6 +309,10 @@ Get feed
 <div class='section'>
 <h2>By Year</h2>
 <ol>
+<li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
 <li>
 <a href="../../../2014.html">2014</a>
 (7)
@@ -360,7 +364,7 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/javascript.html">javascript</a>
-(2)
+(3)
 </li>
 <li>
 <a href="../../../tags/karma.html">karma</a>
@@ -528,6 +532,18 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
 (1)
 </li>
 </ol>

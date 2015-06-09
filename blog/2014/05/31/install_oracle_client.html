@@ -55,7 +55,7 @@ requires compiling source code.</li>
 <p>Create separate group (e.g. &ldquo;oracle&rdquo;) in Gemfile for oracle ruby-oci8 client wrapper. You have to keep
 this gem in separate group because it requires special steps to be done before database driver
 can be installed.</p>
-<pre><code class="highlight ruby"><span class="c1"># Gemfile</span>
+<pre class="highlight ruby"><code><span class="c1"># Gemfile</span>
 
 <span class="n">group</span> <span class="ss">:oracle</span> <span class="k">do</span>
   <span class="n">gem</span> <span class="s2">"ruby-oci8"</span><span class="p">,</span> <span class="s2">"2.1.7"</span>
@@ -65,13 +65,13 @@ can be installed.</p>
 <h2>Install gems for the project (except ruby-oci8 gem)</h2>
 
 <p>Install ruby gems for your project with bundler tool. You have to bypass oracle client wrapper installation:</p>
-<pre><code class="highlight shell">bundle install --without<span class="o">=</span>oracle
+<pre class="highlight shell"><code>bundle install --without<span class="o">=</span>oracle
 </code></pre>
 
 <p><strong>without</strong> parameter will exclude <strong>oracle</strong> bundler group from the execution.</p>
 
 <p>Check that you don&rsquo;t have ruby-oci8 installed yet:</p>
-<pre><code class="highlight shell">gem list
+<pre class="highlight shell"><code>gem list
 </code></pre>
 
 <h2>Download Oracle Instant Client</h2>
@@ -83,7 +83,7 @@ installation packages on <strong><a href="http://www.oracle.com">www.oracle.com<
 
 <p>Create configuration file for the installation (.oracle_client_provision.json) in the root of your project.
 It will define where you have downloaded files and some other parameters:</p>
-<pre><code class="highlight json"><span class="p">{</span><span class="w">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
 
   </span><span class="s2">"node"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
@@ -118,15 +118,15 @@ It will define where you have downloaded files and some other parameters:</p>
 </span></code></pre>
 
 <p>We are going to run ruby from <strong>project.ruby_home</strong> on behalf of the <strong>node.user</strong> and we will use specific versions
-of <strong>oracle</strong> client and <strong>ruby-oci8</strong> gem. We also specify where to look for installation packages (instant<em>client.src\</em>dir)
-and where to install Instant Client (instant<em>client.dest\</em>dir). Also, as you can see, we are using <strong>macos</strong> as a platform
+of <strong>oracle</strong> client and <strong>ruby-oci8</strong> gem. We also specify where to look for installation packages (instant<em>client.src_dir)
+and where to install Instant Client (instant</em>client.dest_dir). Also, as you can see, we are using <strong>macos</strong> as a platform
 and <strong>x64</strong> as an architecture.</p>
 
 <h2>Provide execution script</h2>
 
 <p>Library itself if written in ruby, but for launching its code you have to use <strong>rake</strong> or <strong>thor</strong>. Here I provide
 thor script as an example:</p>
-<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'thor'</span>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'thor'</span>
 <span class="nb">require</span> <span class="s1">'oracle_client_provision'</span>
 
 <span class="k">class</span> <span class="nc">OracleClient</span> <span class="o">&lt;</span> <span class="no">Thor</span>
@@ -164,17 +164,17 @@ thor script as an example:</p>
 <h2>Install Oracle Instant Client</h2>
 
 <p>Run this <strong>thor</strong> command:</p>
-<pre><code class="highlight shell">thor oracle_client:install
+<pre class="highlight shell"><code>thor oracle_client:install
 </code></pre>
 
 <p>After execution all Instant Client packages (basic, sdk and sqlplus) will be installed at the right location
-(instant<em>client.dest\</em>dir) on your computer.</p>
+(instant_client.dest_dir) on your computer.</p>
 
 <h2>Again: install gems for the project, now with ruby-oci8 gem</h2>
 
 <p>Remove .bundle folder in order to include &ldquo;oracle&rdquo; group into bundle execution and
 then run bundler with &ldquo;oracle&rdquo; group:</p>
-<pre><code class="highlight shell">rm -rf .bundle
+<pre class="highlight shell"><code>rm -rf .bundle
 
 bundle
 </code></pre>
@@ -182,7 +182,7 @@ bundle
 <h2>Verify the installation</h2>
 
 <p>If you have Oracle installed locally with <strong>scott/tiger/ORCL</strong>, you can test it now:</p>
-<pre><code class="highlight shell">thor oracle_client:verify
+<pre class="highlight shell"><code>thor oracle_client:verify
 </code></pre>
 
 <p>If you have oracle installed somewhere on the network, you can add TNS names inside your
@@ -190,7 +190,7 @@ bundle
 this location via <strong>tns_admin_dir</strong> property inside your configuration file.</p>
 
 <p>tnsnames.ora file will have this section:</p>
-<pre><code class="highlight plaintext">MY_ORCL=
+<pre class="highlight plaintext"><code>MY_ORCL=
     (DESCRIPTION=
         (ADDRESS=
             (PROTOCOL=TCP)
@@ -206,16 +206,16 @@ this location via <strong>tns_admin_dir</strong> property inside your configurat
 <p>where you define <strong>MY_ORCL</strong> schema on <strong>db.your_host.com</strong> running on port <strong>1521</strong>.</p>
 
 <p>In order to use oracle driver inside rails application, you have to include it into your Gemfile:</p>
-<pre><code class="highlight ruby"><span class="c1"># Gemfile</span>
+<pre class="highlight ruby"><code><span class="c1"># Gemfile</span>
 
 <span class="n">group</span> <span class="ss">:oracle</span> <span class="k">do</span>
-  <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
-  <span class="n">gem</span> <span class="s1">'activerecord-oracle_enhanced-adapter'</span><span class="p">,</span> <span class="s1">'1.5.5'</span>
+  <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
+  <span class="nf">gem</span> <span class="s1">'activerecord-oracle_enhanced-adapter'</span><span class="p">,</span> <span class="s1">'1.5.5'</span>
 <span class="k">end</span>
 </code></pre>
 
 <h1>Summary: all steps all together</h1>
-<pre><code class="highlight shell">bundle install --without<span class="o">=</span>oracle
+<pre class="highlight shell"><code>bundle install --without<span class="o">=</span>oracle
 
 thor oracle_client:install
 
@@ -243,6 +243,10 @@ Get feed
 <div class='section'>
 <h2>By Year</h2>
 <ol>
+<li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
 <li>
 <a href="../../../2014.html">2014</a>
 (7)
@@ -294,7 +298,7 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/javascript.html">javascript</a>
-(2)
+(3)
 </li>
 <li>
 <a href="../../../tags/karma.html">karma</a>
@@ -462,6 +466,18 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
 (1)
 </li>
 </ol>

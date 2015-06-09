@@ -46,18 +46,27 @@ in UI mode, but it's not required.
 * [Vagrant][Vagrant]. Before it was distributed as ruby gem, now it's packaged as **native application**.
 Once installed, it will be accessible from command line as **vagrant** command.
 
+or
+
+```bash
+brew install caskroom/cask/brew-cask
+
+brew cask install virtualbox
+brew cask install vagrant
+```
+
 You have to decide what linux image fits your needs. In our case we use **Ubuntu 14.04 LTS 64-bit** image -
 it is identified with **"ubuntu/trusty64"** key. You can see other images [here][vagrant_cloud].
 
 Download and install it:
 
 ```bash
-vagrant box add ubuntu/trusty64 https://vagrantcloud.com/ubuntu/boxes/trusty64
+  vagrant box add ubuntu/trusty64 https://vagrantcloud.com/ubuntu/boxes/trusty64
 ```
 
 Initialize it:
 
-```
+```bash
 vagrant init ubuntu/trusty64
 ```
 
@@ -141,6 +150,15 @@ In order to use Docker you have to install these programs:
 
 * [boot2docker][boot2docker]. You need to install it only for non-Linux environment.
 
+or 
+
+```bash
+  brew install caskroom/cask/brew-cask
+  
+  brew cask install virtualbox
+  brew cask install docker
+```
+
 boot2docker is a lightweight Linux image made specifically to run Docker containers. It runs completely from
 RAM, weighs  approximately 27 MB and boots in about 5 seconds.
 
@@ -182,6 +200,13 @@ export DOCKER_HOST=tcp://192.168.59.103:2375
 ```
 
 You have to setup it globally in **.bash\_profile** file or specify it each time when docker client gets started.
+Or, you can run this command each time:
+
+```bash
+$(boot2docker shellinit)
+```
+This will set the required environment variables. 
+
 
 You can access boot2docker over ssh (user: **docker**, password: **tcuser**):
 

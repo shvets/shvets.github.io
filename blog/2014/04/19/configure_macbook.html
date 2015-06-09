@@ -56,13 +56,13 @@
 <li><p>Install XCode Command Line Tools from inside XCode.</p></li>
 <li><p>Read and agree to Xcode license from command line:</p></li>
 </ul>
-<pre><code class="highlight shell">sudo xcodebuild -license
+<pre class="highlight shell"><code>sudo xcodebuild -license
 </code></pre>
 
 <h2>Install Homebrew</h2>
 
 <p>It is package manager for MacOS written in ruby:</p>
-<pre><code class="highlight shell">ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSkL raw.github.com/mxcl/homebrew/go<span class="k">)</span><span class="s2">"</span>
+<pre class="highlight shell"><code>ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSkL raw.github.com/mxcl/homebrew/go<span class="k">)</span><span class="s2">"</span>
 
 brew update
 brew tap homebrew/dupes
@@ -74,22 +74,22 @@ brew doctor
 <h2>Install command line tools</h2>
 
 <p>Install base tools:</p>
-<pre><code class="highlight shell">brew install wget
+<pre class="highlight shell"><code>brew install wget
 brew install mc
 brew install git
 </code></pre>
 
 <p><strong>Qt</strong> package is required by Capybara acceptance tests.</p>
-<pre><code class="highlight shell">brew install qt
+<pre class="highlight shell"><code>brew install qt
 </code></pre>
 
 <p><strong>Node</strong> is used for jasmine javascript unit test and for various javascript tasks.
 It will install <strong>node package manager</strong> (<strong>npm</strong>) as well:</p>
-<pre><code class="highlight shell">brew install node
+<pre class="highlight shell"><code>brew install node
 </code></pre>
 
 <p>Test it:</p>
-<pre><code class="highlight shell">node -v
+<pre class="highlight shell"><code>node -v
 npm -v
 </code></pre>
 
@@ -98,25 +98,25 @@ npm -v
 <p>Download it from <a href="http://www.sublimetext.com">http://www.sublimetext.com</a>.</p>
 
 <p>Create convenient link:</p>
-<pre><code class="highlight shell">ln -s /Applications/Sublime<span class="se">\ </span>Text.app/Contents/SharedSupport/bin/subl <span class="nv">$HOME</span>/bin/subl
+<pre class="highlight shell"><code>ln -s /Applications/Sublime<span class="se">\ </span>Text.app/Contents/SharedSupport/bin/subl <span class="nv">$HOME</span>/bin/subl
 </code></pre>
 
 <h2>Install RVM:</h2>
-<pre><code class="highlight shell"><span class="se">\c</span>url -sSL https://get.rvm.io | bash
+<pre class="highlight shell"><code><span class="se">\c</span>url -sSL https://get.rvm.io | bash
 </code></pre>
 
 <p>Then run this command:</p>
-<pre><code class="highlight shell"><span class="nb">source</span> ~/.rvm/scripts/rvm
+<pre class="highlight shell"><code><span class="nb">source</span> ~/.rvm/scripts/rvm
 </code></pre>
 
 <p>or reopen in another terminal window.</p>
 
 <p>Install required packages:</p>
-<pre><code class="highlight shell">rvm requirements
+<pre class="highlight shell"><code>rvm requirements
 </code></pre>
 
 <h2>Install various ruby versions:</h2>
-<pre><code class="highlight shell">rvm install 1.9.3
+<pre class="highlight shell"><code>rvm install 1.9.3
 
 rvm install 2.1.1
 
@@ -126,7 +126,7 @@ rvm install jruby
 <h2>Update .bash_profile</h2>
 
 <p>Add to <strong>~/.bash_profile</strong> the following lines:</p>
-<pre><code class="highlight shell"><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/opt/local/bin:<span class="nv">$PATH</span>
+<pre class="highlight shell"><code><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/opt/local/bin:<span class="nv">$PATH</span>
 
 <span class="nb">export </span><span class="nv">EDITOR</span><span class="o">=</span><span class="s1">'subl -w'</span>
 <span class="nb">export </span><span class="nv">PS1</span><span class="o">=</span><span class="s1">'${LOGNAME}@$(hostname): [$(~/.rvm/bin/rvm-prompt)] (\w):\n&gt; '</span>
@@ -140,11 +140,11 @@ ruby -v
 <h2>Install postgres server:</h2>
 
 <p>Install it:</p>
-<pre><code class="highlight shell">brew install postgres
+<pre class="highlight shell"><code>brew install postgres
 </code></pre>
 
 <p>Start it:</p>
-<pre><code class="highlight shell">mkdir -p ~/Library/LaunchAgents
+<pre class="highlight shell"><code>mkdir -p ~/Library/LaunchAgents
 sudo chown <span class="nv">$USER</span> ~/Library/LaunchAgents
 
 cp /usr/local/Cellar/postgresql/9.3.3/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
@@ -154,11 +154,11 @@ launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 </code></pre>
 
 <p>Initialize database:</p>
-<pre><code class="highlight shell">initdb /usr/local/var/postgres -E utf8
+<pre class="highlight shell"><code>initdb /usr/local/var/postgres -E utf8
 </code></pre>
 
 <p>Create users and databases from command line:</p>
-<pre><code class="highlight shell">createuser -s -d -r rails_app_tmpl
+<pre class="highlight shell"><code>createuser -s -d -r rails_app_tmpl
 
 createdb -U rails_app_tmpl rails_app_tmpl_dev
 createdb -U rails_app_tmpl rails_app_tmpl_test
@@ -168,7 +168,7 @@ rake db:migrate
 </code></pre>
 
 <p>or with psql tool:</p>
-<pre><code class="highlight shell">psql -c <span class="s1">'create user rails_app_tmp;'</span> -s -d -r
+<pre class="highlight shell"><code>psql -c <span class="s1">'create user rails_app_tmp;'</span> -s -d -r
 
 psql -c <span class="s1">'create database rails_app_tmpl_dev;'</span> -U rails_app_tmpl -h 127.0.0.1
 psql -c <span class="s1">'create database rails_app_tmpl_test;'</span> -U rails_app_tmpl -h 127.0.0.1
@@ -178,11 +178,11 @@ psql -c <span class="s1">'create database rails_app_tmpl_prod;'</span> -U rails_
 <h2>Install mysql server:</h2>
 
 <p>Install it:</p>
-<pre><code class="highlight shell">brew install mysql
+<pre class="highlight shell"><code>brew install mysql
 </code></pre>
 
 <p>Start it:</p>
-<pre><code class="highlight shell">mkdir -p ~/Library/LaunchAgents
+<pre class="highlight shell"><code>mkdir -p ~/Library/LaunchAgents
 sudo chown <span class="nv">$USER</span> ~/Library/LaunchAgents
 
 ln -sfv /usr/local/opt/mysql/<span class="k">*</span>.plist ~/Library/LaunchAgents
@@ -192,11 +192,11 @@ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
 </code></pre>
 
 <p>Set up mysql root password:</p>
-<pre><code class="highlight shell">mysqladmin -u root password <span class="s1">'root'</span>
+<pre class="highlight shell"><code>mysqladmin -u root password <span class="s1">'root'</span>
 </code></pre>
 
 <p>Create users and databases from command line:</p>
-<pre><code class="highlight shell">--mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"flush  priveleges;"</span>
+<pre class="highlight shell"><code>--mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"flush  priveleges;"</span>
 --mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"drop user 'rails_app_tmpl'@'localhost';"</span>
 
 mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">"CREATE USER 'rails_app_tmpl'@'localhost' IDENTIFIED BY 'rails_app_tmpl';"</span>
@@ -210,7 +210,7 @@ mysql -h localhost -u root -p<span class="s2">"root"</span> -e <span class="s2">
 </code></pre>
 
 <p>or with mysql tool interactively:</p>
-<pre><code class="highlight shell">mysql -u root -p<span class="s1">'root'</span>
+<pre class="highlight shell"><code>mysql -u root -p<span class="s1">'root'</span>
 
   CREATE USER <span class="s1">'rails_app_tmpl'</span>@<span class="s1">'localhost'</span> IDENTIFIED BY <span class="s1">'rails_app_tmpl'</span>;
 
@@ -233,17 +233,17 @@ brew install selenium-server-standalone
 <p>Standalone selenium server is implemented as launchd agent.</p>
 
 <p>To have launchd start selenium-server-standalone at login, create soft link:</p>
-<pre><code class="highlight shell">ln -sfv /usr/local/opt/selenium-server-standalone/<span class="k">*</span>.plist ~/Library/LaunchAgents
+<pre class="highlight shell"><code>ln -sfv /usr/local/opt/selenium-server-standalone/<span class="k">*</span>.plist ~/Library/LaunchAgents
 </code></pre>
 
 <p>Then load selenium-server-standalone agent:</p>
-<pre><code class="highlight shell">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
+<pre class="highlight shell"><code>launchctl load ~/Library/LaunchAgents/homebrew.mxcl.selenium-server-standalone.plist
 </code></pre>
 
 <p>It will run selenium server on port 4444.</p>
 
 <p>If you don&rsquo;t want to use agent, use java directly:</p>
-<pre><code class="highlight shell">java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
+<pre class="highlight shell"><code>java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444
 </code></pre>
 
 <h2>Create or load your project</h2>
@@ -255,7 +255,7 @@ brew install selenium-server-standalone
 </ul>
 
 <p>*Install ruby gems and js nodes:</p>
-<pre><code class="highlight shell">bundle install
+<pre class="highlight shell"><code>bundle install
 
 npm install
 </code></pre>
@@ -279,6 +279,10 @@ Get feed
 <div class='section'>
 <h2>By Year</h2>
 <ol>
+<li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
 <li>
 <a href="../../../2014.html">2014</a>
 (7)
@@ -330,7 +334,7 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/javascript.html">javascript</a>
-(2)
+(3)
 </li>
 <li>
 <a href="../../../tags/karma.html">karma</a>
@@ -498,6 +502,18 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
 (1)
 </li>
 </ol>

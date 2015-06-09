@@ -81,15 +81,15 @@ Look at my previous article if you need to understand how to do it manually.</p>
 <h2>Install</h2>
 
 <p>Add this line to your application&rsquo;s Gemfile:</p>
-<pre><code class="highlight shell">gem <span class="s1">'osx_provision'</span>
+<pre class="highlight shell"><code>gem <span class="s1">'osx_provision'</span>
 </code></pre>
 
 <p>And then execute it:</p>
-<pre><code class="highlight shell">bundle
+<pre class="highlight shell"><code>bundle
 </code></pre>
 
 <p>Or install it yourself as:</p>
-<pre><code class="highlight shell">gem install osx_provision
+<pre class="highlight shell"><code>gem install osx_provision
 </code></pre>
 
 <h2>Configure</h2>
@@ -100,7 +100,7 @@ Look at my previous article if you need to understand how to do it manually.</p>
 <li>Create configuration file (e.g. .osx_provision.json) in json format at the root of your project.
 It will define your environment:</li>
 </ul>
-<pre><code class="highlight json"><span class="p">{</span><span class="w">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"node"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ENV['USER']"</span><span class="p">,</span><span class="w">
@@ -129,7 +129,7 @@ will have your variables as well.</p>
 
 <p>Next <strong>node</strong> section describes your destination computer where you want to install this provision.
 In this example we do provisioning locally, but it&rsquo;s possible to do it on remote machine, e.g.:</p>
-<pre><code class="highlight json"><span class="w">  </span><span class="err">...</span><span class="w">
+<pre class="highlight json"><code><span class="w">  </span><span class="err">...</span><span class="w">
   </span><span class="s2">"node"</span><span class="err">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.1.2"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some_remote_user"</span><span class="p">,</span><span class="w">
@@ -159,7 +159,7 @@ itself is located at <strong>localhost</strong> address.</p>
 
 <p>Library itself if written in ruby, but for launching its code you have to use <strong>rake</strong> or <strong>thor</strong> tool.
 Here I provide thor script as an example:</p>
-<pre><code class="highlight ruby"><span class="c1"># thor/osx_install.thor</span>
+<pre class="highlight ruby"><code><span class="c1"># thor/osx_install.thor</span>
 
 <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'/../lib'</span><span class="p">)</span>
 
@@ -210,7 +210,7 @@ Here I provide thor script as an example:</p>
 
 <p>You can execute separate commands from script directly with <strong>invoke</strong> thor command. Below is fragment
 of such script:</p>
-<pre><code class="highlight shell"><span class="c">#!/bin/sh</span>
+<pre class="highlight shell"><code><span class="c">#!/bin/sh</span>
 
 <span class="o">[</span>prepare]
 
@@ -240,18 +240,18 @@ curl -L https://get.rvm.io | bash
 <p>All available scripts are located <a href="https://github.com/shvets/osx_provision/blob/master/lib/osx_provision/osx_provision_scripts.sh">here</a>. If you need more scripts, you can
 create them locally (e.g. in (thor/osx_provision_scripts_my_project.sh)) and then initialize
 thor script accordingly:</p>
-<pre><code class="highlight ruby"><span class="c1"># thor/my_project_osx_provision_scripts.thor</span>
-<span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+<pre class="highlight ruby"><code><span class="c1"># thor/my_project_osx_provision_scripts.thor</span>
+<span class="p">.</span><span class="nf">.</span><span class="p">.</span>
 
-<span class="k">class</span> <span class="nc">OsxInstall</span> <span class="o">&lt;</span> <span class="no">Thor</span>
+<span class="nf">class</span> <span class="no">OsxInstall</span> <span class="o">&lt;</span> <span class="no">Thor</span>
   <span class="vi">@installer</span> <span class="o">=</span> <span class="no">OsxProvision</span><span class="p">.</span><span class="nf">new</span> <span class="nb">self</span><span class="p">,</span> <span class="s2">".osx_provision.json"</span><span class="p">,</span>
-                 <span class="o">[</span><span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="s2">"my_project_osx_provision_scripts.sh"</span><span class="p">,</span> <span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">))</span><span class="o">]</span>
-  <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
-<span class="k">end</span>
+                 <span class="p">[</span><span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="s2">"my_project_osx_provision_scripts.sh"</span><span class="p">,</span> <span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">))]</span>
+  <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
+<span class="nf">end</span>
 </code></pre>
 
 <p>Below is the example of such script for running rails server in standard and debug mode:</p>
-<pre><code class="highlight shell"><span class="c">#!/bin/sh</span>
+<pre class="highlight shell"><code><span class="c">#!/bin/sh</span>
 
 <span class="c">##############################</span>
 <span class="o">[</span>rails]
@@ -287,11 +287,11 @@ bundle <span class="nb">exec </span>rdebug-ide --port 1234 --dispatcher-port 261
 <h2>Executing automated scripts</h2>
 
 <p>First, take a look at the list of available thor command:</p>
-<pre><code class="highlight shell">thor -T
+<pre class="highlight shell"><code>thor -T
 </code></pre>
 
 <p>You can see something like this:</p>
-<pre><code class="highlight shell">osx_install
+<pre class="highlight shell"><code>osx_install
 -----------
 thor osx_install:all                      <span class="c"># Installs all required packages</span>
 thor osx_install:app                      <span class="c"># Installs app</span>
@@ -331,7 +331,7 @@ thor osx_install:svn                      <span class="c"># svn</span>
 </code></pre>
 
 <p>With this scripts you can execute them separately and all together:</p>
-<pre><code class="highlight shell">thor osx_install:brew
+<pre class="highlight shell"><code>thor osx_install:brew
 thor osx_install:rvm
 thor osx_install:postgres
 thor osx_install:brew
@@ -340,7 +340,7 @@ thor osx_install:all
 </code></pre>
 
 <p>To configure postgres only run this sequence:</p>
-<pre><code class="highlight shell">thor osx_install:postgres
+<pre class="highlight shell"><code>thor osx_install:postgres
 thor osx_install:postgres_create_user
 thor osx_install:postgres_create_schemas
 thor osx_install:postgres_start
@@ -365,6 +365,10 @@ Get feed
 <div class='section'>
 <h2>By Year</h2>
 <ol>
+<li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
 <li>
 <a href="../../../2014.html">2014</a>
 (7)
@@ -416,7 +420,7 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/javascript.html">javascript</a>
-(2)
+(3)
 </li>
 <li>
 <a href="../../../tags/karma.html">karma</a>
@@ -584,6 +588,18 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
 (1)
 </li>
 </ol>

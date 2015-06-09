@@ -72,19 +72,26 @@ in UI mode, but it&rsquo;s not required.</p></li>
 Once installed, it will be accessible from command line as <strong>vagrant</strong> command.</p></li>
 </ul>
 
+<p>or</p>
+<pre class="highlight shell"><code>brew install caskroom/cask/brew-cask
+
+brew cask install virtualbox
+brew cask install vagrant
+</code></pre>
+
 <p>You have to decide what linux image fits your needs. In our case we use <strong>Ubuntu 14.04 LTS 64-bit</strong> image -
 it is identified with <strong>&ldquo;ubuntu/trusty64&rdquo;</strong> key. You can see other images <a href="https://vagrantcloud.com/discover">here</a>.</p>
 
 <p>Download and install it:</p>
-<pre><code class="highlight shell">vagrant box add ubuntu/trusty64 https://vagrantcloud.com/ubuntu/boxes/trusty64
+<pre class="highlight shell"><code>  vagrant box add ubuntu/trusty64 https://vagrantcloud.com/ubuntu/boxes/trusty64
 </code></pre>
 
 <p>Initialize it:</p>
-<pre><code class="highlight plaintext">vagrant init ubuntu/trusty64
+<pre class="highlight shell"><code>vagrant init ubuntu/trusty64
 </code></pre>
 
 <p>This command creates <strong>Vagrantfile</strong> file in the root of your project. Below is an example of such a file:</p>
-<pre><code class="highlight ruby"><span class="c1"># -*- mode: ruby -*-</span>
+<pre class="highlight ruby"><code><span class="c1"># -*- mode: ruby -*-</span>
 <span class="c1"># vi: set ft=ruby :</span>
 
 <span class="no">VAGRANTFILE_API_VERSION</span> <span class="o">=</span> <span class="s2">"2"</span>
@@ -95,7 +102,7 @@ it is identified with <strong>&ldquo;ubuntu/trusty64&rdquo;</strong> key. You ca
 </code></pre>
 
 <p>You can do various commands with <strong>vagrant</strong> tool. For example:</p>
-<pre><code class="highlight shell">vagrant up        <span class="c"># starts up: creates and configures guest machine</span>
+<pre class="highlight shell"><code>vagrant up        <span class="c"># starts up: creates and configures guest machine</span>
 vagrant <span class="nb">suspend</span>   <span class="c"># suspends the guest machine</span>
 vagrant halt      <span class="c"># shuts down the running machine</span>
 vagrant reload    <span class="c"># vagrant halt; vagrant up</span>
@@ -105,30 +112,30 @@ vagrant box remove ubuntu/trusty64 <span class="c"># removes a box from vagrant<
 </code></pre>
 
 <p>You also can package currently running VirtualBox environment into reusable box:</p>
-<pre><code class="highlight shell">vagrant package --vagrantfile Vagrantfile --output linux_provision.box
+<pre class="highlight shell"><code>vagrant package --vagrantfile Vagrantfile --output linux_provision.box
 </code></pre>
 
 <p>After <strong>Vagrantfile</strong> is generated, you can start your base box:</p>
-<pre><code class="highlight shell">vagrant up
+<pre class="highlight shell"><code>vagrant up
 </code></pre>
 
 <p>Now you have a <strong>fully running virtual machine</strong> in VirtualBox. You can access it through <strong>vagrant ssh</strong> command:</p>
-<pre><code class="highlight shell">vagrant ssh
+<pre class="highlight shell"><code>vagrant ssh
 </code></pre>
 
 <p>or <strong>directly via ssh</strong> (use <strong>vagrant</strong> password for <strong>vagrant</strong> user and port <strong>2222</strong>, this port is used as default
 by vagrant for ssh connections):</p>
-<pre><code class="highlight shell">ssh vagrant@127.0.0.1 -p 2222
+<pre class="highlight shell"><code>ssh vagrant@127.0.0.1 -p 2222
 </code></pre>
 
 <p>You can assign IP address for your linux box, e.g.:</p>
-<pre><code class="highlight ruby"><span class="no">Vagrant</span><span class="p">.</span><span class="nf">configure</span><span class="p">(</span><span class="no">VAGRANTFILE_API_VERSION</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<pre class="highlight ruby"><code><span class="no">Vagrant</span><span class="p">.</span><span class="nf">configure</span><span class="p">(</span><span class="no">VAGRANTFILE_API_VERSION</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
   <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="s2">"private_network"</span><span class="p">,</span> <span class="ss">ip: </span><span class="s2">"22.22.22.22"</span>
 <span class="k">end</span>
 </code></pre>
 
 <p>With this configuration you can access ssh on default port:</p>
-<pre><code class="highlight shell">ssh vagrant@22.22.22.22
+<pre class="highlight shell"><code>ssh vagrant@22.22.22.22
 </code></pre>
 
 <p>Your initial setup of linux box is completed now and ready to use.</p>
@@ -146,6 +153,13 @@ all without the overhead of a hypervisor.</p>
 <li><p><a href="http://boot2docker.io">boot2docker</a>. You need to install it only for non-Linux environment.</p></li>
 </ul>
 
+<p>or </p>
+<pre class="highlight shell"><code>  brew install caskroom/cask/brew-cask
+
+  brew cask install virtualbox
+  brew cask install docker
+</code></pre>
+
 <p>boot2docker is a lightweight Linux image made specifically to run Docker containers. It runs completely from
 RAM, weighs  approximately 27 MB and boots in about 5 seconds.</p>
 
@@ -153,67 +167,72 @@ RAM, weighs  approximately 27 MB and boots in about 5 seconds.</p>
 means that boot2docker, not OSX, is the Docker host.</p>
 
 <p>This command will create <strong>boot2docker-vm</strong> virtual machine:</p>
-<pre><code class="highlight shell">boot2docker init
+<pre class="highlight shell"><code>boot2docker init
 </code></pre>
 
 <p>Go to VirtualBox UI - new VM will be added.</p>
 
 <p>Start it up:</p>
-<pre><code class="highlight shell">boot2docker up
+<pre class="highlight shell"><code>boot2docker up
 </code></pre>
 
 <p>or shut it down:</p>
-<pre><code class="highlight shell">boot2docker down
+<pre class="highlight shell"><code>boot2docker down
 </code></pre>
 
 <p>Upgrade Boot2docker VM image:</p>
-<pre><code class="highlight shell">boot2docker stop
+<pre class="highlight shell"><code>boot2docker stop
 boot2docker download
 boot2docker up
 </code></pre>
 
 <p>When docker daemon first started, it gives you recommendation about how to run docker client.
 It needs to know where docker is running, e.g.:</p>
-<pre><code class="highlight shell"><span class="nb">export </span><span class="nv">DOCKER_HOST</span><span class="o">=</span>tcp://192.168.59.103:2375
+<pre class="highlight shell"><code><span class="nb">export </span><span class="nv">DOCKER_HOST</span><span class="o">=</span>tcp://192.168.59.103:2375
 </code></pre>
 
-<p>You have to setup it globally in <strong>.bash_profile</strong> file or specify it each time when docker client gets started.</p>
+<p>You have to setup it globally in <strong>.bash_profile</strong> file or specify it each time when docker client gets started.
+Or, you can run this command each time:</p>
+<pre class="highlight shell"><code><span class="k">$(</span>boot2docker shellinit<span class="k">)</span>
+</code></pre>
+
+<p>This will set the required environment variables. </p>
 
 <p>You can access boot2docker over ssh (user: <strong>docker</strong>, password: <strong>tcuser</strong>):</p>
-<pre><code class="highlight shell">boot2docker ssh
+<pre class="highlight shell"><code>boot2docker ssh
 </code></pre>
 
 <p>Download the small base image named <strong>busybox</strong>:</p>
-<pre><code class="highlight shell">docker pull busybox
+<pre class="highlight shell"><code>docker pull busybox
 </code></pre>
 
 <p>Run and test docker as separate command:</p>
-<pre><code class="highlight shell">docker run busybox <span class="nb">echo</span> <span class="s2">"hello, linus!"</span>
+<pre class="highlight shell"><code>docker run busybox <span class="nb">echo</span> <span class="s2">"hello, linus!"</span>
 </code></pre>
 
 <p>or interactively:</p>
-<pre><code class="highlight shell">docker run -t -i busybox /bin/sh
+<pre class="highlight shell"><code>docker run -t -i busybox /bin/sh
 </code></pre>
 
 <h2>Install and confige linux_provision gem</h2>
 
 <p>Both programs - Vagrant and Docker - have their own ways to serve provisioning. Vagrant is doing it with the help of
 <strong>provision</strong> attribute. Example with simple shell script:</p>
-<pre><code class="highlight ruby"><span class="no">Vagrant</span><span class="o">::</span><span class="no">Config</span><span class="p">.</span><span class="nf">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<pre class="highlight ruby"><code><span class="no">Vagrant</span><span class="o">::</span><span class="no">Config</span><span class="p">.</span><span class="nf">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
   <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provision</span> <span class="ss">:shell</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s2">"bootstrap.sh"</span>
 <span class="k">end</span>
 </code></pre>
 
 <p>or with chef solo:</p>
-<pre><code class="highlight ruby"><span class="no">Vagrant</span><span class="o">::</span><span class="no">Config</span><span class="p">.</span><span class="nf">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<pre class="highlight ruby"><code><span class="no">Vagrant</span><span class="o">::</span><span class="no">Config</span><span class="p">.</span><span class="nf">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
   <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provision</span> <span class="ss">:chef_solo</span> <span class="k">do</span> <span class="o">|</span><span class="n">chef</span><span class="o">|</span>
-    <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
-  <span class="k">end</span>
+    <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
+  <span class="nf">end</span>
 <span class="k">end</span>
 </code></pre>
 
 <p>Docker also lets you do provisioning in form of <strong>RUN</strong> command:</p>
-<pre><code class="highlight plaintext"># Dockerfile
+<pre class="highlight plaintext"><code># Dockerfile
 
 RUN apt-get -y -q install postgresql-9.3
 </code></pre>
@@ -227,11 +246,11 @@ ruby etc. with the help of thor or rake script. You can see other gems that use 
 for <a href="https://github.com/shvets/oracle_client_provision">Oracle Instant Client</a> installation and for <a href="https://github.com/shvets/osx_provision">OSX</a> provision.</p>
 
 <p>In order to use this gem add this line to your application&rsquo;s Gemfile:</p>
-<pre><code class="highlight shell">gem <span class="s1">'linux_provision'</span>
+<pre class="highlight shell"><code>gem <span class="s1">'linux_provision'</span>
 </code></pre>
 
 <p>And then execute:</p>
-<pre><code class="highlight shell">bundle
+<pre class="highlight shell"><code>bundle
 </code></pre>
 
 <p>Before you can start using <strong>linux_provision</strong> gem within your project, you need to configure it. Do the following:</p>
@@ -240,7 +259,7 @@ for <a href="https://github.com/shvets/oracle_client_provision">Oracle Instant C
 <li>Create configuration file (e.g. <strong>.linux_provision.json</strong>) in json format at the root of your project. It will
 define your environment:</li>
 </ul>
-<pre><code class="highlight json"><span class="p">{</span><span class="w">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"node"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
    </span><span class="err">...</span><span class="w">
   </span><span class="err">}</span><span class="p">,</span><span class="w">
@@ -273,7 +292,7 @@ define your environment:</li>
 
 <p>Library itself if written in ruby, but for launching its code it&rsquo;s more convenient to use <strong>rake</strong> or <strong>thor</strong> tool.
 Here I provide thor script as an example:</p>
-<pre><code class="highlight ruby"><span class="c1"># thor/linux_install.thor</span>
+<pre class="highlight ruby"><code><span class="c1"># thor/linux_install.thor</span>
 
 <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'/../lib'</span><span class="p">)</span>
 
@@ -300,7 +319,7 @@ Here I provide thor script as an example:</p>
 </code></pre>
 
 <p>You can execute separate commands from script directly with <strong>invoke</strong> thor command. Below is fragment of such script:</p>
-<pre><code class="highlight shell"><span class="c">#!/bin/sh</span>
+<pre class="highlight shell"><code><span class="c">#!/bin/sh</span>
 
 <span class="c">#######################################</span>
 <span class="o">[</span>prepare]
@@ -333,16 +352,16 @@ rvm install ruby-1.9.3
 </code></pre>
 
 <p>You can add your own scripts (e.g. demo_scripts.sh):</p>
-<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">LinuxInstall</span> <span class="o">&lt;</span> <span class="no">Thor</span>
+<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">LinuxInstall</span> <span class="o">&lt;</span> <span class="no">Thor</span>
   <span class="vi">@installer</span> <span class="o">=</span> <span class="no">LinuxProvision</span><span class="p">.</span><span class="nf">new</span> <span class="nb">self</span><span class="p">,</span>
     <span class="s2">".linux_provision.json"</span><span class="p">,</span>
-    <span class="o">[</span><span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="s2">"demo_scripts.sh"</span><span class="p">,</span> <span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">))</span><span class="o">]</span>
-  <span class="p">.</span><span class="nf">.</span><span class="o">.</span>
-<span class="k">end</span>
+    <span class="p">[</span><span class="no">File</span><span class="p">.</span><span class="nf">expand_path</span><span class="p">(</span><span class="s2">"demo_scripts.sh"</span><span class="p">,</span> <span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">))]</span>
+  <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
+<span class="nf">end</span>
 </code></pre>
 
 <p>We defined 2 new commands in demo_script.sh:</p>
-<pre><code class="highlight shell"><span class="c">#!/bin/sh</span>
+<pre class="highlight shell"><code><span class="c">#!/bin/sh</span>
 
 <span class="c">##############################</span>
 <span class="o">[</span>project]
@@ -385,13 +404,13 @@ rackup
 <p>For testing purposes we have created demo web application (in <strong>demo</strong> folder) based on <a href="http://www.sinatrarb.com">sinatra</a> framework.</p>
 
 <p>First, we need to inform Vagrant about the location of this application within virtual machine:</p>
-<pre><code class="highlight ruby"><span class="no">Vagrant</span><span class="p">.</span><span class="nf">configure</span><span class="p">(</span><span class="no">VAGRANTFILE_API_VERSION</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<pre class="highlight ruby"><code><span class="no">Vagrant</span><span class="p">.</span><span class="nf">configure</span><span class="p">(</span><span class="no">VAGRANTFILE_API_VERSION</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
   <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">synced_folder</span> <span class="s2">"./demo"</span><span class="p">,</span> <span class="s2">"/home/vagrant/demo"</span>
 <span class="k">end</span>
 </code></pre>
 
 <p>Second, we need to configure linux_provision gem to point to right domain/port and use correct user name/password:</p>
-<pre><code class="highlight json"><span class="p">{</span><span class="w">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"node"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"22.22.22.22"</span><span class="p">,</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="err">remote</span><span class="w"> </span><span class="err">host,</span><span class="w"> </span><span class="err">see</span><span class="w"> </span><span class="s2">"config.vm.synced_folder"</span><span class="w">
     </span><span class="s2">"port"</span><span class="p">:</span><span class="w"> </span><span class="s2">"22"</span><span class="p">,</span><span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="err">default</span><span class="w"> </span><span class="err">ssh</span><span class="w"> </span><span class="err">port</span><span class="w">
@@ -404,11 +423,11 @@ rackup
 </span></code></pre>
 
 <p>Start your base box:</p>
-<pre><code class="highlight shell">vagrant up
+<pre class="highlight shell"><code>vagrant up
 </code></pre>
 
 <p>Access linux box and find out this demo application&rsquo;s home:</p>
-<pre><code class="highlight shell">ssh vagrant@22.22.22.22
+<pre class="highlight shell"><code>ssh vagrant@22.22.22.22
 
 <span class="nb">pwd</span> <span class="c"># /home/vagrant</span>
 
@@ -421,7 +440,7 @@ ls <span class="c"># content of demo folder</span>
 
 <p>These commands from <strong>linux_provision</strong> gem will build your environment for the demo project (install rvm, ruby,
 postgres, postgres user and posters tables):</p>
-<pre><code class="highlight shell">thor linux_install:prepare
+<pre class="highlight shell"><code>thor linux_install:prepare
 thor linux_install:rvm
 thor linux_install:ruby
 
@@ -432,20 +451,20 @@ thor linux_install:postgres_create_schemas
 </code></pre>
 
 <p>Initialize demo project and run sinatra application:</p>
-<pre><code class="highlight shell">thor linux_install:project
+<pre class="highlight shell"><code>thor linux_install:project
 
 thor linux_install:rackup
 </code></pre>
 
 <p>Now you can access application from your favorite browser:</p>
-<pre><code class="highlight shell">open http://22.22.22.22:9292
+<pre class="highlight shell"><code>open http://22.22.22.22:9292
 </code></pre>
 
 <h2>Demo application with Docker</h2>
 
 <p>You need to do very similar steps as with Vagrant. The only difference is in <strong>linux_provision.json</strong> file
 you have to point to different host, port and user:</p>
-<pre><code class="highlight json"><span class="p">{</span><span class="w">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"node"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.59.103"</span><span class="p">,</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="err">remote</span><span class="w"> </span><span class="err">host,</span><span class="w"> </span><span class="err">see</span><span class="w"> </span><span class="err">boot2docker</span><span class="w"> </span><span class="err">ip</span><span class="w">
     </span><span class="s2">"port"</span><span class="p">:</span><span class="w"> </span><span class="s2">"42222"</span><span class="p">,</span><span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="err">ssh</span><span class="w"> </span><span class="err">port</span><span class="w"> </span><span class="err">in</span><span class="w"> </span><span class="err">docker</span><span class="w">
@@ -468,7 +487,7 @@ you have to point to different host, port and user:</p>
 </ul>
 
 <p>Here is example:</p>
-<pre><code class="highlight plaintext">FROM ubuntu:14.04
+<pre class="highlight plaintext"><code>FROM ubuntu:14.04
 
 MAINTAINER Alexander Shvets "alexander.shvets@gmail.com"
 
@@ -505,7 +524,7 @@ EXPOSE 9292
 </code></pre>
 
 <p>Build docker image and run it:</p>
-<pre><code class="highlight shell">docker build -t demo demo
+<pre class="highlight shell"><code>docker build -t demo demo
 docker run -d -p 42222:22 -p 9292:9292 --name demo demo
 </code></pre>
 
@@ -513,11 +532,11 @@ docker run -d -p 42222:22 -p 9292:9292 --name demo demo
 regular telnet or ssh tool, we&rsquo;ll hit service inside the docker.</p>
 
 <p>You can access virtual machine via ssh:</p>
-<pre><code class="highlight shell">ssh vagrant@192.168.59.103 -p 42222
+<pre class="highlight shell"><code>ssh vagrant@192.168.59.103 -p 42222
 </code></pre>
 
 <p>Now you can do your provision - it&rsquo;s exactly the same as with Vagrant example:</p>
-<pre><code class="highlight shell">thor linux_install:prepare
+<pre class="highlight shell"><code>thor linux_install:prepare
 thor linux_install:rvm
 thor linux_install:ruby
 
@@ -532,7 +551,7 @@ thor linux_install:rackup
 </code></pre>
 
 <p>After provisioning and starting server try to access your application from the browser:</p>
-<pre><code class="highlight shell">open http://192.168.59.103:9292
+<pre class="highlight shell"><code>open http://192.168.59.103:9292
 </code></pre>
 
 <div id='footer'>
@@ -552,6 +571,10 @@ Get feed
 <div class='section'>
 <h2>By Year</h2>
 <ol>
+<li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
 <li>
 <a href="../../../2014.html">2014</a>
 (7)
@@ -603,7 +626,7 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/javascript.html">javascript</a>
-(2)
+(3)
 </li>
 <li>
 <a href="../../../tags/karma.html">karma</a>
@@ -771,6 +794,18 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
 (1)
 </li>
 </ol>

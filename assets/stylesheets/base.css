@@ -5,11 +5,11 @@ body {
 
 /* line 7, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 a {
-  color: black;
+  color: #000;
   /*  text-decoration: none;  */ }
   /* line 10, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   a:hover {
-    color: black;
+    color: #000;
     text-decoration: underline; }
   /* line 13, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   a img {
@@ -34,7 +34,7 @@ a {
   margin: 135px 0 0 30px;
   float: left;
   font: 13px Helvetica;
-  color: #5f5d5f; }
+  color: #5F5D5F; }
   /* line 36, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #sidebar p {
     margin: 0 0 5px; }
@@ -50,7 +50,7 @@ a {
   /* line 46, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #sidebar h1, #sidebar h2 {
     font: bold 14px Helvetica;
-    color: black; }
+    color: #000000; }
   /* line 49, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #sidebar .section {
     margin: 0 0 20px;
@@ -76,10 +76,10 @@ a {
     float: right;
     padding: 68px 0 0 18px;
     font: 18px Helvetica;
-    color: #5f5d5f; }
+    color: #5F5D5F; }
     /* line 73, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
     #logo h2 span {
-      color: #b32d15; }
+      color: #B32D15; }
 
 /* menu */
 /* line 78, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
@@ -105,14 +105,14 @@ a {
     text-decoration: none;
     font-family: "Graublau Web", Helvetica, Arial, sans-serif;
     font-size: 25px;
-    color: #bebcbd; }
+    color: #BEBCBD; }
     /* line 98, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
     #menu a:hover {
-      color: #b32d15;
+      color: #B32D15;
       text-decoration: underline; }
   /* line 101, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #menu .current_page_item a {
-    color: #b32d15; }
+    color: #B32D15; }
 
 /* page */
 /* line 106, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
@@ -121,7 +121,7 @@ a {
   margin: 0 0 0 110px;
   float: left;
   font: 13px Helvetica;
-  color: #5f5d5f;
+  color: #5F5D5F;
   line-height: 1.4em;
   text-align: justify;
   letter-spacing: 0.03em;
@@ -129,7 +129,7 @@ a {
   /* line 116, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h1, #page h2 {
     font: bold Helvetica;
-    color: black; }
+    color: #000000; }
   /* line 119, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #page h1 {
     margin: 20px 0 30px;
@@ -151,7 +151,7 @@ a {
   /* line 134, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #footer p {
     font: 11px Helvetica;
-    color: #aaaaaa; }
+    color: #AAAAAA; }
 
 /* line 138, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 #legal {
@@ -161,7 +161,7 @@ a {
   /* line 142, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
   #legal a {
     font-weight: normal;
-    color: #5f5d5f; }
+    color: #5F5D5F; }
 
 /* misc */
 /* line 148, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
@@ -170,8 +170,8 @@ a {
 
 /* line 165, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 pre {
-  border: solid 1px #dddddd;
-  background: white;
+  border: solid 1px #ddd;
+  background: #fff;
   padding: 0;
   line-height: 23px;
   margin-bottom: 30px;
@@ -187,8 +187,8 @@ pre {
 /* line 179, /Users/alex/Dropbox/Alex/work/projects/shvets.github.io/source/assets/stylesheets/base.sass */
 .gl {
   background: #fafafa;
-  border-right: 1px solid #dddddd;
-  color: #999999;
+  border-right: 1px solid #ddd;
+  color: #999;
   /* Stop line numbers being visually selected */
   -webkit-touch-callout: none;
   -webkit-user-select: none;

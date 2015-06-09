@@ -45,7 +45,7 @@
 <ul>
 <li>interpolation inside the string:</li>
 </ul>
-<pre><code class="highlight ruby"><span class="n">var1</span> <span class="o">=</span> <span class="s1">'some value 1'</span>
+<pre class="highlight ruby"><code><span class="n">var1</span> <span class="o">=</span> <span class="s1">'some value 1'</span>
 <span class="n">var2</span> <span class="o">=</span> <span class="s1">'some value 2'</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="s2">"We have var1: </span><span class="si">#{</span><span class="n">var1</span><span class="si">}</span><span class="s2"> and var2: </span><span class="si">#{</span><span class="n">var2</span><span class="si">}</span><span class="s2">."</span>
@@ -56,11 +56,11 @@
 <ul>
 <li>interpolation inside file (with embedded ruby -  erb):</li>
 </ul>
-<pre><code class="highlight ruby"><span class="c1"># some_template.erb</span>
+<pre class="highlight ruby"><code><span class="c1"># some_template.erb</span>
 
 <span class="no">We</span> <span class="n">have</span> <span class="ss">var1: </span><span class="o">&lt;</span><span class="sx">%= var1 %&gt; and var2:  &lt;%=</span> <span class="n">var2</span><span class="sx">%&gt;.
 </span></code></pre>
-<pre><code class="highlight ruby"><span class="c1"># test.rb</span>
+<pre class="highlight ruby"><code><span class="c1"># test.rb</span>
 
 <span class="nb">require</span> <span class="s1">'erb'</span>
 
@@ -76,7 +76,7 @@
 
 <p>This library can be used for <strong>interpolation inside file with string syntax</strong>. In order to
 achieve it library uses one ruby trick:</p>
-<pre><code class="highlight ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span><span class="ss">var1: </span><span class="s1">'some value 1'</span><span class="p">,</span> <span class="ss">var2: </span><span class="s1">'some value 2'</span><span class="p">}</span>
+<pre class="highlight ruby"><code><span class="n">env</span> <span class="o">=</span> <span class="p">{</span><span class="ss">var1: </span><span class="s1">'some value 1'</span><span class="p">,</span> <span class="ss">var2: </span><span class="s1">'some value 2'</span><span class="p">}</span>
 
 <span class="n">template</span> <span class="o">=</span> <span class="s2">"We have var1: %{var1} and var2: %{var2}."</span>
 
@@ -88,12 +88,12 @@ achieve it library uses one ruby trick:</p>
 <h2>Usage</h2>
 
 <p>It&rsquo;s straightforward. Here is example of file interpolation:</p>
-<pre><code class="highlight ruby"><span class="c1"># some_template.txt</span>
+<pre class="highlight ruby"><code><span class="c1"># some_template.txt</span>
 
 <span class="no">We</span> <span class="n">have</span> <span class="ss">var1: </span><span class="c1">#{var1} and var2:  #{var2}.</span>
 <span class="no">We</span> <span class="n">have</span> <span class="ss">var3: </span><span class="c1">#{settings.var3} and var4:  #{settings.var4}.</span>
 </code></pre>
-<pre><code class="highlight ruby"><span class="c1"># test.rb</span>
+<pre class="highlight ruby"><code><span class="c1"># test.rb</span>
 
 <span class="nb">require</span> <span class="s1">'text_interpolator'</span>
 
@@ -118,7 +118,7 @@ achieve it library uses one ruby trick:</p>
 </code></pre>
 
 <p>You can also interpolate hash on multiple levels:</p>
-<pre><code class="highlight ruby"><span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span>
+<pre class="highlight ruby"><code><span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span>
   <span class="ss">host: </span><span class="s1">'localhost'</span><span class="p">,</span>
 
   <span class="ss">credentials: </span><span class="p">{</span>
@@ -175,6 +175,10 @@ Get feed
 <h2>By Year</h2>
 <ol>
 <li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
+<li>
 <a href="../../../2014.html">2014</a>
 (7)
 </li>
@@ -225,7 +229,7 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/javascript.html">javascript</a>
-(2)
+(3)
 </li>
 <li>
 <a href="../../../tags/karma.html">karma</a>
@@ -393,6 +397,18 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
 (1)
 </li>
 </ol>

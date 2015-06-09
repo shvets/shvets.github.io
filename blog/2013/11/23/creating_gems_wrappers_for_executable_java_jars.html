@@ -43,15 +43,15 @@ from <a href="https://github.com/redcar/redcar">redcar project</a> which in turn
 <a href="https://github.com/shvets/jar_wrapper">jar_wrapper gem</a>, so it can be easily used in any ruby project.</p>
 
 <p>Install jar_wrapper with this command:</p>
-<pre><code class="highlight plaintext">$ gem install jar_wrapper
+<pre class="highlight plaintext"><code>$ gem install jar_wrapper
 </code></pre>
 
 <p>Now you can use it in your program directly or create gem for delivering java jar file(s).
 For example, this code will upload remote file:</p>
-<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'jar_wrapper'</span>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'jar_wrapper'</span>
 
 <span class="n">wrapper</span> <span class="o">=</span> <span class="no">JarWrapper</span><span class="o">::</span><span class="no">Runner</span><span class="p">.</span><span class="nf">new</span>
-<span class="n">wrapper</span><span class="p">.</span><span class="nf">java_opts</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"-Xmx1024m"</span><span class="p">,</span> <span class="s2">"-Xss1024k"</span> <span class="o">]</span>
+<span class="n">wrapper</span><span class="p">.</span><span class="nf">java_opts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"-Xmx1024m"</span><span class="p">,</span> <span class="s2">"-Xss1024k"</span> <span class="p">]</span>
 
 <span class="c1"># install jar file from source URL into target file:</span>
 
@@ -62,13 +62,13 @@ For example, this code will upload remote file:</p>
 </code></pre>
 
 <p>You can aldo execute jar file (a.k.a. &ldquo;java -jar jar_file.jar&rdquo;)</p>
-<pre><code class="highlight ruby"><span class="n">wrapper</span><span class="p">.</span><span class="nf">jar_file</span> <span class="o">=</span> <span class="s2">"jar_file.jar"</span>
+<pre class="highlight ruby"><code><span class="n">wrapper</span><span class="p">.</span><span class="nf">jar_file</span> <span class="o">=</span> <span class="s2">"jar_file.jar"</span>
 
 <span class="n">wrapper</span><span class="p">.</span><span class="nf">run</span>
 </code></pre>
 
 <p>Or you can execute java jar file by specifying <strong>main class</strong> (a.k.a. &ldquo;java -cp some<em>class</em>path main_class&rdquo;):</p>
-<pre><code class="highlight ruby"><span class="n">wrapper</span><span class="p">.</span><span class="nf">classpath</span> <span class="o">=</span> <span class="s2">"some_class_path"</span>
+<pre class="highlight ruby"><code><span class="n">wrapper</span><span class="p">.</span><span class="nf">classpath</span> <span class="o">=</span> <span class="s2">"some_class_path"</span>
 <span class="n">wrapper</span><span class="p">.</span><span class="nf">main_class</span> <span class="o">=</span> <span class="s2">"main_class"</span>
 
 <span class="n">wrapper</span><span class="p">.</span><span class="nf">run</span>
@@ -94,6 +94,10 @@ Get feed
 <div class='section'>
 <h2>By Year</h2>
 <ol>
+<li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
 <li>
 <a href="../../../2014.html">2014</a>
 (7)
@@ -145,7 +149,7 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/javascript.html">javascript</a>
-(2)
+(3)
 </li>
 <li>
 <a href="../../../tags/karma.html">karma</a>
@@ -313,6 +317,18 @@ Get feed
 </li>
 <li>
 <a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
 (1)
 </li>
 </ol>
