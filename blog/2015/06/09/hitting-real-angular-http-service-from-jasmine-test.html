@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<!-- Always force latest IE rendering engine or request Chrome Frame -->
+<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+<meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+<meta content="GitHub --- Alexander Shvets's Web Page" name='description'>
+<meta content='github, ruby, java, rails' name='keywords'>
+<title>GitHub --- Alexander Shvets's Web Page</title>
+<link href="/assets/stylesheets/screen.css" rel="stylesheet" type="text/css" />
+<script src="/assets/javascripts/application.js" type="text/javascript"></script>
+</head>
+<body>
+<div id='wrapper'>
+<div id='main-column'>
+<div id='logo'>
+<h1>
+<a href='/'>Alexander Shvets GitHub Home Page</a>
+</h1>
+
+</div>
+<div id='menu'>
+<ul>
+<li class='current_page_item'>
+<a href='/index.html'>Projects</a>
+</li>
+<li class='current_page_item'>
+<a href='/bookmarks/index.html'>Bookmarks</a>
+</li>
+<li class='current_page_item'>
+<a href='/blog/index.html'>Blog</a>
+</li>
+</ul>
+
+</div>
+<div id='page'>
+<h1>Hitting real angular http service from jasmine test</h1>
+
+<p>Sometimes you want to use jasmine as a tool for playing with existing web services,
+grab some responses and then convert them into the stubs. Unfortunately, from jasmine test
+you have access only to mocked version of <strong>$httpBackend</strong> service.</p>
+
+<p>You can use this helper code for accessing real <strong>$httpBackend</strong> service:</p>
+<pre class="highlight javascript"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'httpReal'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'ng'</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">'$provide'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$provide</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$provide</span><span class="p">.</span><span class="nx">decorator</span><span class="p">(</span><span class="s1">'$httpBackend'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">injector</span><span class="p">([</span><span class="s1">'ng'</span><span class="p">]).</span><span class="nx">get</span><span class="p">(</span><span class="s1">'$httpBackend'</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}])</span>
+  <span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">'HttpReal'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$rootScope</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$digest</span><span class="p">();</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+<span class="p">);</span>
+</code></pre>
+
+<p>This code creates <strong>httpReal</strong> service in which you restore access to original <strong>$httpBackend</strong>.
+It also provides a function to flush the request. Otherwise promises from http service call will 
+never be executed.</p>
+
+<p>Let&rsquo;s create demo service:</p>
+<pre class="highlight javascript"><code>
+<span class="kd">var</span> <span class="nx">namespace</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'myModule'</span><span class="p">,</span> <span class="p">[]);</span>
+
+<span class="nx">namespace</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">'MyService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">remoteCall</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$http</span><span class="p">({</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">,</span> <span class="na">url</span><span class="p">:</span> 
+      <span class="s1">'http://api.openweathermap.org/data/2.5/weather?q=Princeton'</span><span class="p">});</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</code></pre>
+
+<p>and test it:</p>
+<pre class="highlight javascript"><code><span class="nx">describe</span><span class="p">(</span><span class="s1">'MyService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">myService</span><span class="p">,</span> <span class="nx">httpReal</span><span class="p">;</span>
+
+  <span class="nx">beforeEach</span><span class="p">(</span><span class="nx">module</span><span class="p">(</span><span class="s1">'myModule'</span><span class="p">,</span> <span class="s1">'httpReal'</span><span class="p">));</span>
+
+  <span class="nx">beforeEach</span><span class="p">(</span><span class="nx">inject</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">MyService</span><span class="p">,</span> <span class="nx">HttpReal</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">myService</span> <span class="o">=</span> <span class="nx">MyService</span><span class="p">;</span>
+    <span class="nx">httpReal</span> <span class="o">=</span> <span class="nx">HttpReal</span><span class="p">;</span>
+  <span class="p">}));</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'calls success callback and returns valid data'</span><span class="p">,</span> 
+    <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">myService</span><span class="p">.</span><span class="nx">remoteCall</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">expect</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">sys</span><span class="p">.</span><span class="nx">country</span><span class="p">).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">'US'</span><span class="p">);</span>
+        <span class="nx">done</span><span class="p">();</span>
+      <span class="p">});</span>
+
+      <span class="nx">httpReal</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">);</span>
+
+  <span class="nx">it</span><span class="p">(</span><span class="s1">'calls error callback'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">myServiceResults</span> <span class="o">=</span> <span class="nx">createPromise</span><span class="p">({},</span> <span class="kc">false</span><span class="p">);</span>
+
+    <span class="nx">spyOn</span><span class="p">(</span><span class="nx">myService</span><span class="p">,</span> <span class="s1">'remoteCall'</span><span class="p">).</span><span class="nx">and</span><span class="p">.</span><span class="nx">returnValue</span><span class="p">(</span><span class="nx">myServiceResults</span><span class="p">);</span>
+
+    <span class="nx">myService</span><span class="p">.</span><span class="nx">remoteCall</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">angular</span><span class="p">.</span><span class="nx">noop</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+
+    <span class="nx">httpReal</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">createPromise</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">q</span><span class="p">;</span>
+
+  <span class="nx">inject</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">q</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">;</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="nx">success</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">success</span> <span class="o">==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</code></pre>
+
+<p>Take a look on how to properly use promises in tests. It uses <a href="http://www.htmlgoodies.com/beyond/javascript/stips/using-jasmine-2.0s-new-done-function-to-test-asynchronous-processes.html"><strong>done</strong></a> 
+function. In jasmine 2.x they have dropped <strong>runs/waitsFor</strong> functions in favor of the Mocha <strong>done</strong> 
+callback. You can use it in <strong>beforeEach</strong>, <strong>afterEach</strong> and <strong>it</strong> calls. </p>
+
+<div id='footer'>
+<p id='legal'>
+&copy; All Right Reserved (2014), Alexander Shvets.
+Built with
+<a href='http://middlemanapp.com'>middleman</a>
+Get feed
+<a href='/feed.xml'>here</a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id='sidebar'>
+<div class='section'>
+<h2>By Year</h2>
+<ol>
+<li>
+<a href="../../../2015.html">2015</a>
+(1)
+</li>
+<li>
+<a href="../../../2014.html">2014</a>
+(7)
+</li>
+<li>
+<a href="../../../2013.html">2013</a>
+(15)
+</li>
+<li>
+<a href="../../../2012.html">2012</a>
+(1)
+</li>
+<li>
+<a href="../../../2011.html">2011</a>
+(1)
+</li>
+</ol>
+</div>
+<div class='section'>
+<h2>Tags</h2>
+<ol>
+<li>
+<a href="../../../tags/ruby.html">ruby</a>
+(19)
+</li>
+<li>
+<a href="../../../tags/jruby.html">jruby</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/rubymine.html">rubymine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nanoc.html">nanoc</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/coffeescript.html">coffeescript</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/bundler.html">bundler</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nodejs.html">nodejs</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/javascript.html">javascript</a>
+(3)
+</li>
+<li>
+<a href="../../../tags/karma.html">karma</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/code-coverage.html">code coverage</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/commonjs.html">commonjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/requirejs.html">requirejs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/sinatra.html">sinatra</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/vegas.html">vegas</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/launchy.html">launchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/lunchy.html">lunchy</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rvm.html">rvm</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/capybara.html">capybara</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/selenium.html">selenium</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webkit.html">webkit</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/phantomjs.html">phantomjs</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/qt.html">qt</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/acceptance-tests.html">acceptance tests</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/simplecov.html">simplecov</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/ci.html">CI</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/webmock.html">webmock</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/dsl.html">dsl</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/zip.html">zip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/java.html">java</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jar.html">jar</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/rake.html">rake</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/thor.html">thor</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/capistrano.html">capistrano</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/chef.html">chef</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/osx.html">osx</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/mavericks.html">mavericks</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/settings.html">settings</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/configuration.html">configuration</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/oracle.html">oracle</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/script_executor.html">script_executor</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/provisioning.html">provisioning</a>
+(2)
+</li>
+<li>
+<a href="../../../tags/macbook.html">macbook</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/cucumber.html">cucumber</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/gherkin.html">gherkin</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/turnip.html">turnip</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/linux.html">linux</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/config.html">config</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/json.html">json</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/yaml.html">yaml</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/nokogiri.html">nokogiri</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/node.html">node</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/jasmine.html">jasmine</a>
+(1)
+</li>
+<li>
+<a href="../../../tags/angular.html">angular</a>
+(1)
+</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>
